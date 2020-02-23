@@ -1101,6 +1101,9 @@ rule("AI General Attack")
 		Start Facing(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Direction Towards(Players In Slot(
 			Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Player Variable(Event Player, lastPosition)), Random Integer(
 			360, 720), To World, Direction and Turn Rate);
+		Skip If(Compare(Hero Of(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))), ==, Hero(Reinhardt)), 2);
+		Skip If(Is Button Held(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Primary Fire), 1);
+		Start Holding Button(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Primary Fire);
 		Skip If(Compare(Health(Event Player), >, 30), 2);
 		Skip If(Compare(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))), >,
 			2.500), 1);
@@ -1108,6 +1111,7 @@ rule("AI General Attack")
 		Set Player Variable(Event Player, lastPosition, Position Of(Event Player));
 		Loop If Condition Is True;
 		Stop Facing(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))));
+		Stop Holding Button(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Primary Fire);
 	}
 }
 
