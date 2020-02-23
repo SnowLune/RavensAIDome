@@ -46,7 +46,7 @@ variables
 		4: playerZoneRadiusDefault
 		5: globalDifficulty
 		6: playerBubbleRadius
-		7: maxKills
+		7: globalMaxKills
 		11: longDistance
 		12: mediumDistance
 		13: shortDistance
@@ -56,7 +56,7 @@ variables
 		21: strafeMovementArray
 		24: version
 		26: difficultyEasy
-		27: difficultyMedium
+		27: difficultyNormal
 		28: difficultyHard
 
 	player:
@@ -65,6 +65,7 @@ variables
 		2: changingHero
 		3: playerZoneRadius
 		4: currentKillNumber
+		5: playerMaxKills
 		6: currentHero
 		7: playerDifficulty
 		8: hudTextInfo
@@ -83,7 +84,11 @@ variables
 		24: newEnemyZ
 		26: enemyDistanceModifier
 		27: enemyDistanceMax
-		31: thisPlayerBot
+		28: skyMenu1
+		29: skyMenu2
+		30: skyMenu3
+		31: skyMenu4
+		32: skyMenu0
 		34: previousPlayerHero
 		35: doomfistPunchCharge
 }
@@ -106,7 +111,7 @@ rule("Info")
 
 	actions
 	{
-		Set Global Variable(version, 0.940);
+		Set Global Variable(version, 0.950);
 	}
 }
 
@@ -134,7 +139,7 @@ rule("Global Define")
 		Modify Global Variable(positiveNegativeArray, Append To Array, -1.000);
 		Modify Global Variable(positiveNegativeArray, Append To Array, 1);
 		Set Global Variable(difficultyEasy, 0);
-		Set Global Variable(difficultyMedium, 1);
+		Set Global Variable(difficultyNormal, 1);
 		Set Global Variable(difficultyHard, 2);
 	}
 }
@@ -195,8 +200,8 @@ rule("Global Settings")
 
 	actions
 	{
-		Set Global Variable(globalDifficulty, Global Variable(difficultyMedium));
-		Set Global Variable(maxKills, 4);
+		Set Global Variable(globalDifficulty, Global Variable(difficultyNormal));
+		Set Global Variable(globalMaxKills, 4);
 		Disable Built-In Game Mode Completion;
 	}
 }
@@ -226,6 +231,7 @@ rule("Player Init")
 		Set Player Variable(Event Player, currentHero, 0);
 		Set Player Variable(Event Player, changingHero, False);
 		Set Player Variable(Event Player, showingInfoText, False);
+		Set Player Variable(Event Player, playerMaxKills, Global Variable(globalMaxKills));
 		Set Player Variable(Event Player, playerDifficulty, Global Variable(globalDifficulty));
 		Set Player Variable(Event Player, reactionTimer, Global Variable(reactionTimerDefault));
 		Set Player Variable(Event Player, playerZoneRadius, Global Variable(playerZoneRadiusDefault));
@@ -290,7 +296,6 @@ rule("Bot Init")
 		Wait(0.250, Ignore Condition);
 		Create Dummy Bot(Value In Array(All Heroes, Player Variable(Event Player, currentHero)), Opposite Team Of(Team Of(Event Player)),
 			Slot Of(Event Player), Vector(0, 0, 0), Vector(Random Real(-1.000, 1), 0, Random Real(-1.000, 1)));
-		Set Player Variable(Event Player, thisPlayerBot, Last Created Entity);
 		Set Invisible(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), All);
 		Call Subroutine(teleportEnemy);
 		Set Invisible(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), None);
@@ -314,7 +319,7 @@ rule("Bot Respawn")
 	{
 		Is Game In Progress == True;
 		Is Dummy Bot(Victim) == True;
-		Player Variable(Event Player, currentKillNumber) != Global Variable(maxKills);
+		Player Variable(Event Player, currentKillNumber) != Player Variable(Event Player, playerMaxKills);
 	}
 
 	actions
@@ -325,6 +330,10 @@ rule("Bot Respawn")
 		Set Player Variable(Attacker, reactionTimer, Global Variable(reactionTimerDefault));
 		Call Subroutine(teleportEnemy);
 		Set Invisible(Victim, None);
+		Stop Holding Button(Victim, Primary Fire);
+		Stop Holding Button(Victim, Secondary Fire);
+		Stop Holding Button(Victim, Crouch);
+		Stop Holding Button(Victim, Jump);
 	}
 }
 
@@ -342,7 +351,8 @@ rule("Bot Run")
 		Is Game In Progress == True;
 		Is Dummy Bot(Event Player) == True;
 		Compare(Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), currentKillNumber), >=,
-			Divide(Global Variable(maxKills), 2)) == True;
+			Divide(Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerMaxKills), 2))
+			== True;
 	}
 
 	actions
@@ -367,7 +377,7 @@ rule("Bot Move Randomly")
 	{
 		Is Game In Progress == True;
 		Is Dummy Bot(Event Player) == False;
-		Compare(Player Variable(Event Player, currentKillNumber), >=, Divide(Global Variable(maxKills), 2)) == True;
+		Compare(Player Variable(Event Player, currentKillNumber), >=, Divide(Player Variable(Event Player, playerMaxKills), 2)) == True;
 		Player Variable(Event Player, playerDifficulty) > Global Variable(difficultyEasy);
 	}
 
@@ -403,6 +413,7 @@ rule("Bot BM")
 
 	actions
 	{
+		Skip If(Compare(Random Real(0, 1), >=, 0.500), 2);
 		Wait(0.750, Ignore Condition);
 		Communicate(Event Player, Thanks);
 	}
@@ -426,8 +437,8 @@ rule("HUD Kill Counter")
 	actions
 	{
 		Create HUD Text(Event Player, Custom String("{0} Kills: {1} / {2}", Hero Icon String(Value In Array(All Heroes, Player Variable(
-			Event Player, currentHero))), Player Variable(Event Player, currentKillNumber), Global Variable(maxKills)), Null, Null, Right,
-			-3.000, White, White, White, Visible To and String, Default Visibility);
+			Event Player, currentHero))), Player Variable(Event Player, currentKillNumber), Player Variable(Event Player, playerMaxKills)),
+			Null, Null, Right, -3.000, White, White, White, Visible To and String, Default Visibility);
 		Create HUD Text(Event Player, Custom String("", Null, Null, Null), Custom String("Hero {0} of 31", Add(1, Player Variable(
 			Event Player, currentHero)), Null, Null), Null, Right, -2.000, White, Yellow, White, Visible To and String,
 			Default Visibility);
@@ -472,7 +483,7 @@ rule("Next Hero")
 	{
 		Is Game In Progress == True;
 		Is Dummy Bot(Event Player) == False;
-		Player Variable(Event Player, currentKillNumber) == Global Variable(maxKills);
+		Player Variable(Event Player, currentKillNumber) == Player Variable(Event Player, playerMaxKills);
 	}
 
 	actions
@@ -500,7 +511,7 @@ rule("Miss Penalty")
 			== True;
 		Is Firing Primary(Event Player) == True;
 		Hero Of(Event Player) == Hero(Widowmaker);
-		Global Variable(globalDifficulty) > Global Variable(difficultyMedium);
+		Player Variable(Event Player, playerDifficulty) > Global Variable(difficultyNormal);
 	}
 
 	actions
@@ -644,7 +655,7 @@ rule("Reaction Timer")
 		Player Variable(Event Player, reactionTimer) >= 0;
 		Array Contains(All Tank Heroes, Hero Of(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))))) == False;
 		Array Contains(Global Variable(longRangeHeroes), Hero Of(Event Player)) == True;
-		Global Variable(globalDifficulty) > Global Variable(difficultyMedium);
+		Player Variable(Event Player, playerDifficulty) > Global Variable(difficultyNormal);
 	}
 
 	actions
@@ -824,12 +835,10 @@ rule("Change Heroes")
 		Preload Hero(Event Player, Hero(Ashe));
 		Set Player Variable(Event Player, previousPlayerHero, Hero Of(Event Player));
 		Set Player Variable(Event Player, changingHero, True);
-		Skip If(Compare(Hero Of(Event Player), ==, Hero(Widowmaker)), 1);
 		Set Player Allowed Heroes(Event Player, Hero(Widowmaker));
 		Wait(0.250, Ignore Condition);
-		Skip If(Compare(Hero Of(Event Player), !=, Hero(Widowmaker)), 1);
 		Set Player Allowed Heroes(Event Player, Hero(Ashe));
-		Wait(0.333, Ignore Condition);
+		Wait(0.250, Ignore Condition);
 		Reset Player Hero Availability(Event Player);
 		Call Subroutine(resetProgress);
 		Set Player Variable(Event Player, changingHero, False);
@@ -878,11 +887,14 @@ rule("Subroutine: teleportEnemy")
 			myPlayer), currentKillNumber), Player Variable(Player Variable(Event Player, myPlayer), enemyDistanceModifier)));
 		Set Player Variable(Player Variable(Event Player, myPlayer), botDistanceMax, Add(Player Variable(Player Variable(Event Player,
 			myPlayer), botDistanceMin), Player Variable(Player Variable(Event Player, myPlayer), enemyDistanceModifier)));
-		If(Compare(Player Variable(Player Variable(Event Player, myPlayer), currentKillNumber), >=, Divide(Global Variable(maxKills), 2)));
-			Modify Player Variable(Player Variable(Event Player, myPlayer), botDistanceMin, Subtract, Multiply(Divide(Global Variable(
-				maxKills), 2), Player Variable(Player Variable(Event Player, myPlayer), enemyDistanceModifier)));
-			Modify Player Variable(Player Variable(Event Player, myPlayer), botDistanceMax, Subtract, Multiply(Divide(Global Variable(
-				maxKills), 2), Player Variable(Player Variable(Event Player, myPlayer), enemyDistanceModifier)));
+		If(Compare(Player Variable(Player Variable(Event Player, myPlayer), currentKillNumber), >=, Divide(Player Variable(Player Variable(
+			Event Player, myPlayer), playerMaxKills), 2)));
+			Modify Player Variable(Player Variable(Event Player, myPlayer), botDistanceMin, Subtract, Multiply(Divide(Player Variable(
+				Player Variable(Event Player, myPlayer), playerMaxKills), 2), Player Variable(Player Variable(Event Player, myPlayer),
+				enemyDistanceModifier)));
+			Modify Player Variable(Player Variable(Event Player, myPlayer), botDistanceMax, Subtract, Multiply(Divide(Player Variable(
+				Player Variable(Event Player, myPlayer), playerMaxKills), 2), Player Variable(Player Variable(Event Player, myPlayer),
+				enemyDistanceModifier)));
 		End;
 		Set Player Variable(Player Variable(Event Player, myPlayer), newEnemyX, Add(X Component Of(Player Variable(Player Variable(
 			Event Player, myPlayer), thisPlayerHome)), Multiply(Random Real(Player Variable(Player Variable(Event Player, myPlayer),
@@ -911,7 +923,7 @@ rule("Subroutine: setHeroDistanceModifier")
 	actions
 	{
 		Set Player Variable(Event Player, enemyDistanceModifier, Divide(Player Variable(Event Player, enemyDistanceMax), Multiply(
-			Global Variable(maxKills), 0.500)));
+			Player Variable(Event Player, playerMaxKills), 0.500)));
 	}
 }
 
@@ -970,14 +982,14 @@ rule("Subroutine: previousHero")
 	{
 		Set Player Variable(Event Player, currentKillNumber, 0);
 		Modify Player Variable(Event Player, currentHero, Subtract, 1);
+		If(Compare(Player Variable(Event Player, currentHero), <, 0));
+			Set Player Variable(Event Player, currentHero, 30);
+		End;
 		Set Invisible(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), All);
 		Start Forcing Player To Be Hero(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Value In Array(
 			All Heroes, Player Variable(Event Player, currentHero)));
 		Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))));
 		Call Subroutine(teleportEnemy);
-		If(Compare(Player Variable(Event Player, currentHero), <, 0));
-			Set Player Variable(Event Player, currentHero, 30);
-		End;
 		Set Invisible(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), None);
 	}
 }
@@ -1061,7 +1073,7 @@ rule("Disable Primary Secondary Skip")
 	}
 }
 
-rule("Attack Long Range")
+rule("AI General Attack")
 {
 	event
 	{
@@ -1075,8 +1087,8 @@ rule("Attack Long Range")
 		Is Game In Progress == True;
 		Is Dummy Bot(Event Player) == False;
 		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
-		Global Variable(globalDifficulty) == 2;
-		Player Variable(Event Player, currentKillNumber) >= Divide(Global Variable(maxKills), 2);
+		Player Variable(Event Player, playerDifficulty) >= Global Variable(difficultyHard);
+		Player Variable(Event Player, currentKillNumber) >= Divide(Player Variable(Event Player, playerMaxKills), 2);
 		Y Component Of(Position Of(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))))) < 5;
 		disabled Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) > Divide(
 			Global Variable(longDistance), 2);
@@ -1093,11 +1105,8 @@ rule("Attack Long Range")
 		Skip If(Compare(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))), >,
 			2.500), 1);
 		Press Button(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Melee);
-		Skip If(Is Button Held(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Primary Fire), 1);
-		Start Holding Button(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Primary Fire);
 		Set Player Variable(Event Player, lastPosition, Position Of(Event Player));
 		Loop If Condition Is True;
-		Stop Holding Button(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Primary Fire);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))));
 	}
 }
@@ -1117,7 +1126,7 @@ disabled rule("Attack Medium Range")
 		Is Dummy Bot(Event Player) == False;
 		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
 		Global Variable(globalDifficulty) == 2;
-		Player Variable(Event Player, currentKillNumber) >= Divide(Global Variable(maxKills), 2);
+		Player Variable(Event Player, currentKillNumber) >= Divide(Global Variable(globalMaxKills), 2);
 		Y Component Of(Position Of(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))))) < 5;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) > Divide(
 			Global Variable(mediumDistance), 2);
@@ -1158,7 +1167,7 @@ disabled rule("Attack Short Range")
 		Is Dummy Bot(Event Player) == False;
 		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
 		Global Variable(globalDifficulty) == 2;
-		Player Variable(Event Player, currentKillNumber) >= Divide(Global Variable(maxKills), 2);
+		Player Variable(Event Player, currentKillNumber) >= Divide(Global Variable(globalMaxKills), 2);
 		Y Component Of(Position Of(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))))) < 5;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) > Divide(
 			Global Variable(shortDistance), 2);
@@ -1199,7 +1208,7 @@ disabled rule("Attack Very Short Range")
 		Is Dummy Bot(Event Player) == False;
 		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
 		Global Variable(globalDifficulty) == 2;
-		Player Variable(Event Player, currentKillNumber) >= Divide(Global Variable(maxKills), 2);
+		Player Variable(Event Player, currentKillNumber) >= Divide(Global Variable(globalMaxKills), 2);
 		Y Component Of(Position Of(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))))) < 5;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) > Divide(
 			Global Variable(veryShortDistance), 2);
@@ -1318,6 +1327,7 @@ rule("Special Rule: Reinhardt Charge")
 		Distance Between(Event Player, Player Variable(Event Player, thisPlayerHome)) >= Subtract(Player Variable(Event Player,
 			playerZoneRadius), 2);
 		Is Dummy Bot(Event Player) == False;
+		Is Using Ability 1(Event Player) == True;
 	}
 
 	actions
@@ -1419,7 +1429,7 @@ rule("Info Toggle")
 			Set Player Variable(Event Player, hudTextInfo, Empty Array);
 			Set Player Variable(Event Player, showingInfoText, True);
 			Create HUD Text(Event Player, Custom String("Welcome to Practice Field: Expanse!", Null, Null, Null), Custom String(
-				"twitch.tv/thewanderingsnow", Null, Null, Null), Custom String("Created by Snow#15707", Null, Null, Null), Top, 3, Yellow,
+				"twitch.tv/thewanderingsnow", Null, Null, Null), Custom String("Created by Snow#15707", Null, Null, Null), Top, 3, Aqua,
 				Purple, Turquoise, Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
@@ -1428,6 +1438,10 @@ rule("Info Toggle")
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
 				"I have since expanded it so that it can be used to warmup on ALL heroes.", Null, Null, Null), Top, 5, Yellow, White, White,
+				Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
+				"Look up for more options! Press INTERACT while looking at an option.", Null, Null, Null), Top, 5.200, Yellow, White, Yellow,
 				Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Wait(2, Ignore Condition);
@@ -1459,7 +1473,6 @@ rule("Player Left")
 
 	actions
 	{
-		Destroy Dummy Bot(Opposite Team Of(Team Of(Event Player)), Slot Of(Player Variable(Event Player, thisPlayerBot)));
 		Set Player Variable(Event Player, initSpawned, False);
 	}
 }
@@ -1501,7 +1514,8 @@ rule("Target Help Indicator")
 		Has Spawned(Event Player) == True;
 		Is Alive(Event Player) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), 90) == False;
-		Player Variable(Event Player, playerDifficulty) <= Global Variable(difficultyMedium);
+		Player Variable(Event Player, playerDifficulty) <= Global Variable(difficultyNormal);
+		Y Component Of(Facing Direction Of(Event Player)) <= 0.500;
 	}
 
 	actions
@@ -1516,5 +1530,249 @@ rule("Target Help Indicator")
 		Wait(3, Ignore Condition);
 		Destroy In-World Text(Player Variable(Event Player, targetHelpIndicatorText));
 		Loop If Condition Is True;
+	}
+}
+
+rule("Sky Menu Generate")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Dummy Bot(Event Player) == False;
+		Player Variable(Event Player, initSpawned) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, skyMenu0, Add(Player Variable(Event Player, thisPlayerHome), Vector(0, 40, 0)));
+		Set Player Variable(Event Player, skyMenu1, Add(Player Variable(Event Player, thisPlayerHome), Vector(15, 45, 0)));
+		Set Player Variable(Event Player, skyMenu2, Add(Player Variable(Event Player, thisPlayerHome), Vector(-15.000, 45, 0)));
+		Set Player Variable(Event Player, skyMenu3, Add(Player Variable(Event Player, thisPlayerHome), Vector(0, 45, 15)));
+		Set Player Variable(Event Player, skyMenu4, Add(Player Variable(Event Player, thisPlayerHome), Vector(0, 45, -15.000)));
+		disabled Create Effect(Event Player, Sphere, White, Add(Player Variable(Event Player, thisPlayerHome), Vector(0, 40, 0)), 2,
+			Visible To Position and Radius);
+		Create Effect(Event Player, Sphere, White, Player Variable(Event Player, skyMenu1), 1, Visible To Position and Radius);
+		Create Effect(Event Player, Sphere, White, Player Variable(Event Player, skyMenu2), 1, Visible To Position and Radius);
+		Create Effect(Event Player, Sphere, White, Player Variable(Event Player, skyMenu3), 1, Visible To Position and Radius);
+		Create Effect(Event Player, Sphere, White, Player Variable(Event Player, skyMenu4), 1, Visible To Position and Radius);
+		Create In-World Text(Event Player, Custom String("Cycle Difficulty (Current: {0})", Player Variable(Event Player,
+			playerDifficulty), Null, Null), Player Variable(Event Player, skyMenu1), 1, Clip Against Surfaces,
+			Visible To Position and String, White, Default Visibility);
+		Create In-World Text(Event Player, Custom String("Cycle Max Kills (Current: {0})", Player Variable(Event Player, playerMaxKills),
+			Null, Null), Player Variable(Event Player, skyMenu2), 1, Clip Against Surfaces, Visible To Position and String, White,
+			Default Visibility);
+	}
+}
+
+rule("Sky Menu Cycle Difficulty")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is In View Angle(Event Player, Player Variable(Event Player, skyMenu1), 10) == True;
+		Is Dummy Bot(Event Player) == False;
+		Is Button Held(Event Player, Interact) == True;
+	}
+
+	actions
+	{
+		Play Effect(Event Player, Explosion Sound, White, Event Player, 10);
+		If(Compare(Player Variable(Event Player, playerDifficulty), ==, 2));
+			Set Player Variable(Event Player, playerDifficulty, Global Variable(difficultyEasy));
+		Else;
+			Modify Player Variable(Event Player, playerDifficulty, Add, 1);
+		End;
+		If(Compare(Player Variable(Event Player, playerDifficulty), ==, Global Variable(difficultyEasy)));
+			Big Message(Event Player, Custom String("Difficulty Set To Easy", Null, Null, Null));
+		Else If(Compare(Player Variable(Event Player, playerDifficulty), ==, Global Variable(difficultyNormal)));
+			Big Message(Event Player, Custom String("Difficulty Set To Normal", Null, Null, Null));
+		Else If(Compare(Player Variable(Event Player, playerDifficulty), ==, Global Variable(difficultyHard)));
+			Big Message(Event Player, Custom String("Difficulty Set To Hard", Null, Null, Null));
+		End;
+	}
+}
+
+rule("Sky Menu Cycle Max Kills")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is In View Angle(Event Player, Player Variable(Event Player, skyMenu2), 10) == True;
+		Is Dummy Bot(Event Player) == False;
+		Is Button Held(Event Player, Interact) == True;
+	}
+
+	actions
+	{
+		Play Effect(Event Player, Explosion Sound, White, Event Player, 10);
+		If(Compare(Player Variable(Event Player, playerMaxKills), >=, 16));
+			Set Player Variable(Event Player, playerMaxKills, 2);
+		Else;
+			Modify Player Variable(Event Player, playerMaxKills, Add, 2);
+		End;
+		Set Player Variable(Event Player, currentKillNumber, 0);
+		Call Subroutine(setHeroDistanceModifier);
+		Call Subroutine(teleportEnemy);
+	}
+}
+
+rule("AI Reinhardt Charge Start")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Hero Of(Event Player) == Hero(Reinhardt);
+		Is Dummy Bot(Event Player) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), 15) == True;
+		Y Component Of(Position Of(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))))) < 5;
+		Y Component Of(Position Of(Event Player)) < 5;
+		Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerDifficulty)
+			>= Global Variable(difficultyHard);
+		Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), currentKillNumber) >= Divide(
+			Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerMaxKills), 2);
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ability 1);
+	}
+}
+
+rule("AI Reinhardt Charge")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Hero Of(Event Player) == Hero(Reinhardt);
+		Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) == True;
+		Distance Between(Event Player, Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))),
+			thisPlayerHome)) >= Subtract(Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))),
+			playerZoneRadius), 2);
+		Is Dummy Bot(Event Player) == True;
+		Is Using Ability 1(Event Player) == True;
+		Y Component Of(Position Of(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))))) < 5;
+		Y Component Of(Position Of(Event Player)) < 5;
+		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
+		Is Alive(Event Player) == True;
+		Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerDifficulty)
+			>= Global Variable(difficultyHard);
+		Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), currentKillNumber) >= Divide(
+			Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerMaxKills), 2);
+	}
+
+	actions
+	{
+		Set Status(Event Player, Null, Stunned, 0.250);
+		Apply Impulse(Event Player, Backward, 1, To World, Cancel Contrary Motion);
+		Set Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player, Stunned, 0.500);
+		Apply Impulse(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Direction Towards(Players In Slot(
+			Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player), 1, To World, Cancel Contrary Motion);
+		Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player, 300);
+	}
+}
+
+rule("AI Reinhardt Use Shield")
+{
+	event
+	{
+		Player Took Damage;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Hero Of(Event Player) == Hero(Reinhardt);
+		Is Dummy Bot(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
+		Is Alive(Event Player) == True;
+		Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerDifficulty)
+			>= Global Variable(difficultyHard);
+		Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), currentKillNumber) >= Divide(
+			Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerMaxKills), 2);
+	}
+
+	actions
+	{
+		If(Compare(Health(Event Player), <=, Multiply(0.750, Max Health(Event Player))));
+			Skip If(Compare(Random Real(0, 1), >=, 0.500), 3);
+			Start Holding Button(Event Player, Secondary Fire);
+			Wait(Random Real(0.500, 3.500), Ignore Condition);
+			Stop Holding Button(Event Player, Secondary Fire);
+		End;
+	}
+}
+
+rule("AI Reinhardt Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Hero Of(Event Player) == Hero(Reinhardt);
+		Is Dummy Bot(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
+		Is Alive(Event Player) == True;
+		Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerDifficulty)
+			>= Global Variable(difficultyHard);
+		Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), currentKillNumber) >= Divide(
+			Player Variable(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), playerMaxKills), 2);
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) <= Random Real(
+			5.500, 7.500);
+	}
+
+	actions
+	{
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+		Stop Holding Button(Event Player, Secondary Fire);
+		Start Holding Button(Event Player, Primary Fire);
+		Wait(0.200, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Primary Fire);
+		Start Holding Button(Event Player, Secondary Fire);
 	}
 }
