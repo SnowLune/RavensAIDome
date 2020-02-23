@@ -106,7 +106,7 @@ rule("Info")
 
 	actions
 	{
-		Set Global Variable(version, 0.930);
+		Set Global Variable(version, 0.940);
 	}
 }
 
@@ -1290,6 +1290,8 @@ rule("Special Rule: In Air Bug")
 		Is Dummy Bot(Event Player) == False;
 		Is In Air(Event Player) == True;
 		Hero Of(Event Player) != Hero(Pharah);
+		Hero Of(Event Player) != Hero(Sigma);
+		Hero Of(Event Player) != Hero(Mercy);
 	}
 
 	actions
@@ -1321,7 +1323,10 @@ rule("Special Rule: Reinhardt Charge")
 	actions
 	{
 		Set Status(Event Player, Null, Stunned, 0.250);
+		Apply Impulse(Event Player, Backward, 1, To World, Cancel Contrary Motion);
 		Set Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player, Stunned, 0.500);
+		Apply Impulse(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Direction Towards(Players In Slot(
+			Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player), 1, To World, Cancel Contrary Motion);
 		Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player, 300);
 	}
 }
@@ -1371,7 +1376,7 @@ rule("Special Rule: Doomfist Rocket Punch")
 		Hero Of(Event Player) == Hero(Doomfist);
 		Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) == True;
 		Distance Between(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Player Variable(Event Player,
-			thisPlayerHome)) >= Subtract(Player Variable(Event Player, playerZoneRadius), 2);
+			thisPlayerHome)) >= Subtract(Player Variable(Event Player, playerZoneRadius), 1);
 		Is Dummy Bot(Event Player) == False;
 	}
 
@@ -1428,6 +1433,11 @@ rule("Info Toggle")
 			Wait(2, Ignore Condition);
 			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String("<3", Null, Null, Null), Top, 6, Yellow,
 				White, White, Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Custom String(
+				"For More Information & The Most Recent Version go to: ", Null, Null, Null), Custom String(
+				"https://github.com/SnowRoberge/Practice-Field-Expanse", Null, Null, Null), Top, 7, Yellow, White, Sky Blue,
+				Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 		End;
 	}
@@ -1491,6 +1501,7 @@ rule("Target Help Indicator")
 		Has Spawned(Event Player) == True;
 		Is Alive(Event Player) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), 90) == False;
+		Player Variable(Event Player, playerDifficulty) <= Global Variable(difficultyMedium);
 	}
 
 	actions
