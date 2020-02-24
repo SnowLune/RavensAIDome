@@ -111,7 +111,7 @@ rule("Info")
 
 	actions
 	{
-		Set Global Variable(version, 0.950);
+		Set Global Variable(version, 0.952);
 	}
 }
 
@@ -303,6 +303,30 @@ rule("Bot Init")
 			Player Variable(Event Player, thisPlayerHome)), Null, Null, Left, 0, Orange, White, White, Visible To and String,
 			Default Visibility);
 		Disable Built-In Game Mode Respawning(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))));
+	}
+}
+
+rule("Bot Destroy")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Dummy Bot(Event Player) == True;
+		Is In Spawn Room(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == False;
+		Has Spawned(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == False;
+		Entity Exists(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == False;
+	}
+
+	actions
+	{
+		Destroy Dummy Bot(Team Of(Event Player), Slot Of(Event Player));
 	}
 }
 
@@ -829,8 +853,9 @@ rule("Change Heroes")
 
 	actions
 	{
+		Wait(0.250, Abort When False);
 		Small Message(Event Player, Custom String("Continue holding to change heroes...", Null, Null, Null));
-		Wait(0.750, Abort When False);
+		Wait(0.500, Abort When False);
 		Preload Hero(Event Player, Hero(Widowmaker));
 		Preload Hero(Event Player, Hero(Ashe));
 		Set Player Variable(Event Player, previousPlayerHero, Hero Of(Event Player));
@@ -908,6 +933,8 @@ rule("Subroutine: teleportEnemy")
 			1)), To Player);
 		Teleport(Player Variable(Event Player, myBot), Vector(Player Variable(Player Variable(Event Player, myPlayer), newEnemyX), 0,
 			Player Variable(Player Variable(Event Player, myPlayer), newEnemyZ)));
+		Skip If(Is In View Angle(Player Variable(Event Player, myPlayer), Player Variable(Player Variable(Event Player, myPlayer),
+			skyMenu2), 20), 1);
 		Play Effect(Player Variable(Event Player, myPlayer), Buff Impact Sound, White, Player Variable(Event Player, myBot), 180);
 	}
 }
@@ -1461,26 +1488,6 @@ rule("Info Toggle")
 	}
 }
 
-rule("Player Left")
-{
-	event
-	{
-		Player Left Match;
-		All;
-		All;
-	}
-
-	conditions
-	{
-		Is Dummy Bot(Event Player) == False;
-	}
-
-	actions
-	{
-		Set Player Variable(Event Player, initSpawned, False);
-	}
-}
-
 rule("Player Joined")
 {
 	event
@@ -1594,7 +1601,7 @@ rule("Sky Menu Cycle Difficulty")
 
 	actions
 	{
-		Play Effect(Event Player, Explosion Sound, White, Event Player, 10);
+		Play Effect(Event Player, Explosion Sound, White, Event Player, 15);
 		If(Compare(Player Variable(Event Player, playerDifficulty), ==, 2));
 			Set Player Variable(Event Player, playerDifficulty, Global Variable(difficultyEasy));
 		Else;
@@ -1629,7 +1636,7 @@ rule("Sky Menu Cycle Max Kills")
 
 	actions
 	{
-		Play Effect(Event Player, Explosion Sound, White, Event Player, 10);
+		Play Effect(Event Player, Explosion Sound, White, Event Player, 15);
 		If(Compare(Player Variable(Event Player, playerMaxKills), >=, 16));
 			Set Player Variable(Event Player, playerMaxKills, 2);
 		Else;
