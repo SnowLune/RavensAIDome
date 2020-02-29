@@ -38,6 +38,11 @@ settings
 		Team 2
 		{
 			Ultimate Generation: 200%
+
+			D.Va
+			{
+				Ultimate Generation Self-Destruct: 101%
+			}
 		}
 	}
 }
@@ -58,7 +63,6 @@ variables
 		12: mediumDistance
 		13: shortDistance
 		14: veryShortDistance
-		15: enemyToPlayerDistance
 		16: positiveNegativeArray
 		18: reactionTimerDefault
 		20: serverLoad
@@ -122,14 +126,15 @@ variables
 		50: botAI_MoveJump_Enabled
 		51: botAI_FacingTarget
 		52: botAI_Cooldown_Ability1
-		53: botAI_Coodown_Ability2
-		54: botAI_Coodown_Ability3
+		53: botAI_Cooldown_Ability2
+		54: botAI_Cooldown_Ability3
 		55: botAI_UseTime_Ability1
 		56: botAI_UseTime_Ability2
 		57: botAI_UseTime_Ability3
 		59: botAI_Resource_2
 		61: botAI_CanUseAbilities
 		62: botAI_CanAttack
+		63: botAI_AnchorPosition
 }
 
 subroutines
@@ -146,6 +151,7 @@ subroutines
 	11: botAI_FacingReset
 	12: botAI_FacingEyePosition
 	13: botAI_RealisticMode_Enable
+	14: infoToggle
 }
 
 rule("Info")
@@ -157,7 +163,7 @@ rule("Info")
 
 	actions
 	{
-		Set Global Variable(version, 0.973);
+		Set Global Variable(version, 0.975);
 	}
 }
 
@@ -206,13 +212,6 @@ rule("Global Define")
 		Set Global Variable(difficultyHard, 2);
 		Set Global Variable(difficultyRealistic, 3);
 		Set Global Variable(serverLoad, Server Load);
-		Set Global Variable(enemyToPlayerDistance, Empty Array);
-		Modify Global Variable(enemyToPlayerDistance, Append To Array, 0);
-		Modify Global Variable(enemyToPlayerDistance, Append To Array, 0);
-		Modify Global Variable(enemyToPlayerDistance, Append To Array, 0);
-		Modify Global Variable(enemyToPlayerDistance, Append To Array, 0);
-		Modify Global Variable(enemyToPlayerDistance, Append To Array, 0);
-		Modify Global Variable(enemyToPlayerDistance, Append To Array, 0);
 	}
 }
 
@@ -441,8 +440,8 @@ rule("Bot Respawn")
 		Set Player Variable(Players In Slot(Slot Of(Event Player), Team 1), reactionTimer, Global Variable(reactionTimerDefault));
 		Wait(0.250, Ignore Condition);
 		Set Invisible(Event Player, All);
-		Resurrect(Event Player);
 		Call Subroutine(teleportEnemy);
+		Resurrect(Event Player);
 		Set Player Variable(Event Player, botAI_UsingAbility, False);
 		Stop Holding Button(Event Player, Primary Fire);
 		Stop Holding Button(Event Player, Secondary Fire);
@@ -1277,7 +1276,7 @@ rule("Special Rule: Doomfist Rocket Punch Charge")
 	event
 	{
 		Ongoing - Each Player;
-		All;
+		Team 1;
 		All;
 	}
 
@@ -1308,7 +1307,7 @@ rule("Special Rule: Doomfist Rocket Punch")
 	event
 	{
 		Ongoing - Each Player;
-		All;
+		Team 1;
 		All;
 	}
 
@@ -1337,7 +1336,7 @@ rule("Info Toggle")
 	event
 	{
 		Ongoing - Each Player;
-		All;
+		Team 1;
 		All;
 	}
 
@@ -1346,48 +1345,11 @@ rule("Info Toggle")
 		Is Game In Progress == True;
 		Is Button Held(Event Player, Interact) == True;
 		Is Button Held(Event Player, Crouch) == True;
-		Is Dummy Bot(Event Player) == False;
 	}
 
 	actions
 	{
-		If(Compare(Player Variable(Event Player, showingInfoText), ==, True));
-			For Player Variable(Event Player, hudTextInfo_i, 0, Count Of(Player Variable(Event Player, hudTextInfo)), 1);
-				Destroy HUD Text(Value In Array(Player Variable(Event Player, hudTextInfo), Player Variable(Event Player, hudTextInfo_i)));
-			End;
-			Set Player Variable(Event Player, showingInfoText, False);
-		Else;
-			Set Player Variable(Event Player, hudTextInfo, Empty Array);
-			Set Player Variable(Event Player, showingInfoText, True);
-			Create HUD Text(Event Player, Custom String("Welcome to Practice Field: Expanse!", Null, Null, Null), Custom String(
-				"twitch.tv/thewanderingsnow", Null, Null, Null), Custom String("Created by Snow#15707", Null, Null, Null), Top, 3, Aqua,
-				Purple, Turquoise, Visible To and String, Default Visibility);
-			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
-			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
-				"This workshop mode was designed initially as an aim and reaction time practice for Widowmaker.", Null, Null, Null), Top, 4,
-				Yellow, White, White, Visible To and String, Default Visibility);
-			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
-			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
-				"I have since expanded it so that it can be used to warmup on ALL heroes.", Null, Null, Null), Top, 5, Yellow, White, White,
-				Visible To and String, Default Visibility);
-			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
-			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
-				"Look up for more options! Press [INTERACT] while looking at an option.", Null, Null, Null), Top, 5.200, Yellow, White, Yellow,
-				Visible To and String, Default Visibility);
-			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
-			Wait(2, Ignore Condition);
-			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String("<3", Null, Null, Null), Top, 6, Yellow,
-				White, White, Visible To and String, Default Visibility);
-			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
-			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Custom String(
-				"For More Information & The Most Recent Version go to: ", Null, Null, Null), Custom String(
-				"https://github.com/SnowRoberge/Practice-Field-Expanse", Null, Null, Null), Top, 7, Yellow, White, Sky Blue,
-				Visible To and String, Default Visibility);
-			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
-			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Custom String("Press [CROUCH] and [INTERACT] to hide this text",
-				Null, Null, Null), Null, Top, 8, Yellow, White, Sky Blue, Visible To and String, Default Visibility);
-			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
-		End;
+		Call Subroutine(infoToggle);
 	}
 }
 
@@ -1396,14 +1358,13 @@ rule("Player Joined")
 	event
 	{
 		Player Joined Match;
-		All;
+		Team 1;
 		All;
 	}
 
 	conditions
 	{
 		Is Game In Progress == True;
-		Is Dummy Bot(Event Player) == False;
 		Player Variable(Event Player, initSpawned) == True;
 	}
 
@@ -1411,6 +1372,7 @@ rule("Player Joined")
 	{
 		Destroy Dummy Bot(Opposite Team Of(Team Of(Event Player)), Slot Of(Event Player));
 		Set Player Variable(Event Player, initSpawned, False);
+		Call Subroutine(infoToggle);
 	}
 }
 
@@ -1708,7 +1670,7 @@ rule("AI Subroutine: botAI_FacingReset")
 		Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Add(Direction Towards(Players In Slot(Slot Of(Event Player), Team 2),
 			Players In Slot(Slot Of(Event Player), Team 1)), Vector(Player Variable(Players In Slot(Slot Of(Event Player), Team 2),
 			botAI_FacingX), Player Variable(Players In Slot(Slot Of(Event Player), Team 2), botAI_FacingY), Player Variable(
-			Players In Slot(Slot Of(Event Player), Team 2), botAI_FacingZ))), Random Integer(360, 720), To World, Direction and Turn Rate);
+			Players In Slot(Slot Of(Event Player), Team 2), botAI_FacingZ))), Random Integer(180, 540), To World, Direction and Turn Rate);
 	}
 }
 
@@ -1725,7 +1687,7 @@ rule("AI Subroutine: botAI_FacingEyePosition")
 		Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Add(Direction Towards(Eye Position(Players In Slot(Slot Of(
 			Event Player), Team 2)), Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), Vector(Player Variable(Players In Slot(
 			Slot Of(Event Player), Team 2), botAI_FacingX), Player Variable(Players In Slot(Slot Of(Event Player), Team 2), botAI_FacingY),
-			Player Variable(Players In Slot(Slot Of(Event Player), Team 2), botAI_FacingZ))), Random Integer(360, 720), To World,
+			Player Variable(Players In Slot(Slot Of(Event Player), Team 2), botAI_FacingZ))), Random Integer(180, 540), To World,
 			Direction and Turn Rate);
 	}
 }
@@ -2177,7 +2139,7 @@ rule("AI Tracer General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(5, 6.500));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 3.100);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 13.250);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 13.250);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
 		Set Player Variable(Event Player, botAI_Resource_2, 3);
 	}
@@ -2226,7 +2188,7 @@ rule("AI Tracer Recall")
 		Player Variable(Event Player, botAI_Enabled) == True;
 		Health(Event Player) < 65;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
@@ -2572,7 +2534,7 @@ rule("AI Reinhardt General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(2.500, 5));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 10.600);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 6.500);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 6.500);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
 	}
 }
@@ -2719,7 +2681,7 @@ rule("AI Reinhardt Firestrike")
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
@@ -2816,6 +2778,8 @@ rule("AI Moira Fade")
 	conditions
 	{
 		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Health(Event Player) < 100;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability1), Player Variable(Event Player,
 			botAI_Cooldown_Ability1));
@@ -2823,15 +2787,12 @@ rule("AI Moira Fade")
 
 	actions
 	{
-		Skip If(Compare(Random Real(0, 1), >=, 0.750), 6);
-		Set Player Variable(Event Player, botAI_UsingAbility, True);
 		Press Button(Event Player, Jump);
 		Wait(0.300, Ignore Condition);
 		Press Button(Event Player, Ability 1);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
 		Wait(0.500, Ignore Condition);
 		Press Button(Event Player, Jump);
-		Set Player Variable(Event Player, botAI_UsingAbility, False);
 	}
 }
 
@@ -2879,13 +2840,13 @@ rule("AI Moira Biotic Orb Damage")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
 		Ultimate Charge Percent(Event Player) < 80;
 		Health(Event Player) >= 100;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 75;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
 		Is Using Ability 1(Event Player) == False;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 	}
 
 	actions
@@ -2903,7 +2864,7 @@ rule("AI Moira Biotic Orb Healing")
 {
 	event
 	{
-		Player Took Damage;
+		Ongoing - Each Player;
 		Team 2;
 		Moira;
 	}
@@ -2911,9 +2872,10 @@ rule("AI Moira Biotic Orb Healing")
 	conditions
 	{
 		Player Variable(Event Player, botAI_Enabled) == True;
-		Health(Event Player) < 90;
+		Is Alive(Event Player) == True;
+		Health(Event Player) < 100;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 	}
 
 	actions
@@ -2923,8 +2885,8 @@ rule("AI Moira Biotic Orb Healing")
 		Press Button(Event Player, Ability 2);
 		Wait(0.200, Ignore Condition);
 		Press Button(Event Player, Primary Fire);
-		Set Player Variable(Event Player, botAI_MoveWASD_Enabled, False);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
+		Set Player Variable(Event Player, botAI_MoveWASD_Enabled, False);
 		Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, Direction and Magnitude);
 		Wait(Random Real(1.200, 1.600), Ignore Condition);
 		Set Player Variable(Event Player, botAI_MoveWASD_Enabled, True);
@@ -2943,10 +2905,10 @@ rule("AI Moira Coalescence")
 	conditions
 	{
 		Player Variable(Event Player, botAI_Enabled) == True;
+		Ultimate Charge Percent(Event Player) == 100;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30) == True;
-		Ultimate Charge Percent(Event Player) == 100;
 	}
 
 	actions
@@ -2957,15 +2919,37 @@ rule("AI Moira Coalescence")
 		Press Button(Event Player, Secondary Fire);
 		Wait(0.100, Ignore Condition);
 		Press Button(Event Player, Ultimate);
-		Wait(1, Ignore Condition);
 	}
 }
 
-rule("AI Zarya Use Bubble")
+rule("AI Zarya General")
 {
 	event
 	{
-		Player Took Damage;
+		Ongoing - Each Player;
+		Team 2;
+		Zarya;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(5, 10));
+		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 12);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
+	}
+}
+
+rule("AI Zarya Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
 		Team 2;
 		Zarya;
 	}
@@ -2973,12 +2957,81 @@ rule("AI Zarya Use Bubble")
 	conditions
 	{
 		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
 	}
 
 	actions
 	{
-		Skip If(Compare(Random Real(0, 1), >=, 0.500), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Start Holding Button(Event Player, Primary Fire);
+		Wait(1, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Zarya Use Bubble")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Zarya;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 10) == True;
+		Is Firing Primary(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
+			botAI_Cooldown_Ability3));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Skip If(Compare(Random Real(0, 1), >=, 0.500), 2);
 		Press Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
+	}
+}
+
+rule("AI Zarya Graviton Surge")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Zarya;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
+	}
+
+	actions
+	{
+		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Position Of(Players In Slot(Slot Of(Event Player),
+			Team 1))), 360, To World, Direction and Turn Rate);
+		Wait(0.250, Ignore Condition);
+		Press Button(Event Player, Ultimate);
+		Wait(0.200, Ignore Condition);
+		Call Subroutine(botAI_FacingReset);
 	}
 }
 
@@ -3002,7 +3055,7 @@ rule("AI Brigitte General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(4, 6));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 4);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability3, 7);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 7);
 		Set Player Variable(Event Player, botAI_UseTime_Ability3, 0);
 	}
 }
@@ -3084,7 +3137,7 @@ rule("AI Brigitte Shield Bash")
 		Y Component Of(Position Of(Event Player)) < 3;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 6.800;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
-			botAI_Coodown_Ability3));
+			botAI_Cooldown_Ability3));
 	}
 
 	actions
@@ -3120,7 +3173,7 @@ rule("AI Brigitte Shield Bash Gap Closer")
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 12.500;
 		Health(Event Player) >= 125;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
-			botAI_Coodown_Ability3));
+			botAI_Cooldown_Ability3));
 	}
 
 	actions
@@ -3248,7 +3301,7 @@ rule("AI Roadhog General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(9, 12));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 8.300);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 8.500);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 8.500);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
 	}
 }
@@ -3362,7 +3415,7 @@ rule("AI Roadhog Take A Breather")
 		Player Variable(Event Player, botAI_Enabled) == True;
 		Health(Event Player) < 100;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
@@ -3418,7 +3471,11 @@ rule("AI McCree General")
 
 	actions
 	{
-		Set Player Variable(Event Player, botAI_OptimalDistance, 15);
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(13, 16));
+		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 6.400);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 10.650);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
 	}
 }
 
@@ -3439,6 +3496,7 @@ rule("AI McCree Attack")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
+		Is Using Ultimate(Event Player) == False;
 	}
 
 	actions
@@ -3446,6 +3504,35 @@ rule("AI McCree Attack")
 		Press Button(Event Player, Primary Fire);
 		Wait(Random Real(0.420, 0.520), Ignore Condition);
 		Loop If Condition Is True;
+	}
+}
+
+rule("AI McCree Combat Roll")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		McCree;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 10) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability1), Player Variable(Event Player,
+			botAI_UseTime_Ability1));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Skip If(Is Using Ultimate(Players In Slot(Slot Of(Event Player), Team 1)), 1);
+		Skip If(Compare(Random Real(0, 1), >, 0.750), 2);
+		Press Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
 	}
 }
 
@@ -3464,14 +3551,18 @@ rule("AI McCree Flashbang")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 7;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 6;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
+			botAI_Cooldown_Ability2));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
 	actions
 	{
 		Skip If(Is Using Ultimate(Players In Slot(Slot Of(Event Player), Team 1)), 1);
-		Skip If(Compare(Random Real(0, 1), >, 0.750), 1);
+		Skip If(Compare(Random Real(0, 1), >, 0.750), 2);
 		Press Button(Event Player, Ability 2);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
 	}
 }
 
@@ -3515,11 +3606,12 @@ rule("AI McCree Deadeye Charge")
 	{
 		Player Variable(Event Player, botAI_Enabled) == True;
 		Player Variable(Event Player, mccreeDeadeyeUse) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 	}
 
 	actions
 	{
-		Set Player Variable(Event Player, botAI_UsingAbility, True);
 		Set Player Variable(Event Player, mccreeDeadeyeCharge, 0);
 		Set Player Variable(Event Player, mccreeDeadeyeRate, 100);
 		Stop Holding Button(Event Player, Primary Fire);
@@ -3535,7 +3627,6 @@ rule("AI McCree Deadeye Charge")
 		Press Button(Event Player, Primary Fire);
 		Set Player Variable(Event Player, mccreeDeadeyeCharge, 0);
 		Set Player Variable(Event Player, mccreeDeadeyeUse, False);
-		Set Player Variable(Event Player, botAI_UsingAbility, False);
 	}
 }
 
@@ -3563,7 +3654,6 @@ rule("AI McCree Deadeye Fire")
 		Stop Chasing Player Variable(Event Player, mccreeDeadeyeCharge);
 		Press Button(Event Player, Primary Fire);
 		Set Player Variable(Event Player, mccreeDeadeyeUse, False);
-		Set Player Variable(Event Player, botAI_UsingAbility, False);
 	}
 }
 
@@ -3587,9 +3677,9 @@ rule("AI D.Va General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(4, 8));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 5);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 8);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 8);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability3, 1.500);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 1.500);
 		Set Player Variable(Event Player, botAI_UseTime_Ability3, 0);
 	}
 }
@@ -3640,7 +3730,7 @@ rule("AI D.Va Micro Missiles")
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
@@ -3668,7 +3758,7 @@ rule("AI D.Va Defense Matrix")
 		Array Contains(Global Variable(projectileHeroes), Hero Of(Attacker)) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30) == True;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
-			botAI_Coodown_Ability3));
+			botAI_Cooldown_Ability3));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
@@ -3902,7 +3992,7 @@ rule("Debug Toggle")
 	event
 	{
 		Ongoing - Each Player;
-		All;
+		Team 1;
 		All;
 	}
 
@@ -3945,15 +4035,11 @@ rule("Debug Toggle")
 			Create HUD Text(Event Player, Custom String("Enemy Ult Charge: {0}", Ultimate Charge Percent(Players In Slot(Slot Of(Event Player),
 				Team 2)), Null, Null), Null, Null, Right, 6, Turquoise, White, White, Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, debugHUD, Append To Array, Last Text ID);
+			Create HUD Text(Event Player, Custom String("Player Facing Dir: {0}", Facing Direction Of(Event Player), Null, Null), Null,
+				Custom String("Enemy Facing Dir: {0}", Facing Direction Of(Players In Slot(Slot Of(Event Player), Team 2)), Null, Null), Left,
+				6.100, White, White, White, Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, debugHUD, Append To Array, Last Text ID);
 			Wait(2, Ignore Condition);
-			disabled Create HUD Text(Event Player, Custom String("", Null, Null, Null), Custom String(
-				"For More Information & The Most Recent Version go to: ", Null, Null, Null), Custom String(
-				"https://github.com/SnowRoberge/Practice-Field-Expanse", Null, Null, Null), Top, 7, Yellow, White, Sky Blue,
-				Visible To and String, Default Visibility);
-			disabled Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
-			disabled Create HUD Text(Event Player, Custom String("", Null, Null, Null), Custom String("Press [CROUCH] and [INTERACT] to hide this text",
-				Null, Null, Null), Null, Top, 8, Yellow, White, Sky Blue, Visible To and String, Default Visibility);
-			disabled Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 		End;
 	}
 }
@@ -4029,7 +4115,7 @@ rule("AI Moira General")
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 6);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 10);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 10);
 	}
 }
 
@@ -4075,7 +4161,7 @@ rule("AI Widowmaker General")
 	}
 }
 
-rule("AI Widowmaker Aim Down Sights Start")
+rule("AI Widowmaker Aim Down Sights")
 {
 	event
 	{
@@ -4088,63 +4174,22 @@ rule("AI Widowmaker Aim Down Sights Start")
 	{
 		Player Variable(Event Player, botAI_Enabled) == True;
 		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 16;
+		Player Variable(Event Player, botAI_CanAttack) == True;
 	}
 
 	actions
 	{
+		Skip If(Is Button Held(Event Player, Secondary Fire), 3);
 		Set Player Variable(Event Player, botAI_MoveJump_Enabled, False);
 		Start Holding Button(Event Player, Secondary Fire);
 		Call Subroutine(botAI_FacingEyePosition);
-	}
-}
-
-rule("AI Widowmaker Aim Down Sights Stop")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Widowmaker;
-	}
-
-	conditions
-	{
-		Player Variable(Event Player, botAI_Enabled) == True;
-		Is Alive(Event Player) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 16;
-	}
-
-	actions
-	{
+		Wait(0.750, Ignore Condition);
+		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Secondary Fire);
 		Call Subroutine(botAI_FacingReset);
 		Set Player Variable(Event Player, botAI_MoveJump_Enabled, True);
-	}
-}
-
-disabled rule("AI Widowmaker Aim For Head")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Widowmaker;
-	}
-
-	conditions
-	{
-		Player Variable(Event Player, botAI_Enabled) == True;
-		Is Alive(Event Player) == True;
-		Is Button Held(Event Player, Secondary Fire) == True;
-	}
-
-	actions
-	{
-		Wait(0.100, Abort When False);
-		Set Player Variable(Event Player, botAI_FacingTarget, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)));
-		Loop If Condition Is True;
-		Set Player Variable(Event Player, botAI_FacingTarget, Players In Slot(Slot Of(Event Player), Team 1));
 	}
 }
 
@@ -4161,8 +4206,9 @@ rule("AI Widowmaker Charge Shot")
 	{
 		Player Variable(Event Player, botAI_Enabled) == True;
 		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is Button Held(Event Player, Secondary Fire) == True;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)), 4) == True;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)), 6) == True;
 	}
 
 	actions
@@ -4193,7 +4239,7 @@ rule("AI Torbjorn General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(15, 20));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 13);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 15);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 15);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
 		Call Subroutine(botAI_FacingEyePosition);
 	}
@@ -4306,7 +4352,7 @@ rule("AI Torbjorn Overload")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Health(Event Player) <= 90;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
@@ -4371,7 +4417,7 @@ rule("AI Mei General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(6, 10));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 16);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 15);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 15);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
 	}
 }
@@ -4514,15 +4560,16 @@ rule("AI Mei Ice Wall")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
 	actions
 	{
 		Press Button(Event Player, Ability 2);
-		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Players In Slot(Slot Of(Event Player), Team 1)), 360,
-			To World, None);
+		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Add(Position Of(Players In Slot(Slot Of(Event Player),
+			Team 1)), World Vector Of(Add(Facing Direction Of(Event Player), 1), Event Player, Rotation And Translation))), 360, To World,
+			None);
 		Wait(0.300, Ignore Condition);
 		Press Button(Event Player, Primary Fire);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
@@ -4550,7 +4597,7 @@ rule("AI Winston General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(3, 8));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 6);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 13);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 13);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
 	}
 }
@@ -4600,7 +4647,7 @@ rule("AI Winston Barrier Projector")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 	}
 
@@ -4895,9 +4942,9 @@ rule("AI Sombra General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(5, 8));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 6);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 6);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 6);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability3, 8);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 8);
 		Set Player Variable(Event Player, botAI_UseTime_Ability3, 0);
 		Press Button(Event Player, Ability 1);
 		Call Subroutine(botAI_FacingReset);
@@ -4981,7 +5028,7 @@ rule("AI Sombra Translocator Place")
 		Player Variable(Event Player, botAI_Enabled) == True;
 		Is Alive(Event Player) == True;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 		Is Using Ability 1(Event Player) == False;
 		Is Button Held(Event Player, Secondary Fire) == False;
@@ -5014,9 +5061,10 @@ rule("AI Sombra Translocator Use")
 		Player Variable(Event Player, botAI_Enabled) == True;
 		Is Alive(Event Player) == True;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 		Health(Event Player) < 75;
+		Is Button Held(Event Player, Secondary Fire) == False;
 	}
 
 	actions
@@ -5196,13 +5244,8 @@ rule("AI Genji General")
 		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(7, 14));
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 8.300);
 		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability2, 10);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 10);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
-		Set Player Variable(Event Player, botAI_Coodown_Ability3, 8);
-		Set Player Variable(Event Player, botAI_UseTime_Ability3, 0);
-		Press Button(Event Player, Ability 1);
-		Call Subroutine(botAI_FacingReset);
-		Call Subroutine(botAI_RealisticMode_Enable);
 	}
 }
 
@@ -5289,7 +5332,7 @@ rule("AI Genji Deflect")
 		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 7.500) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
-			botAI_Coodown_Ability2));
+			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
 		Is Using Ability 1(Event Player) == False;
 		Array Contains(Global Variable(projectileHeroes), Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
@@ -5413,13 +5456,15 @@ rule("AI Genji Swift Dragonblade")
 	{
 		Press Button(Event Player, Ultimate);
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 0);
-		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(2.500, 4.500));
-		Skip If(Compare(Random Real(0, 1), >=, 0.750), 1);
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(1.500, 4.500));
+		Skip If(Compare(Random Real(0, 1), >=, 0.900), 1);
 		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Add(Position Of(Players In Slot(Slot Of(Event Player),
-			Team 1)), Vector(0, 15, 0))), Random Real(400, 800), To World, Direction and Turn Rate);
+			Team 1)), Vector(0, Random Real(5, 10), 0))), Random Real(400, 800), To World, Direction and Turn Rate);
 		Wait(1, Ignore Condition);
 		Press Button(Event Player, Ability 1);
 		Call Subroutine(botAI_FacingReset);
+		Wait(6, Ignore Condition);
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(7, 14));
 	}
 }
 
@@ -5475,5 +5520,531 @@ rule("AI Genji Double Jump")
 		Skip If(Compare(Random Real(0, 1), >=, 0.750), 2);
 		Wait(Random Real(0.200, 0.350), Ignore Condition);
 		Press Button(Event Player, Jump);
+	}
+}
+
+rule("AI Orisa General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Orisa;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(12, 16));
+		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 14);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 10);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 8);
+		Set Player Variable(Event Player, botAI_UseTime_Ability3, 0);
+	}
+}
+
+rule("AI Orisa Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Orisa;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+	}
+
+	actions
+	{
+		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Start Holding Button(Event Player, Primary Fire);
+		Wait(1, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Orisa Protective Barrier")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Orisa;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Player Variable(Event Player,
+			botAI_OptimalDistance);
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
+			botAI_Cooldown_Ability2));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Start Facing(Event Player, Direction From Angles(Horizontal Facing Angle Of(Event Player), 30), Random Real(400, 700), To World,
+			None);
+		Wait(0.200, Ignore Condition);
+		Press Button(Event Player, Ability 2);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
+		Set Player Variable(Event Player, botAI_AnchorPosition, Position Of(Event Player));
+		Set Player Variable(Event Player, botAI_MoveWASD_Enabled, False);
+		Wait(0.200, Ignore Condition);
+		Call Subroutine(botAI_FacingReset);
+	}
+}
+
+disabled rule("AI Orisa Protective Barrier Stay Behind")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Orisa;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		disabled Is Using Ability 2(Event Player) == True;
+		disabled Player Variable(Event Player, botAI_AnchorPosition) > 0;
+	}
+
+	actions
+	{
+		If(Compare(X Component Of(Position Of(Event Player)), >, X Component Of(Player Variable(Event Player, botAI_AnchorPosition))));
+			Start Throttle In Direction(Event Player, Left, 1, To Player, Replace existing throttle, Direction and Magnitude);
+		Else;
+			Start Throttle In Direction(Event Player, Right, 1, To Player, Replace existing throttle, Direction and Magnitude);
+		End;
+		If(Compare(Z Component Of(Position Of(Event Player)), >, Z Component Of(Player Variable(Event Player, botAI_AnchorPosition))));
+			Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, Direction and Magnitude);
+		Else;
+			Start Throttle In Direction(Event Player, Backward, 1, To Player, Replace existing throttle, Direction and Magnitude);
+		End;
+		Wait(Random Real(0.200, 0.500), Ignore Condition);
+		Loop If Condition Is True;
+	}
+}
+
+rule("AI Zenyatta General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Zenyatta;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(12, 16));
+	}
+}
+
+rule("AI Zenyatta Attack Primary")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Zenyatta;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is Button Held(Event Player, Secondary Fire) == False;
+		Is Using Ultimate(Event Player) == False;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+	}
+
+	actions
+	{
+		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Start Holding Button(Event Player, Primary Fire);
+		Wait(0.400, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Zenyatta Attack Secondary")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Zenyatta;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is Using Ultimate(Event Player) == False;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+	}
+
+	actions
+	{
+		Stop Holding Button(Event Player, Primary Fire);
+		Skip If(Is Button Held(Event Player, Secondary Fire), 1);
+		Start Holding Button(Event Player, Secondary Fire);
+		Wait(2.500, Ignore Condition);
+		Stop Holding Button(Event Player, Secondary Fire);
+	}
+}
+
+rule("AI Zenyatta Transcendence")
+{
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		Zenyatta;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Health(Event Player) < 50;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ultimate);
+	}
+}
+
+rule("AI Doomfist General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(3, 6));
+		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 6.600);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, 0);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 6);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, 0);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 6);
+		Set Player Variable(Event Player, botAI_UseTime_Ability3, 0);
+	}
+}
+
+rule("AI Doomfist Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+		Is Button Held(Event Player, Secondary Fire) == False;
+	}
+
+	actions
+	{
+		Skip If(Compare(Random Real(0, 1), >=, 0.500), 1);
+		Press Button(Event Player, Primary Fire);
+		Wait(0.400, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Doomfist Uppercut")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 5;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability1), Player Variable(Event Player,
+			botAI_Cooldown_Ability1));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+		Is Button Held(Event Player, Secondary Fire) == False;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Primary Fire);
+		Wait(0.100, Ignore Condition);
+		Press Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
+		Wait(0.400, Ignore Condition);
+		Press Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Doomfist Seismic Slam")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Or(Compare(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), All Teams)), >=, 2), Is In Air(Event Player))
+			== True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 14;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
+			botAI_Cooldown_Ability2));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Jump);
+		Start Facing(Event Player, Direction From Angles(Horizontal Angle Towards(Event Player, Players In Slot(Slot Of(Event Player),
+			Team 1)), Add(Vertical Angle Towards(Event Player, Players In Slot(Slot Of(Event Player), Team 1)), Random Real(20, 30))), 400,
+			To Player, Direction and Turn Rate);
+		Wait(0.250, Ignore Condition);
+		Press Button(Event Player, Ability 2);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
+		Call Subroutine(botAI_FacingReset);
+	}
+}
+
+rule("AI Doomfist Rocket Punch Start")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
+			botAI_Cooldown_Ability3));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Start Holding Button(Event Player, Secondary Fire);
+		Set Player Variable(Event Player, doomfistPunchCharge, Total Time Elapsed);
+		Wait(Random Real(0.900, 1.800), Ignore Condition);
+		Stop Holding Button(Event Player, Secondary Fire);
+	}
+}
+
+rule("AI Doomfist Rocket Punch Stop")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+		Is Button Held(Event Player, Secondary Fire) == False;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, doomfistPunchCharge, Subtract(Total Time Elapsed, Player Variable(Event Player,
+			doomfistPunchCharge)));
+	}
+}
+
+rule("AI Doomfist Meteor Strike")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 1.500;
+		Is Button Held(Event Player, Secondary Fire) == False;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ultimate);
+		Set Player Variable(Event Player, botAI_MoveWASD_Enabled, False);
+		Start Throttle In Direction(Event Player, Direction Towards(Event Player, Position Of(Players In Slot(Slot Of(Event Player),
+			Team 1))), 1, To Player, Replace existing throttle, Direction and Magnitude);
+		Wait(0.200, Ignore Condition);
+		Loop If Condition Is True;
+		Press Button(Event Player, Primary Fire);
+		Set Player Variable(Event Player, botAI_MoveWASD_Enabled, True);
+	}
+}
+
+rule("AI Doomfist Rocket Punch")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Has Status(Players In Slot(Slot Of(Event Player), Team 1), Stunned) == True;
+		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Player Variable(Players In Slot(Slot Of(Event Player), Team 1),
+			thisPlayerHome)) >= Subtract(Player Variable(Players In Slot(Slot Of(Event Player), Team 1), playerZoneRadius), 1);
+	}
+
+	actions
+	{
+		Set Status(Players In Slot(Slot Of(Event Player), Team 1), Event Player, Stunned, 0.500);
+		Apply Impulse(Players In Slot(Slot Of(Event Player), Team 1), Direction Towards(Players In Slot(Slot Of(Event Player), Team 1),
+			Event Player), 1, To World, Cancel Contrary Motion);
+		Damage(Players In Slot(Slot Of(Event Player), Team 1), Event Player, Add(Multiply(Divide(Player Variable(Event Player,
+			doomfistPunchCharge), 1.400), 100.750), 49.250));
+		Set Player Variable(Event Player, doomfistPunchCharge, 0);
+	}
+}
+
+rule("Subroutine: infoToggle")
+{
+	event
+	{
+		Subroutine;
+		infoToggle;
+	}
+
+	actions
+	{
+		If(Compare(Player Variable(Event Player, showingInfoText), ==, True));
+			For Player Variable(Event Player, hudTextInfo_i, 0, Count Of(Player Variable(Event Player, hudTextInfo)), 1);
+				Destroy HUD Text(Value In Array(Player Variable(Event Player, hudTextInfo), Player Variable(Event Player, hudTextInfo_i)));
+			End;
+			Set Player Variable(Event Player, showingInfoText, False);
+		Else;
+			Set Player Variable(Event Player, hudTextInfo, Empty Array);
+			Set Player Variable(Event Player, showingInfoText, True);
+			Create HUD Text(Event Player, Custom String("Welcome to Practice Field: Expanse!", Null, Null, Null), Custom String(
+				"twitch.tv/thewanderingsnow", Null, Null, Null), Custom String("Created by Snow#15707", Null, Null, Null), Top, 3, Aqua,
+				Purple, Turquoise, Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
+				"This workshop mode was designed initially as an aim and reaction time practice for Widowmaker.", Null, Null, Null), Top, 4,
+				Yellow, White, White, Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
+				"I have since expanded it so that it can be used to warmup on ALL heroes.", Null, Null, Null), Top, 5, Yellow, White, White,
+				Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String(
+				"Look above you for more options! Press [INTERACT] while looking at an option.", Null, Null, Null), Top, 5.200, Yellow, White,
+				Yellow, Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+			Wait(2, Ignore Condition);
+			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Null, Custom String("See the top left corner for controls.",
+				Null, Null, Null), Top, 6, Yellow, White, Green, Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Custom String(
+				"For More Information & The Most Recent Version go to: ", Null, Null, Null), Custom String(
+				"https://github.com/SnowRoberge/Practice-Field-Expanse", Null, Null, Null), Top, 7, Yellow, White, Sky Blue,
+				Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+			Create HUD Text(Event Player, Custom String("", Null, Null, Null), Custom String("Press [CROUCH] and [INTERACT] to hide this text",
+				Null, Null, Null), Null, Top, 8, Yellow, White, Sky Blue, Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+		End;
 	}
 }
