@@ -131,7 +131,9 @@ variables
 		60: botAI_Resource_3
 		61: botAI_CanUseAbilities
 		62: botAI_CanAttack
-		63: botAI_AnchorPosition
+		63: botAI_Anchor_Position
+		64: botAI_Anchor_DriftMax
+		65: botAI_Anchor_Enabled
 }
 
 subroutines
@@ -151,6 +153,7 @@ subroutines
 	14: infoToggle
 	15: botAI_FacingAbsolute
 	16: botAI_RealisticMode_Disable
+	17: botAI_MoveTowardsAnchor
 }
 
 rule("Info")
@@ -162,7 +165,7 @@ rule("Info")
 
 	actions
 	{
-		Set Global Variable(version, 0.978);
+		Set Global Variable(version, 0.979);
 	}
 }
 
@@ -1286,6 +1289,34 @@ rule("Special Rule: Doomfist Rocket Punch Stop")
 			Set Player Variable(Event Player, doomfistPunchDamage, 150);
 		End;
 		Small Message(Event Player, Player Variable(Event Player, doomfistPunchDamage));
+	}
+}
+
+rule("Special Rule: Doomfist Rocket Punch Damage")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		Doomfist;
+	}
+
+	conditions
+	{
+		Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) == True;
+		Distance Between(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Player Variable(Players In Slot(
+			Slot Of(Event Player), Team 1), thisPlayerHome)) >= Subtract(Player Variable(Players In Slot(Slot Of(Event Player), Team 1),
+			playerZoneRadius), 1);
+	}
+
+	actions
+	{
+		Apply Impulse(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Direction Towards(Players In Slot(
+			Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player), 1, To World, Cancel Contrary Motion);
+		Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player, Player Variable(Event Player,
+			doomfistPunchDamage));
+		Set Player Variable(Event Player, doomfistPunchCharge, 0);
+		Set Player Variable(Event Player, doomfistPunchDamage, 0);
 	}
 }
 
@@ -5421,6 +5452,7 @@ rule("AI Orisa General")
 		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 14);
 		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 10);
 		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 8);
+		Set Player Variable(Event Player, botAI_Anchor_Enabled, False);
 	}
 }
 
@@ -5482,44 +5514,11 @@ rule("AI Orisa Protective Barrier")
 		Wait(0.200, Ignore Condition);
 		Press Button(Event Player, Ability 2);
 		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
-		Set Player Variable(Event Player, botAI_AnchorPosition, Position Of(Event Player));
-		Set Player Variable(Event Player, botAI_MoveWASD_Enabled, False);
+		Set Player Variable(Event Player, botAI_Anchor_Position, Position Of(Event Player));
+		Set Player Variable(Event Player, botAI_Anchor_DriftMax, 1.500);
+		Set Player Variable(Event Player, botAI_Anchor_Enabled, True);
 		Wait(0.200, Ignore Condition);
 		Call Subroutine(botAI_FacingReset);
-	}
-}
-
-disabled rule("AI Orisa Protective Barrier Stay Behind")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Orisa;
-	}
-
-	conditions
-	{
-		Player Variable(Event Player, botAI_Enabled) == True;
-		Is Alive(Event Player) == True;
-		disabled Is Using Ability 2(Event Player) == True;
-		disabled Player Variable(Event Player, botAI_AnchorPosition) > 0;
-	}
-
-	actions
-	{
-		If(Compare(X Component Of(Position Of(Event Player)), >, X Component Of(Player Variable(Event Player, botAI_AnchorPosition))));
-			Start Throttle In Direction(Event Player, Left, 1, To Player, Replace existing throttle, Direction and Magnitude);
-		Else;
-			Start Throttle In Direction(Event Player, Right, 1, To Player, Replace existing throttle, Direction and Magnitude);
-		End;
-		If(Compare(Z Component Of(Position Of(Event Player)), >, Z Component Of(Player Variable(Event Player, botAI_AnchorPosition))));
-			Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, Direction and Magnitude);
-		Else;
-			Start Throttle In Direction(Event Player, Backward, 1, To Player, Replace existing throttle, Direction and Magnitude);
-		End;
-		Wait(Random Real(0.200, 0.500), Ignore Condition);
-		Loop If Condition Is True;
 	}
 }
 
@@ -6103,13 +6102,13 @@ rule("AI Ana Sleep Dart Face Enemy Asleep")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Player Variable(Event Player, botAI_CanAttack) == True;
-		Has Status(Event Player, Asleep) == Players In Slot(Slot Of(Event Player), Team 1);
+		Has Status(Players In Slot(Slot Of(Event Player), Team 1), Asleep) == True;
 	}
 
 	actions
 	{
 		Call Subroutine(botAI_FacingAbsolute);
-		Wait(1.500, Ignore Condition);
+		Wait(1, Ignore Condition);
 		Loop If Condition Is True;
 		Call Subroutine(botAI_FacingReset);
 	}
@@ -6134,6 +6133,7 @@ rule("AI Ana Biotic Grenade")
 		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
 			botAI_Cooldown_Ability2));
 		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+		Health(Event Player) > 100;
 	}
 
 	actions
@@ -6354,9 +6354,10 @@ rule("AI Symmetra Attack Primary")
 
 	actions
 	{
+		Wait(0.250, Ignore Condition);
 		Skip If(Is Button Held(Event Player, Primary Fire), 1);
 		Start Holding Button(Event Player, Primary Fire);
-		Wait(0.750, Ignore Condition);
+		Wait(0.500, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Primary Fire);
 	}
@@ -6875,6 +6876,7 @@ rule("AI Winston Jump Pack")
 			Random Integer(270, 360), To World, Direction and Turn Rate);
 		Wait(0.100, Ignore Condition);
 		Press Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
 		Wait(0.250, Ignore Condition);
 		Call Subroutine(botAI_FacingReset);
 		Set Player Variable(Event Player, botAI_MoveWASD_Enabled, True);
@@ -6924,5 +6926,446 @@ rule("Special Rule: Doomfist Rocket Punch Damage")
 			doomfistPunchDamage));
 		Set Player Variable(Event Player, doomfistPunchCharge, 0);
 		Set Player Variable(Event Player, doomfistPunchDamage, 0);
+	}
+}
+
+rule("AI Bastion General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Bastion;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(18, 22));
+		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 1);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 1.500);
+		Call Subroutine(botAI_FacingReset);
+	}
+}
+
+rule("AI Bastion Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Bastion;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+		Is Using Ability 1(Event Player) == False;
+		Is Firing Secondary(Event Player) == False;
+	}
+
+	actions
+	{
+		Start Holding Button(Event Player, Primary Fire);
+		Wait(1, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Bastion Reconfigure")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Bastion;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Player Variable(Event Player,
+			botAI_OptimalDistance);
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability1), Player Variable(Event Player,
+			botAI_Cooldown_Ability1));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+		Is Moving(Event Player) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
+	}
+}
+
+rule("AI Bastion Self-Repair")
+{
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		Bastion;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
+			botAI_Cooldown_Ability3));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Start Holding Button(Event Player, Secondary Fire);
+		Wait(Divide(Subtract(Max Health(Event Player), Health(Event Player)), 75), Ignore Condition);
+		Stop Holding Button(Event Player, Secondary Fire);
+		Set Player Variable(Event Player, botAI_UseTime_Ability3, Total Time Elapsed);
+	}
+}
+
+rule("AI Bastion Configuration: Tank")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Bastion;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Health(Event Player) >= 100;
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ultimate);
+		Call Subroutine(botAI_FacingAbsolute);
+		Wait(8, Ignore Condition);
+		Call Subroutine(botAI_FacingReset);
+	}
+}
+
+rule("AI Symmetra Photon Barrier")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Symmetra;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Health(Event Player) >= 100;
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ultimate);
+		Wait(0.200, Ignore Condition);
+		Press Button(Event Player, Ultimate);
+		Wait(0.100, Ignore Condition);
+		Press Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Soldier: 76 General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(15, 20));
+		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 0.300);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 15);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 8);
+		Call Subroutine(botAI_FacingReset);
+	}
+}
+
+rule("AI Soldier: 76 Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+		Is Using Ability 1(Event Player) == False;
+		Is Firing Secondary(Event Player) == False;
+	}
+
+	actions
+	{
+		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Start Holding Button(Event Player, Primary Fire);
+		Wait(0.750, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Soldier: 76 Sprint")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= Player Variable(Event Player,
+			botAI_OptimalDistance);
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability1), Player Variable(Event Player,
+			botAI_Cooldown_Ability1));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Start Holding Button(Event Player, Ability 1);
+		Wait(0.600, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
+	}
+}
+
+rule("AI Soldier: 76 Biotic Field")
+{
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		Soldier: 76;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Health(Event Player) <= 80;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
+			botAI_Cooldown_Ability2));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ability 2);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
+	}
+}
+
+rule("AI Soldier: 76 Helix Rockets")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
+			botAI_Cooldown_Ability3));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Call Subroutine(botAI_FacingAbsolute);
+		Wait(0.150, Ignore Condition);
+		Press Button(Event Player, Secondary Fire);
+		Set Player Variable(Event Player, botAI_UseTime_Ability3, Total Time Elapsed);
+		Wait(0.150, Ignore Condition);
+		Call Subroutine(botAI_FacingReset);
+	}
+}
+
+rule("AI Soldier: 76 Tactical Visor")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Health(Event Player) >= 100;
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ultimate);
+	}
+}
+
+rule("AI Ana Biotic Grenade Self")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Ana;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Health(Event Player) <= 100;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
+			botAI_Cooldown_Ability2));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Position Of(Event Player)), Random Integer(360, 540),
+			To World, Direction and Turn Rate);
+		Wait(Random Real(0.150, 0.200), Ignore Condition);
+		Press Button(Event Player, Ability 2);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
+		Wait(0.150, Ignore Condition);
+		Call Subroutine(botAI_FacingReset);
+	}
+}
+
+rule("AI Subroutine: botAI_MoveTowardsAnchor")
+{
+	event
+	{
+		Subroutine;
+		botAI_MoveTowardsAnchor;
+	}
+
+	actions
+	{
+		Set Player Variable(Players In Slot(Slot Of(Event Player), Team 2), botAI_MoveWASD_Enabled, False);
+		Start Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2), Direction Towards(Players In Slot(Slot Of(
+			Event Player), Team 2), Player Variable(Players In Slot(Slot Of(Event Player), Team 2), botAI_Anchor_Position)), 1, To World,
+			Replace existing throttle, Direction and Magnitude);
+		While(Compare(Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Player Variable(Players In Slot(Slot Of(
+			Event Player), Team 2), botAI_Anchor_Position)), >, 0.500));
+			Wait(0.500, Ignore Condition);
+		End;
+		Set Player Variable(Players In Slot(Slot Of(Event Player), Team 2), botAI_MoveWASD_Enabled, True);
+	}
+}
+
+rule("AI Move Towards Anchor")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Anchor_Enabled) == True;
+		Distance Between(Event Player, Player Variable(Event Player, botAI_Anchor_Position)) > Player Variable(Event Player,
+			botAI_Anchor_DriftMax);
+	}
+
+	actions
+	{
+		Start Rule(botAI_MoveTowardsAnchor, Do Nothing);
+	}
+}
+
+rule("AI Move Around Anchor")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Anchor_Enabled) == True;
+		Distance Between(Event Player, Player Variable(Event Player, botAI_Anchor_Position)) <= Player Variable(Event Player,
+			botAI_Anchor_DriftMax);
+		Player Variable(Event Player, botAI_MoveWASD_Enabled) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_ThrottleDir, Random Value In Array(Global Variable(moveDirAll)));
+		Call Subroutine(botAI_WASD);
+		Loop If Condition Is True;
 	}
 }
