@@ -35,6 +35,14 @@ settings
 
 	heroes
 	{
+		Team 2
+		{
+			Wrecking Ball
+			{
+				Jump Vertical Speed: 500%
+			}
+		}
+
 		General
 		{
 			Ultimate Generation: 150%
@@ -165,7 +173,7 @@ rule("Info")
 
 	actions
 	{
-		Set Global Variable(version, 0.979);
+		Set Global Variable(version, 0.980);
 	}
 }
 
@@ -711,17 +719,10 @@ rule("Reset Enemy Position")
 
 	actions
 	{
-		If(Is Moving(Event Player));
+		If(Compare(Player Variable(Event Player, playerDifficulty), <=, Global Variable(difficultyHard)));
 			"Flip 180"
 			Set Facing(Event Player, Vector(0, Y Component Of(Facing Direction Of(Event Player)), -1.000), To Player);
 		Else;
-			Call Subroutine(teleportEnemy);
-		End;
-		Wait(0.750, Ignore Condition);
-		"Check Aggressively"
-		If(Compare(Distance Between(Event Player, Player Variable(Players In Slot(Slot Of(Event Player), Team 1), thisPlayerHome)), >,
-			Square Root(Multiply(Raise To Power(Player Variable(Players In Slot(Slot Of(Event Player), Team 1), enemyDistanceMax), 2),
-			2))));
 			Call Subroutine(teleportEnemy);
 		End;
 	}
@@ -2085,6 +2086,7 @@ rule("AI Tracer General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -2262,6 +2264,7 @@ rule("AI Mercy General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -2371,6 +2374,7 @@ rule("AI Hanzo General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -2480,6 +2484,7 @@ rule("AI Reinhardt General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -2885,6 +2890,7 @@ rule("AI Zarya General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -2997,6 +3003,7 @@ rule("AI Brigitte General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -3241,6 +3248,7 @@ rule("AI Roadhog General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -3412,6 +3420,7 @@ rule("AI McCree General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -3613,6 +3622,7 @@ rule("AI D.Va General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -4047,6 +4057,7 @@ rule("AI Moira General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -4091,6 +4102,7 @@ rule("AI Widowmaker General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -4170,6 +4182,7 @@ rule("AI Torbjorn General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -4346,6 +4359,7 @@ rule("AI Mei General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -4524,6 +4538,7 @@ rule("AI Winston General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -6321,6 +6336,7 @@ rule("AI Symmetra General")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
 	}
 
 	actions
@@ -7367,5 +7383,384 @@ rule("AI Move Around Anchor")
 		Set Player Variable(Event Player, botAI_ThrottleDir, Random Value In Array(Global Variable(moveDirAll)));
 		Call Subroutine(botAI_WASD);
 		Loop If Condition Is True;
+	}
+}
+
+rule("AI Lucio General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Lúcio;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(4, 6));
+		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 0.800);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 15);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 4);
+		Call Subroutine(botAI_FacingReset);
+	}
+}
+
+rule("AI Lucio Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Lúcio;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Primary Fire);
+		Wait(1, Ignore Condition);
+		Loop If Condition Is True;
+	}
+}
+
+rule("AI Lucio Crossfade Heal Self")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Lúcio;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability1), Player Variable(Event Player,
+			botAI_Cooldown_Ability1));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+		Health(Event Player) <= 100;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
+	}
+}
+
+rule("AI Lucio Crossfade Speed Self")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Lúcio;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability1), Player Variable(Event Player,
+			botAI_Cooldown_Ability1));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+		Health(Event Player) > 100;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
+	}
+}
+
+rule("AI Lucio Amp It Up")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Lúcio;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Or(Compare(Health(Event Player), <=, 75), Compare(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)),
+			>, 15)) == True;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
+			botAI_Cooldown_Ability2));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ability 2);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
+	}
+}
+
+rule("AI Lucio Soundwave Boop")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Lúcio;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Health(Event Player) <= 75;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
+			botAI_Cooldown_Ability3));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Secondary Fire);
+		Set Player Variable(Event Player, botAI_UseTime_Ability3, Total Time Elapsed);
+	}
+}
+
+rule("AI Lucio Soundwave Final")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Lúcio;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 25;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
+			botAI_Cooldown_Ability3));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Secondary Fire);
+		Set Player Variable(Event Player, botAI_UseTime_Ability3, Total Time Elapsed);
+	}
+}
+
+rule("AI Lucio Sound Barrier")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Lúcio;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ultimate);
+	}
+}
+
+rule("AI Wrecking Ball General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Wrecking Ball;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Player Variable(Event Player, botAI_Enabled) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_OptimalDistance, Random Real(5, 10));
+		Set Player Variable(Event Player, botAI_Cooldown_Ability1, 0);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability2, 15.200);
+		Set Player Variable(Event Player, botAI_Cooldown_Ability3, 10);
+		Call Subroutine(botAI_FacingReset);
+		Set Player Variable(Event Player, botAI_MoveJump_Enabled, False);
+	}
+}
+
+rule("AI Wrecking Ball Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Wrecking Ball;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Add(Player Variable(Event Player,
+			botAI_OptimalDistance), 4);
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10) == True;
+		Player Variable(Event Player, botAI_CanAttack) == True;
+	}
+
+	actions
+	{
+		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Start Holding Button(Event Player, Primary Fire);
+		Wait(0.500, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Primary Fire);
+	}
+}
+
+rule("AI Wrecking Ball Roll")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Wrecking Ball;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 15;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability1), Player Variable(Event Player,
+			botAI_Cooldown_Ability1));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ability 1);
+		Set Player Variable(Event Player, botAI_UseTime_Ability1, Total Time Elapsed);
+	}
+}
+
+rule("AI Wrecking Ball Adaptive Shield")
+{
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		Wrecking Ball;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Health(Event Player) <= 250;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability2), Player Variable(Event Player,
+			botAI_Cooldown_Ability2));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ability 2);
+		Set Player Variable(Event Player, botAI_UseTime_Ability2, Total Time Elapsed);
+	}
+}
+
+rule("AI Wrecking Ball Piledriver")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Wrecking Ball;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
+		Total Time Elapsed >= Add(Player Variable(Event Player, botAI_UseTime_Ability3), Player Variable(Event Player,
+			botAI_Cooldown_Ability3));
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Set Player Variable(Event Player, botAI_MoveCrouch_Enabled, False);
+		Press Button(Event Player, Jump);
+		Wait(0.200, Ignore Condition);
+		Press Button(Event Player, Crouch);
+		Set Player Variable(Event Player, botAI_UseTime_Ability3, Total Time Elapsed);
+		Set Player Variable(Event Player, botAI_MoveCrouch_Enabled, True);
+	}
+}
+
+rule("AI Wrecking Ball Minefield")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Wrecking Ball;
+	}
+
+	conditions
+	{
+		Player Variable(Event Player, botAI_Enabled) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
+		Player Variable(Event Player, botAI_CanUseAbilities) == True;
+	}
+
+	actions
+	{
+		Press Button(Event Player, Ultimate);
 	}
 }
