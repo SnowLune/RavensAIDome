@@ -488,7 +488,7 @@ rule("Player Init")
 		Default Visibility);
         Create HUD Text(Event Player, Null, Custom String(" "), Custom String(" "), Left, -3.200, White, White, White, None,
 		Default Visibility);
-        "Create Version Info Text"
+        "Create Left Side HUD Text"
 		Create HUD Text(Event Player, Custom String(""), Custom String("Practice Field: Expanse", Global.version), Null, Left, -3, White,
 			Green, White, Visible To and String, Default Visibility);
 		Create HUD Text(Event Player, Custom String(""), Custom String("Version {0}, Created by {1}", Global.version,
@@ -503,7 +503,23 @@ rule("Player Init")
 			Visible To and String, Default Visibility);
         Create HUD Text(Event Player, Custom String(""), Null, Custom String("Hold {0} and {1} to open/close the menu", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left,
 			-0.910, White, White, Yellow, Visible To and String, Default Visibility);
-		
+		"Create Right Side HUD Text"
+        Create HUD Text(Event Player, Custom String("{0} Kills: {1} / {2}", Hero Icon String(
+			Event Player.player_CurrentHeroList[Event Player.player_currentHero]), Event Player.currentKillNumber,
+			Event Player.player_KillQuota), Null, Null, Right, -3, White, White, White, Visible To and String, Default Visibility);
+		Create HUD Text(Event Player, Null, Custom String("{0} killed you {1} time(s).", Hero Of(Players In Slot(Slot Of(Event Player),
+			Team 2)), Players In Slot(Slot Of(Event Player), Team 2).currentKillNumber), Null, Right, -2.900, White, White, Red,
+			Visible To and String, Default Visibility);
+		Create HUD Text(Event Player, Null, Custom String("Hero Type: {0}", Event Player.player_CurrentHeroListName), Null, Right, -2.200,
+			White, White, White, Visible To and String, Default Visibility);
+		Create HUD Text(Event Player, Custom String(""), Custom String("Hero {0} of {1}", 1 + Event Player.player_currentHero, Count Of(
+			Event Player.player_CurrentHeroList)), Null, Right, -2, White, Yellow, White, Visible To and String, Default Visibility);
+		Create HUD Text(Event Player, Null, Custom String("Next Hero: {0}", Hero Icon String(
+			Event Player.player_CurrentHeroList[Event Player.nextHero])), Null, Right, -1, White, Aqua, White, Visible To and String,
+			Default Visibility);
+		Create HUD Text(Event Player, Null, Custom String("Difficulty: {0}", Event Player.player_DifficultyName), Null, Right, -0.900,
+			White, Orange, White, Visible To and String, Default Visibility);
+        "Show info"
 		Call Subroutine(infoToggle);
 	}
 }
@@ -680,40 +696,6 @@ rule("Bot Asleep Thanks")
 			Wait(Random Real(0.15, 0.5), Ignore Condition);
 		    Communicate(Event Player, Thanks);
         End;
-	}
-}
-
-rule("HUD Kill Counter")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
-
-	conditions
-	{
-		Is Game In Progress == True;
-	}
-
-	actions
-	{
-		Create HUD Text(Event Player, Custom String("{0} Kills: {1} / {2}", Hero Icon String(
-			Event Player.player_CurrentHeroList[Event Player.player_currentHero]), Event Player.currentKillNumber,
-			Event Player.player_KillQuota), Null, Null, Right, -3, White, White, White, Visible To and String, Default Visibility);
-		Create HUD Text(Event Player, Null, Custom String("{0} killed you {1} time(s).", Hero Of(Players In Slot(Slot Of(Event Player),
-			Team 2)), Players In Slot(Slot Of(Event Player), Team 2).currentKillNumber), Null, Right, -2.900, White, White, Red,
-			Visible To and String, Default Visibility);
-		Create HUD Text(Event Player, Null, Custom String("Hero Type: {0}", Event Player.player_CurrentHeroListName), Null, Right, -2.200,
-			White, White, White, Visible To and String, Default Visibility);
-		Create HUD Text(Event Player, Custom String(""), Custom String("Hero {0} of {1}", 1 + Event Player.player_currentHero, Count Of(
-			Event Player.player_CurrentHeroList)), Null, Right, -2, White, Yellow, White, Visible To and String, Default Visibility);
-		Create HUD Text(Event Player, Null, Custom String("Next Hero: {0}", Hero Icon String(
-			Event Player.player_CurrentHeroList[Event Player.nextHero])), Null, Right, -1, White, Aqua, White, Visible To and String,
-			Default Visibility);
-		Create HUD Text(Event Player, Null, Custom String("Difficulty: {0}", Event Player.player_DifficultyName), Null, Right, -0.900,
-			White, Orange, White, Visible To and String, Default Visibility);
 	}
 }
 
