@@ -9,7 +9,8 @@ settings
 	{
 		Allow Players Who Are In Queue: Yes
 		Data Center Preference: USA - Central
-		Max Spectators: 4
+		Max Spectators: 6
+		Max Team 1 Players: 5
 		Max Team 2 Players: 0
 		Return To Lobby: Never
 	}
@@ -86,6 +87,8 @@ variables
 		44: facingDefault_Body
 		45: facingDefault_Position
 		46: facingDefault_Other
+        47: globalHealBot
+        48: globalHealPlayer
         49: workshopCode
         50: globalHeroListShuffled
 
@@ -99,7 +102,7 @@ variables
 		6: player_currentHero
 		7: player_Difficulty
 		8: hudTextInfo
-		9: player_DamageDone
+		9: inspireHeal_ID
         10: player_DeathPenalty_Enabled
 		11: showingInfoText
         12: botAI_OptimalDistanceDefault
@@ -142,11 +145,13 @@ variables
 		49: botAI_MoveCrouch_Enabled
 		50: botAI_MoveJump_Enabled
         51: botAI_MoveCrouch_ChanceMod
+		52: healing_Enabled
         53: botAI_MoveJump_ChanceMod
         54: index2
         55: botAI_ProjectileSpeed
         56: botAI_ProjectileSpeed_Secondary
         57: botAI_ProjectileSpeed_Ability1
+		58: inspireHeal_StartTime
 		61: botAI_CanUseAbilities
 		62: botAI_CanAttack
 		63: botAI_Anchor_Position
@@ -223,7 +228,7 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("v0.999-pre-release-beta.64");
+		Global.version = Custom String("v0.999-pre-release-beta.71");
         Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
 		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -408,6 +413,8 @@ rule("Global Settings")
 		Global.globalheroClassName = Global.heroClassName_All;
 		Global.globalKillQuota = 6;
         Global.globalHeroListShuffled = True;
+        Global.globalHealBot = False;
+        Global.globalHealPlayer = True;
 		Disable Built-In Game Mode Completion;
 	}
 }
@@ -431,7 +438,6 @@ rule("Player Init")
 	actions
 	{
 		"Initialize Variables"
-		Event Player.player_DamageDone = 0;
 		Event Player.currentKillNumber = 0;
 		Event Player.player_currentHero = 0;
 		Event Player.player_CurrentHeroList = Global.globalHeroType;
@@ -448,6 +454,7 @@ rule("Player Init")
 		Event Player.player_Difficulty = Global.globalDifficulty;
 		Event Player.player_DifficultyName = Global.globalDifficultyName;
 		Event Player.player_ZoneRadius = Global.playerZoneRadiusDefault;
+        Event Player.healing_Enabled = Global.globalHealPlayer;
 		"Set Home Vector"
 		If(Slot Of(Event Player) == 0);
 			Event Player.player_Home = Vector(-380 + Global.playerBubbleRadius, 0, 380 - Global.playerBubbleRadius);
@@ -474,7 +481,14 @@ rule("Player Init")
 			Visible To Position and Radius);
 		"Player initialization is complete"
 		Event Player.player_InitSpawned = True;
-		"Create Version Info Text"
+        "Disable Skirmish HUD"
+        Disable Game Mode HUD(Event Player);
+        "Padding"
+        Create HUD Text(Event Player, Null, Custom String(" "), Custom String(" "), Left, -3.100, White, White, White, None,
+		Default Visibility);
+        Create HUD Text(Event Player, Null, Custom String(" "), Custom String(" "), Left, -3.200, White, White, White, None,
+		Default Visibility);
+        "Create Version Info Text"
 		Create HUD Text(Event Player, Custom String(""), Custom String("Practice Field: Expanse", Global.version), Null, Left, -3, White,
 			Green, White, Visible To and String, Default Visibility);
 		Create HUD Text(Event Player, Custom String(""), Custom String("Version {0}, Created by {1}", Global.version,
@@ -515,6 +529,7 @@ rule("Bot Init")
 		Disable Built-In Game Mode Respawning(Players In Slot(Slot Of(Event Player), Team 2));
 		"Setup difficulty"
 		Call Subroutine(player_SetDifficulty);
+        Players In Slot(Slot Of(Event Player), Team 2).healing_Enabled = Global.globalHealBot;
 	}
 }
 
@@ -556,6 +571,7 @@ rule("Bot Respawn")
 
 	actions
 	{
+		Stop Heal Over Time(Event Player.inspireHeal_ID);
 		Wait(0.250, Abort When False);
         Call Subroutine(teleportEnemy);
         Resurrect(Event Player);
@@ -605,7 +621,7 @@ rule("Bot BM")
 	{
         If(Random Real(0, 1) < 0.60);
 			Event Player.index2 = Random Integer(1, 4);
-		    Wait(Random Real(0.750, 1.250), Ignore Condition);
+		    Wait(Random Real(0.650, 1.150), Ignore Condition);
             If(Event Player.index2 == 1);
 		        Communicate(Event Player, Hello);
             Else If(Event Player.index2 == 2);
@@ -660,8 +676,8 @@ rule("Bot Asleep Thanks")
 
 	actions
 	{
-		Wait(Random Real(0.75, 1.25), Ignore Condition);
-        If(Random Real(0, 1) < 0.5);
+        If(Random Real(0, 1) < 0.8);
+			Wait(Random Real(0.15, 0.5), Ignore Condition);
 		    Communicate(Event Player, Thanks);
         End;
 	}
@@ -757,21 +773,22 @@ rule("Player Elimination Heal")
 		Is Alive(Event Player) == True;
 		Health(Event Player) != Max Health(Event Player);
 		Event Player.player_HasMercy == False;
+        Event Player.healing_Enabled == True;
 	}
 
 	actions
 	{
-
-	    Start Heal Over Time(Event Player, Null, Random Real(2, 4), 55);
+        Wait(0.1, Ignore Condition);
+	    Start Heal Over Time(Event Player, Null, Random Real(Event Player.player_Difficulty / 5, Event Player.player_Difficulty / 2.5), 55);
 	}
 }
 
-rule("Player Damage Dealt Heal")
+rule("Player/Bot Inspire Heal")
 {
 	event
 	{
 		Player Dealt Damage;
-		Team 1;
+		All;
 		All;
 	}
 
@@ -779,15 +796,21 @@ rule("Player Damage Dealt Heal")
 	{
 		Is Game In Progress == True;
 		Is Alive(Event Player) == True;
-		Health(Event Player) != Max Health(Event Player);
 		Event Player.player_HasMercy == False;
+        Event Player.healing_Enabled == True;
+		Total Time Elapsed >= Event Player.inspireHeal_StartTime + 1;
+        Event Damage > 5;
 	}
 
 	actions
 	{
-		Wait(0.200, Ignore Condition);
-		Event Player.player_DamageDone += Event Damage;
-		Heal(Event Player, Event Player, Event Damage * Event Player.player_SelfHealAmount);
+		"Essentially Brigitte's Inspire"
+		If(Event Player.inspireHeal_ID != 0);
+			Stop Heal Over Time(Event Player.inspireHeal_ID);
+		End;
+		Start Heal Over Time(Event Player, Event Player, 6, 15);
+		Event Player.inspireHeal_ID = Last Heal Over Time ID;
+		Event Player.inspireHeal_StartTime = Total Time Elapsed;
 	}
 }
 
@@ -1432,6 +1455,8 @@ rule("Player Sky Menu Generate")
         Modify Player Variable(Event Player, player_SkyMenu, Append To Array, Event Player.player_Home + Vector(0, 45, 5));
         Modify Player Variable(Event Player, player_SkyMenu, Append To Array, Event Player.player_Home + Vector(0, 45, 6.25));
         Modify Player Variable(Event Player, player_SkyMenu, Append To Array, Event Player.player_Home + Vector(0, 45, 7.50));
+		Modify Player Variable(Event Player, player_SkyMenu, Append To Array, Event Player.player_Home + Vector(0, 45, 8.75));
+		Modify Player Variable(Event Player, player_SkyMenu, Append To Array, Event Player.player_Home + Vector(0, 45, 10));
         Event Player.player_SkyMenu_Selection = Event Player.player_SkyMenu[0];
         "Menu Selection Arrows"
         Event Player.player_SkyMenuArrowsVisibleTo = Empty Array;
@@ -1456,6 +1481,10 @@ rule("Player Sky Menu Generate")
 			Event Player.player_SkyMenu[5], 1.5, Clip Against Surfaces, Visible To and String, White, Default Visibility);
         Create In-World Text(Event Player.player_SkyMenuVisibleTo, Custom String("Mirror Mode: {0}", Event Player.player_MirrorMode_Enabled == True ? Custom String("On") : Custom String("Off")),
 			Event Player.player_SkyMenu[6], 1.5, Clip Against Surfaces, Visible To and String, White, Default Visibility);
+		Create In-World Text(Event Player.player_SkyMenuVisibleTo, Custom String("Bot Healing: {0}", Players In Slot(Slot of(Event Player), Team 2).healing_Enabled == True ? Custom String("On") : Custom String("Off")),
+			Event Player.player_SkyMenu[7], 1.5, Clip Against Surfaces, Visible To and String, White, Default Visibility);
+		Create In-World Text(Event Player.player_SkyMenuVisibleTo, Custom String("Player Healing: {0}", Event Player.healing_Enabled == True ? Custom String("On") : Custom String("Off")),
+			Event Player.player_SkyMenu[8], 1.5, Clip Against Surfaces, Visible To and String, White, Default Visibility);
 	}
 }
 
@@ -1476,9 +1505,11 @@ rule("Player Sky Menu Toggle")
 
 	actions
 	{
-        Wait(0.45, Abort When False);
+        Wait(0.25, Abort When False);
         If(Event Player.player_SkyMenu_isOpen == False);
-            Call Subroutine(botAI_AIMode_Disable);
+            If(Players In Slot(Slot Of(Event Player), Team 2).botAI_Enabled == True);
+                Call Subroutine(botAI_AIMode_Disable);
+            End;
             Set Status(Event Player, Null, Phased Out, 9999);
             Start Forcing Player Position(Event Player, Event Player.player_Home, False);
 	        Start Facing(Event Player, Facing Direction Of(Event Player), 100, To World, Direction and Turn Rate);
@@ -1496,6 +1527,7 @@ rule("Player Sky Menu Toggle")
             Call Subroutine(skyMenuArrowVisibility);
             Event Player.player_SkyMenu_isOpen = True;
             Big Message(Event Player, Custom String("Use WASD to navigate the menu."));
+            Small Message(Event Player, Custom String("Use WASD to navigate the menu."));
         Else;
             Clear Status(Event Player, Phased Out);
             Stop Forcing Player Position(Event Player);
@@ -1606,6 +1638,10 @@ rule("Player Sky Menu Move Selection Decrease")
             Event Player.player_DeathPenalty_Enabled = False;
         Else If(Event Player.player_SkyMenu_Selection == Event Player.player_SkyMenu[6] && Event Player.player_MirrorMode_Enabled == True);
             Event Player.player_MirrorMode_Enabled = False;
+		Else If(Event Player.player_SkyMenu_Selection == Event Player.player_SkyMenu[7] && Players In Slot(Slot Of(Event Player), Team 2).healing_Enabled == True);
+            Players In Slot(Slot Of(Event Player), Team 2).healing_Enabled = False;
+		Else If(Event Player.player_SkyMenu_Selection == Event Player.player_SkyMenu[8] && Event Player.healing_Enabled == True);
+            Event Player.healing_Enabled = False;
         End;
         Call Subroutine(skyMenuArrowVisibility);
 	}
@@ -1647,6 +1683,10 @@ rule("Player Sky Menu Move Selection Increase")
             Event Player.player_DeathPenalty_Enabled = True;
         Else If(Event Player.player_SkyMenu_Selection == Event Player.player_SkyMenu[6] && Event Player.player_MirrorMode_Enabled == False);
             Event Player.player_MirrorMode_Enabled = True;
+		Else If(Event Player.player_SkyMenu_Selection == Event Player.player_SkyMenu[7] && Players In Slot(Slot Of(Event Player), Team 2).healing_Enabled == False);
+            Players In Slot(Slot Of(Event Player), Team 2).healing_Enabled = True;
+		Else If(Event Player.player_SkyMenu_Selection == Event Player.player_SkyMenu[8] && Event Player.healing_Enabled == False);
+            Event Player.healing_Enabled = True;
         End;
         Call Subroutine(skyMenuArrowVisibility);
 	}
@@ -1708,6 +1748,22 @@ rule("Player Sky Menu Arrow Visibility")
                 Event Player.player_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.player_SkyMenuArrowsVisibleTo[1] = Event Player;
             Else If(Event Player.player_MirrorMode_Enabled == True);
+                Event Player.player_SkyMenuArrowsVisibleTo[1] = Null;
+                Event Player.player_SkyMenuArrowsVisibleTo[0] = Event Player;
+            End;
+		Else If(Event Player.player_SkyMenu_Selection == Event Player.player_SkyMenu[7]);
+            If(Players In Slot(Slot Of(Event Player), Team 2).healing_Enabled == False);
+                Event Player.player_SkyMenuArrowsVisibleTo[0] = Null;
+                Event Player.player_SkyMenuArrowsVisibleTo[1] = Event Player;
+            Else If(Players In Slot(Slot Of(Event Player), Team 2).healing_Enabled == True);
+                Event Player.player_SkyMenuArrowsVisibleTo[1] = Null;
+                Event Player.player_SkyMenuArrowsVisibleTo[0] = Event Player;
+            End;
+        Else If(Event Player.player_SkyMenu_Selection == Event Player.player_SkyMenu[8]);
+            If(Event Player.healing_Enabled == False);
+                Event Player.player_SkyMenuArrowsVisibleTo[0] = Null;
+                Event Player.player_SkyMenuArrowsVisibleTo[1] = Event Player;
+            Else If(Event Player.healing_Enabled == True);
                 Event Player.player_SkyMenuArrowsVisibleTo[1] = Null;
                 Event Player.player_SkyMenuArrowsVisibleTo[0] = Event Player;
             End;
@@ -1927,7 +1983,7 @@ rule("AI Subroutine: botAI_ReactionDelay")
 
     actions
     {
-        Wait(Random Real(Players In Slot(Slot Of(Event Player), Team 2).botAI_ReactionTime / 2, Players In Slot(Slot Of(Event Player), Team 2).botAI_ReactionTime), Ignore Condition);
+        Wait(Random Real(Players In Slot(Slot Of(Event Player), Team 2).botAI_ReactionTime / 3, Players In Slot(Slot Of(Event Player), Team 2).botAI_ReactionTime / 1.5), Ignore Condition);
     }
 }
 
@@ -2426,6 +2482,7 @@ rule("AI Reaper Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
 		Wait(0.500, Ignore Condition);
 		Loop If Condition Is True;
@@ -2530,7 +2587,8 @@ rule("AI Tracer Attack")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.250, Ignore Condition);
 		Loop If Condition Is True;
@@ -2681,7 +2739,8 @@ rule("AI Mercy Attack")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.500, Ignore Condition);
 		Loop If Condition Is True;
@@ -2803,6 +2862,7 @@ rule("AI Hanzo Attack")
 	{
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(Random Real(1.250, 1.750), Ignore Condition);
+        Call Subroutine(botAI_ReactionDelay);
         If(Random Real(0, 1) < 0.50);
             Call Subroutine(botAI_Facing_FlickIn);
 		    Stop Holding Button(Event Player, Primary Fire);
@@ -2891,6 +2951,7 @@ rule("AI Hanzo Storm Arrows Fire")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
 		Wait(0.350, Ignore Condition);
 		Loop If Condition Is True;
@@ -2976,6 +3037,7 @@ rule("AI Torbjorn Attack Primary")
 	actions
 	{
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Primary;
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
 		Wait(0.600, Ignore Condition);
 		Loop If Condition Is True;
@@ -3005,8 +3067,9 @@ rule("AI Torbjorn Attack Secondary")
 	actions
 	{
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Secondary;
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Secondary Fire);
-		Wait(0.600, Ignore Condition);
+		Wait(0.800, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -3149,7 +3212,8 @@ rule("AI Reinhardt Attack")
 	{
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Primary;
 		Stop Holding Button(Event Player, Secondary Fire);
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(1, Ignore Condition);
 		Loop If Condition Is True;
@@ -3417,8 +3481,9 @@ rule("AI Pharah Attack")
 	actions
 	{
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Primary;
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
-		Wait(0.750, Ignore Condition);
+		Wait(0.850, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -3470,6 +3535,7 @@ rule("AI Pharah Concussive Blast")
 	{
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Ability2;
         Wait(0.25, Ignore Condition);
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Ability 2);
 	}
 }
@@ -3551,7 +3617,8 @@ rule("AI Winston Attack")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.750, Ignore Condition);
 		Loop If Condition Is True;
@@ -3703,6 +3770,7 @@ rule("AI Widowmaker Scope In")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_MoveJump_Enabled = False;
 		Start Holding Button(Event Player, Secondary Fire);
 		Call Subroutine(botAI_Facing_Head);
@@ -3730,6 +3798,7 @@ rule("AI Widowmaker Scope Out")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_MoveJump_Enabled = True;
 		Stop Holding Button(Event Player, Secondary Fire);
 		Call Subroutine(botAI_Facing_Reset);
@@ -3758,6 +3827,7 @@ rule("AI Widowmaker Charge And Fire")
 	actions
 	{
 		Wait(Random Real(1.300, 1.600), Ignore Condition);
+        Call Subroutine(botAI_ReactionDelay);
         If(Random Real(0, 1) < 0.5);
 		    Call Subroutine(botAI_Facing_FlickIn);
 		    Press Button(Event Player, Primary Fire);
@@ -3790,7 +3860,8 @@ rule("AI Widowmaker Attack SMG")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.500, Ignore Condition);
 		Loop If Condition Is True;
@@ -3820,6 +3891,7 @@ rule("AI Widowmaker Grappling Hook Closer")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Stop Holding Button(Event Player, Secondary Fire);
         Event Player.botAI_Facing_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(Random Real(-8, 8), 0, Random Real(8, 16)), Event Player, Rotation);
 		Call Subroutine(botAI_Facing_LookAt);
@@ -3852,6 +3924,7 @@ rule("AI Widowmaker Grappling Hook Farther")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Stop Holding Button(Event Player, Secondary Fire);
 		Event Player.botAI_Facing_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(Random Real(-8, 8), 0, Random Real(-8, -16)), Event Player, Rotation);
 		Call Subroutine(botAI_Facing_LookAt);
@@ -3885,6 +3958,7 @@ rule("AI Widowmaker Venom Mine")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_Facing_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player),
 			Team 1)) + Vector(0, Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) * 0.130, 0);
 		Call Subroutine(botAI_Facing_LookAt);
@@ -3970,6 +4044,8 @@ rule("AI Bastion Attack")
 
 	actions
 	{
+        Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(1, Ignore Condition);
 		Loop If Condition Is True;
@@ -4000,6 +4076,7 @@ rule("AI Bastion Reconfigure")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Ability 1);
 	}
 }
@@ -4109,8 +4186,9 @@ rule("AI Symmetra Attack Primary")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+		Skip If(Is Button Held(Event Player, Primary Fire), 3);
 		Stop Holding Button(Event Player, Secondary Fire);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.500, Ignore Condition);
 		Loop If Condition Is True;
@@ -4140,6 +4218,7 @@ rule("AI Symmetra Attack Secondary")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Secondary;
         Event Player.botAI_isProjectile = True;
         Call Subroutine(botAI_Facing_Reset);
@@ -4178,6 +4257,7 @@ rule("AI Symmetra Sentry Turret")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_Facing_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player),
 			Team 1)) + World Vector Of(Vector(Random Real(-8, 8), 0, Random Real(-8, 8)), Players In Slot(Slot Of(Event Player),
 			Team 1), Rotation);
@@ -4267,6 +4347,7 @@ rule("AI Zenyatta Attack Primary")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
 		Wait(0.400, Ignore Condition);
 		Loop If Condition Is True;
@@ -4289,12 +4370,14 @@ rule("AI Zenyatta Attack Secondary")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is Using Ultimate(Event Player) == False;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) == 10;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
+        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30) == True;
 	}
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Stop Holding Button(Event Player, Primary Fire);
 		Skip If(Is Button Held(Event Player, Secondary Fire), 1);
 		Start Holding Button(Event Player, Secondary Fire);
@@ -4324,6 +4407,7 @@ rule("AI Zenyatta Orb of Discord")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Ability 2);
 	}
 }
@@ -4405,6 +4489,7 @@ rule("AI Genji Attack Primary")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
 		Wait(0.95, Ignore Condition);
 		Loop If Condition Is True;
@@ -4435,6 +4520,7 @@ rule("AI Genji Attack Secondary")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         If(Random Real(0, 1) >= 0.5);
 		    Call Subroutine(botAI_Facing_FlickIn);
             Press Button(Event Player, Secondary Fire);
@@ -4566,6 +4652,7 @@ rule("AI Genji Dragonblade Pre Swift Strike")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Event Player.botAI_Facing_LookAtVector = Vector(X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), Random Real(10, 15), Z Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))));
 		Call Subroutine(botAI_Facing_LookAt);
 		Wait(0.250, Ignore Condition);
@@ -4665,7 +4752,8 @@ rule("AI Genji Dragonblade Swing")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.900, Ignore Condition);
 		Loop If Condition Is True;
@@ -4747,8 +4835,9 @@ rule("AI Roadhog Attack Primary")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
-		Wait(0.700, Ignore Condition);
+		Wait(0.850, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -4777,8 +4866,9 @@ rule("AI Roadhog Attack Secondary")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Secondary Fire);
-		Wait(0.700, Ignore Condition);
+		Wait(0.850, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -4872,6 +4962,7 @@ rule("AI Roadhog Whole Hog")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Ultimate);
 	}
 }
@@ -4923,8 +5014,9 @@ rule("AI McCree Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
-		Wait(Random Real(0.420, 0.520), Ignore Condition);
+		Wait(0.500, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -4974,8 +5066,8 @@ rule("AI McCree Flashbang")
 		Event Player.botAI_CanUseAbilities == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 6;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 	}
 
@@ -5076,6 +5168,7 @@ rule("AI McCree Deadeye Fire")
 	{
 		Wait(Random Real(0.100, 0.150), Ignore Condition);
 		Stop Chasing Player Variable(Event Player, mccreeDeadeyeCharge);
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
 		Event Player.mccreeDeadeyeUse = False;
 	}
@@ -5130,8 +5223,9 @@ rule("AI Junkrat Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
-		Wait(0.700, Ignore Condition);
+		Wait(0.670, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -5246,6 +5340,7 @@ rule("AI Junkrat Riptire")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10);
 			Wait(1, Ignore Condition);
 			Press Button(Event Player, Primary Fire);
@@ -5304,7 +5399,8 @@ rule("AI Zarya Attack Primary")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(1, Ignore Condition);
 		Loop If Condition Is True;
@@ -5334,6 +5430,7 @@ rule("AI Zarya Attack Secondary")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_ProjectileSpeed_Primary = 25;
 		Event Player.botAI_Facing_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player),
 			Team 1)) + Vector(0, Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) * 0.110, 0);
@@ -5447,7 +5544,7 @@ rule("AI Soldier: 76 Attack")
 		Event Player.botAI_CanAttack == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10) == True;
 		Is Using Ability 1(Event Player) == False;
 		Is Firing Secondary(Event Player) == False;
@@ -5455,9 +5552,10 @@ rule("AI Soldier: 76 Attack")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
-		Wait(0.750, Ignore Condition);
+		Wait(0.50, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Primary Fire);
 	}
@@ -5624,8 +5722,9 @@ rule("AI Lucio Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
-		Wait(1, Ignore Condition);
+		Wait(0.94, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -5837,9 +5936,10 @@ rule("AI D.Va Attack")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
-		Wait(0.750, Ignore Condition);
+		Wait(0.50, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Primary Fire);
 	}
@@ -5937,7 +6037,7 @@ rule("AI D.Va Defense Matrix")
 	actions
 	{
         Call Subroutine(botAI_ReactionDelay);
-		If(Random Real(0, 1) < 0.750);
+		If(Random Real(0, 1) < 0.850);
 		    Start Holding Button(Event Player, Secondary Fire);
 		    Wait(Random Real(0.250, 0.750), Ignore Condition);
 		    Stop Holding Button(Event Player, Secondary Fire);
@@ -6060,7 +6160,8 @@ rule("AI Mei Attack Primary")
 	actions
 	{
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Primary;
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.20, Ignore Condition);
 		Loop If Condition Is True;
@@ -6092,6 +6193,7 @@ rule("AI Mei Attack Secondary")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Secondary;
 		Press Button(Event Player, Secondary Fire);
 		Wait(0.800, Ignore Condition);
@@ -6122,6 +6224,7 @@ rule("AI Mei Attack Secondary Frozen")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_ProjectileSpeed_Primary = 115;
 		Event Player.botAI_MoveCrouch_Enabled = False;
 		Event Player.botAI_MoveJump_Enabled = False;
@@ -6286,7 +6389,8 @@ rule("AI Sombra Attack")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.250, Ignore Condition);
 		Loop If Condition Is True;
@@ -6342,13 +6446,14 @@ rule("AI Sombra Translocator Place")
 		Event Player.botAI_Enabled == True;
 		Event Player.botAI_CanUseAbilities == True;
 		Is Alive(Event Player) == True;
-		Is Using Ability 2(Event Player) == False;
+		Is Using Ability 2(Event Player) == 0;
 		Is Firing Secondary(Event Player) == False;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 	}
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_Facing_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(Random Real(-5, 5), Random Real(1, 3), Random Real(-10, -15)), Event Player, Rotation);
 		Call Subroutine(botAI_Facing_LookAt);
 		Wait(0.150, Ignore Condition);
@@ -6373,7 +6478,7 @@ rule("AI Sombra Translocator Use")
 		Event Player.botAI_CanUseAbilities == True;
 		Is Alive(Event Player) == True;
 		Health(Event Player) <= 75;
-		Is Using Ability 1(Event Player) == False;
+		Is Using Ability 1(Event Player) == 0;
 		Is Using Ability 2(Event Player) == True;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 	}
@@ -6411,6 +6516,7 @@ rule("AI Sombra EMP")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Ultimate);
 	}
 }
@@ -6430,7 +6536,7 @@ rule("AI Sombra Stealth")
 		Event Player.botAI_CanUseAbilities == True;
 		Is Alive(Event Player) == True;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Is Using Ability 1(Event Player) == False;
+		Is Using Ability 1(Event Player) == 0;
 	}
 
 	actions
@@ -6489,8 +6595,9 @@ rule("AI Doomfist Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
-		Wait(0.400, Ignore Condition);
+		Wait(0.333, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -6682,7 +6789,8 @@ rule("AI Ana Attack Scope In")
 	{
         Event Player.botAI_isProjectile = False;
         Call Subroutine(botAI_Facing_Reset);
-		Skip If(Is Button Held(Event Player, Secondary Fire), 1);
+		Skip If(Is Button Held(Event Player, Secondary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Secondary Fire);
 		Wait(0.800, Ignore Condition);
 		Loop If Condition Is True;
@@ -6713,6 +6821,7 @@ rule("AI Ana Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
 		Wait(0.800, Ignore Condition);
 		Loop If Condition Is True;
@@ -6894,7 +7003,7 @@ rule("AI Orisa General")
 		Event Player.botAI_FacingDefault = Global.facingDefault_Body;
         Event Player.botAI_isProjectile = True;
 		Event Player.botAI_Anchor_Enabled = False;
-        Event Player.botAI_ProjectileSpeed = 90;
+        Event Player.botAI_ProjectileSpeed = 120;
 	}
 }
 
@@ -6913,13 +7022,14 @@ rule("AI Orisa Attack")
 		Event Player.botAI_CanAttack == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15) == True;
 	}
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(1, Ignore Condition);
 		Loop If Condition Is True;
@@ -7095,12 +7205,13 @@ rule("AI Brigitte Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45) == True;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 90) == True;
 	}
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.600, Ignore Condition);
 		Loop If Condition Is True;
@@ -7330,7 +7441,7 @@ rule("AI Moira General")
 	}
 }
 
-rule("AI Moira Biotic Grasp")
+rule("AI Moira Attack")
 {
 	event
 	{
@@ -7352,9 +7463,10 @@ rule("AI Moira Biotic Grasp")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Secondary Fire), 1);
+		Skip If(Is Button Held(Event Player, Secondary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Secondary Fire);
-		Wait(0.700, Ignore Condition);
+		Wait(0.250, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Secondary Fire);
 	}
@@ -7535,7 +7647,8 @@ rule("AI Wrecking Ball Attack")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Primary Fire), 1);
+		Skip If(Is Button Held(Event Player, Primary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Primary Fire);
 		Wait(0.250, Ignore Condition);
 		Loop If Condition Is True;
@@ -7701,9 +7814,10 @@ rule("AI Ashe Attack Scoped")
 
 	actions
 	{
-		Skip If(Is Button Held(Event Player, Secondary Fire), 1);
+		Skip If(Is Button Held(Event Player, Secondary Fire), 2);
+        Call Subroutine(botAI_ReactionDelay);
 		Start Holding Button(Event Player, Secondary Fire);
-		Wait(Random Real(0.800, 1.250), Ignore Condition);
+		Wait(0.7, Ignore Condition);
 		Press Button(Event Player, Primary Fire);
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Secondary Fire);
@@ -7734,8 +7848,9 @@ rule("AI Ashe Attack Unscoped")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		Press Button(Event Player, Primary Fire);
-		Wait(Random Real(0.250, 0.350), Ignore Condition);
+		Wait(0.25, Ignore Condition);
 		Loop If Condition Is True;
 	}
 }
@@ -7964,6 +8079,7 @@ rule("AI Baptiste Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
 		If(Ammo(Event Player, 0) <= 0);
 			Press Button(Event Player, Reload);
             Wait(1.5, Ignore Condition);
@@ -8112,6 +8228,7 @@ rule("AI Sigma Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Primary;
 		Press Button(Event Player, Primary Fire);
 		Wait(1.500, Ignore Condition);
@@ -8143,7 +8260,7 @@ rule("AI Sigma Kinetic Grasp")
 	actions
 	{
 		Call Subroutine(botAI_ReactionDelay);
-		If(Random Real(0, 1) < 0.500);
+		If(Random Real(0, 1) < 0.650);
 		    Press Button(Event Player, Ability 1);
         End;
 	}
@@ -8324,6 +8441,7 @@ rule("AI Echo Attack")
 
 	actions
 	{
+        Call Subroutine(botAI_ReactionDelay);
         Event Player.botAI_ProjectileSpeed = Event Player.botAI_ProjectileSpeed_Primary;
 		Press Button(Event Player, Primary Fire);
 		Wait(0.330, Ignore Condition);
@@ -8459,6 +8577,7 @@ rule("Player Died")
 
 	actions
 	{
+		Stop Heal Over Time(Event Player.inspireHeal_ID);
 		Set Status(Event Player, Null, Invincible, 2.250);
         Stop Forcing Player Position(Event Player);
         Disallow Button(Event Player, Jump);
@@ -8574,26 +8693,38 @@ rule("Subroutine: infoToggle")
 		Else;
 			Event Player.hudTextInfo = Empty Array;
 			Create HUD Text(Event Player, Custom String("Welcome to Practice Field: Expanse!"), Global.twitchURL, Custom String(
-				"Created by {0}", Global.programmerName), Top, 3, Sky Blue, Purple, Sky Blue, Visible To and String, Default Visibility);
+				"Created by {0}", Global.programmerName), Top, 3, Sky Blue, Aqua, Purple, Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Create HUD Text(Event Player, Custom String(""), Null, Custom String(
-				"This workshop mode was initially created out of dissatisfaction with other aim trainers and arenas."), Top, 4, Yellow, White,
+				"This workshop mode allows you to thoroughly warm up/practice your movement and aim on and against ALL heroes."), Top, 4, Yellow, White,
 				White, Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Create HUD Text(Event Player, Custom String(""), Null, Custom String(
-				"I have continually expanded it so that it can be used to warmup on ALL heroes against ALL heroes."), Top, 5, Yellow, White, White,
+				"You are placed in a bubble against one bot opponent. When you kill them enough times it progresses to the next hero in the list."), Top, 5, Yellow, White, Green,
 				Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Create HUD Text(Event Player, Custom String(""), Custom String("This is version {0}", Global.version), Custom String(
 				"The AI modes contain AI for all heroes written from scratch by myself. The bots do not attack below the difficulty \"{0}\".", Global.difficultyNames[3]),
 				Top, 5.100, Yellow, White, White, Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+            Create HUD Text(Event Player, Custom String(""), Null, Custom String(
+				"There are many difficulties and they correspond to many variables that affect the bots' movement, aim, and reaction time."), Top, 5.12, Yellow, White, White,
+				Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+            Create HUD Text(Event Player, Custom String(""), Null, Custom String(
+				"Difficulty also affects how much healing the player receieves after a kill."), Top, 5.13, Yellow, White, White,
+				Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Create HUD Text(Event Player, Custom String(""), Null, Custom String(
 				"Hold {0} and {1} to toggle the menu!", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Yellow, White, Yellow,
 				Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
+            Create HUD Text(Event Player, Custom String(""), Null, Custom String(
+				"There are many settings so you can customize your warmup!"), Top, 5.300, Yellow, White, Yellow,
+				Visible To and String, Default Visibility);
+			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Create HUD Text(Event Player, Custom String(""), Null, Custom String("See the top left corner for controls."), Top, 6, Yellow,
-				White, Green, Visible To and String, Default Visibility);
+				White, Yellow, Visible To and String, Default Visibility);
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
 			Create HUD Text(Event Player, Custom String(""), Null, Custom String("For the most recent version import code: {0}",
 				Global.workshopCode), Top, 7, Yellow, White, Aqua, Visible To and String, Default Visibility);
@@ -8603,7 +8734,7 @@ rule("Subroutine: infoToggle")
 			Modify Player Variable(Event Player, hudTextInfo, Append To Array, Last Text ID);
             Event Player.showingInfoText = True;
 		End;
-        Wait(10, Ignore Condition);
+        Wait(25, Ignore Condition);
 		If(Event Player.showingInfoText == True);
 			Call Subroutine(infoToggle);
 		End;
