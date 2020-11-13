@@ -13,5 +13,5 @@ The enemy only moves in a straight line with no strafing or jumping.
 The enemy randomly strafes, crouches, and jumps while moving.
 #### Hard
 The enemy moves randomly and unpredictably the entire time.
-#### AI Bronze - AI Grand Master
+#### AI Bronze - AI Grandmaster
 The enemy moves randomly and attacks the player. Each hero uses their abilities against the player. The seven difficulties each affect the bots' aim, movement, and reaction time.
