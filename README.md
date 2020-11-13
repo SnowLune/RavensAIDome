@@ -1,8 +1,8 @@
 # Practice Field: Expanse
-An Overwatch custom game mode designed for warming up and practicing against dummy bots.
+An Overwatch custom game workshop mode designed for warming up and practising against dummy bots.
 
 ### Summary 
-This workshop mode puts up to six players spread across the Expanse map, each confined to their own bubble and player zone.
+This workshop mode puts up to six players spread across the "Workshop: Expanse" map, each confined to their own bubble and player zone.
 A single enemy bot spawns for each player. Enemies spawn at a random position within a range based on the player's current hero, facing a random direction. The player kills their enemy a set number of times (defined by the global variable `globalKillQuota` or player variable `player_KillQuota`). The hero of the enemy increments when the kill quota is reached for each hero, iterating over the entire selected hero type array (`All Heroes` by default). 
 
 There are three difficult settings: Easy, Medium, and Hard. 
