@@ -6,7 +6,7 @@ Up to six players are spread across the map "Workshop Expanse". Each player is p
 
 For more info, see: [Practice Field: Expanse](https://snowroberge.github.io/PracticeFieldExpanse/)
 ## Files
-The main file containing the mode `PracticeFieldExpanse.txt` is a simple text file.
+The main file containing the mode [`PracticeFieldExpanse.txt`](https://github.com/SnowRoberge/PracticeFieldExpanse/blob/master/PracticeFieldExpanse.txt) is a simple text file.
 ## Additional Information
 The mode itself is over 12,000 lines of text and reaching even the new Overwatch Workshop limit of 35,000 objects.
 
