@@ -14,7 +14,8 @@ The menu allows the player to:
 * Set the language
 * and more...
 ### Sandbox Approach to Practice
-**Practice Field: Expanse** is designed so that players can configure their own settings to best aid what they would like to practice. 
+**Practice Field: Expanse** is designed so that players can configure their own settings to best aid what they would like to practice.
+
 A few examples: 
 * The player wishes to get better at ***Roadhog***'s *Chain Hook* combo against supports.
   * Open the in-game menu, set the "1 Second Cooldown" mode to "Player" so that the player's cooldowns are automatically refreshed
