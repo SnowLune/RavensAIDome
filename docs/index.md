@@ -12,7 +12,8 @@ The menu allows the player to:
 * Set difficulty to the desired level
 * Enable or Disable various modes that affect play
 * Set the language
-* and more
+* and more...
+
 ### Sandbox Approach to Practice
 **Practice Field: Expanse** is designed so that players can configure their own settings to best aid what they would like to practice.
 
