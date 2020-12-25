@@ -2,7 +2,7 @@ settings
 {
 	main
 	{
-		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\nThis is a Pre-Release Beta Version!\nImport Code: 5DPKQ\nCreated by Snow#15707\ndiscord.gg/KJ277sdhzE\nIf you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\" to this description."
+		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Snow#15707\n♥  discord.gg/KJ277sdhzE\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\" to this description."
 	}
 
 	lobby
@@ -68,40 +68,41 @@ variables
 		8: effectColors
 		9: g_BotHealing
 		10: g_DebugHero
-		11: g_DebugMode
-		12: g_Difficulty
-		13: g_HeroClass
-		14: g_KillGoal
-		15: g_Language
-		16: g_OneSecCooldown
-		17: g_PlayerHealing
-		18: gameTick
-		19: githubURL
-		20: heroClasses
-		21: largePlayerZoneHeroes
-		22: longDistance
-		23: longRangeHeroes
-		24: mediumDistance
-		25: mediumRangeHeroes
-		26: moveDirAll
-		27: moveDirBackwards
-		28: moveDirBackwardsNoStrafe
-		29: moveDirForwards
-		30: moveDirForwardsNoStrafe
-		31: moveDirStrafe
-		32: playerBubbleRadius
-		33: playerZoneRadiusDefault
-		34: programmerName
-		35: projectileHeroes
-		36: pseudoInfinity
-		37: scopeHeroes
-		38: shortDistance
-		39: shortRangeHeroes
-		40: twitchURL
-		41: version
-		42: veryShortDistance
-		43: veryShortRangeHeroes
-		44: workshopCode
+		11: g_DebugHUD
+		12: g_DebugMode
+		13: g_Difficulty
+		14: g_HeroClass
+		15: g_KillGoal
+		16: g_Language
+		17: g_OneSecCooldown
+		18: g_PlayerHealing
+		19: gameTick
+		20: githubURL
+		21: heroClasses
+		22: largePlayerZoneHeroes
+		23: longDistance
+		24: longRangeHeroes
+		25: mediumDistance
+		26: mediumRangeHeroes
+		27: moveDirAll
+		28: moveDirBackwards
+		29: moveDirBackwardsNoStrafe
+		30: moveDirForwards
+		31: moveDirForwardsNoStrafe
+		32: moveDirStrafe
+		33: playerBubbleRadius
+		34: playerZoneRadiusDefault
+		35: programmerName
+		36: projectileHeroes
+		37: pseudoInfinity
+		38: scopeHeroes
+		39: shortDistance
+		40: shortRangeHeroes
+		41: twitchURL
+		42: version
+		43: veryShortDistance
+		44: veryShortRangeHeroes
+		45: workshopCode
 
 	player:
 		0: ai_AbilityButton
@@ -211,69 +212,69 @@ variables
 
 subroutines
 {
-    0: aiSub_Abilities_Ana
-    1: aiSub_Abilities_Ashe
-    2: aiSub_Abilities_Baptiste
-    3: aiSub_Abilities_Bastion
-    4: aiSub_Abilities_Brigitte
-    5: aiSub_Abilities_Doomfist
-    6: aiSub_Abilities_DVa
-    7: aiSub_Abilities_Echo
-    8: aiSub_Abilities_Genji
-    9: aiSub_Abilities_Hanzo
-    10: aiSub_Abilities_Junkrat
-    11: aiSub_Abilities_Lucio
-    12: aiSub_Abilities_McCree
-    13: aiSub_Abilities_Mei
-    14: aiSub_Abilities_Mercy
-    15: aiSub_Abilities_Moira
-    16: aiSub_Abilities_Orisa
-    17: aiSub_Abilities_Pharah
-    18: aiSub_Abilities_Reaper
-    19: aiSub_Abilities_Reinhardt
-    20: aiSub_Abilities_Roadhog
-    21: aiSub_Abilities_Sigma
-    22: aiSub_Abilities_Soldier76
-    23: aiSub_Abilities_Sombra
-    24: aiSub_Abilities_Symmetra
-    25: aiSub_Abilities_Torbjorn
-    26: aiSub_Abilities_Tracer
-    27: aiSub_Abilities_Widowmaker
-    28: aiSub_Abilities_Winston
-    29: aiSub_Abilities_WreckingBall
-    30: aiSub_Abilities_Zarya
-    31: aiSub_Abilities_Zenyatta
-    32: aiSub_AimCalculation
-    33: aiSub_AimModSet
-    34: aiSub_ButtonsReset
-    35: aiSub_EnableAI
-    36: aiSub_FacingLookAt
-    37: aiSub_FacingReset
-    38: aiSub_FacingStart
-    39: aiSub_FlickIn
-    40: aiSub_FlickOut
-    41: aiSub_ReactionDelay
-    42: allSub_ButtonsAllow
-    43: allSub_ButtonsDisallow
-    44: allSub_WaitForFrame
-    45: botSub_MoveCrouch
-    46: botSub_MoveJump
-    47: botSub_MoveWASD
-    48: botSub_ResetBot
-    49: botSub_SetHero
-    50: botSub_TeleportBot
-    51: botSub_ThrottleStop
-    52: hudSub_DebugToggle
-    53: hudSub_InfoToggle
-    54: hudSub_MainToggle
-    55: hudSub_SkyMenuArrowSet
-    56: hudSub_SkyMenuPlaySound
-    57: hudSub_SkyMenuToggle
-    58: pSub_QuickMode
-    59: pSub_SetDifficulty
-    60: pSub_SetDistances
-    61: pSub_SetHeroClass
-    62: pSub_SetNames
+	0: aiSub_Abilities_Ana
+	1: aiSub_Abilities_Ashe
+	2: aiSub_Abilities_Baptiste
+	3: aiSub_Abilities_Bastion
+	4: aiSub_Abilities_Brigitte
+	5: aiSub_Abilities_Doomfist
+	6: aiSub_Abilities_DVa
+	7: aiSub_Abilities_Echo
+	8: aiSub_Abilities_Genji
+	9: aiSub_Abilities_Hanzo
+	10: aiSub_Abilities_Junkrat
+	11: aiSub_Abilities_Lucio
+	12: aiSub_Abilities_McCree
+	13: aiSub_Abilities_Mei
+	14: aiSub_Abilities_Mercy
+	15: aiSub_Abilities_Moira
+	16: aiSub_Abilities_Orisa
+	17: aiSub_Abilities_Pharah
+	18: aiSub_Abilities_Reaper
+	19: aiSub_Abilities_Reinhardt
+	20: aiSub_Abilities_Roadhog
+	21: aiSub_Abilities_Sigma
+	22: aiSub_Abilities_Soldier76
+	23: aiSub_Abilities_Sombra
+	24: aiSub_Abilities_Symmetra
+	25: aiSub_Abilities_Torbjorn
+	26: aiSub_Abilities_Tracer
+	27: aiSub_Abilities_Widowmaker
+	28: aiSub_Abilities_Winston
+	29: aiSub_Abilities_WreckingBall
+	30: aiSub_Abilities_Zarya
+	31: aiSub_Abilities_Zenyatta
+	32: aiSub_AimCalculation
+	33: aiSub_AimModSet
+	34: aiSub_ButtonsReset
+	35: aiSub_EnableAI
+	36: aiSub_FacingLookAt
+	37: aiSub_FacingReset
+	38: aiSub_FacingStart
+	39: aiSub_FlickIn
+	40: aiSub_FlickOut
+	41: aiSub_ReactionDelay
+	42: allSub_ButtonsAllow
+	43: allSub_ButtonsDisallow
+	44: allSub_WaitForFrame
+	45: botSub_MoveCrouch
+	46: botSub_MoveJump
+	47: botSub_MoveWASD
+	48: botSub_ResetBot
+	49: botSub_SetHero
+	50: botSub_TeleportBot
+	51: botSub_ThrottleStop
+	52: hudSub_DebugToggle
+	53: hudSub_InfoToggle
+	54: hudSub_MainToggle
+	55: hudSub_SkyMenuArrowSet
+	56: hudSub_SkyMenuPlaySound
+	57: hudSub_SkyMenuToggle
+	58: pSub_QuickMode
+	59: pSub_SetDifficulty
+	60: pSub_SetDistances
+	61: pSub_SetHeroClass
+	62: pSub_SetNames
 }
 
 rule("Info")
@@ -285,7 +286,7 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.10.7");
+		Global.version = Custom String("0.10.8");
 		Global.buildDate = Custom String("20201225");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
@@ -321,8 +322,10 @@ rule("Global Settings")
 			"Player Healing / 플레이어 치유"), True, 4);
 		Global.g_BotHealing = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Bot Healing / 인공지는 치유"),
 			False, 5);
-		Global.g_DebugMode = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
-			"Debug Mode / 디버그 모드"), False, 6);
+		Global.g_DebugMode = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug Mode / 디버그 모드"), False,
+			6);
+		Global.g_DebugHUD = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug HUD / 디버그 HUD"), False,
+			6);
 		Global.g_OneSecCooldown = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
 			"Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"), False, 7);
 		Global.g_DebugHero = Empty Array;
@@ -351,13 +354,13 @@ rule("Global Main Tic Loop")
 	actions
 	{
 		For Global Variable(gameTick, 0, 60, 1);
-            "Dyamically lower the tick rate under high load"
+			"Dyamically lower the tick rate under high load"
 			If(Server Load >= 240);
 				Wait(2 / 60, Ignore Condition);
-            Else If(Server Load >= 225);
+			Else If(Server Load >= 225);
 				Wait(1 / 60, Ignore Condition);
 			Else;
-                Wait(0.500 / 60, Ignore Condition);
+				Wait(0.500 / 60, Ignore Condition);
 			End;
 		End;
 		Loop If Condition Is True;
@@ -540,13 +543,13 @@ rule("Global HUD")
 		Create HUD Text(All Players(All Teams), Custom String("{0}", Global.workshopCode), Custom String("{0}+{1}, {2}", Global.version,
 			Global.buildDate, Global.programmerName), Custom String("Practice Field: Expanse"), Left, -3, Global.colorLightPink,
 			Global.colorLightGrey, Global.colorLightTeal, Visible To, Default Visibility);
-        "Global Debug HUD"
-        If(Global.g_DebugMode == True);
-            Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(
-                    Server Load / 2.550, Down), Server Load), Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550,
-                    Down), Server Load Average), Custom String("Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down),
-                    Server Load Peak), Top, 100, Color(Orange), Color(Yellow), Color(Red), Visible To and String, Visible Always);
-        End;
+		"Global Debug HUD"
+		If(Global.g_DebugHUD == True);
+			Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(Server Load / 2.550, Down), Server Load),
+				Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550, Down), Server Load Average), Custom String(
+				"Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down), Server Load Peak), Top, 100, Global.colorLightTeal,
+				Global.colorLightPink, Global.colorDarkTeal, Visible To and String, Visible Always);
+		End;
 	}
 }
 
@@ -9668,21 +9671,21 @@ rule("AI Moira")
 				Press Button(Event Player, Button(Ability 1));
 			End;
 		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-            Stop Holding Button(Event Player, Button(Secondary Fire));
-            Call Subroutine(aiSub_ReactionDelay);
-            Press Button(Event Player, Button(Ability 2));
-            Call Subroutine(aiSub_ReactionDelay);
+			Stop Holding Button(Event Player, Button(Secondary Fire));
+			Call Subroutine(aiSub_ReactionDelay);
+			Press Button(Event Player, Button(Ability 2));
+			Call Subroutine(aiSub_ReactionDelay);
 			If(Event Player.ai_AbilityOpt == 0);
 				Press Button(Event Player, Button(Primary Fire));
 			Else If(Event Player.ai_AbilityOpt == 1);
 				Press Button(Event Player, Button(Secondary Fire));
 			End;
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-            If(Ability Cooldown(Event Player, Button(Ability 2)) == 0);
-                Event Player.ai_AbilityButton = Button(Ability 2);
-                Event Player.ai_AbilityOpt = 1;
-                Call Subroutine(aiSub_Abilities_Moira);
-            End;
+			If(Ability Cooldown(Event Player, Button(Ability 2)) == 0);
+				Event Player.ai_AbilityButton = Button(Ability 2);
+				Event Player.ai_AbilityOpt = 1;
+				Call Subroutine(aiSub_Abilities_Moira);
+			End;
 			Press Button(Event Player, Button(Ultimate));
 			Wait Until(Is Using Ultimate(Event Player), 1 / 60);
 			Wait Until(Is Using Ultimate(Event Player) == False, 8);
@@ -11716,7 +11719,8 @@ rule("pSub_SetDifficulty")
 			.p_Difficulty * 0.070;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod = 0.160 + Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty * 0.030;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.difficultyMax - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty);
+		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.difficultyMax - Players In Slot(Slot Of(
+			Event Player), Team 1).p_Difficulty);
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ChanceMod = Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty / 100;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ViewAngleMod = (Global.difficultyMax - Players In Slot(Slot Of(Event Player),
 			Team 1).p_Difficulty) / 2;
@@ -11798,28 +11802,28 @@ rule("AI Aim Calculation")
 	actions
 	{
 		If(Event Player.ai_AimTurnRate == 0);
-            Call Subroutine(allSub_WaitForFrame);
+			Call Subroutine(allSub_WaitForFrame);
 			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, Random Real(Event Player.ai_FacingPadMin,
 				Event Player.ai_FacingPadMax), Random Real(0.050, 0.150), None);
 			Wait(0.150, Ignore Condition);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-            Abort;
-        Else If(Random Real(0, 1) < 0.350 - Event Player.ai_ChanceMod);
-            Call Subroutine(allSub_WaitForFrame);
+			Abort;
+		Else If(Random Real(0, 1) < 0.350 - Event Player.ai_ChanceMod);
+			Call Subroutine(allSub_WaitForFrame);
 			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.150, 0.250) - Event Player.ai_ChanceMod;
 			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(250, 500), Destination and Rate);
 			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.150, 0.250) - Event Player.ai_ChanceMod);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
 			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.150, 0.250) - Event Player.ai_ChanceMod, None);
 			Call Subroutine(aiSub_AimModSet);
-            Abort;
+			Abort;
 		Else;
-            Call Subroutine(allSub_WaitForFrame);
-            Event Player.ai_AimTurnRate = Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(
-                Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300, 0)))
-                ^ Event Player.ai_FacingAngleMod / Event Player.ai_FacingBase + Random Real(Event Player.ai_FacingPadMin,
-                Event Player.ai_FacingPadMax);
-        End;
+			Call Subroutine(allSub_WaitForFrame);
+			Event Player.ai_AimTurnRate = Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(
+				Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300, 0)))
+				^ Event Player.ai_FacingAngleMod / Event Player.ai_FacingBase + Random Real(Event Player.ai_FacingPadMin,
+				Event Player.ai_FacingPadMax);
+		End;
 		If(Array Contains(Global.scopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
 			Event Player.ai_AimTurnRate = Event Player.ai_AimTurnRate / 1.500;
 		End;
@@ -11877,10 +11881,11 @@ rule("AI Aim Stop")
 	actions
 	{
 		If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
-            Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.20, 0.60) - (Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.020);
-            Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
+			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.200, 0.600) - Players In Slot(Slot Of(Event Player), Team 1)
+				.p_Difficulty * 0.020;
+			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
 			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.075, 0.150) - Event Player.ai_ChanceMod);
-            Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
+			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
 			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.025, 0.075) - Event Player.ai_ChanceMod, None);
 			Start Rule(aiSub_AimModSet, Restart Rule);
 		End;
@@ -12046,7 +12051,7 @@ rule("aiSub_FacingLookAt")
 			Team 2)), Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector), Players In Slot(Slot Of(Event Player), Team 2)
 			.ai_AimTurnRate, To World, Direction and Turn Rate);
 		Wait Until(Is In View Angle(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 2)
-			.ai_LookAtVector - Vector(0, Y Component Of(Eye Position(Players In Slot(Slot Of(Event Player), Team 2))), 0), 12.5), 2);
+			.ai_LookAtVector - Vector(0, Y Component Of(Eye Position(Players In Slot(Slot Of(Event Player), Team 2))), 0), 12.500), 2);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 	}
 }
