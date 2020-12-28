@@ -286,8 +286,8 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.10.9");
-		Global.buildDate = Custom String("20201225");
+		Global.version = Custom String("0.10.10");
+		Global.buildDate = Custom String("20201227");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
 		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -325,15 +325,15 @@ rule("Global Settings")
 		Global.g_DebugMode = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug Mode / 디버그 모드"), False,
 			6);
 		Global.g_DebugHUD = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug HUD / 디버그 HUD"), False,
-			6);
+			7);
 		Global.g_OneSecCooldown = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
-			"Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"), False, 7);
+			"Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"), False, 8);
 		Global.g_DebugHero = Empty Array;
 		Global.g_DebugHero[0] = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
-			"Debug Hero Enabled / 디버그 영웅 활성화"), False, 8);
+			"Debug Hero Enabled / 디버그 영웅 활성화"), False, 9);
 		If(Global.g_DebugHero[0] == True);
 			Global.g_DebugHero[1] = Workshop Setting Hero(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug Hero / 디버그 영웅"),
-				Genji, 9);
+				Genji, 10);
 		End;
 		Disable Built-In Game Mode Completion;
 	}
@@ -765,6 +765,7 @@ rule("Player Leave Destroy All Objects")
 
 	actions
 	{
+		Destroy Dummy Bot(Team 2, Slot Of(Event Player));
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu) > 0);
 			Call Subroutine(hudSub_SkyMenuToggle);
 		End;
@@ -785,7 +786,6 @@ rule("Player Leave Destroy All Objects")
 					.p_Effects, Players In Slot(Slot Of(Event Player), Team 1).p_Effects[Players In Slot(Slot Of(Event Player), Team 1).index]);
 			End;
 		End;
-		Destroy Dummy Bot(Team 2, Slot Of(Event Player));
 	}
 }
 
@@ -1807,6 +1807,10 @@ rule("hudSub_SkyMenuToggle")
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuIsOpen = True;
 			Big Message(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("메뉴를 탐색하려면 WASD 버튼을 사용하십시오") : Custom String("Use WASD to navigate the menu"));
+			Big Message(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
+				.p_Language == 1 ? Custom String("[{0} 및 {1}]를 길게 누르면 메뉴가 닫힙니다", Input Binding String(Button(Reload)), Input Binding String(
+				Button(Melee))) : Custom String("Press and hold {0} and {1} to close the menu", Input Binding String(Button(Reload)),
+				Input Binding String(Button(Melee))));
 			"Menu Selection Arrows"
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo = Empty Array;
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenuArrowsVisibleTo, Append To Array, Null);
@@ -1867,11 +1871,11 @@ rule("hudSub_SkyMenuToggle")
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("1 초 쿨 다운 모드: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-				.p_OneSecCooldown == 3 ? Custom String("양자 모두") : (Players In Slot(Slot Of(Event Player), Team 1)
+				.p_OneSecCooldown == 3 ? Custom String("플레이어 + 인공 지능") : (Players In Slot(Slot Of(Event Player), Team 1)
 				.p_OneSecCooldown == 2 ? Custom String("인공지는") : (Players In Slot(Slot Of(Event Player), Team 1)
 				.p_OneSecCooldown == 1 ? Custom String("플레이어") : Custom String("비활성화")))) : Custom String("1 Sec Cooldown Mode: {0}",
-				Players In Slot(Slot Of(Event Player), Team 1).p_OneSecCooldown == 3 ? Custom String("Both") : (Players In Slot(Slot Of(
-				Event Player), Team 1).p_OneSecCooldown == 2 ? Custom String("Bot") : (Players In Slot(Slot Of(Event Player), Team 1)
+				Players In Slot(Slot Of(Event Player), Team 1).p_OneSecCooldown == 3 ? Custom String("Player & Bot") : (Players In Slot(
+				Slot Of(Event Player), Team 1).p_OneSecCooldown == 2 ? Custom String("Bot") : (Players In Slot(Slot Of(Event Player), Team 1)
 				.p_OneSecCooldown == 1 ? Custom String("Player") : Custom String("Off")))), Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuVectors[5], 1.500, Clip Against Surfaces, Visible To and String, Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
@@ -4292,6 +4296,7 @@ rule("AI Reinhardt")
 			Stop Holding Button(Event Player, Button(Secondary Fire));
 		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
 			Press Button(Event Player, Button(Ability 1));
+			Event Player.bot_MoveJumpEnabled = False;
 		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
 			Call Subroutine(aiSub_ButtonsReset);
 			Event Player.ai_AimType = 1;
@@ -4488,6 +4493,9 @@ rule("Special Rule: Reinhardt Charge")
 		Stop Forcing Player Position(Event Player);
 		Stop Forcing Player Position(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))));
 		Call Subroutine(aiSub_FacingReset);
+		If(Event Player == Players In Slot(Slot Of(Event Player), Team 2));
+			Event Player.bot_MoveJumpEnabled = True;
+		End;
 	}
 }
 
@@ -5688,6 +5696,7 @@ rule("AI Symmetra Sentry Turret")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
 		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 15 + Event Player.ai_ViewAngleMod) == True;
 		Ability Charge(Event Player, Button(Ability 1)) > 0;
@@ -8424,7 +8433,7 @@ rule("AI Sombra Translocator Use")
 {
 	event
 	{
-		Player Took Damage;
+		Ongoing - Each Player;
 		Team 2;
 		Sombra;
 	}
@@ -8498,9 +8507,8 @@ rule("AI Doomfist General")
 		Event Player.ai_OptimalDistanceDefault = Random Real(3, 6);
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 		Event Player.ai_StrafeDistanceMod = 3;
+		Event Player.ai_AimTypeDefault = 1;
 		Event Player.ai_AimBaseDefault = 0;
-		Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
-		Event Player.ai_AimType = 1;
 		Event Player.ai_ProjectileSpeed = 80;
 		Event Player.ai_HeroInitialized = True;
 	}
@@ -8518,17 +8526,12 @@ rule("AI Doomfist")
 	{
 		Event Player.ai_IsInAbilitySub = True;
 		Call Subroutine(aiSub_ReactionDelay);
-		If(Event Player.ai_AbilityButton == Button(Primary Fire));
-			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
-			Start Holding Button(Event Player, Button(Primary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+		If(Event Player.ai_AbilityButton == Button(Secondary Fire));
 			If(Event Player.ai_AbilityOpt == 0);
 				Start Holding Button(Event Player, Button(Secondary Fire));
 				Event Player.bot_MoveJumpEnabled = False;
 				Wait(Random Real(0.900, 1.800), Ignore Condition);
 				Stop Holding Button(Event Player, Button(Secondary Fire));
-				Wait(0.500, Ignore Condition);
-				Event Player.bot_MoveJumpEnabled = True;
 			Else If(Event Player.ai_AbilityOpt == 1);
 				Start Holding Button(Event Player, Button(Secondary Fire));
 				Wait(Random Real(0.750, 1.500), Ignore Condition);
@@ -8541,13 +8544,15 @@ rule("AI Doomfist")
 		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
 			Press Button(Event Player, Button(Jump));
 			Event Player.ai_AimBase = 2;
-			Wait(Random Real(0.200, 0.300), Ignore Condition);
+			Call Subroutine(aiSub_FacingStart);
+			Call Subroutine(aiSub_ReactionDelay);
 			Press Button(Event Player, Button(Ability 2));
 			Wait(0.250, Ignore Condition);
 			Call Subroutine(aiSub_FacingReset);
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Press Button(Event Player, Button(Ultimate));
 			Event Player.ai_AimBase = 2;
+			Call Subroutine(aiSub_FacingStart);
 			Event Player.ai_OptimalDistance = 0;
 			While(Is Using Ultimate(Event Player));
 				Wait(10 / 60, Ignore Condition);
@@ -8577,19 +8582,20 @@ rule("AI Doomfist Attack")
 	{
 		Event Player.ai_AIEnabled == True;
 		Event Player.ai_CanAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
-		Is Button Held(Event Player, Button(Secondary Fire)) == False;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 12.500) == True;
+		Is Firing Secondary(Event Player) == False;
 		Ammo(Event Player, 0) > 0;
+		Is Using Ultimate(Event Player) == False;
 	}
 
 	actions
 	{
-		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_Doomfist);
+		Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
+		Start Holding Button(Event Player, Button(Primary Fire));
 		Wait(0.333, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Button(Primary Fire));
@@ -8612,7 +8618,8 @@ rule("AI Doomfist Rocket Punch")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 50;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12.500;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
 		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
 		(Ability Cooldown(Event Player, Button(Ability 1)) == 0 ? Distance Between(Event Player, Players In Slot(Slot Of(Event Player),
@@ -8624,6 +8631,8 @@ rule("AI Doomfist Rocket Punch")
 		Event Player.ai_AbilityButton = Button(Secondary Fire);
 		Event Player.ai_AbilityOpt = 0;
 		Call Subroutine(aiSub_Abilities_Doomfist);
+		Wait Until(Speed Of(Event Player) < 45, 2);
+		Event Player.bot_MoveJumpEnabled = True;
 	}
 }
 
@@ -9484,7 +9493,7 @@ rule("AI Brigitte Shield Bash")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.850 - Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.850 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Primary Fire);
 			Event Player.ai_AbilityOpt = 1;
 			Call Subroutine(aiSub_Abilities_Brigitte);
@@ -9511,7 +9520,6 @@ rule("AI Brigitte Shield Bash Gap Closer")
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 12.500;
 		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
 			< Global.playerBubbleRadius;
-		Health(Event Player) >= 125;
 		Ability Cooldown(Event Player, Button(Primary Fire)) == 0;
 	}
 
@@ -11172,7 +11180,8 @@ rule("AI Echo Duplicate")
 		Ultimate Charge Percent(Event Player) == 100;
 		Is Using Ultimate(Event Player) == False;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 10) == True;
 	}
 
 	actions
