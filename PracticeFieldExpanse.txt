@@ -2,7 +2,7 @@ settings
 {
 	main
 	{
-		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Snow#15707\n♥  discord.gg/KJ277sdhzE\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\" to this description."
+		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)  ♥  This is a Pre-Release Beta Version!  ♥  Import Code: 5DPKQ  ♥  Created by Snow#15707  ♥  discord.gg/KJ277sdhzE  ♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\" to this description."
 	}
 
 	lobby
@@ -286,7 +286,7 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.10.8");
+		Global.version = Custom String("0.10.9");
 		Global.buildDate = Custom String("20201225");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
@@ -547,8 +547,8 @@ rule("Global HUD")
 		If(Global.g_DebugHUD == True);
 			Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(Server Load / 2.550, Down), Server Load),
 				Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550, Down), Server Load Average), Custom String(
-				"Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down), Server Load Peak), Top, 100, Global.colorLightTeal,
-				Global.colorLightPink, Global.colorDarkTeal, Visible To and String, Visible Always);
+				"Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down), Server Load Peak), Top, 100, Global.colorLightPink,
+				Global.colorLightTeal, Global.colorDarkTeal, Visible To and String, Visible Always);
 		End;
 	}
 }
@@ -1734,9 +1734,11 @@ rule("hudSub_SkyMenuToggle")
 	{
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Info) > 0);
 			Call Subroutine(hudSub_InfoToggle);
-		Else If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Debug) > 0);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Debug) > 0);
 			Call Subroutine(hudSub_DebugToggle);
-		Else If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Main) > 0);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Main) > 0);
 			Call Subroutine(hudSub_MainToggle);
 		End;
 		Wait(3 / 60, Ignore Condition);
@@ -1797,14 +1799,14 @@ rule("hudSub_SkyMenuToggle")
 				Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenuVectors, Append To Array, Vector(0, 45,
 					1.250 * Players In Slot(Slot Of(Event Player), Team 1).hud_i));
 			End;
+			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection = Players In Slot(Slot Of(Event Player), Team 1)
+				.hud_SkyMenuVectors[0];
 			Stop Camera(Event Player);
 			Start Camera(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuSelection - Vector(0, 15, 0.001), Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection, 30);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuIsOpen = True;
 			Big Message(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("메뉴를 탐색하려면 WASD 버튼을 사용하십시오") : Custom String("Use WASD to navigate the menu"));
-			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection = Players In Slot(Slot Of(Event Player), Team 1)
-				.hud_SkyMenuVectors[0];
 			"Menu Selection Arrows"
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo = Empty Array;
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenuArrowsVisibleTo, Append To Array, Null);
@@ -7707,6 +7709,7 @@ rule("AI D.Va General")
 		Event Player.ai_AimType = 0;
 		Event Player.ai_ProjectileSpeeds[0] = 50;
 		Event Player.ai_ProjectileSpeeds[3] = 40;
+		Event Player.ai_ProjectileSpeeds[4] = 12;
 		Event Player.ai_HeroInitialized = True;
 	}
 }
@@ -7739,12 +7742,26 @@ rule("AI D.Va")
 			Call Subroutine(aiSub_FacingReset);
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Call Subroutine(aiSub_ButtonsReset);
-			If(Is In Alternate Form(Event Player));
+			If(Event Player.ai_AbilityOpt == 0);
+				If(Ability Cooldown(Event Player, Button(Ability 1)) == 0);
+					Event Player.ai_AimType = 2;
+					Event Player.ai_AimBase = 2;
+					Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
+					Event Player.ai_AimDistanceMod = -10;
+					Call Subroutine(aiSub_FacingStart);
+					Call Subroutine(aiSub_ReactionDelay);
+					Press Button(Event Player, Button(Ability 1));
+					Call Subroutine(aiSub_ReactionDelay);
+					Press Button(Event Player, Button(Ultimate));
+					Call Subroutine(aiSub_ReactionDelay);
+					Call Subroutine(aiSub_FacingReset);
+				Else;
+					Press Button(Event Player, Button(Ultimate));
+				End;
+				Wait Until(Is In Alternate Form(Event Player), 1.500);
+			Else If(Event Player.ai_AbilityOpt == 1);
 				Wait(3.500, Ignore Condition);
 				Press Button(Event Player, Button(Ultimate));
-			Else;
-				Press Button(Event Player, Button(Ultimate));
-				Wait Until(Is In Alternate Form(Event Player), 1.500);
 			End;
 		End;
 		Event Player.ai_IsInAbilitySub = False;
@@ -7895,16 +7912,16 @@ rule("AI D.Va Self-Destruct")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Health(Event Player) == 1;
 		Is In Alternate Form(Event Player) == False;
 		Ultimate Charge Percent(Event Player) == 100;
 		Is Using Ultimate(Event Player) == False;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
 	}
 
 	actions
 	{
 		Event Player.ai_AbilityButton = Button(Ultimate);
+		Event Player.ai_AbilityOpt = 0;
 		Call Subroutine(aiSub_Abilities_DVa);
 	}
 }
@@ -7932,30 +7949,8 @@ rule("AI D.Va Call Mech")
 	actions
 	{
 		Event Player.ai_AbilityButton = Button(Ultimate);
+		Event Player.ai_AbilityOpt = 1;
 		Call Subroutine(aiSub_Abilities_DVa);
-	}
-}
-
-rule("Non AI D.Va Call Mech")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		D.Va;
-	}
-
-	conditions
-	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3;
-		Is Alive(Event Player) == True;
-		Is In Alternate Form(Event Player) == True;
-	}
-
-	actions
-	{
-		Set Ultimate Charge(Event Player, 100);
-		Press Button(Event Player, Button(Ultimate));
 	}
 }
 
@@ -11244,8 +11239,12 @@ rule("hudSub_DebugToggle")
 	{
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu) > 0);
 			Call Subroutine(hudSub_SkyMenuToggle);
-		Else If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Info) > 0);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Info) > 0);
 			Call Subroutine(hudSub_InfoToggle);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Main) > 0);
+			Call Subroutine(hudSub_MainToggle);
 		End;
 		Wait(3 / 60, Ignore Condition);
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Debug) > 0);
@@ -11256,35 +11255,39 @@ rule("hudSub_DebugToggle")
 					.hud_Debug, Players In Slot(Slot Of(Event Player), Team 1).hud_Debug[Players In Slot(Slot Of(Event Player), Team 1).hud_i]);
 			End;
 			Players In Slot(Slot Of(Event Player), Team 1).hud_DebugEnabled = False;
+			If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Main) <= 0);
+				Call Subroutine(hudSub_MainToggle);
+			End;
 		Else;
 			Players In Slot(Slot Of(Event Player), Team 1).hud_Debug = Empty Array;
 			Players In Slot(Slot Of(Event Player), Team 1).hud_DebugEnabled = True;
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Server Load: {1} ({0}%)", Round To Integer(
-				Server Load / 2.550, Down), Server Load), Custom String("Average: {1} ({0}%)", Round To Integer(Server Load Average / 2.550,
-				Down), Server Load Average), Custom String("Peak: {1} ({0}%)", Round To Integer(Server Load Peak / 2.550, Down),
-				Server Load Peak), Top, 3, Color(Orange), Color(Yellow), Color(Red), Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Custom String("Enemy Pos: {0}", Position Of(
-				Players In Slot(Slot Of(Event Player), Team 2))), Custom String("Player Pos: {0}", Position Of(Event Player)), Left, 4, Color(
-				Yellow), Color(Red), Color(Sky Blue), Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Player Dist From Home: {0}", Distance Between(
-				Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)), Null,
-				Custom String("Enemy Dist From Home: {0}", Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(
-				Slot Of(Event Player), Team 1).p_HomeVector)), Left, 5, Color(Yellow), Color(White), Color(White), Visible To and String,
+			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Server Load: {0}% ({1})", Round To Integer(
+				Server Load / 2.550, Down), Server Load), Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550,
+				Down), Server Load Average), Custom String("Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down),
+				Server Load Peak), Top, 100, Global.colorLightPink, Global.colorLightTeal, Global.colorDarkTeal, Visible To and String,
 				Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Enemy Dist From Player: {0}", Distance Between(
+			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Null, Custom String("Enemy Pos: {0}", Position Of(Players In Slot(
+				Slot Of(Event Player), Team 2))), Custom String("Player Pos: {0}", Position Of(Event Player)), Left, 4, Color(White),
+				Global.colorLightPink, Global.colorLightTeal, Visible To and String, Default Visibility);
+			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
+			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Null, Custom String("Enemy Dist From Home: {0}", Distance Between(
+				Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)), Custom String(
+				"Player Dist From Home: {0}", Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(
+				Event Player), Team 1).p_HomeVector)), Left, 5, Color(White), Global.colorLightPink, Global.colorLightTeal,
+				Visible To and String, Default Visibility);
+			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
+			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Enemy Distance From Player: {0}", Distance Between(
 				Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 2))), Null, Null, Left, 5.200,
-				Color(Yellow), Color(White), Color(Yellow), Visible To and String, Default Visibility);
+				Global.colorLightPink, Color(White), Color(White), Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Enemy Ult Charge: {0}", Ultimate Charge Percent(
-				Players In Slot(Slot Of(Event Player), Team 2))), Null, Null, Right, 6, Color(Turquoise), Color(White), Color(White),
+				Players In Slot(Slot Of(Event Player), Team 2))), Null, Null, Right, 6, Global.colorLightGrey, Color(White), Color(White),
 				Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Player Facing Dir: {0}", Facing Direction Of(
 				Event Player)), Null, Custom String("Enemy Facing Dir: {0}", Facing Direction Of(Players In Slot(Slot Of(Event Player),
-				Team 2))), Left, 6.100, Color(White), Color(White), Color(White), Visible To and String, Default Visibility);
+				Team 2))), Left, 6.100, Global.colorLightTeal, Color(White), Global.colorLightPink, Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 		End;
 	}
@@ -11302,7 +11305,8 @@ rule("hudSub_InfoToggle")
 	{
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu) > 0);
 			Call Subroutine(hudSub_SkyMenuToggle);
-		Else If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Debug) > 0);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Debug) > 0);
 			Call Subroutine(hudSub_DebugToggle);
 		End;
 		Wait(3 / 60, Ignore Condition);
@@ -12042,10 +12046,10 @@ rule("aiSub_FacingLookAt")
 
 	actions
 	{
-		Event Player.ai_CanAim = False;
+		Players In Slot(Slot Of(Event Player), Team 2).ai_CanAim = False;
 		Wait(2 / 60, Ignore Condition);
-		Event Player.ai_AimTurnRate = Random Real(Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin, Players In Slot(Slot Of(
-			Event Player), Team 2).ai_FacingCapMin * 1.250);
+		Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate = Random Real(Players In Slot(Slot Of(Event Player), Team 2)
+			.ai_FacingCapMin, Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin * 1.250);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 		Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Direction Towards(Eye Position(Players In Slot(Slot Of(Event Player),
 			Team 2)), Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector), Players In Slot(Slot Of(Event Player), Team 2)
@@ -12095,16 +12099,16 @@ rule("Special Rule: Player Sombra Disable Enemy Attack")
 		Players In Slot(Slot Of(Event Player), Team 2).ai_CanAttack = False;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_CanUseAbilities = False;
 		While(Is Using Ability 1(Event Player) == True && Hero Of(Event Player) == Hero(Sombra));
-			Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Direction From Angles(Random Integer(1, 360), Random Integer(-5, 5)),
-				Random Integer(180, 360), To World, None);
-			Wait(Random Real(0.500, 1.500), Ignore Condition);
+			Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector = Vector(Random Real(-5, 5), Random Real(1, 2), Random Real(-5, 5))
+				+ Position Of(Players In Slot(Slot Of(Event Player), Team 2));
+			Call Subroutine(aiSub_FacingLookAt);
+			Wait(Random Real(0.250, 1.250), Ignore Condition);
+			Players In Slot(Slot Of(Event Player), Team 2).ai_CanAim = True;
 			If(Random Real(0, 1) < 0.050);
 				Communicate(Players In Slot(Slot Of(Event Player), Team 2), Hello);
 			End;
 		End;
 		Wait(Random Real(0.250, 0.500), Ignore Condition);
-		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
-		Call Subroutine(aiSub_FacingReset);
 		Players In Slot(Slot Of(Event Player), Team 2).ai_CanAttack = True;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_CanUseAbilities = True;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = True;
@@ -12127,6 +12131,7 @@ rule("Player Mirror Mode On")
 		Event Player.all_ChangingHero == False;
 		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
 		Hero Of(Event Player) != Hero Of(Players In Slot(Slot Of(Event Player), Team 2));
+		Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)) == True;
 	}
 
 	actions
