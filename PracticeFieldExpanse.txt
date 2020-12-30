@@ -125,7 +125,7 @@ variables
 		17: ai_DoomfistPunchDamage
 		18: ai_DoomfistPunchTime
 		19: ai_FacingAngleMod
-		20: ai_FacingBase
+		20: ai_FacingAnglePow
 		21: ai_FacingCapMax
 		22: ai_FacingCapMin
 		23: ai_FacingPadMax
@@ -288,7 +288,7 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.11.0");
+		Global.version = Custom String("0.11.1");
 		Global.buildDate = Custom String("20201230");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
@@ -11685,18 +11685,18 @@ rule("pSub_SetDifficulty")
 
 	actions
 	{
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingBase = 0.150 - 0.001 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAngleMod = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 15 + 15 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 30 + 15 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMax = 540 + 18 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAngleMod = 0.700 + 0.010 * Players In Slot(Slot Of(Event Player), Team 1)
-			.p_Difficulty;
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAnglePow = (0.150 - 0.001 * Players In Slot(Slot Of(Event Player), Team 1)
+			.p_Difficulty) / (0.700 + 0.010 * Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty);
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod = 1 - 0.100 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty * 0.550 + 0.150;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchTimeMod = 0.080 * Players In Slot(Slot Of(Event Player), Team 1)
@@ -11807,10 +11807,9 @@ rule("AI Aim Calculation")
 			Abort;
 		Else;
 			Call Subroutine(allSub_WaitForFrame);
-			Event Player.ai_AimTurnRate = Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(
-				Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300, 0))) ^ (
-				Event Player.ai_FacingBase / Event Player.ai_FacingAngleMod) + Random Real(Event Player.ai_FacingPadMin,
-				Event Player.ai_FacingPadMax);
+			Event Player.ai_AimTurnRate = (Event Player.ai_FacingAngleMod * Angle Between Vectors(Facing Direction Of(Event Player),
+				Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300,
+				0)))) ^ Event Player.ai_FacingAnglePow + Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax);
 		End;
 		If(Array Contains(Global.scopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
 			Event Player.ai_AimTurnRate = Event Player.ai_AimTurnRate / 1.500;
