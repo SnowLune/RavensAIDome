@@ -150,64 +150,65 @@ variables
 		42: all_InspireHealID
 		43: all_InspireHealTime
 		44: all_Kills
-		45: bot_BotResetComplete
-		46: bot_FlickerEnabled
-		47: bot_MoveCrouchChanceMod
-		48: bot_MoveCrouchEnabled
-		49: bot_MoveCrouchTimeMod
-		50: bot_MoveJumpChanceMod
-		51: bot_MoveJumpEnabled
-		52: bot_MoveJumpTimeMod
-		53: bot_MoveWASDEnabled
-		54: bot_MoveWASDTimeMod
-		55: bot_ThrottleDir
-		56: hud_Debug
-		57: hud_DebugEnabled
-		58: hud_i
-		59: hud_Info
-		60: hud_InfoEnabled
-		61: hud_Main
-		62: hud_SkyMenu
-		63: hud_SkyMenuArrowsVisibleTo
-		64: hud_SkyMenuIsOpen
-		65: hud_SkyMenuSelection
-		66: hud_SkyMenuSound
-		67: hud_SkyMenuVectors
-		68: hud_SkyMenuVisibleTo
-		69: index
-		70: p_BotHeroClass
-		71: p_BotHeroNumber
-		72: p_BotHeroNumberNext
-		73: p_BotTPDistance
-		74: p_CameraEyePos
-		75: p_CameraLookAtPos
-		76: p_DamageModDealtID
-		77: p_DamageModReceievedID
-		78: p_Difficulty
-		79: p_DifficultyNames
-		80: p_Effects
-		81: p_EffectsColor
-		82: p_ElevationEnabled
-		83: p_ElevationHeight
-		84: p_ElevationPosition
-		85: p_EnemyDistanceMax
-		86: p_EnemyDistanceMod
-		87: p_HelpTargetIndicator
-		88: p_HeroClassNames
-		89: p_HeroList
-		90: p_HeroListName
-		91: p_HeroNumberMod
-		92: p_HomeVector
-		93: p_KillGoal
-		94: p_Language
-		95: p_MinusKillOnDeath
-		96: p_MirrorModeEnabled
-		97: p_OneSecCooldown
-		98: p_PlayerHero
-		99: p_PlayerInitialized
-		100: p_QuickModeEnabled
-		101: p_Unkillable
-		102: p_ZoneRadius
+		45: all_SubArg
+		46: bot_BotResetComplete
+		47: bot_FlickerEnabled
+		48: bot_MoveCrouchChanceMod
+		49: bot_MoveCrouchEnabled
+		50: bot_MoveCrouchTimeMod
+		51: bot_MoveJumpChanceMod
+		52: bot_MoveJumpEnabled
+		53: bot_MoveJumpTimeMod
+		54: bot_MoveWASDEnabled
+		55: bot_MoveWASDTimeMod
+		56: bot_ThrottleDir
+		57: hud_Debug
+		58: hud_DebugEnabled
+		59: hud_i
+		60: hud_Info
+		61: hud_InfoEnabled
+		62: hud_Main
+		63: hud_SkyMenu
+		64: hud_SkyMenuArrowsVisibleTo
+		65: hud_SkyMenuIsOpen
+		66: hud_SkyMenuSelection
+		67: hud_SkyMenuSound
+		68: hud_SkyMenuVectors
+		69: hud_SkyMenuVisibleTo
+		70: index
+		71: p_BotHeroClass
+		72: p_BotHeroNumber
+		73: p_BotHeroNumberNext
+		74: p_BotTPDistance
+		75: p_CameraEyePos
+		76: p_CameraLookAtPos
+		77: p_DamageModDealtID
+		78: p_DamageModReceievedID
+		79: p_Difficulty
+		80: p_DifficultyNames
+		81: p_Effects
+		82: p_EffectsColor
+		83: p_ElevatorEnabled
+		84: p_ElevatorHeight
+		85: p_ElevatorPosition
+		86: p_EnemyDistanceMax
+		87: p_EnemyDistanceMod
+		88: p_HelpTargetIndicator
+		89: p_HeroClassNames
+		90: p_HeroList
+		91: p_HeroListName
+		92: p_HeroNumberMod
+		93: p_HomeVector
+		94: p_KillGoal
+		95: p_Language
+		96: p_MinusKillOnDeath
+		97: p_MirrorModeEnabled
+		98: p_OneSecCooldown
+		99: p_PlayerHero
+		100: p_PlayerInitialized
+		101: p_QuickModeEnabled
+		102: p_Unkillable
+		103: p_ZoneRadius
 }
 
 subroutines
@@ -270,11 +271,12 @@ subroutines
 	55: hudSub_SkyMenuArrowSet
 	56: hudSub_SkyMenuPlaySound
 	57: hudSub_SkyMenuToggle
-	58: pSub_QuickMode
-	59: pSub_SetDifficulty
-	60: pSub_SetDistances
-	61: pSub_SetHeroClass
-	62: pSub_SetNames
+	58: pSub_Elevator
+	59: pSub_QuickMode
+	60: pSub_SetDifficulty
+	61: pSub_SetDistances
+	62: pSub_SetHeroClass
+	63: pSub_SetNames
 }
 
 rule("Info")
@@ -286,12 +288,12 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.10.10");
-		Global.buildDate = Custom String("20201227");
+		Global.version = Custom String("0.11.0");
+		Global.buildDate = Custom String("20201230");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
 		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
-		Global.githubURL = Custom String("https://github.com/SnowRoberge/PracticeFieldExpanse");
+		Global.githubURL = Custom String("https://github.com/SnowLune/PracticeFieldExpanse");
 		Global.discordInvite = Custom String("discord.gg/KJ277sdhzE");
 	}
 }
@@ -765,7 +767,6 @@ rule("Player Leave Destroy All Objects")
 
 	actions
 	{
-		Destroy Dummy Bot(Team 2, Slot Of(Event Player));
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu) > 0);
 			Call Subroutine(hudSub_SkyMenuToggle);
 		End;
@@ -786,6 +787,7 @@ rule("Player Leave Destroy All Objects")
 					.p_Effects, Players In Slot(Slot Of(Event Player), Team 1).p_Effects[Players In Slot(Slot Of(Event Player), Team 1).index]);
 			End;
 		End;
+		Destroy Dummy Bot(Team 2, Slot Of(Event Player));
 	}
 }
 
@@ -967,6 +969,11 @@ rule("Next Hero")
 	actions
 	{
 		Wait(0.300, Abort When False);
+		"Exception: Stop Echo Ultimate"
+		If(Is Duplicating(Event Player));
+			Kill(Event Player, Null);
+			Wait Until(Is Duplicating(Players In Slot(Slot Of(Event Player), Team 1)) == False, 3);
+		End;
 		Event Player.p_HeroNumberMod = 1;
 		Call Subroutine(botSub_SetHero);
 	}
@@ -1046,7 +1053,7 @@ rule("Reset Player At Home")
 
 	actions
 	{
-		"Stun if in air to prevent infinite teleport loop"
+		"Prevent Widowmaker Doomfist loop bug"
 		If(((Hero Of(Event Player) == Hero(Widowmaker) && Is Using Ability 1(Event Player)) || (Hero Of(Event Player) == Hero(Doomfist)
 			&& Is Using Ability 2(Event Player))) == True);
 			Cancel Primary Action(Event Player);
@@ -1064,8 +1071,8 @@ rule("Reset Player At Home")
 		Else;
 			Teleport(Event Player, Event Player.p_HomeVector);
 		End;
-		If(Event Player.p_ElevationEnabled == True);
-			Start Forcing Player Position(Event Player, Vector(X Component Of(Event Player.p_HomeVector), Event Player.p_ElevationHeight,
+		If(Event Player.p_ElevatorEnabled == True);
+			Start Forcing Player Position(Event Player, Vector(X Component Of(Event Player.p_HomeVector), Event Player.p_ElevatorHeight,
 				Z Component Of(Event Player.p_HomeVector)), False);
 			Wait(0.250, Ignore Condition);
 			Stop Forcing Player Position(Event Player);
@@ -1095,7 +1102,6 @@ rule("Reset Enemy Position Non AI Difficulty")
 	{
 		"Flip 180"
 		Stop Facing(Event Player);
-		Wait(2 / 60, Ignore Condition);
 		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Event Player) + World Vector Of(Vector(0, 0,
 			-5), Event Player, Rotation)), Random Integer(300, 500), To Player, None);
 	}
@@ -1779,9 +1785,9 @@ rule("hudSub_SkyMenuToggle")
 				Call Subroutine(botSub_ResetBot);
 			End;
 			Set Status(Players In Slot(Slot Of(Event Player), Team 1), Null, Phased Out, 9999);
-			If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevationEnabled == True);
+			If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True);
 				Start Forcing Player Position(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
-					.p_HomeVector + Vector(0, Players In Slot(Slot Of(Event Player), Team 1).p_ElevationHeight, 0), False);
+					.p_HomeVector + Vector(0, Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorHeight, 0), False);
 			Else;
 				Start Forcing Player Position(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 					.p_HomeVector, False);
@@ -1922,9 +1928,9 @@ rule("hudSub_SkyMenuToggle")
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
-				Team 1).p_Language == 1 ? Custom String("플레이어 상승: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-				.p_ElevationEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Elevation: {0}",
-				Players In Slot(Slot Of(Event Player), Team 1).p_ElevationEnabled == True ? Custom String("On") : Custom String("Off")),
+				Team 1).p_Language == 1 ? Custom String("플레이어 엘리베이터: {0}", Players In Slot(Slot Of(Event Player), Team 1)
+				.p_ElevatorEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Elevator: {0}",
+				Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True ? Custom String("On") : Custom String("Off")),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[12], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
@@ -2119,12 +2125,12 @@ rule("Player Sky Menu Move Selection Decrease")
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Players In Slot(Slot Of(Event Player), Team 2).bot_FlickerEnabled = False;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Players In Slot(Slot Of(Event Player), Team 1)
-				.p_ElevationEnabled == True);
+				.p_ElevatorEnabled == True);
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Players In Slot(Slot Of(Event Player), Team 1).p_ElevationEnabled = False;
-			Stop Chasing Player Variable(Event Player, p_ElevationHeight);
-			Players In Slot(Slot Of(Event Player), Team 1).p_ElevationHeight = 0;
+			Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled = False;
+			Stop Chasing Player Variable(Event Player, p_ElevatorHeight);
+			Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorHeight = 0;
 			Set Jump Enabled(Event Player, True);
 			Set Crouch Enabled(Event Player, True);
 			Set Gravity(Event Player, 100);
@@ -2237,12 +2243,13 @@ rule("Player Sky Menu Move Selection Increase")
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Players In Slot(Slot Of(Event Player), Team 2).bot_FlickerEnabled = True;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Players In Slot(Slot Of(Event Player), Team 1)
-				.p_ElevationEnabled == False);
+				.p_ElevatorEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
+			Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled = True;
 			Set Jump Enabled(Event Player, False);
 			Set Crouch Enabled(Event Player, False);
-			Players In Slot(Slot Of(Event Player), Team 1).p_ElevationEnabled = True;
+			Set Gravity(Event Player, 0);
 			Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("{0} = 올리다 / {1} = 낮추다",
 				Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))) : Custom String("{0} to go Up / {1} to go Down",
 				Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))));
@@ -2360,10 +2367,10 @@ rule("Player Sky Menu Arrow Visibility")
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]);
-			If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevationEnabled == False);
+			If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevationEnabled == True);
+			Else If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True);
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
@@ -2409,7 +2416,7 @@ rule("botSub_MoveCrouch")
 
 	actions
 	{
-		Wait(0.250, Ignore Condition);
+		Call Subroutine(aiSub_ReactionDelay);
 		If(Random Real(0, 1) < Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchChanceMod);
 			Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch));
 			Start Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch));
@@ -3090,7 +3097,8 @@ rule("AI Movement Crouch")
 		Event Player.bot_MoveCrouchEnabled == True;
 		Is Alive(Event Player) == True;
 		Is On Ground(Event Player) == True;
-		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 5) == True;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 10) == True;
 	}
 
 	actions
@@ -3601,11 +3609,25 @@ rule("AI Mercy")
 	{
 		Event Player.ai_IsInAbilitySub = True;
 		Call Subroutine(aiSub_ReactionDelay);
-		If(Event Player.ai_AbilityButton == Button(Primary Fire));
-			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
-			Start Holding Button(Event Player, Button(Primary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+		If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Press Button(Event Player, Button(Ultimate));
+			Wait Until(Is Using Ultimate(Event Player), 1);
+			If(Is Using Ultimate(Event Player));
+				Event Player.ai_OptimalDistance = Random Real(12, 16);
+				Event Player.bot_MoveCrouchEnabled = False;
+				Event Player.bot_MoveWASDEnabled = False;
+				Event Player.ai_LookAtVector = Vector(X Component Of(Position Of(Event Player)), 10, Z Component Of(Position Of(Event Player)));
+				Call Subroutine(aiSub_FacingLookAt);
+				Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, Direction and Magnitude);
+				Wait(Random Real(0.500, 1), Ignore Condition);
+				Event Player.ai_CanAim = True;
+				Start Throttle In Direction(Event Player, Backward, 1, To Player, Replace existing throttle, Direction and Magnitude);
+				Wait(Random Real(0.500, 1), Ignore Condition);
+				Event Player.bot_MoveWASDEnabled = True;
+				Wait Until(Is Using Ultimate(Event Player) == False, 15);
+				Event Player.bot_MoveCrouchEnabled = True;
+				Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+			End;
 		End;
 		Event Player.ai_IsInAbilitySub = False;
 	}
@@ -3646,7 +3668,6 @@ rule("AI Mercy Attack")
 	{
 		Event Player.ai_AIEnabled == True;
 		Event Player.ai_CanAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -3656,15 +3677,15 @@ rule("AI Mercy Attack")
 
 	actions
 	{
-		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_Mercy);
+		Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
+		Start Holding Button(Event Player, Button(Primary Fire));
 		Wait(0.250, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Button(Primary Fire));
 	}
 }
 
-rule("AI Mercy Valkyrie Start")
+rule("AI Mercy Valkyrie")
 {
 	event
 	{
@@ -3689,43 +3710,6 @@ rule("AI Mercy Valkyrie Start")
 	{
 		Event Player.ai_AbilityButton = Button(Ultimate);
 		Call Subroutine(aiSub_Abilities_Mercy);
-	}
-}
-
-rule("AI Mercy Valkyrie Movement")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Mercy;
-	}
-
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_HeroInitialized == True;
-		Is Alive(Event Player) == True;
-		Is Using Ultimate(Event Player) == True;
-	}
-
-	actions
-	{
-		Event Player.ai_OptimalDistance = Random Real(12, 16);
-		Event Player.bot_MoveCrouchEnabled = False;
-		Event Player.bot_MoveWASDEnabled = False;
-		Call Subroutine(botSub_ThrottleStop);
-		Event Player.ai_LookAtVector = Vector(X Component Of(Position Of(Event Player)), 10, Z Component Of(Position Of(Event Player)));
-		Call Subroutine(aiSub_FacingLookAt);
-		Start Throttle In Direction(Event Player, Vector(0, 0, 1), 1, To Player, Replace existing throttle, Direction and Magnitude);
-		Wait(Random Real(0.500, 1), Ignore Condition);
-		Event Player.ai_CanAim = True;
-		Start Throttle In Direction(Event Player, Vector(0, 0, -1), 1, To Player, Replace existing throttle, Direction and Magnitude);
-		Wait(Random Real(0.500, 1.250), Ignore Condition);
-		Event Player.bot_MoveWASDEnabled = True;
-		Wait Until(Is Using Ultimate(Event Player) == False, 10);
-		Event Player.bot_MoveCrouchEnabled = True;
-		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 	}
 }
 
@@ -4682,7 +4666,7 @@ rule("AI Pharah Attack")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
 		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 17.500) == True;
+			Eye Position(Event Player)), 0), 20) == True;
 		Is Using Ultimate(Event Player) == False;
 	}
 
@@ -8835,7 +8819,7 @@ rule("AI Ana")
 				Wait(0.250, Ignore Condition);
 				Call Subroutine(aiSub_FacingReset);
 			Else If(Event Player.ai_AbilityOpt == 1);
-				Event Player.ai_LookAtVector = Position Of(Event Player);
+				Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(0, 0, 0.250), Event Player, Rotation);
 				Call Subroutine(aiSub_FacingLookAt);
 				Press Button(Event Player, Button(Ability 2));
 				Wait(0.100, Ignore Condition);
@@ -11701,15 +11685,6 @@ rule("pSub_SetDifficulty")
 
 	actions
 	{
-		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty == 3);
-		Else If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty == 4);
-		Else If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty == 5);
-		Else If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty == 6);
-		Else If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty == 7);
-		Else If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty == 8);
-		Else If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty == 9);
-		Else If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty == 10);
-		End;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingBase = 0.150 - 0.001 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 15 + 15 * Players In Slot(Slot Of(Event Player), Team 1)
@@ -11766,7 +11741,7 @@ rule("pSub_SetHeroClass")
 	}
 }
 
-rule("AI Aim Dir Mod Calculation")
+rule("AI Aim Mod Calculation")
 {
 	event
 	{
@@ -11833,8 +11808,8 @@ rule("AI Aim Calculation")
 		Else;
 			Call Subroutine(allSub_WaitForFrame);
 			Event Player.ai_AimTurnRate = Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(
-				Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300, 0)))
-				^ Event Player.ai_FacingAngleMod / Event Player.ai_FacingBase + Random Real(Event Player.ai_FacingPadMin,
+				Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300, 0))) ^ (
+				Event Player.ai_FacingBase / Event Player.ai_FacingAngleMod) + Random Real(Event Player.ai_FacingPadMin,
 				Event Player.ai_FacingPadMax);
 		End;
 		If(Array Contains(Global.scopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
@@ -12058,7 +12033,7 @@ rule("aiSub_FacingLookAt")
 		Players In Slot(Slot Of(Event Player), Team 2).ai_CanAim = False;
 		Wait(2 / 60, Ignore Condition);
 		Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate = Random Real(Players In Slot(Slot Of(Event Player), Team 2)
-			.ai_FacingCapMin, Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin * 1.250);
+			.ai_FacingCapMin, Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin * 1.500);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 		Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Direction Towards(Eye Position(Players In Slot(Slot Of(Event Player),
 			Team 2)), Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector), Players In Slot(Slot Of(Event Player), Team 2)
@@ -12275,7 +12250,40 @@ rule("Player 1 Second Cooldown Resets")
 	}
 }
 
-rule("Player Elevation Up")
+rule("pSub_Elevator")
+{
+	event
+	{
+		Subroutine;
+		pSub_Elevator;
+	}
+
+	actions
+	{
+		Start Forcing Throttle(Event Player, 0, 0, 0, 0, 0, 0);
+		Stop Chasing Player Variable(Event Player, p_ElevatorHeight);
+		Start Forcing Player Position(Event Player, Vector(X Component Of(Event Player.p_HomeVector), Event Player.p_ElevatorHeight,
+			Z Component Of(Event Player.p_HomeVector)), True);
+		Chase Player Variable Over Time(Event Player, p_ElevatorHeight, (Event Player.all_SubArg[0] == 1 ? 2 : -2)
+			+ Event Player.p_ElevatorHeight - Event Player.p_ElevatorHeight % 2, 0.250, None);
+		Wait(0.250, Ignore Condition);
+		Loop If Condition Is True;
+		Wait(0.250, Ignore Condition);
+		Stop Forcing Player Position(Event Player);
+		Stop Forcing Throttle(Event Player);
+		Event Player.p_ElevatorPosition = Empty Array;
+		Event Player.p_ElevatorPosition[0] = Position Of(Event Player);
+		Wait(0.100, Ignore Condition);
+		Event Player.p_ElevatorPosition[1] = Position Of(Event Player);
+		Apply Impulse(Event Player, Direction Towards(Event Player.p_ElevatorPosition[1], Event Player.p_ElevatorPosition[0]),
+			Speed Of In Direction(Event Player, Direction Towards(Event Player.p_ElevatorPosition[0], Event Player.p_ElevatorPosition[1])),
+			To World, Incorporate Contrary Motion);
+		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("높이: {0} 미터",
+			Event Player.p_ElevatorHeight) : Custom String("Height: {0} Meters", Event Player.p_ElevatorHeight));
+	}
+}
+
+rule("Player Elevator Up")
 {
 	event
 	{
@@ -12286,8 +12294,10 @@ rule("Player Elevation Up")
 
 	conditions
 	{
-		Event Player.p_ElevationEnabled == True;
-		Event Player.p_ElevationHeight < 32;
+		Event Player.p_ElevatorEnabled == True;
+		Event Player.p_ElevatorHeight < 32;
+		Event Player.p_ElevatorHeight % 2 == 0;
+		Vertical Speed Of(Event Player) >= 0;
 		Is Alive(Event Player) == True;
 		Is Button Held(Event Player, Button(Jump)) == True;
 		Is Button Held(Event Player, Button(Crouch)) == False;
@@ -12295,21 +12305,13 @@ rule("Player Elevation Up")
 
 	actions
 	{
-		Stop Chasing Player Variable(Event Player, p_ElevationHeight);
-		Chase Player Variable Over Time(Event Player, p_ElevationHeight,
-			2 + Event Player.p_ElevationHeight - Event Player.p_ElevationHeight % 2, 0.250, None);
-		Start Forcing Player Position(Event Player, Vector(X Component Of(Event Player.p_HomeVector), Event Player.p_ElevationHeight,
-			Z Component Of(Event Player.p_HomeVector)), True);
-		Wait(0.250, Ignore Condition);
-		Set Gravity(Event Player, 0);
-		Wait(0.250, Ignore Condition);
-		Stop Forcing Player Position(Event Player);
-		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("높이: {0} 미터",
-			Event Player.p_ElevationHeight) : Custom String("Elevation: {0} Meters", Event Player.p_ElevationHeight));
+		Event Player.all_SubArg[0] = 1;
+		Call Subroutine(pSub_Elevator);
+		Loop If Condition Is True;
 	}
 }
 
-rule("Player Elevation Down")
+rule("Player Elevator Down")
 {
 	event
 	{
@@ -12320,30 +12322,25 @@ rule("Player Elevation Down")
 
 	conditions
 	{
-		Event Player.p_ElevationEnabled == True;
-		Event Player.p_ElevationHeight > 0;
+		Event Player.p_ElevatorEnabled == True;
+		Event Player.p_ElevatorHeight > 0;
+		Event Player.p_ElevatorHeight % 2 == 0;
+		Vertical Speed Of(Event Player) <= 0;
 		Is Alive(Event Player) == True;
 		Is Button Held(Event Player, Button(Crouch)) == True;
 		Is Button Held(Event Player, Button(Jump)) == False;
+		Is Button Held(Event Player, Button(Reload)) == False;
 	}
 
 	actions
 	{
-		Stop Chasing Player Variable(Event Player, p_ElevationHeight);
-		Chase Player Variable Over Time(Event Player, p_ElevationHeight,
-			-2 + Event Player.p_ElevationHeight - Event Player.p_ElevationHeight % 2, 0.250, None);
-		Start Forcing Player Position(Event Player, Vector(X Component Of(Event Player.p_HomeVector), Event Player.p_ElevationHeight,
-			Z Component Of(Event Player.p_HomeVector)), True);
-		Wait(0.250, Ignore Condition);
-		Set Gravity(Event Player, 0);
-		Wait(0.250, Ignore Condition);
-		Stop Forcing Player Position(Event Player);
-		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("높이: {0} 미터",
-			Event Player.p_ElevationHeight) : Custom String("Elevation: {0} Meters", Event Player.p_ElevationHeight));
+		Event Player.all_SubArg[0] = 2;
+		Call Subroutine(pSub_Elevator);
+		Loop If Condition Is True;
 	}
 }
 
-rule("Player Elevation Movement Start")
+rule("Player Elevator Movement Start")
 {
 	event
 	{
@@ -12354,7 +12351,7 @@ rule("Player Elevation Movement Start")
 
 	conditions
 	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_ElevationEnabled == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True;
 		Is Alive(Event Player) == True;
 		Throttle Of(Event Player) != Vector(0, 0, 0);
 	}
@@ -12363,12 +12360,10 @@ rule("Player Elevation Movement Start")
 	{
 		Stop Accelerating(Event Player);
 		Start Accelerating(Event Player, Throttle Of(Event Player), 100, Speed Of(Event Player), To Player, Direction Rate and Max Speed);
-		Wait(0.250, Ignore Condition);
-		Loop If Condition Is True;
 	}
 }
 
-rule("Player Elevation Movement Stop")
+rule("Player Elevator Movement Stop")
 {
 	event
 	{
@@ -12379,20 +12374,21 @@ rule("Player Elevation Movement Stop")
 
 	conditions
 	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_ElevationEnabled == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True;
 		Is Alive(Event Player) == True;
 		Throttle Of(Event Player) == Vector(0, 0, 0);
+		Speed Of(Event Player) > 0;
 	}
 
 	actions
 	{
 		Stop Accelerating(Event Player);
-		Event Player.p_ElevationPosition = Empty Array;
-		Event Player.p_ElevationPosition[0] = Position Of(Event Player);
+		Event Player.p_ElevatorPosition = Empty Array;
+		Event Player.p_ElevatorPosition[0] = Position Of(Event Player);
 		Wait(0.100, Ignore Condition);
-		Event Player.p_ElevationPosition[1] = Position Of(Event Player);
-		Apply Impulse(Event Player, Direction Towards(Event Player.p_ElevationPosition[1], Event Player.p_ElevationPosition[0]),
-			Speed Of In Direction(Event Player, Direction Towards(Event Player.p_ElevationPosition[0],
-			Event Player.p_ElevationPosition[1])), To World, Incorporate Contrary Motion);
+		Event Player.p_ElevatorPosition[1] = Position Of(Event Player);
+		Apply Impulse(Event Player, Direction Towards(Event Player.p_ElevatorPosition[1], Event Player.p_ElevatorPosition[0]),
+			Speed Of In Direction(Event Player, Direction Towards(Event Player.p_ElevatorPosition[0], Event Player.p_ElevatorPosition[1])),
+			To World, Incorporate Contrary Motion);
 	}
 }
