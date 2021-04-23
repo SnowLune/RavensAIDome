@@ -1,0 +1,71 @@
+rule("Global Define")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	actions
+	{
+		Global.longDistance = 65;
+		Global.mediumDistance = 50;
+		Global.shortDistance = 35;
+		Global.veryShortDistance = 20;
+		Global.playerZoneRadiusDefault = 20;
+		Global.playerBubbleRadius = 80;
+		Global.difficultyMax = 10;
+		Global.heroClasses = Empty Array;
+		Global.heroClasses[0] = All Heroes;
+		Global.heroClasses[1] = All Tank Heroes;
+		Global.heroClasses[2] = All Damage Heroes;
+		Global.heroClasses[3] = All Support Heroes;
+		Global.pseudoInfinity = 999999;
+		Global.colorLightPink = Custom Color(255, 195, 216, 255);
+		Global.colorDarkPink = Custom Color(255, 135, 176, 255);
+		Global.colorLightTeal = Custom Color(190, 235, 233, 255);
+		Global.colorDarkTeal = Custom Color(138, 198, 209, 255);
+		Global.colorLightGrey = Custom Color(230, 230, 230, 255);
+		Global.effectColors = Array(Color(White), Color(Gray), Color(Black), Color(Red), Color(Green), Color(Blue), Color(Rose), Color(
+			Lime Green), Color(Sky Blue), Color(Violet));
+	}
+}
+
+rule("Global Direction Array Define")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	actions
+	{
+		Global.moveDirAll = Array(Forward, Backward, Left, Right, Vector(1, 0, 1), Vector(-1, 0, 1), Vector(1, 0, -1), Vector(-1, 0, -1));
+		Global.moveDirForwards = Array(Forward, Left, Right, Vector(1, 0, 1), Vector(-1, 0, 1));
+		Global.moveDirBackwards = Array(Backward, Left, Right, Vector(1, 0, -1), Vector(-1, 0, -1));
+		Global.moveDirStrafe = Array(Left, Right);
+	}
+}
+
+rule("Global Hero Define")
+{
+	event
+	{
+		Ongoing - Global;
+	}
+
+	actions
+	{
+		Global.longRangeHeroes = Array(Hero(Widowmaker));
+		Global.mediumRangeHeroes = Array(Hero(Ana), Hero(Ashe), Hero(Baptiste), Hero(Hanzo));
+		Global.shortRangeHeroes = Array(Hero(Bastion), Hero(Lúcio), Hero(McCree), Hero(Mei), Hero(Orisa), Hero(Soldier: 76), Hero(
+			Torbjörn), Hero(Zenyatta));
+		Global.veryShortRangeHeroes = Array(Hero(Brigitte), Hero(D.Va), Hero(Moira), Hero(Reaper), Hero(Reinhardt), Hero(Roadhog), Hero(
+			Sigma), Hero(Symmetra), Hero(Winston), Hero(Zarya));
+		Global.projectileHeroes = Array(Hero(Ana), Hero(Ashe), Hero(Baptiste), Hero(Bastion), Hero(D.Va), Hero(Echo), Hero(Genji), Hero(
+			Hanzo), Hero(Junkrat), Hero(Lúcio), Hero(McCree), Hero(Mercy), Hero(Orisa), Hero(Pharah), Hero(Reaper), Hero(Roadhog), Hero(
+			Sigma), Hero(Soldier: 76), Hero(Sombra), Hero(Torbjörn), Hero(Tracer), Hero(Widowmaker), Hero(Wrecking Ball), Hero(Zenyatta));
+		Global.largePlayerZoneHeroes = Array(Hero(Doomfist), Hero(Echo), Hero(Genji), Hero(Junkrat), Hero(Mercy), Hero(Pharah), Hero(
+			Sombra), Hero(Tracer), Hero(Wrecking Ball));
+		Global.scopeHeroes = Array(Hero(Ana), Hero(Ashe), Hero(Widowmaker));
+	}
+}

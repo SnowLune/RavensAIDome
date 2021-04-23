@@ -1,0 +1,53 @@
+rule("Player/Bot Elimination Heal")
+{
+	event
+	{
+		Player Dealt Final Blow;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Health(Event Player) != Max Health(Event Player);
+		Event Player.all_HealingEnabled == True;
+	}
+
+	actions
+	{
+		Wait(6 / 60, Ignore Condition);
+		Start Heal Over Time(Event Player, Null, 2, 55);
+	}
+}
+
+rule("Player/Bot Inspire Heal")
+{
+	event
+	{
+		Player Dealt Damage;
+		All;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
+		Event Player.all_HealingEnabled == True;
+		Total Time Elapsed >= Event Player.all_InspireHealTime + 1;
+		Event Damage > 5;
+	}
+
+	actions
+	{
+		"Essentially Brigitte's Inspire"
+		If(Event Player.all_InspireHealID != 0);
+			Stop Heal Over Time(Event Player.all_InspireHealID);
+		End;
+		Start Heal Over Time(Event Player, Null, 6, 15);
+		Event Player.all_InspireHealID = Last Heal Over Time ID;
+		Event Player.all_InspireHealTime = Total Time Elapsed;
+	}
+}

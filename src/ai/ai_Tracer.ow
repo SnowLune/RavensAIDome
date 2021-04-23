@@ -1,0 +1,244 @@
+rule("AI Tracer")
+{
+	event
+	{
+		Subroutine;
+		aiSub_Abilities_Tracer;
+	}
+
+	actions
+	{
+		Event Player.ai_IsInAbilitySub = True;
+		Call Subroutine(aiSub_ReactionDelay);
+		If(Event Player.ai_AbilityButton == Button(Primary Fire));
+			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
+			Start Holding Button(Event Player, Button(Primary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+			Press Button(Event Player, Button(Ability 1));
+			Wait(0.100, Ignore Condition);
+		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+			Press Button(Event Player, Button(Ability 2));
+		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
+			Event Player.ai_AimType = 2;
+			Call Subroutine(aiSub_FacingStart);
+			Wait(Random Real(0.150, 0.250), Ignore Condition);
+			Press Button(Event Player, Button(Ultimate));
+			Wait(0.150, Ignore Condition);
+			Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+			Event Player.ai_AimType = 0;
+			Call Subroutine(aiSub_FacingStart);
+		End;
+		Event Player.ai_IsInAbilitySub = False;
+	}
+}
+
+rule("AI Tracer General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Tracer;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_AIEnabled == True;
+	}
+
+	actions
+	{
+		Event Player.ai_OptimalDistanceDefault = Random Real(4, 6);
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+		Event Player.ai_AimBaseDefault = 0;
+		Event Player.ai_AimTypeDefault = 0;
+		Event Player.ai_ProjectileSpeeds[4] = 15;
+		Call Subroutine(aiSub_FacingReset);
+		Event Player.ai_HeroInitialized = True;
+	}
+}
+
+rule("AI Tracer Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Tracer;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanAttack == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 23;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 12.500) == True;
+		Is Reloading(Event Player) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Primary Fire);
+		Call Subroutine(aiSub_Abilities_Tracer);
+		Wait(1, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Primary Fire));
+	}
+}
+
+rule("AI Tracer Blink")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Tracer;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 5) == True;
+		Ability Charge(Event Player, Button(Ability 1)) > 0;
+		Is Using Ability 1(Event Player) == False;
+	}
+
+	actions
+	{
+		If(Random Real(0, 1) < 0.500 + Event Player.ai_ChanceMod);
+			Event Player.ai_AbilityButton = Button(Ability 1);
+			Call Subroutine(aiSub_Abilities_Tracer);
+		End;
+	}
+}
+
+rule("AI Tracer Recall")
+{
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		Tracer;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Health(Event Player) < 70;
+		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+		Is Using Ability 2(Event Player) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 2);
+		Call Subroutine(aiSub_Abilities_Tracer);
+	}
+}
+
+rule("AI Tracer Pulse Bomb Update Range")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Tracer;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_OptimalDistance = Random Real(1, 3);
+	}
+}
+
+rule("AI Tracer Pulse Bomb Toss")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Tracer;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 75;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 5;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 10) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ultimate);
+		Call Subroutine(aiSub_Abilities_Tracer);
+	}
+}
+
+rule("AI Tracer Pulse Bomb Stick Recall")
+{
+	event
+	{
+		Player Dealt Damage;
+		Team 2;
+		Tracer;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Damage == 5;
+		Ultimate Charge Percent(Event Player) == 0;
+		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+		Is Using Ability 2(Event Player) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 2);
+		Call Subroutine(aiSub_Abilities_Tracer);
+	}
+}

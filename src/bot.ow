@@ -1,0 +1,434 @@
+rule("Bot Init")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 1;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.p_PlayerInitialized == True;
+	}
+
+	actions
+	{
+		Wait(0.100, Ignore Condition);
+		Call Subroutine(botSub_SetHero);
+		"Setup difficulty"
+		Call Subroutine(pSub_SetDifficulty);
+		Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled = Global.g_BotHealing;
+		"Face enemy bot after it is created"
+		Stop Facing(Event Player);
+		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
+			Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
+			Players In Slot(Slot Of(Event Player), Team 2)))) * 10, To World, None);
+		Wait(12 / 60, Ignore Condition);
+		Stop Facing(Event Player);
+	}
+}
+
+rule("Player Leave Destroy All Objects")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Entity Exists(Players In Slot(Slot Of(Event Player), Team 1)) == False;
+		Is In Spawn Room(Players In Slot(Slot Of(Event Player), Team 1)) == False;
+		Has Spawned(Players In Slot(Slot Of(Event Player), Team 1)) == False;
+	}
+
+	actions
+	{
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu) > 0);
+			Call Subroutine(hudSub_SkyMenuToggle);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Debug) > 0);
+			Call Subroutine(hudSub_DebugToggle);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Info) > 0);
+			Call Subroutine(hudSub_InfoToggle);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Main) > 0);
+			Call Subroutine(hudSub_MainToggle);
+		End;
+		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).p_Effects) > 0);
+			For Player Variable(Players In Slot(Slot Of(Event Player), Team 1), index, Count Of(Players In Slot(Slot Of(Event Player), Team 1)
+				.p_Effects), -1, -1);
+				Destroy Effect(Players In Slot(Slot Of(Event Player), Team 1).p_Effects[Players In Slot(Slot Of(Event Player), Team 1).index]);
+				Players In Slot(Slot Of(Event Player), Team 1).p_Effects = Remove From Array(Players In Slot(Slot Of(Event Player), Team 1)
+					.p_Effects, Players In Slot(Slot Of(Event Player), Team 1).p_Effects[Players In Slot(Slot Of(Event Player), Team 1).index]);
+			End;
+		End;
+		Destroy Dummy Bot(Team 2, Slot Of(Event Player));
+	}
+}
+
+rule("Bot Respawn")
+{
+	event
+	{
+		Player Died;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Players In Slot(Slot Of(Event Player), Team 1).all_Kills < Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal;
+	}
+
+	actions
+	{
+		Wait(0.250, Abort When False);
+		Call Subroutine(aiSub_ButtonsReset);
+		Event Player.ai_HeroInitialized = False;
+		Event Player.ai_IsInAbilitySub = False;
+		Stop Heal Over Time(Event Player.all_InspireHealID);
+		Stop Facing(Event Player);
+		Call Subroutine(allSub_WaitForFrame);
+		Respawn(Event Player);
+		Call Subroutine(botSub_TeleportBot);
+	}
+}
+
+rule("Bot Elimination")
+{
+	event
+	{
+		Player Dealt Final Blow;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+	}
+
+	actions
+	{
+		Event Player.all_Kills += 1;
+		If(Players In Slot(Slot Of(Event Player), Team 1).p_MinusKillOnDeath == True && Players In Slot(Slot Of(Event Player), Team 1)
+			.all_Kills > 0);
+			Players In Slot(Slot Of(Event Player), Team 1).all_Kills -= 1;
+		End;
+		"Bad Manners"
+		If(Random Real(0, 1) < 0.600);
+			Event Player.ai_BMVoiceLine = Random Integer(1, 4);
+			Wait(Random Real(0.650, 1.150), Ignore Condition);
+			If(Event Player.ai_BMVoiceLine == 1);
+				Communicate(Event Player, Hello);
+			Else If(Event Player.ai_BMVoiceLine == 2);
+				Communicate(Event Player, Thanks);
+			Else If(Event Player.ai_BMVoiceLine == 3);
+				Communicate(Event Player, Sorry);
+			Else If(Event Player.ai_BMVoiceLine == 4);
+				Communicate(Event Player, Goodbye);
+			End;
+		End;
+		Call Subroutine(aiSub_ReactionDelay);
+		Call Subroutine(aiSub_ButtonsReset);
+	}
+}
+
+rule("Bot Reset Position Non AI Difficulty")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(
+			Event Player), Team 1).p_EnemyDistanceMax - 1;
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3;
+	}
+
+	actions
+	{
+		"Flip 180"
+		Stop Facing(Event Player);
+		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Event Player) + World Vector Of(Vector(0, 0,
+			-5), Event Player, Rotation)), Random Integer(300, 500), To Player, None);
+	}
+}
+
+rule("Bot Reset Position Out Of Bounds")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Has Spawned(Event Player) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) > Players In Slot(Slot Of(
+			Event Player), Team 1).p_EnemyDistanceMax + 15;
+	}
+
+	actions
+	{
+		Wait(0.750, Abort When False);
+		Call Subroutine(botSub_TeleportBot);
+	}
+}
+
+rule("Bot Hello")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 1;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Communicating(Event Player, Hello) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+	}
+
+	actions
+	{
+		Wait(Random Real(1, 1.250), Ignore Condition);
+		Communicate(Players In Slot(Slot Of(Event Player), Team 2), Hello);
+	}
+}
+
+rule("Bot You Are Welcome")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 1;
+		All;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Communicating(Event Player, Thanks) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+	}
+
+	actions
+	{
+		Wait(Random Real(1, 1.250), Ignore Condition);
+		Communicate(Players In Slot(Slot Of(Event Player), Team 2), You are Welcome);
+	}
+}
+
+rule("Bot Asleep Thanks")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 1;
+		Ana;
+	}
+
+	conditions
+	{
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+		Has Status(Players In Slot(Slot Of(Event Player), Team 2), Asleep) == True;
+	}
+
+	actions
+	{
+		If(Random Real(0, 1) < 0.750);
+			Wait(Random Real(0.750, 1), Ignore Condition);
+			Communicate(Players In Slot(Slot Of(Event Player), Team 2), Thanks);
+		End;
+	}
+}
+
+rule("Hard Mode WASD")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 1;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.p_Difficulty == 2;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+		Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete == True;
+	}
+
+	actions
+	{
+		Players In Slot(Slot Of(Event Player), Team 2).bot_ThrottleDir = Random Value In Array(Global.moveDirAll);
+		Start Rule(botSub_MoveWASD, Do Nothing);
+		Start Rule(botSub_MoveCrouch, Do Nothing);
+		Start Rule(botSub_MoveJump, Do Nothing);
+		Wait(0.250, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2));
+		Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch));
+		Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
+	}
+}
+
+rule("Medium Mode WASD")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 1;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.p_Difficulty == 1;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+		(Event Player.all_Kills >= Event Player.p_KillGoal / 2 || (
+			Event Player.p_KillGoal == Global.pseudoInfinity && Event Player.all_Kills % 2 == 1)) == True;
+		Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete == True;
+	}
+
+	actions
+	{
+		Players In Slot(Slot Of(Event Player), Team 2).bot_ThrottleDir = Random Value In Array(Global.moveDirForwards);
+		Start Rule(botSub_MoveWASD, Do Nothing);
+		Start Rule(botSub_MoveCrouch, Do Nothing);
+		Start Rule(botSub_MoveJump, Do Nothing);
+		Wait(0.250, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2));
+		Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch));
+		Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
+	}
+}
+
+rule("Easy Mode WASD")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 1;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.p_Difficulty == 0;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+		(Event Player.all_Kills >= Event Player.p_KillGoal / 2 || (
+			Event Player.p_KillGoal == Global.pseudoInfinity && Event Player.all_Kills % 2 == 1)) == True;
+		Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete == True;
+	}
+
+	actions
+	{
+		Start Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2), Forward, 1, To Player, Replace existing throttle,
+			Direction and Magnitude);
+		Wait(1, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2));
+	}
+}
+
+rule("Non AI Scope Hero Scope In")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3;
+		Array Contains(Global.scopeHeroes, Hero Of(Event Player)) == True;
+		Event Player.bot_BotResetComplete == True;
+	}
+
+	actions
+	{
+		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 2 && Players In Slot(Slot Of(Event Player), Team 1)
+			.p_KillGoal == Global.pseudoInfinity);
+			If(Players In Slot(Slot Of(Event Player), Team 1).all_Kills % 4 == 0 || (Players In Slot(Slot Of(Event Player), Team 1)
+				.all_Kills - 1) % 4 == 0);
+				Stop Holding Button(Event Player, Button(Secondary Fire));
+				Wait(3 / 60, Ignore Condition);
+				Start Holding Button(Event Player, Button(Secondary Fire));
+				Event Player.bot_MoveJumpEnabled = False;
+			Else;
+				Skip If(Is Button Held(Event Player, Button(Secondary Fire)) == False, 1);
+				Stop Holding Button(Event Player, Button(Secondary Fire));
+				Event Player.bot_MoveJumpEnabled = True;
+			End;
+		Else;
+			If(Players In Slot(Slot Of(Event Player), Team 1).all_Kills % 2 == 0);
+				Stop Holding Button(Event Player, Button(Secondary Fire));
+				Wait(3 / 60, Ignore Condition);
+				Start Holding Button(Event Player, Button(Secondary Fire));
+				Event Player.bot_MoveJumpEnabled = False;
+			Else;
+				Skip If(Is Button Held(Event Player, Button(Secondary Fire)) == False, 1);
+				Stop Holding Button(Event Player, Button(Secondary Fire));
+				Event Player.bot_MoveJumpEnabled = True;
+			End;
+		End;
+	}
+}
+
+rule("Bot Flicker")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Event Player.bot_FlickerEnabled == True;
+		Event Player.bot_BotResetComplete == True;
+	}
+
+	actions
+	{
+		Cancel Primary Action(Event Player);
+		Set Invisible(Event Player, All);
+		Event Player.ai_CanAim = False;
+		Event Player.ai_CanAttack = False;
+		Event Player.ai_CanUseAbilities = False;
+		Set Status(Event Player, Null, Phased Out, 9999);
+		Wait(Random Real(0.300, 3), Ignore Condition);
+		Set Invisible(Event Player, None);
+		Event Player.ai_CanAim = True;
+		Event Player.ai_CanAttack = True;
+		Event Player.ai_CanUseAbilities = True;
+		Clear Status(Event Player, Phased Out);
+		Wait(Random Real(0.250, 2.500), Ignore Condition);
+		Loop If Condition Is True;
+	}
+}

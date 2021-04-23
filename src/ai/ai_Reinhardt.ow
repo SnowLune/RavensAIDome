@@ -1,0 +1,283 @@
+rule("AI Reinhardt")
+{
+	event
+	{
+		Subroutine;
+		aiSub_Abilities_Reinhardt;
+	}
+
+	actions
+	{
+		Event Player.ai_IsInAbilitySub = True;
+		Call Subroutine(aiSub_ReactionDelay);
+		If(Event Player.ai_AbilityButton == Button(Primary Fire));
+			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+			Call Subroutine(aiSub_ButtonsReset);
+			Start Holding Button(Event Player, Button(Primary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+			Start Holding Button(Event Player, Button(Secondary Fire));
+			Wait Until(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 6.500, Random Real(0.500, 2.750));
+			Stop Holding Button(Event Player, Button(Secondary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+			Press Button(Event Player, Button(Ability 1));
+			Event Player.bot_MoveJumpEnabled = False;
+		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+			Call Subroutine(aiSub_ButtonsReset);
+			Event Player.ai_AimType = 1;
+			Event Player.ai_AimBase = 3;
+			Event Player.ai_FacingRelPosMod = Vector(0, 0.750, 0);
+			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[3];
+			Call Subroutine(aiSub_FacingStart);
+			Wait(Random Real(0.150, 0.250), Ignore Condition);
+			Press Button(Event Player, Button(Ability 2));
+			Wait(1.120, Ignore Condition);
+			Call Subroutine(aiSub_FacingReset);
+		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+			Call Subroutine(aiSub_ButtonsReset);
+			Press Button(Event Player, Button(Ultimate));
+			Wait(0.950, Ignore Condition);
+			If(Has Status(Players In Slot(Slot Of(Event Player), Team 1), Knocked Down));
+				Event Player.bot_MoveCrouchEnabled = False;
+				Event Player.ai_OptimalDistance = Random Real(1.500, 3);
+				If(Ability Cooldown(Event Player, Button(Ability 1)) == 0);
+					Press Button(Event Player, Button(Ability 1));
+				End;
+			End;
+		End;
+		Event Player.ai_IsInAbilitySub = False;
+	}
+}
+
+rule("AI Reinhardt General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reinhardt;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_AIEnabled == True;
+	}
+
+	actions
+	{
+		Event Player.ai_OptimalDistanceDefault = Random Real(2.250, 4.250);
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+		Event Player.ai_StrafeDistanceMod = 0;
+		Event Player.ai_AimBaseDefault = 0;
+		Event Player.ai_AimTypeDefault = 0;
+		Event Player.ai_ProjectileSpeeds[3] = 25;
+		Call Subroutine(aiSub_FacingReset);
+		Event Player.ai_HeroInitialized = True;
+	}
+}
+
+rule("AI Reinhardt Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reinhardt;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanAttack == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 10;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 30) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Primary Fire);
+		Call Subroutine(aiSub_Abilities_Reinhardt);
+		Wait(0.960, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Primary Fire));
+	}
+}
+
+rule("AI Reinhardt Use Shield")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reinhardt;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Health(Event Player) < 450;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 10) == True;
+		(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 7.500 || Health(Event Player) <= 250) == True;
+		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+			< Global.playerBubbleRadius;
+		Has Status(Players In Slot(Slot Of(Event Player), Team 1), Knocked Down) == False;
+		Is Using Ultimate(Event Player) == False;
+	}
+
+	actions
+	{
+		If(Random Real(0, 1) < 0.650 + Event Player.ai_ChanceMod);
+			Event Player.ai_AbilityButton = Button(Secondary Fire);
+			Call Subroutine(aiSub_Abilities_Reinhardt);
+		End;
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Secondary Fire));
+	}
+}
+
+rule("AI Reinhardt Charge")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reinhardt;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 12.500) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) < Players In Slot(Slot Of(
+			Event Player), Team 1).p_EnemyDistanceMax - 2.500;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 75;
+		Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) < 2;
+		Altitude Of(Event Player) < 2;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 1);
+		Call Subroutine(aiSub_Abilities_Reinhardt);
+	}
+}
+
+rule("AI Reinhardt Charge Gap Closer")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reinhardt;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 12.500) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 20;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 1);
+		Call Subroutine(aiSub_Abilities_Reinhardt);
+	}
+}
+
+rule("AI Reinhardt Firestrike")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reinhardt;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 15) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 20;
+		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 2);
+		Call Subroutine(aiSub_Abilities_Reinhardt);
+	}
+}
+
+rule("AI Reinhardt Earthshatter")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reinhardt;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 15) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 16;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
+		Health(Event Player) >= 100;
+		Is On Ground(Event Player) == True;
+		Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		(Hero Of(Players In Slot(Slot Of(Event Player), Team 1)) == Hero(Reinhardt) ? Is Firing Secondary(Players In Slot(Slot Of(
+			Event Player), Team 1)) == False : True) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ultimate);
+		Call Subroutine(aiSub_Abilities_Reinhardt);
+		Wait Until(Has Status(Players In Slot(Slot Of(Event Player), Team 1), Knocked Down) == False, 2.500);
+		Event Player.bot_MoveCrouchEnabled = True;
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+	}
+}

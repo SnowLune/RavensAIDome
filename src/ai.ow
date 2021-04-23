@@ -1,0 +1,604 @@
+rule("AI Enable")
+{
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == False;
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
+		Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuIsOpen == False;
+		Event Player.bot_BotResetComplete == True;
+	}
+
+	actions
+	{
+		Wait(0.250, Ignore Condition);
+		Heal(Event Player, Null, Max Health(Event Player));
+		Call Subroutine(aiSub_EnableAI);
+	}
+}
+
+rule("AI Disable On Low Difficulty")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3;
+	}
+
+	actions
+	{
+		Call Subroutine(botSub_ResetBot);
+		Wait(2 / 60, Ignore Condition);
+		Clear Status(Event Player, Unkillable);
+		Wait(2 / 60, Ignore Condition);
+		Call Subroutine(botSub_TeleportBot);
+	}
+}
+
+rule("AI Aim Calculation Loop")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Event Player.bot_BotResetComplete == True;
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanAim == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
+		Total Time Elapsed >= Event Player.ai_AimStopTime;
+		((Slot Of(Event Player) % 2 == 0 && Global.gameTick % 2 == 0) || (Slot Of(Event Player) % 2 != 0 && Global.gameTick % 2 != 0))
+			== True;
+		Global.gameTick % 5 == 0;
+	}
+
+	actions
+	{
+		Start Rule(aiSub_AimCalculation, Do Nothing);
+	}
+}
+
+rule("AI Aim Stop")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Event Player.bot_BotResetComplete == True;
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanAim == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 5) == True;
+	}
+
+	actions
+	{
+		If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
+			Small Message(Event Player, Custom String("aim stop"));
+			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.200, 0.600) - Players In Slot(Slot Of(Event Player), Team 1)
+				.p_Difficulty * 0.020;
+			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
+			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.075, 0.150) - Event Player.ai_ChanceMod);
+			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
+			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.025, 0.075) - Event Player.ai_ChanceMod, None);
+			Start Rule(aiSub_AimModSet, Restart Rule);
+		End;
+	}
+}
+
+rule("AI Aim Flick")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Event Player.bot_BotResetComplete == True;
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanAim == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 1) == False;
+	}
+
+	actions
+	{
+		Small Message(Event Player, Custom String("aim flick"));
+		Start Rule(aiSub_AimModSet, Restart Rule);
+	}
+}
+
+rule("AI Attack Melee")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanAttack == True;
+		Is Alive(Event Player) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 2.500;
+		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 0;
+	}
+
+	actions
+	{
+		Call Subroutine(aiSub_ReactionDelay);
+		Press Button(Event Player, Button(Melee));
+	}
+}
+
+rule("AI Aim Start")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_CanAim == True;
+	}
+
+	actions
+	{
+		Call Subroutine(aiSub_FacingStart);
+	}
+}
+
+rule("AI Rule Can Aim")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Knocked Down) == False;
+		Has Status(Event Player, Asleep) == False;
+		Has Status(Event Player, Frozen) == False;
+		Has Status(Event Player, Stunned) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_CanAim = True;
+	}
+}
+
+rule("AI Rule Can Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Knocked Down) == False;
+		Has Status(Event Player, Asleep) == False;
+		Has Status(Event Player, Frozen) == False;
+		Has Status(Event Player, Phased Out) == False;
+		Has Status(Event Player, Stunned) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_CanAttack = True;
+	}
+}
+
+rule("AI Rule Can Use Abilities")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Hacked) == False;
+		Has Status(Event Player, Knocked Down) == False;
+		Has Status(Event Player, Asleep) == False;
+		Has Status(Event Player, Frozen) == False;
+		Has Status(Event Player, Phased Out) == False;
+		Has Status(Event Player, Stunned) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_CanUseAbilities = True;
+	}
+}
+
+rule("AI Rule Status Hacked")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Hacked) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_CanUseAbilities = False;
+	}
+}
+
+rule("AI Rule Status Knocked Down")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Knocked Down) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_CanAim = False;
+		Event Player.ai_CanAttack = False;
+		Event Player.ai_CanUseAbilities = False;
+		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
+	}
+}
+
+rule("AI Rule Status Asleep")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Asleep) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_CanAim = False;
+		Event Player.ai_CanAttack = False;
+		Event Player.ai_CanUseAbilities = False;
+		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
+	}
+}
+
+rule("AI Rule Status Frozen")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Frozen) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_CanAim = False;
+		Event Player.ai_CanAttack = False;
+		Event Player.ai_CanUseAbilities = False;
+		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
+	}
+}
+
+rule("AI Rule Status Phased Out")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Phased Out) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_CanUseAbilities = False;
+		Event Player.ai_CanAttack = False;
+	}
+}
+
+rule("AI Rule Status Stunned")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Has Status(Event Player, Stunned) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_CanAim = False;
+		Event Player.ai_CanAttack = False;
+		Event Player.ai_CanUseAbilities = False;
+		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
+	}
+}
+
+rule("AI Movement WASD Strafe On Dmg")
+{
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.bot_MoveWASDEnabled == True;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1))
+			> Event Player.ai_OptimalDistance + Event Player.ai_StrafeDistanceMod;
+		Event Damage > 25;
+	}
+
+	actions
+	{
+		If(Random Real(0, 1) < 0.700 + Event Player.ai_ChanceMod);
+			Call Subroutine(aiSub_ReactionDelay);
+			Event Player.bot_ThrottleDir = Random Value In Array(Global.moveDirStrafe);
+			Start Rule(botSub_MoveWASD, Restart Rule);
+		End;
+	}
+}
+
+rule("AI Movement WASD Move Closer")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.bot_MoveWASDEnabled == True;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Distance Between(Event Player, Vector(X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), 0,
+			Z Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))))) >= Event Player.ai_OptimalDistance;
+	}
+
+	actions
+	{
+		If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1))
+			> Event Player.ai_OptimalDistance + Event Player.ai_StrafeDistanceMod);
+			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirForwards, Array(Left, Right,
+				Event Player.bot_ThrottleDir)));
+		Else;
+			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirForwards, Event Player.bot_ThrottleDir));
+		End;
+		Call Subroutine(botSub_MoveWASD);
+		Loop If Condition Is True;
+	}
+}
+
+rule("AI Movement WASD Move Farther")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.bot_MoveWASDEnabled == True;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Distance Between(Event Player, Vector(X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), 0,
+			Z Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))))) < Event Player.ai_OptimalDistance;
+	}
+
+	actions
+	{
+		Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirBackwards, Event Player.bot_ThrottleDir));
+		Call Subroutine(botSub_MoveWASD);
+		Loop If Condition Is True;
+	}
+}
+
+rule("AI Optimal Distance Default Resize")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Alive(Event Player) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(
+			Event Player), Team 1).p_EnemyDistanceMax - 2.500;
+	}
+
+	actions
+	{
+		Event Player.ai_OptimalDistance = Random Real(2.500, 5);
+		Wait(Random Real(1.500, 3), Ignore Condition);
+		Loop If Condition Is True;
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+	}
+}
+
+rule("AI Movement Crouch")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.bot_MoveCrouchEnabled == True;
+		Is Alive(Event Player) == True;
+		Is On Ground(Event Player) == True;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 10) == True;
+	}
+
+	actions
+	{
+		Call Subroutine(botSub_MoveCrouch);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Crouch));
+	}
+}
+
+rule("AI Movement Jump")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.bot_MoveJumpEnabled == True;
+		Is Alive(Event Player) == True;
+		Is On Ground(Event Player) == True;
+	}
+
+	actions
+	{
+		Call Subroutine(botSub_MoveJump);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Jump));
+	}
+}
+
+rule("Quick Mode AI Enable")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Players In Slot(Slot Of(Event Player), Team 1).p_QuickModeEnabled == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
+		Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuIsOpen == False;
+		Is Alive(Event Player) == True;
+		Event Player.bot_BotResetComplete == True;
+	}
+
+	actions
+	{
+		Call Subroutine(aiSub_EnableAI);
+	}
+}

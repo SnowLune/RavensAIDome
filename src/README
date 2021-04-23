@@ -1,0 +1,6 @@
+This separation of the mode into multiple files became necessary as it became too difficult to keep track of everything
+
+".owh" denotes an Overwatch Workshop Header, used for subroutine declarations and general settings.
+".ow" denotes rules, grouped based on purpose.
+
+To build into a usable complete Workshop text file, type 'make'.

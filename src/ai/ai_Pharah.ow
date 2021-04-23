@@ -1,0 +1,217 @@
+rule("AI Pharah")
+{
+	event
+	{
+		Subroutine;
+		aiSub_Abilities_Pharah;
+	}
+
+	actions
+	{
+		Event Player.ai_IsInAbilitySub = True;
+		Call Subroutine(aiSub_ReactionDelay);
+		If(Event Player.ai_AbilityButton == Button(Primary Fire));
+			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[0];
+			Press Button(Event Player, Button(Primary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+			Start Holding Button(Event Player, Button(Secondary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+			Press Button(Event Player, Button(Ability 1));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[3];
+			Call Subroutine(aiSub_ReactionDelay);
+			Press Button(Event Player, Button(Ability 2));
+		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
+			Press Button(Event Player, Button(Ultimate));
+			Wait Until(Is Using Ultimate(Event Player) == True, 0.250);
+			Wait Until(Is Using Ultimate(Event Player) == False, 2.500);
+		End;
+		Event Player.ai_IsInAbilitySub = False;
+	}
+}
+
+rule("AI Pharah General")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Pharah;
+	}
+
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_AIEnabled == True;
+	}
+
+	actions
+	{
+		Event Player.ai_OptimalDistanceDefault = Random Real(9, 12);
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+		Event Player.ai_StrafeDistanceMod = 10;
+		Event Player.ai_AimBaseDefault = 2;
+		Event Player.ai_AimTypeDefault = 1;
+		Event Player.ai_ProjectileSpeeds[0] = 35;
+		Event Player.ai_ProjectileSpeeds[3] = 60;
+		Event Player.ai_ProjectileSpeeds[4] = 45;
+		Call Subroutine(aiSub_FacingReset);
+		Event Player.ai_HeroInitialized = True;
+	}
+}
+
+rule("AI Pharah Hover Jets")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Pharah;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Altitude Of(Event Player) <= 20;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Secondary Fire);
+		Call Subroutine(aiSub_Abilities_Pharah);
+		Wait(Random Real(0.250, 1.250), Ignore Condition);
+		Stop Holding Button(Event Player, Button(Secondary Fire));
+		Wait(Random Real(0.500, 1), Ignore Condition);
+		Loop If Condition Is True;
+	}
+}
+
+rule("AI Pharah Attack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Pharah;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanAttack == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 20) == True;
+		Is Using Ultimate(Event Player) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Primary Fire);
+		Call Subroutine(aiSub_Abilities_Pharah);
+		Wait(0.850, Ignore Condition);
+		Loop If Condition Is True;
+	}
+}
+
+rule("AI Pharah Jump Jet")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Pharah;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+		Altitude Of(Event Player) <= 20;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 1);
+		Call Subroutine(aiSub_Abilities_Pharah);
+	}
+}
+
+rule("AI Pharah Concussive Blast")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Pharah;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 12.500) == True;
+		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+		Is Using Ultimate(Event Player) == False;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 2);
+		Call Subroutine(aiSub_Abilities_Pharah);
+	}
+}
+
+rule("AI Pharah Barrage")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Pharah;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+		Altitude Of(Event Player) >= 3;
+		Altitude Of(Event Player) <= 12;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 17.500) == True;
+	}
+
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ultimate);
+		Call Subroutine(aiSub_Abilities_Pharah);
+	}
+}
