@@ -2,7 +2,7 @@ settings
 {
 	main
 	{
-		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)  ♥  This is a Pre-Release Beta Version!  ♥  Import Code: 5DPKQ  ♥  Created by Snow#15707  ♥  discord.gg/KJ277sdhzE  ♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\" to this description."
+		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)  ♥  This is a Pre-Release Beta Version!  ♥  Import Code: 5DPKQ  ♥  Created by Snow#15707  ♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\" to this description."
 	}
 
 	lobby
@@ -86,9 +86,7 @@ variables
 		26: mediumRangeHeroes
 		27: moveDirAll
 		28: moveDirBackwards
-		29: moveDirBackwardsNoStrafe
 		30: moveDirForwards
-		31: moveDirForwardsNoStrafe
 		32: moveDirStrafe
 		33: playerBubbleRadius
 		34: playerZoneRadiusDefault
@@ -103,6 +101,10 @@ variables
 		43: veryShortDistance
 		44: veryShortRangeHeroes
 		45: workshopCode
+		46: hud_MainVisibleToEN
+		47: hud_InfoVisibleToEN
+		48: hud_MainVisibleToKR
+		49: hud_InfoVisibleToKR
 
 	player:
 		0: ai_AbilityButton
@@ -183,7 +185,7 @@ variables
 		75: p_CameraEyePos
 		76: p_CameraLookAtPos
 		77: p_DamageModDealtID
-		78: p_DamageModReceievedID
+		78: p_DamageModReceivedID
 		79: p_Difficulty
 		80: p_DifficultyNames
 		81: p_Effects
@@ -277,6 +279,7 @@ subroutines
 	61: pSub_SetDistances
 	62: pSub_SetHeroClass
 	63: pSub_SetNames
+	64: pSub_SetLanguage
 }
 
 rule("Info")
@@ -288,13 +291,13 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.11.1");
-		Global.buildDate = Custom String("20201230");
+		Global.version = Custom String("0.12.0-beta.15");
+		Global.buildDate = Custom String("20210422");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
 		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
 		Global.githubURL = Custom String("https://github.com/SnowLune/PracticeFieldExpanse");
-		Global.discordInvite = Custom String("discord.gg/KJ277sdhzE");
+		Global.discordInvite = Custom String("TBA");
 	}
 }
 
@@ -341,7 +344,7 @@ rule("Global Settings")
 	}
 }
 
-rule("Global Main Tic Loop")
+rule("Global Main Tick Loop")
 {
 	event
 	{
@@ -356,7 +359,7 @@ rule("Global Main Tic Loop")
 	actions
 	{
 		For Global Variable(gameTick, 0, 60, 1);
-			"Dyamically lower the tick rate under high load"
+			"Dynamically lower the tick rate under high load"
 			If(Server Load >= 240);
 				Wait(2 / 60, Ignore Condition);
 			Else If(Server Load >= 225);
@@ -410,38 +413,10 @@ rule("Global Direction Array Define")
 
 	actions
 	{
-		Global.moveDirAll = Empty Array;
-		Modify Global Variable(moveDirAll, Append To Array, Forward);
-		Modify Global Variable(moveDirAll, Append To Array, Left);
-		Modify Global Variable(moveDirAll, Append To Array, Right);
-		Modify Global Variable(moveDirAll, Append To Array, Backward);
-		Modify Global Variable(moveDirAll, Append To Array, Vector(1, 0, 1));
-		Modify Global Variable(moveDirAll, Append To Array, Vector(-1, 0, 1));
-		Modify Global Variable(moveDirAll, Append To Array, Vector(1, 0, -1));
-		Modify Global Variable(moveDirAll, Append To Array, Vector(-1, 0, -1));
-		Global.moveDirForwards = Empty Array;
-		Modify Global Variable(moveDirForwards, Append To Array, Forward);
-		Modify Global Variable(moveDirForwards, Append To Array, Left);
-		Modify Global Variable(moveDirForwards, Append To Array, Right);
-		Modify Global Variable(moveDirForwards, Append To Array, Vector(1, 0, 1));
-		Modify Global Variable(moveDirForwards, Append To Array, Vector(-1, 0, 1));
-		Global.moveDirBackwards = Empty Array;
-		Modify Global Variable(moveDirBackwards, Append To Array, Left);
-		Modify Global Variable(moveDirBackwards, Append To Array, Right);
-		Modify Global Variable(moveDirBackwards, Append To Array, Backward);
-		Modify Global Variable(moveDirBackwards, Append To Array, Vector(1, 0, -1));
-		Modify Global Variable(moveDirBackwards, Append To Array, Vector(-1, 0, -1));
-		Global.moveDirForwardsNoStrafe = Empty Array;
-		Modify Global Variable(moveDirForwardsNoStrafe, Append To Array, Forward);
-		Modify Global Variable(moveDirForwardsNoStrafe, Append To Array, Vector(1, 0, 1));
-		Modify Global Variable(moveDirForwardsNoStrafe, Append To Array, Vector(-1, 0, 1));
-		Global.moveDirBackwardsNoStrafe = Empty Array;
-		Modify Global Variable(moveDirBackwardsNoStrafe, Append To Array, Backward);
-		Modify Global Variable(moveDirBackwardsNoStrafe, Append To Array, Vector(1, 0, -1));
-		Modify Global Variable(moveDirBackwardsNoStrafe, Append To Array, Vector(-1, 0, -1));
-		Global.moveDirStrafe = Empty Array;
-		Modify Global Variable(moveDirStrafe, Append To Array, Left);
-		Modify Global Variable(moveDirStrafe, Append To Array, Right);
+		Global.moveDirAll = Array(Forward, Backward, Left, Right, Vector(1, 0, 1), Vector(-1, 0, 1), Vector(1, 0, -1), Vector(-1, 0, -1));
+		Global.moveDirForwards = Array(Forward, Left, Right, Vector(1, 0, 1), Vector(-1, 0, 1));
+		Global.moveDirBackwards = Array(Backward, Left, Right, Vector(1, 0, -1), Vector(-1, 0, -1));
+		Global.moveDirStrafe = Array(Left, Right);
 	}
 }
 
@@ -454,72 +429,18 @@ rule("Global Hero Define")
 
 	actions
 	{
-		Global.longRangeHeroes = Empty Array;
-		Modify Global Variable(longRangeHeroes, Append To Array, Hero(Widowmaker));
-		Global.mediumRangeHeroes = Empty Array;
-		Modify Global Variable(mediumRangeHeroes, Append To Array, Hero(Ana));
-		Modify Global Variable(mediumRangeHeroes, Append To Array, Hero(Ashe));
-		Modify Global Variable(mediumRangeHeroes, Append To Array, Hero(Baptiste));
-		Modify Global Variable(mediumRangeHeroes, Append To Array, Hero(Hanzo));
-		Global.shortRangeHeroes = Empty Array;
-		Modify Global Variable(shortRangeHeroes, Append To Array, Hero(Bastion));
-		Modify Global Variable(shortRangeHeroes, Append To Array, Hero(Lúcio));
-		Modify Global Variable(shortRangeHeroes, Append To Array, Hero(McCree));
-		Modify Global Variable(shortRangeHeroes, Append To Array, Hero(Mei));
-		Modify Global Variable(shortRangeHeroes, Append To Array, Hero(Orisa));
-		Modify Global Variable(shortRangeHeroes, Append To Array, Hero(Soldier: 76));
-		Modify Global Variable(shortRangeHeroes, Append To Array, Hero(Torbjörn));
-		Modify Global Variable(shortRangeHeroes, Append To Array, Hero(Zenyatta));
-		Global.veryShortRangeHeroes = Empty Array;
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Brigitte));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(D.Va));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Moira));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Reaper));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Reinhardt));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Roadhog));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Sigma));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Symmetra));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Winston));
-		Modify Global Variable(veryShortRangeHeroes, Append To Array, Hero(Zarya));
-		Global.projectileHeroes = Empty Array;
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Ana));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Ashe));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Baptiste));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Bastion));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(D.Va));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Echo));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Genji));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Hanzo));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Junkrat));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Lúcio));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(McCree));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Mercy));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Orisa));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Pharah));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Reaper));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Roadhog));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Sigma));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Soldier: 76));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Sombra));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Torbjörn));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Tracer));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Widowmaker));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Wrecking Ball));
-		Modify Global Variable(projectileHeroes, Append To Array, Hero(Zenyatta));
-		Global.largePlayerZoneHeroes = Empty Array;
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Doomfist));
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Echo));
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Genji));
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Junkrat));
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Mercy));
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Pharah));
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Sombra));
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Tracer));
-		Modify Global Variable(largePlayerZoneHeroes, Append To Array, Hero(Wrecking Ball));
-		Global.scopeHeroes = Empty Array;
-		Modify Global Variable(scopeHeroes, Append To Array, Hero(Ana));
-		Modify Global Variable(scopeHeroes, Append To Array, Hero(Ashe));
-		Modify Global Variable(scopeHeroes, Append To Array, Hero(Widowmaker));
+		Global.longRangeHeroes = Array(Hero(Widowmaker));
+		Global.mediumRangeHeroes = Array(Hero(Ana), Hero(Ashe), Hero(Baptiste), Hero(Hanzo));
+		Global.shortRangeHeroes = Array(Hero(Bastion), Hero(Lúcio), Hero(McCree), Hero(Mei), Hero(Orisa), Hero(Soldier: 76), Hero(
+			Torbjörn), Hero(Zenyatta));
+		Global.veryShortRangeHeroes = Array(Hero(Brigitte), Hero(D.Va), Hero(Moira), Hero(Reaper), Hero(Reinhardt), Hero(Roadhog), Hero(
+			Sigma), Hero(Symmetra), Hero(Winston), Hero(Zarya));
+		Global.projectileHeroes = Array(Hero(Ana), Hero(Ashe), Hero(Baptiste), Hero(Bastion), Hero(D.Va), Hero(Echo), Hero(Genji), Hero(
+			Hanzo), Hero(Junkrat), Hero(Lúcio), Hero(McCree), Hero(Mercy), Hero(Orisa), Hero(Pharah), Hero(Reaper), Hero(Roadhog), Hero(
+			Sigma), Hero(Soldier: 76), Hero(Sombra), Hero(Torbjörn), Hero(Tracer), Hero(Widowmaker), Hero(Wrecking Ball), Hero(Zenyatta));
+		Global.largePlayerZoneHeroes = Array(Hero(Doomfist), Hero(Echo), Hero(Genji), Hero(Junkrat), Hero(Mercy), Hero(Pharah), Hero(
+			Sombra), Hero(Tracer), Hero(Wrecking Ball));
+		Global.scopeHeroes = Array(Hero(Ana), Hero(Ashe), Hero(Widowmaker));
 	}
 }
 
@@ -545,6 +466,86 @@ rule("Global HUD")
 		Create HUD Text(All Players(All Teams), Custom String("{0}", Global.workshopCode), Custom String("{0}+{1}, {2}", Global.version,
 			Global.buildDate, Global.programmerName), Custom String("Practice Field: Expanse"), Left, -3, Global.colorLightPink,
 			Global.colorLightGrey, Global.colorLightTeal, Visible To, Default Visibility);
+		"Create Left Side HUD Text EN"
+		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to show/hide info",
+			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White),
+			Color(White), Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and {1} to change heroes",
+			Input Binding String(Button(Crouch)), Input Binding String(Button(Reload))), Null, Left, -1.800, Color(White), Color(White),
+			Color(White), Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and press {1} or {2} to cycle enemy hero",
+			Input Binding String(Button(Interact)), Input Binding String(Button(Primary Fire)), Input Binding String(Button(
+			Secondary Fire))), Null, Left, -1.600, Color(White), Color(White), Color(Yellow), Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and {1} to select specific enemy hero",
+			Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String(
+			"Hold {0} and {1} to open/close the menu", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left,
+			-1.500, Color(White), Color(White), Global.colorDarkPink, Visible To and String, Default Visibility);
+		"Create Left Side HUD Text KR"
+		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼을 [{0} 및 {1}] 눌러 힌트 창을 닫습니다", Input Binding String(
+			Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White), Color(White),
+			Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 영웅 선택", Input Binding String(
+			Button(Crouch)), Input Binding String(Button(Reload))), Null, Left, -1.800, Color(White), Color(White), Color(White),
+			Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 순환합니다.",
+			Input Binding String(Button(Interact)), Input Binding String(Button(Primary Fire)), Input Binding String(Button(
+			Secondary Fire))), Null, Left, -1.600, Color(White), Color(White), Color(Yellow), Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 선택합니다",
+			Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다",
+			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left, -1.500, Color(White), Color(White),
+			Global.colorDarkPink, Visible To and String, Default Visibility);
+		"Create Info HUD EN"
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Practice Field: Expanse!"), Global.twitchURL, Custom String(
+			"Created by {0}", Global.programmerName), Top, 3, Global.colorLightTeal, Global.colorLightPink, Global.colorLightPink,
+			Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
+			"This workshop mode allows you to thoroughly warm up/practice your movement and aim on and against ALL heroes."),
+			Custom String(
+			"You are placed in a bubble against one bot opponent. When you kill them enough times it progresses to the next hero in the list."),
+			Top, 5, Color(Yellow), Color(White), Global.colorDarkPink, Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String(
+			"The AI modes contain AI for all heroes written from scratch by myself. The bots do not attack below the difficulty \"AI Bronze\"."),
+			Top, 5.100, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String(
+			"There are many difficulties and they correspond to many variables that affect the bots' movement, aim, and reaction time."),
+			Top, 5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String("Hold {0} and {1} to toggle the menu!",
+			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White),
+			Global.colorDarkTeal, Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
+			"There are many settings so you can customize your warmup!"), Custom String("See the top left corner for controls."), Top,
+			5.300, Color(Yellow), Color(White), Global.colorDarkTeal, Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Join the discord: {0}", Global.discordInvite),
+			Custom String("For the most recent version: Please import code: {0}", Global.workshopCode), Top, 7, Color(Yellow),
+			Global.colorLightTeal, Global.colorLightPink, Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to hide this text",
+			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
+			Global.colorLightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
+		"Create Info HUD KR"
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Practice Field: Expanse 어서 오십시오!"), Global.twitchURL, Custom String(
+			"창조자: {0}", Global.programmerName), Top, 3, Global.colorLightTeal, Global.colorLightPink, Global.colorLightPink,
+			Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 모드를 사용하면 워밍업하고 철저하게 연습 할 수 있습니다."), Custom String(
+			"적을 충분한 횟수로 처치하면 다음 영웅이 생성됩니다."), Top, 5, Color(Yellow), Color(White), Global.colorDarkPink, Visible To and String,
+			Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String(
+			"나는 모든 영웅을 위해 인공 지능을 프로그래밍했습니다. 난이도가 \"인공지능 브론즈\" 미만이면 봇은 공격하지 않습니다."), Top, 5.100, Color(Yellow), Color(White), Color(White),
+			Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String("난이도은 인공 지능의 움직임, 겨냥, 반응 시간에 영향을 미칩니다."), Top,
+			5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다!",
+			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White),
+			Global.colorDarkTeal, Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("당신이 당신의 연습 루틴을 사용자 정의 할 수 있도록 많은 설정이 있습니다!"),
+			Custom String("컨트롤은 왼쪽 상단을 참조하십시오."), Top, 5.300, Color(Yellow), Color(White), Global.colorDarkTeal, Visible To and String,
+			Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String(
+			"저는 영어 밖에 할 줄 모릅니다. Please help me with this translation on the Discord Server: {0}", Global.discordInvite), Custom String(
+			"최신 버전을 얻으려면 코드 {0}를 사용하십시오!", Global.workshopCode), Top, 7, Color(Yellow), Global.colorLightTeal, Global.colorLightPink,
+			Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 정보를 숨기려면 {0} 및 {1} 버튼을 사용하십시오",
+			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
+			Global.colorLightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
 		"Global Debug HUD"
 		If(Global.g_DebugHUD == True);
 			Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(Server Load / 2.550, Down), Server Load),
@@ -600,6 +601,26 @@ rule("Player Set Names")
 	}
 }
 
+rule("Player Set Language")
+{
+	event
+	{
+		Subroutine;
+		pSub_SetLanguage;
+	}
+
+	actions
+	{
+		If(Event Player.p_Language == 1);
+			Modify Global Variable(hud_MainVisibleToEN, Remove From Array By Value, Event Player);
+			Modify Global Variable(hud_MainVisibleToKR, Append To Array, Event Player);
+		Else;
+			Modify Global Variable(hud_MainVisibleToKR, Remove From Array By Value, Event Player);
+			Modify Global Variable(hud_MainVisibleToEN, Append To Array, Event Player);
+		End;
+	}
+}
+
 rule("Player Init")
 {
 	event
@@ -623,6 +644,9 @@ rule("Player Init")
 		"Force facing and prevent movement"
 		Start Facing(Event Player, Vector(0, 0, 0), 1000, To World, None);
 		Start Forcing Throttle(Event Player, 0, 0, 0, 0, 0, 0);
+		"Set Language"
+		Event Player.p_Language = Global.g_Language;
+		Call Subroutine(pSub_SetLanguage);
 		"Show info"
 		Start Rule(hudSub_InfoToggle, Restart Rule);
 		"Disable HUDs"
@@ -633,7 +657,6 @@ rule("Player Init")
 		Event Player.p_CameraLookAtPos = Vector(0, 200, 0);
 		Start Camera(Event Player, Event Player.p_CameraEyePos, Event Player.p_CameraLookAtPos, 10);
 		"Initialize Variables"
-		Event Player.p_Language = Global.g_Language;
 		Call Subroutine(pSub_SetNames);
 		Event Player.all_Kills = 0;
 		Event Player.p_BotHeroNumber = 0;
@@ -807,12 +830,12 @@ rule("Bot Respawn")
 
 	actions
 	{
+		Wait(0.250, Abort When False);
 		Call Subroutine(aiSub_ButtonsReset);
 		Event Player.ai_HeroInitialized = False;
 		Event Player.ai_IsInAbilitySub = False;
 		Stop Heal Over Time(Event Player.all_InspireHealID);
 		Stop Facing(Event Player);
-		Wait(0.250, Abort When False);
 		Call Subroutine(allSub_WaitForFrame);
 		Respawn(Event Player);
 		Call Subroutine(botSub_TeleportBot);
@@ -968,7 +991,6 @@ rule("Next Hero")
 
 	actions
 	{
-		Wait(0.300, Abort When False);
 		"Exception: Stop Echo Ultimate"
 		If(Is Duplicating(Event Player));
 			Kill(Event Player, Null);
@@ -1738,7 +1760,7 @@ rule("hudSub_SkyMenuToggle")
 
 	actions
 	{
-		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Info) > 0);
+		If(Players In Slot(Slot Of(Event Player), Team 1).hud_InfoEnabled == True);
 			Call Subroutine(hudSub_InfoToggle);
 		End;
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Debug) > 0);
@@ -1818,9 +1840,7 @@ rule("hudSub_SkyMenuToggle")
 				Button(Melee))) : Custom String("Press and hold {0} and {1} to close the menu", Input Binding String(Button(Reload)),
 				Input Binding String(Button(Melee))));
 			"Menu Selection Arrows"
-			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo = Empty Array;
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenuArrowsVisibleTo, Append To Array, Null);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenuArrowsVisibleTo, Append To Array, Null);
+			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo = Array(Null, Null);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu = Empty Array;
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo[0], Icon String(Arrow: Left),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection + Vector(4.500, 0, 0), 1.250, Clip Against Surfaces,
@@ -2147,6 +2167,7 @@ rule("Player Sky Menu Move Selection Decrease")
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Players In Slot(Slot Of(Event Player), Team 1).p_Language = 0;
+			Call Subroutine(pSub_SetLanguage);
 			Call Subroutine(pSub_SetNames);
 		End;
 		Call Subroutine(hudSub_SkyMenuArrowSet);
@@ -2266,6 +2287,7 @@ rule("Player Sky Menu Move Selection Increase")
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Players In Slot(Slot Of(Event Player), Team 1).p_Language = 1;
+			Call Subroutine(pSub_SetLanguage);
 			Call Subroutine(pSub_SetNames);
 		End;
 		Call Subroutine(hudSub_SkyMenuArrowSet);
@@ -2401,8 +2423,8 @@ rule("botSub_MoveWASD")
 	{
 		Start Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 2)
 			.bot_ThrottleDir, 1, To Player, Replace existing throttle, None);
-		Wait(Random Real(Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod / 7, Players In Slot(Slot Of(Event Player),
-			Team 2).bot_MoveWASDTimeMod), Ignore Condition);
+		Wait(Random Real(Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod / Players In Slot(Slot Of(Event Player),
+			Team 1).p_Difficulty, Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod), Ignore Condition);
 	}
 }
 
@@ -3019,8 +3041,8 @@ rule("AI Movement WASD Move Closer")
 	{
 		If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1))
 			> Event Player.ai_OptimalDistance + Event Player.ai_StrafeDistanceMod);
-			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirForwardsNoStrafe,
-				Event Player.bot_ThrottleDir));
+			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirForwards, Array(Left, Right,
+				Event Player.bot_ThrottleDir)));
 		Else;
 			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirForwards, Event Player.bot_ThrottleDir));
 		End;
@@ -11303,67 +11325,18 @@ rule("hudSub_InfoToggle")
 			Call Subroutine(hudSub_DebugToggle);
 		End;
 		Wait(3 / 60, Ignore Condition);
-		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Info) > 0);
-			For Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_i, Count Of(Players In Slot(Slot Of(Event Player), Team 1)
-				.hud_Info), -1, -1);
-				Destroy HUD Text(Players In Slot(Slot Of(Event Player), Team 1).hud_Info[Players In Slot(Slot Of(Event Player), Team 1).hud_i]);
-				Players In Slot(Slot Of(Event Player), Team 1).hud_Info = Remove From Array(Players In Slot(Slot Of(Event Player), Team 1)
-					.hud_Info, Players In Slot(Slot Of(Event Player), Team 1).hud_Info[Players In Slot(Slot Of(Event Player), Team 1).hud_i]);
-			End;
+		If(Players In Slot(Slot Of(Event Player), Team 1).hud_InfoEnabled == True);
+			Modify Global Variable(hud_InfoVisibleToEN, Remove From Array By Value, Event Player);
+			Modify Global Variable(hud_InfoVisibleToKR, Remove From Array By Value, Event Player);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_InfoEnabled = False;
 		Else;
-			Players In Slot(Slot Of(Event Player), Team 1).hud_Info = Empty Array;
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("Practice Field: Expanse 어서 오십시오!") : Custom String("Welcome to Practice Field: Expanse!"),
-				Global.twitchURL, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("창조자: {0}",
-				Global.programmerName) : Custom String("Created by {0}", Global.programmerName), Top, 3, Global.colorLightTeal,
-				Global.colorLightPink, Global.colorLightPink, Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Info, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("이 모드를 사용하면 워밍업하고 철저하게 연습 할 수 있습니다.") : Custom String(
-				"This workshop mode allows you to thoroughly warm up/practice your movement and aim on and against ALL heroes."),
-				Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("적을 충분한 횟수로 처치하면 다음 영웅이 생성됩니다.")
-				: Custom String(
-				"You are placed in a bubble against one bot opponent. When you kill them enough times it progresses to the next hero in the list."),
-				Top, 5, Color(Yellow), Color(White), Global.colorDarkPink, Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Info, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Null, Players In Slot(Slot Of(Event Player),
-				Team 1).p_Language == 1 ? Custom String("나는 모든 영웅을 위해 인공 지능을 프로그래밍했습니다. 난이도가 \"{0}\" 미만이면 봇은 공격하지 않습니다.", Players In Slot(
-				Slot Of(Event Player), Team 1).p_DifficultyNames[3]) : Custom String(
-				"The AI modes contain AI for all heroes written from scratch by myself. The bots do not attack below the difficulty \"{0}\".",
-				Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[3]), Top, 5.100, Color(Yellow), Color(White), Color(White),
-				Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Info, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Null, Players In Slot(Slot Of(Event Player),
-				Team 1).p_Language == 1 ? Custom String("난이도은 인공 지능의 움직임, 겨냥, 반응 시간에 영향을 미칩니다.") : Custom String(
-				"There are many difficulties and they correspond to many variables that affect the bots' movement, aim, and reaction time."),
-				Top, 5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Info, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Null, Players In Slot(Slot Of(Event Player),
-				Team 1).p_Language == 1 ? Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다!", Input Binding String(Button(Reload)),
-				Input Binding String(Button(Melee))) : Custom String("Hold {0} and {1} to toggle the menu!", Input Binding String(Button(
-				Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White), Global.colorDarkTeal,
-				Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Info, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("당신이 당신의 연습 루틴을 사용자 정의 할 수 있도록 많은 설정이 있습니다!") : Custom String(
-				"There are many settings so you can customize your warmup!"), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("컨트롤은 왼쪽 상단을 참조하십시오.") : Custom String("See the top left corner for controls."), Top, 5.300,
-				Color(Yellow), Color(White), Global.colorDarkTeal, Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Info, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("저는 영어 밖에 할 줄 모릅니다. Please help me with this translation on the Discord Server: {0}",
-				Global.discordInvite) : Custom String("Join the discord: {0}", Global.discordInvite), Players In Slot(Slot Of(Event Player),
-				Team 1).p_Language == 1 ? Custom String("최신 버전을 얻으려면 코드 {0}를 사용하십시오!", Global.workshopCode) : Custom String(
-				"For the most recent version: Please import code: {0}", Global.workshopCode), Top, 7, Color(Yellow), Global.colorLightTeal,
-				Global.colorLightPink, Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Info, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("이 정보를 숨기려면 {0} 및 {1} 버튼을 사용하십시오", Input Binding String(Button(Crouch)), Input Binding String(
-				Button(Interact))) : Custom String("Press {0} and {1} to hide this text", Input Binding String(Button(Crouch)),
-				Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow), Global.colorLightGrey, Color(Sky Blue),
-				Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Info, Append To Array, Last Text ID);
+			If(Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1);
+				Modify Global Variable(hud_InfoVisibleToEN, Remove From Array By Value, Event Player);
+				Modify Global Variable(hud_InfoVisibleToKR, Append To Array, Event Player);
+			Else;
+				Modify Global Variable(hud_InfoVisibleToKR, Remove From Array By Value, Event Player);
+				Modify Global Variable(hud_InfoVisibleToEN, Append To Array, Event Player);
+			End;
 			Players In Slot(Slot Of(Event Player), Team 1).hud_InfoEnabled = True;
 			"Auto-close after 20 seconds open"
 			Wait(20, Ignore Condition);
@@ -11392,37 +11365,8 @@ rule("hudSub_MainToggle")
 					.hud_Main, Players In Slot(Slot Of(Event Player), Team 1).hud_Main[Players In Slot(Slot Of(Event Player), Team 1).hud_i]);
 			End;
 		Else;
-			Wait(12 / 60, Ignore Condition);
+			Wait(3 / 60, Ignore Condition);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_Main = Empty Array;
-			"Create Left Side HUD Text"
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("버튼을 [{0} 및 {1}] 눌러 힌트 창을 닫습니다", Input Binding String(Button(Crouch)), Input Binding String(
-				Button(Interact))) : Custom String("Press {0} and {1} to show/hide info", Input Binding String(Button(Crouch)),
-				Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White), Color(White), Visible To and String,
-				Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 영웅 선택", Input Binding String(Button(Crouch)), Input Binding String(
-				Button(Reload))) : Custom String("Hold {0} and {1} to change heroes", Input Binding String(Button(Crouch)),
-				Input Binding String(Button(Reload))), Null, Left, -1.800, Color(White), Color(White), Color(White), Visible To and String,
-				Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 순환합니다.", Input Binding String(Button(Interact)),
-				Input Binding String(Button(Primary Fire)), Input Binding String(Button(Secondary Fire))) : Custom String(
-				"Hold {0} and press {1} or {2} to cycle enemy hero", Input Binding String(Button(Interact)), Input Binding String(Button(
-				Primary Fire)), Input Binding String(Button(Secondary Fire))), Null, Left, -1.600, Color(White), Color(White), Color(Yellow),
-				Visible To and String, Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
-			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String(""), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 선택합니다", Input Binding String(Button(Interact)),
-				Input Binding String(Button(Reload))) : Custom String("Hold {0} and {1} to select specific enemy hero", Input Binding String(
-				Button(Interact)), Input Binding String(Button(Reload))), Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Language == 1 ? Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다", Input Binding String(Button(Reload)), Input Binding String(
-				Button(Melee))) : Custom String("Hold {0} and {1} to open/close the menu", Input Binding String(Button(Reload)),
-				Input Binding String(Button(Melee))), Left, -1.500, Color(White), Color(White), Global.colorDarkPink, Visible To and String,
-				Default Visibility);
-			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
 			"Create Right Side HUD Text"
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("{0} 킬: {1} / {2}", Hero Icon String(Players In Slot(Slot Of(Event Player), Team 1)
@@ -11560,12 +11504,12 @@ rule("Player Ana Self Nano Boost")
 		Event Player.p_DamageModDealtID = Last Damage Modification ID;
 		Start Damage Modification(Event Player, Players In Slot(Slot Of(Event Player), Team 2), 50, Receivers Damagers and Damage Percent);
 		Call Subroutine(allSub_WaitForFrame);
-		Event Player.p_DamageModReceievedID = Last Damage Modification ID;
+		Event Player.p_DamageModReceivedID = Last Damage Modification ID;
 		Wait Until(Is Dead(Event Player), 8);
 		Set Ultimate Ability Enabled(Event Player, True);
 		Allow Button(Event Player, Button(Ultimate));
 		Stop Damage Modification(Event Player.p_DamageModDealtID);
-		Stop Damage Modification(Event Player.p_DamageModReceievedID);
+		Stop Damage Modification(Event Player.p_DamageModReceivedID);
 	}
 }
 
@@ -11685,33 +11629,33 @@ rule("pSub_SetDifficulty")
 
 	actions
 	{
+		Players In Slot(Slot Of(Event Player), Team 2).ai_ChanceMod = Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty / 100;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAngleMod = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
-			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
-			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAnglePow = 0.225 + 0.005 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMax = 540 + 18 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAnglePow = (0.150 - 0.001 * Players In Slot(Slot Of(Event Player), Team 1)
-			.p_Difficulty) / (0.700 + 0.010 * Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty);
-		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod = 1 - 0.100 * Players In Slot(Slot Of(Event Player), Team 1)
-			.p_Difficulty * 0.550 + 0.150;
-		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchTimeMod = 0.080 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchChanceMod = 0.100 + Players In Slot(Slot Of(Event Player), Team 1)
-			.p_Difficulty * 0.010;
-		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpTimeMod = 1 + Players In Slot(Slot Of(Event Player), Team 1)
-			.p_Difficulty * 0.070;
-		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod = 0.160 + Players In Slot(Slot Of(Event Player), Team 1)
-			.p_Difficulty * 0.030;
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+			.p_Difficulty;
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.difficultyMax - Players In Slot(Slot Of(
 			Event Player), Team 1).p_Difficulty);
-		Players In Slot(Slot Of(Event Player), Team 2).ai_ChanceMod = Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty / 100;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ViewAngleMod = (Global.difficultyMax - Players In Slot(Slot Of(Event Player),
 			Team 1).p_Difficulty) / 2;
+		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchChanceMod = 0.100 + Players In Slot(Slot Of(Event Player), Team 1)
+			.p_Difficulty * 0.010;
+		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchTimeMod = 0.080 * Players In Slot(Slot Of(Event Player), Team 1)
+			.p_Difficulty;
+		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod = 0.160 + Players In Slot(Slot Of(Event Player), Team 1)
+			.p_Difficulty * 0.030;
+		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpTimeMod = 1 + Players In Slot(Slot Of(Event Player), Team 1)
+			.p_Difficulty * 0.070;
+		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod = 2 - 0.100 * Players In Slot(Slot Of(Event Player), Team 1)
+			.p_Difficulty;
 	}
 }
 
@@ -11756,25 +11700,25 @@ rule("AI Aim Mod Calculation")
 		If(Array Contains(Global.scopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
 			If(Horizontal Angle Towards(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 0);
 				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(0, (Global.difficultyMax - Players In Slot(Slot Of(
-					Event Player), Team 1).p_Difficulty) * 0.450), Random Real(0.125, 0.625), None);
+					Event Player), Team 1).p_Difficulty) * 0.450), Random Real(0.100, 0.500), None);
 			Else;
 				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(-0.450 * (Global.difficultyMax - Players In Slot(Slot Of(
-					Event Player), Team 1).p_Difficulty), 0), Random Real(0.125, 0.625), None);
+					Event Player), Team 1).p_Difficulty), 0), Random Real(0.100, 0.500), None);
 			End;
 			Chase Player Variable Over Time(Event Player, ai_AimModY, Random Real(-0.300 * (Global.difficultyMax - Players In Slot(Slot Of(
 				Event Player), Team 1).p_Difficulty), (Global.difficultyMax - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty)
-				* 0.300), Random Real(0.125, 0.625), None);
+				* 0.300), Random Real(0.100, 0.500), None);
 		Else;
 			If(Horizontal Angle Towards(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 0);
 				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(0, (Global.difficultyMax - Players In Slot(Slot Of(
-					Event Player), Team 1).p_Difficulty) * 0.650), Random Real(0.125, 0.625), None);
+					Event Player), Team 1).p_Difficulty) * 0.750), Random Real(0.100, 0.500), None);
 			Else;
-				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(-0.650 * (Global.difficultyMax - Players In Slot(Slot Of(
-					Event Player), Team 1).p_Difficulty), 0), Random Real(0.125, 0.625), None);
+				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(-0.750 * (Global.difficultyMax - Players In Slot(Slot Of(
+					Event Player), Team 1).p_Difficulty), 0), Random Real(0.100, 0.500), None);
 			End;
-			Chase Player Variable Over Time(Event Player, ai_AimModY, Random Real(-0.525 * (Global.difficultyMax - Players In Slot(Slot Of(
+			Chase Player Variable Over Time(Event Player, ai_AimModY, Random Real(-0.550 * (Global.difficultyMax - Players In Slot(Slot Of(
 				Event Player), Team 1).p_Difficulty), (Global.difficultyMax - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty)
-				* 0.525), Random Real(0.125, 0.625), None);
+				* 0.550), Random Real(0.100, 0.500), None);
 		End;
 	}
 }
@@ -11795,7 +11739,6 @@ rule("AI Aim Calculation")
 				Event Player.ai_FacingPadMax), Random Real(0.050, 0.150), None);
 			Wait(0.150, Ignore Condition);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-			Abort;
 		Else If(Random Real(0, 1) < 0.350 - Event Player.ai_ChanceMod);
 			Call Subroutine(allSub_WaitForFrame);
 			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.150, 0.250) - Event Player.ai_ChanceMod;
@@ -11804,7 +11747,6 @@ rule("AI Aim Calculation")
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
 			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.150, 0.250) - Event Player.ai_ChanceMod, None);
 			Call Subroutine(aiSub_AimModSet);
-			Abort;
 		Else;
 			Call Subroutine(allSub_WaitForFrame);
 			Event Player.ai_AimTurnRate = (Event Player.ai_FacingAngleMod * Angle Between Vectors(Facing Direction Of(Event Player),
@@ -11862,12 +11804,13 @@ rule("AI Aim Stop")
 		Event Player.ai_CanAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
 		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 5 + Event Player.ai_ViewAngleMod) == True;
+			Eye Position(Event Player)), 0), 5) == True;
 	}
 
 	actions
 	{
 		If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
+			Small Message(Event Player, Custom String("aim stop"));
 			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.200, 0.600) - Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Difficulty * 0.020;
 			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
@@ -11876,6 +11819,33 @@ rule("AI Aim Stop")
 			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.025, 0.075) - Event Player.ai_ChanceMod, None);
 			Start Rule(aiSub_AimModSet, Restart Rule);
 		End;
+	}
+}
+
+rule("AI Aim Flick")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Event Player.bot_BotResetComplete == True;
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CanAim == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
+		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Event Player)), 0), 1) == False;
+	}
+
+	actions
+	{
+		Small Message(Event Player, Custom String("aim flick"));
+		Start Rule(aiSub_AimModSet, Restart Rule);
 	}
 }
 
@@ -12035,8 +12005,9 @@ rule("aiSub_FacingLookAt")
 			.ai_FacingCapMin, Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin * 1.500);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 		Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Direction Towards(Eye Position(Players In Slot(Slot Of(Event Player),
-			Team 2)), Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector), Players In Slot(Slot Of(Event Player), Team 2)
-			.ai_AimTurnRate, To World, Direction and Turn Rate);
+			Team 2)), Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector), Evaluate Once(Random Real(Players In Slot(Slot Of(
+			Event Player), Team 2).ai_FacingCapMin, Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMax)), To World,
+			Direction and Turn Rate);
 		Wait Until(Is In View Angle(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 2)
 			.ai_LookAtVector - Vector(0, Y Component Of(Eye Position(Players In Slot(Slot Of(Event Player), Team 2))), 0), 12.500), 2);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
