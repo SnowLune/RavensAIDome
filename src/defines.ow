@@ -69,3 +69,4 @@ rule("Global Hero Define")
 		Global.scopeHeroes = Array(Hero(Ana), Hero(Ashe), Hero(Widowmaker));
 	}
 }
+

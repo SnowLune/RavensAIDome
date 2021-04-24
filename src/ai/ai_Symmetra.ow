@@ -186,3 +186,4 @@ rule("AI Symmetra Photon Barrier")
 		Call Subroutine(aiSub_Abilities_Symmetra);
 	}
 }
+

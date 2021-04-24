@@ -253,3 +253,4 @@ rule("AI Lucio Sound Barrier")
 		Call Subroutine(aiSub_Abilities_Lucio);
 	}
 }
+

@@ -417,3 +417,4 @@ rule("hudSub_SkyMenuToggle")
 			Event Player), Team 1).hud_SkyMenuSelection - Vector(0, 15, 0), 75);
 	}
 }
+

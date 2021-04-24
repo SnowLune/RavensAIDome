@@ -236,3 +236,4 @@ rule("AI Roadhog Whole Hog")
 		Call Subroutine(aiSub_Abilities_Roadhog);
 	}
 }
+

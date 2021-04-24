@@ -79,8 +79,6 @@ rule("AI Echo General")
 	}
 }
 
-
-
 rule("AI Echo Glide")
 {
 	event
@@ -250,3 +248,4 @@ rule("AI Echo Duplicate")
 		Call Subroutine(aiSub_Abilities_Echo);
 	}
 }
+

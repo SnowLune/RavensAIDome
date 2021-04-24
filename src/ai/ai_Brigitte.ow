@@ -307,3 +307,4 @@ rule("AI Brigitte Rally")
 		Call Subroutine(aiSub_Abilities_Brigitte);
 	}
 }
+

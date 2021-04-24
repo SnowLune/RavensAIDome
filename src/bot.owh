@@ -237,3 +237,4 @@ rule("botSub_ThrottleStop")
 		Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2));
 	}
 }
+

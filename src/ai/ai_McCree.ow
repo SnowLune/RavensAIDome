@@ -252,3 +252,4 @@ rule("AI McCree Deadeye Charge")
 		Event Player.ai_McCreeDeadeyeCharge = 0;
 	}
 }
+

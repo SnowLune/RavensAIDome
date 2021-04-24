@@ -60,8 +60,6 @@ rule("AI Bastion General")
 	}
 }
 
-
-
 rule("AI Bastion Attack")
 {
 	event
@@ -182,3 +180,4 @@ rule("AI Bastion Configuration: Tank")
 		Event Player.ai_AimBase = 0;
 	}
 }
+

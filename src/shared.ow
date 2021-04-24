@@ -51,3 +51,4 @@ rule("Player/Bot Inspire Heal")
 		Event Player.all_InspireHealTime = Total Time Elapsed;
 	}
 }
+

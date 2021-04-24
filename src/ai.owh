@@ -361,3 +361,4 @@ rule("aiSub_FlickOut")
 		Call Subroutine(aiSub_FacingReset);
 	}
 }
+

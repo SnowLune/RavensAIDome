@@ -374,3 +374,4 @@ rule("AI Widowmaker Infra-Sight")
 		Call Subroutine(aiSub_Abilities_Widowmaker);
 	}
 }
+

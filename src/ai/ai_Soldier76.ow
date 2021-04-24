@@ -212,3 +212,4 @@ rule("AI Soldier: 76 Tactical Visor")
 		Call Subroutine(aiSub_Abilities_Soldier76);
 	}
 }
+

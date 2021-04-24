@@ -197,3 +197,4 @@ rule("AI Wrecking Ball Minefield")
 		Call Subroutine(aiSub_Abilities_WreckingBall);
 	}
 }
+

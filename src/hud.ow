@@ -590,3 +590,4 @@ rule("Info Toggle")
 		Start Rule(hudSub_InfoToggle, Restart Rule);
 	}
 }
+

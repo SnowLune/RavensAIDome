@@ -281,3 +281,4 @@ rule("AI Reinhardt Earthshatter")
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 	}
 }
+

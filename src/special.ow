@@ -220,3 +220,4 @@ rule("Special Rule: Player Sombra Disable Enemy Attack")
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = True;
 	}
 }
+

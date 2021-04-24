@@ -61,8 +61,6 @@ rule("AI Hanzo General")
 	}
 }
 
-
-
 rule("AI Hanzo Lunge")
 {
 	event
@@ -278,3 +276,4 @@ rule("AI Hanzo Dragonstrike")
 		Call Subroutine(aiSub_Abilities_Hanzo);
 	}
 }
+

@@ -81,8 +81,6 @@ rule("AI Doomfist General")
 	}
 }
 
-
-
 rule("AI Doomfist Attack")
 {
 	event
@@ -270,3 +268,4 @@ rule("AI Doomfist Meteor Strike")
 		Call Subroutine(aiSub_Abilities_Doomfist);
 	}
 }
+
