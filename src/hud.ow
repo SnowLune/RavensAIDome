@@ -362,6 +362,7 @@ rule("Player Sky Menu Move Selection Increase")
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_MirrorModeEnabled = True;
+			Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Event Player);
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);

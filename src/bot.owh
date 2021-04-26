@@ -38,6 +38,13 @@ rule("botSub_ResetBot")
 			Create Dummy Bot(Players In Slot(Slot Of(Event Player), Team 1).p_HeroList[Players In Slot(Slot Of(Event Player), Team 1)
 				.p_BotHeroNumber], Team 2, Slot Of(Event Player), Vector(0, 0, 0), Vector(0, 0, 0));
 			Wait Until(Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)), 5);
+			"Give the bot a silly name. For Fun. If Mirror Mode is on use the Player's name"
+			If(Players In Slot(Slot Of(Event Player), Team 1).p_MirrorModeEnabled == True);
+				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Event Player);
+			Else If(Global.namesUseNames == True);
+				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), String Slice(Custom String("{0}{1}", Random Value In Array(Remove From Array(Global.namesBase, Array(Players In Slot(Slot Of(Event Player), Team 2), All Players(Team 2)))), Random Real(0, 1)
+				< 0.150 ? Random Integer(10, 69) : Custom String("")), 0, 12));
+			End;
 			Call Subroutine(pSub_SetDifficulty);
 			Disable Built-In Game Mode Respawning(Players In Slot(Slot Of(Event Player), Team 2));
 			Call Subroutine(allSub_WaitForFrame);

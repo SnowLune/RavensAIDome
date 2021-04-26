@@ -105,6 +105,8 @@ variables
 		47: hud_InfoVisibleToEN
 		48: hud_MainVisibleToKR
 		49: hud_InfoVisibleToKR
+		50: namesBase
+		51: namesUseNames
 
 	player:
 		0: ai_AbilityButton

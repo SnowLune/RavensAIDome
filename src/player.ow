@@ -115,6 +115,11 @@ rule("Player Init")
 		Stop Forcing Throttle(Event Player);
 		"Player initialization is complete"
 		Event Player.p_PlayerInitialized = True;
+		Log To Inspector(Custom String("{0} spawned as {1} at vector {2}", Custom String("{0}: {1}", Total Time Elapsed, Event Player), Hero Of(Event Player), Event Player.p_HomeVector));
+		"Add Player name to pool of names"
+		If((Global.namesUseNames == True && Count Of(Global.namesBase) < 256) == True);
+			Modify Global Variable(namesBase, Append To Array, Custom String("{0}", Event Player));
+		End;
 	}
 }
 

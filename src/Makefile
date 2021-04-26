@@ -52,7 +52,7 @@ FILES=	\
 	ai/ai_Zenyatta.ow
 
 ../PracticeFieldExpanse.txt: $(FILES)
-	cat $(FILES) > ../PracticeFieldExpanse.txt
+	cat $(FILES) | sed -e '/\/\/.*$$/d' > ../PracticeFieldExpanse.txt
 
 clean: 
 	rm -f ../PracticeFieldExpanse.txt
