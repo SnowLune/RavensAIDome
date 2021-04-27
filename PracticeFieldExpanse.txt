@@ -293,11 +293,12 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.12.1-test.3");
+		Global.version = Custom String("0.12.1-test.4");
 		Global.buildDate = Custom String("20210427");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
 		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
+		Global.githubURL = Custom String("github.com/SnowLune/PracticeFieldExpanse/tree/dev");
 		Global.discordInvite = Custom String("TBA");
 	}
 }
@@ -1026,7 +1027,7 @@ rule("Global HUD")
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
 			"There are many settings so you can customize your warmup!"), Custom String("See the top left corner for controls."), Top,
 			5.300, Color(Yellow), Color(White), Global.colorDarkTeal, Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Join the discord: {0}", Global.discordInvite),
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("{0}", Global.githubURL),
 			Custom String("For the most recent version: Please import code: {0}", Global.workshopCode), Top, 7, Color(Yellow),
 			Global.colorLightTeal, Global.colorLightPink, Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to hide this text",
@@ -1051,7 +1052,7 @@ rule("Global HUD")
 			Custom String("컨트롤은 왼쪽 상단을 참조하십시오."), Top, 5.300, Color(Yellow), Color(White), Global.colorDarkTeal, Visible To and String,
 			Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String(
-			"저는 영어 밖에 할 줄 모릅니다. Please help me with this translation on the Discord Server: {0}", Global.discordInvite), Custom String(
+			"{0}", Global.githubURL), Custom String(
 			"최신 버전을 얻으려면 코드 {0}를 사용하십시오!", Global.workshopCode), Top, 7, Color(Yellow), Global.colorLightTeal, Global.colorLightPink,
 			Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 정보를 숨기려면 {0} 및 {1} 버튼을 사용하십시오",
