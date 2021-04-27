@@ -273,7 +273,7 @@ rule("hudSub_SkyMenuToggle")
 			End;
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection = Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuVectors[0];
-			"Start Camera"
+			// "Start Camera"
 			// Stop Camera(Event Player);
 			// Event Player.p_CameraEyePos = Eye Position(Event Player);
 			// Event Player.p_CameraLookAtPos = Ray Cast Hit Position(Eye Position(Event Player), Eye Position(Event Player)
@@ -410,10 +410,10 @@ rule("hudSub_SkyMenuToggle")
 				Event Player), Team 1).hud_SkyMenuVectors[14], 1.500, Clip Against Surfaces, Visible To and String, Color(White),
 				Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+			Call Subroutine(hudSub_SkyMenuArrowSet);
 			Stop Camera(Event Player);
 			Start Camera(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuSelection - Vector(0, 15, 0.001), Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection, 30);
-			Call Subroutine(hudSub_SkyMenuArrowSet);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuIsOpen = True;
 			Big Message(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("메뉴를 탐색하려면 WASD 버튼을 사용하십시오") : Custom String("Use WASD to navigate the menu"));

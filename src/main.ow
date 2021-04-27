@@ -7,8 +7,8 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.12.1-test.1");
-		Global.buildDate = Custom String("20210426");
+		Global.version = Custom String("0.12.1-test.3");
+		Global.buildDate = Custom String("20210427");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
 		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -43,7 +43,7 @@ rule("Global Settings")
 			"Player Healing / 플레이어 치유"), True, 4);
 		Global.g_BotHealing = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Bot Healing / 인공지는 치유"),
 			False, 5);
-		Global.namesUseNames = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Random Battletags For Bots"),
+		Global.namesUseNames = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Random Names For Bots"),
 			True, 5.5);
 		Global.g_DebugMode = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug Mode / 디버그 모드"), False,
 			6);

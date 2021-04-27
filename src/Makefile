@@ -3,6 +3,8 @@ SHELL = /bin/sh
 .SUFFIXES:
 .SUFFIXES: .owh .ow
 
+MODEFILE=../PracticeFieldExpanse.txt
+
 FILES=	\
 	main.owh \
 	main.ow \
@@ -51,8 +53,9 @@ FILES=	\
 	ai/ai_Zarya.ow \
 	ai/ai_Zenyatta.ow
 
-../PracticeFieldExpanse.txt: $(FILES)
-	cat $(FILES) | sed -e '/\/\/.*$$/d' > ../PracticeFieldExpanse.txt
+$(MODEFILE): $(FILES)
+	cat $(FILES) | sed -e '/\/\/.*$$/d' > $(MODEFILE)
+	cat $(MODEFILE) | clip.exe
 
 clean: 
 	rm -f ../PracticeFieldExpanse.txt

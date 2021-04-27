@@ -293,8 +293,8 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.12.1-test.1");
-		Global.buildDate = Custom String("20210426");
+		Global.version = Custom String("0.12.1-test.3");
+		Global.buildDate = Custom String("20210427");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
 		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -419,15 +419,14 @@ rule("Global Define")
 			Custom String("BitsAndBytes"), 
 			Custom String("Blue"), 
 			Custom String("Bread"), 
-			Custom String("BrigitteLindholm"),
 			Custom String("BronzeSmurf"), 
 			Custom String("Comfort"), 
 			Custom String("CoolGamer"), 
-			Custom String("DiffDiff"), 
 			Custom String("Dirt"),
 			Custom String("DontLeaveMe"), 
 			Custom String("DoomfistOTP"), 
 			Custom String("DoomSlayer"), 
+			Custom String("DPSDiff"), 
 			Custom String("DPSLucio"),
 			Custom String("DPSMercy"), 
 			Custom String("Ecofriendly"), 
@@ -469,7 +468,7 @@ rule("Global Define")
 			Custom String("NotScripting"),
 			Custom String("NotSmurfing"), 
 			Custom String("OatMilk"), 
-			Custom String("OnesAndZeroes"), 
+			Custom String("OnesAndZeros"), 
 			Custom String("Overclocked"), 
 			Custom String("Paul"), 
 			Custom String("Persephone"), 
@@ -480,8 +479,9 @@ rule("Global Define")
 			Custom String("Samantha"), 
 			Custom String("Sedna"), 
 			Custom String("Soap"), 
-			Custom String("Spaghettageddon"), 
+			Custom String("SupportDiff"), 
 			Custom String("Takoyaki"), 
+			Custom String("TankDiff"), 
 			Custom String("Tempest"), 
 			Custom String("TheBoyMayor"), 
 			Custom String("Titan"), 
@@ -810,7 +810,6 @@ rule("hudSub_SkyMenuToggle")
 			End;
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection = Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuVectors[0];
-			"Start Camera"
 			"Menu Selection Arrows"
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo = Array(Null, Null);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu = Empty Array;
@@ -939,10 +938,10 @@ rule("hudSub_SkyMenuToggle")
 				Event Player), Team 1).hud_SkyMenuVectors[14], 1.500, Clip Against Surfaces, Visible To and String, Color(White),
 				Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+			Call Subroutine(hudSub_SkyMenuArrowSet);
 			Stop Camera(Event Player);
 			Start Camera(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuSelection - Vector(0, 15, 0.001), Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection, 30);
-			Call Subroutine(hudSub_SkyMenuArrowSet);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuIsOpen = True;
 			Big Message(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("메뉴를 탐색하려면 WASD 버튼을 사용하십시오") : Custom String("Use WASD to navigate the menu"));
@@ -1587,6 +1586,9 @@ rule("pSub_SetDifficulty")
 			.p_Difficulty * 0.070;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod = 2 - 0.100 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
+		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3);
+			Clear Status(Players In Slot(Slot Of(Event Player), Team 2), Unkillable);
+		End;
 	}
 }
 
@@ -1945,10 +1947,11 @@ rule("Next Hero")
 
 	actions
 	{
-		"Exception: Stop Echo Ultimate"
+		"Echo locks you out of switching heroes for ~4 seconds"
 		If(Is Duplicating(Event Player));
-			Kill(Event Player, Null);
-			Wait Until(Is Duplicating(Players In Slot(Slot Of(Event Player), Team 1)) == False, 3);
+			"So this was causing an issue with Create Dummy Bot"
+			Damage(Event Player, Null, 9999);
+			Wait(4, Ignore Condition);
 		End;
 		Event Player.p_HeroNumberMod = 1;
 		Call Subroutine(botSub_SetHero);
@@ -2210,7 +2213,7 @@ rule("Target Help Indicator")
 		Has Spawned(Event Player) == True;
 		Is Alive(Event Player) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), 90) == False;
-		Event Player.p_Difficulty <= 2;
+		Event Player.p_Difficulty < 3;
 		Y Component Of(Facing Direction Of(Event Player)) <= 0.500;
 	}
 
@@ -2520,11 +2523,11 @@ rule("botSub_ResetBot")
 				.p_BotHeroNumber], Team 2, Slot Of(Event Player), Vector(0, 0, 0), Vector(0, 0, 0));
 			Wait Until(Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)), 5);
 			"Give the bot a silly name. For Fun. If Mirror Mode is on use the Player's name"
-			If(Players In Slot(Slot Of(Event Player), Team 1).p_MirrorModeEnabled == True);
-				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Event Player);
-			Else If(Global.namesUseNames == True);
+			If(Global.namesUseNames == True);
 				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), String Slice(Custom String("{0}{1}", Random Value In Array(Remove From Array(Global.namesBase, Array(Players In Slot(Slot Of(Event Player), Team 2), All Players(Team 2)))), Random Real(0, 1)
 				< 0.150 ? Random Integer(10, 69) : Custom String("")), 0, 12));
+			Else If(Players In Slot(Slot Of(Event Player), Team 1).p_MirrorModeEnabled == True);
+				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Event Player);
 			End;
 			Call Subroutine(pSub_SetDifficulty);
 			Disable Built-In Game Mode Respawning(Players In Slot(Slot Of(Event Player), Team 2));
@@ -2537,9 +2540,10 @@ rule("botSub_ResetBot")
 		End;
 		"Set Unkillable"
 		Call Subroutine(allSub_WaitForFrame);
-		Skip If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3 || (
-			Global.g_DebugHero[0] == True || Global.g_DebugMode == True) == True, 1);
-		Set Status(Players In Slot(Slot Of(Event Player), Team 2), Null, Unkillable, 9999);
+		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3 && (
+			Global.g_DebugHero[0] == False && Global.g_DebugMode == False) == True);
+			Set Status(Players In Slot(Slot Of(Event Player), Team 2), Null, Unkillable, 9999);
+		End;
 		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
 			Players In Slot(Slot Of(Event Player), Team 2).ai_StrafeDistanceMod = 5;
 			If(Global.g_DebugHero[0] == True || Global.g_DebugMode == True);
@@ -3887,30 +3891,6 @@ rule("AI Enable")
 	}
 }
 
-rule("AI Disable On Low Difficulty")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		All;
-	}
-
-	conditions
-	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3;
-	}
-
-	actions
-	{
-		Call Subroutine(botSub_ResetBot);
-		Wait(2 / 60, Ignore Condition);
-		Clear Status(Event Player, Unkillable);
-		Wait(2 / 60, Ignore Condition);
-		Call Subroutine(botSub_TeleportBot);
-	}
-}
-
 rule("AI Aim Calculation Loop")
 {
 	event
@@ -3962,7 +3942,9 @@ rule("AI Aim Stop")
 	actions
 	{
 		If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
-			Small Message(Event Player, Custom String("aim stop"));
+			If(Global.g_DebugHUD == True);
+				Small Message(Event Player, Custom String("aim stop"));
+			End;
 			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.200, 0.600) - Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Difficulty * 0.020;
 			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
@@ -3996,7 +3978,9 @@ rule("AI Aim Flick")
 
 	actions
 	{
-		Small Message(Event Player, Custom String("aim flick"));
+		If(Global.g_DebugHUD == True);
+			Small Message(Event Player, Custom String("aim flick"));
+		End;
 		Start Rule(aiSub_AimModSet, Restart Rule);
 	}
 }
@@ -9349,7 +9333,7 @@ rule("AI Reaper Shadow Step")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 20;
-		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+		Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
 			< Global.playerBubbleRadius;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Is Using Ability 2(Event Player) == False;

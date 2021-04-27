@@ -182,10 +182,11 @@ rule("Next Hero")
 
 	actions
 	{
-		"Exception: Stop Echo Ultimate"
+		"Echo locks you out of switching heroes for ~4 seconds"
 		If(Is Duplicating(Event Player));
-			Kill(Event Player, Null);
-			Wait Until(Is Duplicating(Players In Slot(Slot Of(Event Player), Team 1)) == False, 3);
+			"So this was causing an issue with Create Dummy Bot"
+			Damage(Event Player, Null, 9999);
+			Wait(4, Ignore Condition);
 		End;
 		Event Player.p_HeroNumberMod = 1;
 		Call Subroutine(botSub_SetHero);
@@ -447,7 +448,7 @@ rule("Target Help Indicator")
 		Has Spawned(Event Player) == True;
 		Is Alive(Event Player) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), 90) == False;
-		Event Player.p_Difficulty <= 2;
+		Event Player.p_Difficulty < 3;
 		Y Component Of(Facing Direction Of(Event Player)) <= 0.500;
 	}
 

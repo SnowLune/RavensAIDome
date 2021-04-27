@@ -23,30 +23,6 @@ rule("AI Enable")
 	}
 }
 
-rule("AI Disable On Low Difficulty")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		All;
-	}
-
-	conditions
-	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3;
-	}
-
-	actions
-	{
-		Call Subroutine(botSub_ResetBot);
-		Wait(2 / 60, Ignore Condition);
-		Clear Status(Event Player, Unkillable);
-		Wait(2 / 60, Ignore Condition);
-		Call Subroutine(botSub_TeleportBot);
-	}
-}
-
 rule("AI Aim Calculation Loop")
 {
 	event
@@ -98,7 +74,9 @@ rule("AI Aim Stop")
 	actions
 	{
 		If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
-			Small Message(Event Player, Custom String("aim stop"));
+			If(Global.g_DebugHUD == True);
+				Small Message(Event Player, Custom String("aim stop"));
+			End;
 			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.200, 0.600) - Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Difficulty * 0.020;
 			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
@@ -132,7 +110,9 @@ rule("AI Aim Flick")
 
 	actions
 	{
-		Small Message(Event Player, Custom String("aim flick"));
+		If(Global.g_DebugHUD == True);
+			Small Message(Event Player, Custom String("aim flick"));
+		End;
 		Start Rule(aiSub_AimModSet, Restart Rule);
 	}
 }

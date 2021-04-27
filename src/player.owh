@@ -35,6 +35,9 @@ rule("pSub_SetDifficulty")
 			.p_Difficulty * 0.070;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod = 2 - 0.100 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
+		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3);
+			Clear Status(Players In Slot(Slot Of(Event Player), Team 2), Unkillable);
+		End;
 	}
 }
 
