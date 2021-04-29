@@ -14,11 +14,7 @@ rule("Global Define")
 		Global.playerZoneRadiusDefault = 20;
 		Global.playerBubbleRadius = 80;
 		Global.difficultyMax = 10;
-		Global.heroClasses = Empty Array;
-		Global.heroClasses[0] = All Heroes;
-		Global.heroClasses[1] = All Tank Heroes;
-		Global.heroClasses[2] = All Damage Heroes;
-		Global.heroClasses[3] = All Support Heroes;
+		Global.heroClasses = Array(All Heroes, All Tank Heroes, All Damage Heroes, All Support Heroes);
 		Global.pseudoInfinity = 999999;
 		Global.colorLightPink = Custom Color(255, 195, 216, 255);
 		Global.colorDarkPink = Custom Color(255, 135, 176, 255);
@@ -27,7 +23,7 @@ rule("Global Define")
 		Global.colorLightGrey = Custom Color(230, 230, 230, 255);
 		Global.effectColors = Array(Color(White), Color(Gray), Color(Black), Color(Red), Color(Green), Color(Blue), Color(Rose), Color(
 			Lime Green), Color(Sky Blue), Color(Violet));
-		Global.namesBase = Array(Custom String("HelloWorld"),
+		Global.namesBotNames = Array(Array(Custom String("HelloWorld"),
 			Custom String("Alien"), 
 			Custom String("Amanda"), 
 			Custom String("Amber"), 
@@ -72,7 +68,7 @@ rule("Global Define")
 			Custom String("JustLikeBart"), 
 			Custom String("Kachow"), 
 			Custom String("Kyle"), 
-			Custom String("Legolas"), 
+			Custom String("Player"), 
 			Custom String("Mars"), 
 			Custom String("Mercury"), 
 			Custom String("MercyMainBTW"), 
@@ -109,7 +105,7 @@ rule("Global Define")
 			Custom String("Veronica"), 
 			Custom String("ZaryaMain"), 
 			Custom String("ZenMainBTW")
-		);
+		), Array());
 	}
 }
 

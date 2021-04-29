@@ -105,7 +105,7 @@ variables
 		47: hud_InfoVisibleToEN
 		48: hud_MainVisibleToKR
 		49: hud_InfoVisibleToKR
-		50: namesBase
+		50: namesBotNames
 		51: namesUseNames
 
 	player:
@@ -213,6 +213,7 @@ variables
 		101: p_QuickModeEnabled
 		102: p_Unkillable
 		103: p_ZoneRadius
+		104: bot_Name
 }
 
 subroutines

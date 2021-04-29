@@ -40,11 +40,21 @@ rule("botSub_ResetBot")
 			Wait Until(Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)), 5);
 			"If Mirror Mode is on use the Player's name"
 			If(Players In Slot(Slot Of(Event Player), Team 1).p_MirrorModeEnabled == True);
-				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Custom String("{0}", Event Player));
+				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Custom String("{0}", Players In Slot(Slot Of(Event Player), Team 1)));
 			"Give the bot a silly name. For Fun."
 			Else If(Global.namesUseNames == True);
-				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), String Slice(Custom String("{0}{1}", Random Value In Array(Remove From Array(Global.namesBase, Array(Players In Slot(Slot Of(Event Player), Team 2), All Players(Team 2)))), Random Real(0, 1)
-				< 0.100 ? Random Integer(10, 69) : Custom String("")), 0, 12));
+				If(Count Of(Global.namesBotNames[0]) - Count Of(All Players(Team 1)) == 0);
+					For Player Variable(Players In Slot(Slot Of(Event Player), Team 2), index, 0, Count Of(Global.namesBotNames[0]), 1);
+						Modify Global Variable At Index(namesBotNames, 1, Append To Array, Global.namesBotNames[0][Players In Slot(Slot Of(Event Player), Team 2).index]);
+					End;
+					Global.namesBotNames[0] = Global.namesBotNames[1];
+					Global.namesBotNames[1] = Empty Array;
+				End;
+				Players In Slot(Slot Of(Event Player), Team 2).bot_Name = Random Value In Array(Remove From Array(Global.namesBotNames[0], Mapped Array(All Players(Team 1), Custom String("{0}", Current Array Element))));
+				Global.namesBotNames[0] = Remove From Array(Global.namesBotNames[0], Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
+				Modify Global Variable At Index(namesBotNames, 1, Append To Array, Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
+				Stop Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2));
+				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
 			End;
 			Call Subroutine(pSub_SetDifficulty);
 			Disable Built-In Game Mode Respawning(Players In Slot(Slot Of(Event Player), Team 2));

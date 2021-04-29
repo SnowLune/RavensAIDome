@@ -7,8 +7,8 @@ rule("Info")
 
 	actions
 	{
-		Global.version = Custom String("0.12.1-test.4");
-		Global.buildDate = Custom String("20210427");
+		Global.version = Custom String("0.12.1-test.5");
+		Global.buildDate = Custom String("20210428");
 		Global.workshopCode = Custom String("5DPKQ");
 		Global.programmerName = Custom String("Snow#15707");
 		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
