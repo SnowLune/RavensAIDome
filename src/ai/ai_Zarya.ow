@@ -161,7 +161,7 @@ rule("AI Zarya Use Bubble")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.600 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.700 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 1);
 			Call Subroutine(aiSub_Abilities_Zarya);
 		End;

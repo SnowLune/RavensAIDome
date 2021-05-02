@@ -182,11 +182,11 @@ rule("Next Hero")
 
 	actions
 	{
-		"Echo locks you out of switching heroes for ~4 seconds"
+		"Echo locks you out of switching heroes for ~5 seconds"
 		If(Is Duplicating(Event Player));
 			"So this was causing an issue with Create Dummy Bot"
 			Damage(Event Player, Null, 9999);
-			Wait(4, Ignore Condition);
+			Wait(5, Ignore Condition);
 		End;
 		Event Player.p_HeroNumberMod = 1;
 		Call Subroutine(botSub_SetHero);

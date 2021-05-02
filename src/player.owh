@@ -173,6 +173,7 @@ rule("pSub_QuickMode")
 			Event Player.p_KillGoal = Global.g_KillGoal;
 			Event Player.p_QuickModeEnabled = False;
 		Else;
+			Event Player.all_Kills = 0;
 			Event Player.p_KillGoal = 1;
 			Event Player.p_QuickModeEnabled = True;
 		End;

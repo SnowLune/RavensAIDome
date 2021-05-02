@@ -33,9 +33,9 @@ rule("AI Symmetra")
 			Event Player.ai_CanAim = True;
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Press Button(Event Player, Button(Ultimate));
-			Wait(0.200, Ignore Condition);
+			Wait(0.250, Ignore Condition);
 			Press Button(Event Player, Button(Ultimate));
-			Wait(0.200, Ignore Condition);
+			Wait(0.250, Ignore Condition);
 			Press Button(Event Player, Button(Primary Fire));
 		End;
 		Event Player.ai_IsInAbilitySub = False;
