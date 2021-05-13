@@ -30,7 +30,7 @@ rule("Player Init")
 		Disable Game Mode HUD(Event Player);
 		Disable Hero HUD(Event Player);
 		"Start Camera"
-		Event Player.p_CameraEyePos = Vector(0, Global.playerBubbleRadius * 2, 0);
+		Event Player.p_CameraEyePos = Vector(0, Global.c_BubbleRadius * 2, 0);
 		Event Player.p_CameraLookAtPos = Vector(0, 200, 0);
 		Start Camera(Event Player, Event Player.p_CameraEyePos, Event Player.p_CameraLookAtPos, 10);
 		"Initialize Variables"
@@ -47,8 +47,8 @@ rule("Player Init")
 		Event Player.p_MinusKillOnDeath = False;
 		Event Player.p_MirrorModeEnabled = False;
 		Event Player.p_Difficulty = Global.g_Difficulty;
-		Event Player.p_EffectsColor = Global.effectColors[0];
-		Event Player.p_ZoneRadius = Global.playerZoneRadiusDefault;
+		Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
+		Event Player.p_ZoneRadius = Global.c_ZoneRadiusDefault;
 		Event Player.p_PlayerHero = Hero Of(Event Player);
 		Call Subroutine(pSub_SetDistances);
 		"HUD Object Arrays"
@@ -57,21 +57,21 @@ rule("Player Init")
 		Event Player.hud_SkyMenu = Empty Array;
 		"Set Home Vector"
 		If(Slot Of(Event Player) == 0);
-			Event Player.p_HomeVector = Vector(-380 + Global.playerBubbleRadius, 0, 380 - Global.playerBubbleRadius);
+			Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
 		Else If(Slot Of(Event Player) == 1);
-			Event Player.p_HomeVector = Vector(380 - Global.playerBubbleRadius, 0, -380 + Global.playerBubbleRadius);
+			Event Player.p_HomeVector = Vector(380 - Global.c_BubbleRadius, 0, -380 + Global.c_BubbleRadius);
 		Else If(Slot Of(Event Player) == 2);
-			Event Player.p_HomeVector = Vector(380 - Global.playerBubbleRadius, 0, 380 - Global.playerBubbleRadius);
+			Event Player.p_HomeVector = Vector(380 - Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
 		Else If(Slot Of(Event Player) == 3);
-			Event Player.p_HomeVector = Vector(-380 + Global.playerBubbleRadius, 0, -380 + Global.playerBubbleRadius);
+			Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, -380 + Global.c_BubbleRadius);
 		Else If(Slot Of(Event Player) == 4);
-			Event Player.p_HomeVector = Vector(0, 0, 380 - Global.playerBubbleRadius);
+			Event Player.p_HomeVector = Vector(0, 0, 380 - Global.c_BubbleRadius);
 		Else If(Slot Of(Event Player) == 5);
-			Event Player.p_HomeVector = Vector(0, 0, -380 + Global.playerBubbleRadius);
+			Event Player.p_HomeVector = Vector(0, 0, -380 + Global.c_BubbleRadius);
 		End;
 		Event Player.p_Effects = Empty Array;
 		"Create Player Bubble"
-		Create Effect(All Players(All Teams), Sphere, Event Player.p_EffectsColor, Event Player.p_HomeVector, Global.playerBubbleRadius,
+		Create Effect(All Players(All Teams), Sphere, Event Player.p_EffectsColor, Event Player.p_HomeVector, Global.c_BubbleRadius,
 			Color);
 		Event Player.p_Effects[0] = Last Created Entity;
 		"Create Player Movement Zone"
@@ -88,14 +88,14 @@ rule("Player Init")
 		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("메뉴를 열어 환경 설정을 구성하십시오.")
 			: Custom String("Open menu for options"));
 		Wait(1, Ignore Condition);
-		Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, Global.playerBubbleRadius * 2, 0.001);
+		Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, Global.c_BubbleRadius * 2, 0.001);
 		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("활성화하려면 봇을 공격하십시오.")
 			: Custom String("Attack the bot to start"));
 		Wait(1, Ignore Condition);
 		Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, 5, 0.001);
 		"Preload Heroes"
-		For Player Variable(Event Player, index, 0, Count Of(All Heroes), 1);
-			Preload Hero(Event Player, All Heroes[Event Player.index]);
+		For Player Variable(Event Player, all_Index, 0, Count Of(All Heroes), 1);
+			Preload Hero(Event Player, All Heroes[Event Player.all_Index]);
 			Wait(1 / 60, Ignore Condition);
 		End;
 		"Global 1 Second Cooldown"
@@ -113,12 +113,15 @@ rule("Player Init")
 		Enable Hero HUD(Event Player);
 		Call Subroutine(allSub_ButtonsAllow);
 		Stop Forcing Throttle(Event Player);
+
 		"Player initialization is complete"
 		Event Player.p_PlayerInitialized = True;
 		Log To Inspector(Custom String("{0} spawned as {1} at vector {2}", Custom String("{0}: {1}", Total Time Elapsed, Event Player), Hero Of(Event Player), Event Player.p_HomeVector));
+
 		"Add Player name to pool of names"
-		If((Global.namesUseNames == True && Count Of(Global.namesBotNames[0]) < 256) == True);
-			Modify Global Variable At Index(namesBotNames, 0, Append To Array, Custom String("{0}", Event Player));
+		If(Global.g_UseBotNames == True && Count Of(Global.g_PlayerNames) < 256);
+			Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
+			Modify Global Variable(g_BotNames, Append To Array, Custom String("{0}", Event Player));
 		End;
 	}
 }

@@ -40,9 +40,9 @@ rule("AI Aim Calculation Loop")
 		Event Player.ai_CanAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
 		Total Time Elapsed >= Event Player.ai_AimStopTime;
-		((Slot Of(Event Player) % 2 == 0 && Global.gameTick % 2 == 0) || (Slot Of(Event Player) % 2 != 0 && Global.gameTick % 2 != 0))
+		((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) || (Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0))
 			== True;
-		Global.gameTick % 5 == 0;
+		Global.g_Tick % 5 == 0;
 	}
 
 	actions
@@ -415,7 +415,7 @@ rule("AI Movement WASD Strafe On Dmg")
 	{
 		If(Random Real(0, 1) < 0.700 + Event Player.ai_ChanceMod);
 			Call Subroutine(aiSub_ReactionDelay);
-			Event Player.bot_ThrottleDir = Random Value In Array(Global.moveDirStrafe);
+			Event Player.bot_ThrottleDir = Random Value In Array(Global.c_MoveDir_Strafe);
 			Start Rule(botSub_MoveWASD, Restart Rule);
 		End;
 	}
@@ -444,10 +444,10 @@ rule("AI Movement WASD Move Closer")
 	{
 		If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1))
 			> Event Player.ai_OptimalDistance + Event Player.ai_StrafeDistanceMod);
-			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirForwards, Array(Left, Right,
+			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.c_MoveDir_Forward, Array(Left, Right,
 				Event Player.bot_ThrottleDir)));
 		Else;
-			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirForwards, Event Player.bot_ThrottleDir));
+			Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.c_MoveDir_Forward, Event Player.bot_ThrottleDir));
 		End;
 		Call Subroutine(botSub_MoveWASD);
 		Loop If Condition Is True;
@@ -475,7 +475,7 @@ rule("AI Movement WASD Move Farther")
 
 	actions
 	{
-		Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.moveDirBackwards, Event Player.bot_ThrottleDir));
+		Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.c_MoveDir_Backward, Event Player.bot_ThrottleDir));
 		Call Subroutine(botSub_MoveWASD);
 		Loop If Condition Is True;
 	}

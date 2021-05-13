@@ -54,7 +54,7 @@ FILES=	\
 	ai/ai_Zenyatta.ow
 
 $(MODEFILE): $(FILES)
-	cat $(FILES) | sed -e '/\/\/.*$$/d' > $(MODEFILE)
+	cat $(FILES) | sed -e 's/\/\/.*$$//' -e 's/\t/    /g' -e '/^\ *$$/d' -e '/^$$/d' > $(MODEFILE)
 	cat $(MODEFILE) | clip.exe
 
 clean: 

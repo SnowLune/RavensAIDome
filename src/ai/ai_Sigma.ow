@@ -181,7 +181,7 @@ rule("AI Sigma Kinetic Grasp")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
 		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 15 + Event Player.ai_ViewAngleMod) == True;
-		Array Contains(Global.projectileHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
+		Array Contains(Global.c_ProjectileHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 		Is Using Ability 1(Event Player) == False;
 	}

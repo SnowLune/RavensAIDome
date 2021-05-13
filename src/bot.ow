@@ -60,11 +60,11 @@ rule("Player Leave Destroy All Objects")
 			Call Subroutine(hudSub_MainToggle);
 		End;
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).p_Effects) > 0);
-			For Player Variable(Players In Slot(Slot Of(Event Player), Team 1), index, Count Of(Players In Slot(Slot Of(Event Player), Team 1)
+			For Player Variable(Players In Slot(Slot Of(Event Player), Team 1), all_Index, Count Of(Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Effects), -1, -1);
-				Destroy Effect(Players In Slot(Slot Of(Event Player), Team 1).p_Effects[Players In Slot(Slot Of(Event Player), Team 1).index]);
+				Destroy Effect(Players In Slot(Slot Of(Event Player), Team 1).p_Effects[Players In Slot(Slot Of(Event Player), Team 1).all_Index]);
 				Players In Slot(Slot Of(Event Player), Team 1).p_Effects = Remove From Array(Players In Slot(Slot Of(Event Player), Team 1)
-					.p_Effects, Players In Slot(Slot Of(Event Player), Team 1).p_Effects[Players In Slot(Slot Of(Event Player), Team 1).index]);
+					.p_Effects, Players In Slot(Slot Of(Event Player), Team 1).p_Effects[Players In Slot(Slot Of(Event Player), Team 1).all_Index]);
 			End;
 		End;
 		Destroy Dummy Bot(Team 2, Slot Of(Event Player));
@@ -279,7 +279,7 @@ rule("Hard Mode WASD")
 
 	actions
 	{
-		Players In Slot(Slot Of(Event Player), Team 2).bot_ThrottleDir = Random Value In Array(Global.moveDirAll);
+		Players In Slot(Slot Of(Event Player), Team 2).bot_ThrottleDir = Random Value In Array(Global.c_MoveDir_All);
 		Start Rule(botSub_MoveWASD, Do Nothing);
 		Start Rule(botSub_MoveCrouch, Do Nothing);
 		Start Rule(botSub_MoveJump, Do Nothing);
@@ -305,13 +305,13 @@ rule("Medium Mode WASD")
 		Event Player.p_Difficulty == 1;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
 		(Event Player.all_Kills >= Event Player.p_KillGoal / 2 || (
-			Event Player.p_KillGoal == Global.pseudoInfinity && Event Player.all_Kills % 2 == 1)) == True;
+			Event Player.p_KillGoal == Global.c_PseudoInfinity && Event Player.all_Kills % 2 == 1)) == True;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete == True;
 	}
 
 	actions
 	{
-		Players In Slot(Slot Of(Event Player), Team 2).bot_ThrottleDir = Random Value In Array(Global.moveDirForwards);
+		Players In Slot(Slot Of(Event Player), Team 2).bot_ThrottleDir = Random Value In Array(Global.c_MoveDir_Forward);
 		Start Rule(botSub_MoveWASD, Do Nothing);
 		Start Rule(botSub_MoveCrouch, Do Nothing);
 		Start Rule(botSub_MoveJump, Do Nothing);
@@ -337,7 +337,7 @@ rule("Easy Mode WASD")
 		Event Player.p_Difficulty == 0;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
 		(Event Player.all_Kills >= Event Player.p_KillGoal / 2 || (
-			Event Player.p_KillGoal == Global.pseudoInfinity && Event Player.all_Kills % 2 == 1)) == True;
+			Event Player.p_KillGoal == Global.c_PseudoInfinity && Event Player.all_Kills % 2 == 1)) == True;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete == True;
 	}
 
@@ -364,14 +364,14 @@ rule("Non AI Scope Hero Scope In")
 	{
 		Is Alive(Event Player) == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 3;
-		Array Contains(Global.scopeHeroes, Hero Of(Event Player)) == True;
+		Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) == True;
 		Event Player.bot_BotResetComplete == True;
 	}
 
 	actions
 	{
 		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty < 2 && Players In Slot(Slot Of(Event Player), Team 1)
-			.p_KillGoal == Global.pseudoInfinity);
+			.p_KillGoal == Global.c_PseudoInfinity);
 			If(Players In Slot(Slot Of(Event Player), Team 1).all_Kills % 4 == 0 || (Players In Slot(Slot Of(Event Player), Team 1)
 				.all_Kills - 1) % 4 == 0);
 				Stop Holding Button(Event Player, Button(Secondary Fire));

@@ -8,8 +8,8 @@ rule("allSub_WaitForFrame")
 
 	actions
 	{
-		Wait Until(((Slot Of(Event Player) % 2 == 0 && Global.gameTick % 2 == 0) || (Slot Of(Event Player)
-			% 2 != 0 && Global.gameTick % 2 != 0)) == True, 2 / 60);
+		Wait Until(((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) || (Slot Of(Event Player)
+			% 2 != 0 && Global.g_Tick % 2 != 0)) == True, 2 / 60);
 		Wait(0.500 / 60, Ignore Condition);
 	}
 }

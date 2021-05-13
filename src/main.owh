@@ -2,7 +2,7 @@ settings
 {
 	main
 	{
-		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)  ♥  This is a Pre-Release Beta Version!  ♥  Import Code: 5DPKQ  ♥  Created by Snow#15707  ♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\" to this description."
+		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Snow#15707\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\"to this description."
 	}
 
 	lobby
@@ -57,167 +57,205 @@ settings
 variables
 {
 	global:
-		0: buildDate
-		1: colorDarkPink
-		2: colorDarkTeal
-		3: colorLightGrey
-		4: colorLightPink
-		5: colorLightTeal
-		6: difficultyMax
-		7: discordInvite
-		8: effectColors
-		9: g_BotHealing
-		10: g_DebugHero
-		11: g_DebugHUD
-		12: g_DebugMode
-		13: g_Difficulty
-		14: g_HeroClass
-		15: g_KillGoal
-		16: g_Language
-		17: g_OneSecCooldown
-		18: g_PlayerHealing
-		19: gameTick
-		20: githubURL
-		21: heroClasses
-		22: largePlayerZoneHeroes
-		23: longDistance
-		24: longRangeHeroes
-		25: mediumDistance
-		26: mediumRangeHeroes
-		27: moveDirAll
-		28: moveDirBackwards
-		30: moveDirForwards
-		32: moveDirStrafe
-		33: playerBubbleRadius
-		34: playerZoneRadiusDefault
-		35: programmerName
-		36: projectileHeroes
-		37: pseudoInfinity
-		38: scopeHeroes
-		39: shortDistance
-		40: shortRangeHeroes
-		41: twitchURL
-		42: version
-		43: veryShortDistance
-		44: veryShortRangeHeroes
-		45: workshopCode
-		46: hud_MainVisibleToEN
-		47: hud_InfoVisibleToEN
-		48: hud_MainVisibleToKR
-		49: hud_InfoVisibleToKR
-		50: namesBotNames
-		51: namesUseNames
+
+		//
+		// global const
+		//
+		0:	c_BotNamesConst
+		1:	c_BubbleRadius
+		2:	c_BuildDate
+		3:	c_Color_DarkPink
+		4:	c_Color_DarkTeal
+		5:	c_Color_EffectColors
+		6:	c_Color_LightGrey
+		7:	c_Color_LightPink
+		8:	c_Color_LightTeal
+		9:	c_DeveloperName
+		10:	c_DiscordLink
+		11:	c_GithubURL
+		12:	c_HeroClasses
+		13:	c_LargeZoneHeroes
+		14:	c_LongDistance
+		15:	c_LongRangeHeroes
+		16:	c_MaxDifficulty
+		17:	c_MediumDistance
+		18:	c_MediumRangeHeroes
+		19:	c_MoveDir_All
+		20:	c_MoveDir_Backward
+		21:	c_MoveDir_Forward
+		22:	c_MoveDir_Strafe
+		23:	c_ProjectileHeroes
+		24:	c_PseudoInfinity
+		25:	c_ScopeHeroes
+		26:	c_ShortDistance
+		27:	c_ShortRangeHeroes
+		28:	c_TwitchURL
+		29:	c_Version
+		30:	c_VeryShortDistance
+		31:	c_VeryShortRangeHeroes
+		32:	c_WorkshopCode
+		33:	c_ZoneRadiusDefault
+
+		//
+		// global variable
+		//
+		34:	g_BotHealing
+		35:	g_BotNames
+		36:	g_DebugHero
+		37:	g_DebugHUD
+		38:	g_DebugMode
+		39:	g_Difficulty
+		40:	g_HeroClass
+		41:	g_Initialized
+		42:	g_KillGoal
+		43:	g_Language
+		44:	g_OneSecCooldown
+		45:	g_PlayerHealing
+		46:	g_PlayerNames
+		48:	g_Tick
+		49:	g_UseBotNames
+
+		//
+		// global HUD variable (arrays used for language, may be deprecated soon)
+		//
+		50:	hud_InfoVisibleToEN
+		51:	hud_InfoVisibleToKR
+		52:	hud_MainVisibleToEN
+		53:	hud_MainVisibleToKR
 
 	player:
-		0: ai_AbilityButton
-		1: ai_AbilityOpt
-		2: ai_AIEnabled
-		3: ai_AimBase
-		4: ai_AimBaseDefault
-		5: ai_AimDistanceMod
-		6: ai_AimModX
-		7: ai_AimModY
-		8: ai_AimStopTime
-		9: ai_AimTurnRate
-		10: ai_AimType
-		11: ai_AimTypeDefault
-		12: ai_BMVoiceLine
-		13: ai_CanAim
-		14: ai_CanAttack
-		15: ai_CanUseAbilities
-		16: ai_ChanceMod
-		17: ai_DoomfistPunchDamage
-		18: ai_DoomfistPunchTime
-		19: ai_FacingAngleMod
-		20: ai_FacingAnglePow
-		21: ai_FacingCapMax
-		22: ai_FacingCapMin
-		23: ai_FacingPadMax
-		24: ai_FacingPadMin
-		25: ai_FacingRelPosMod
-		26: ai_HeroInitialized
-		27: ai_IsInAbilitySub
-		28: ai_LookAtVector
-		29: ai_McCreeDeadeyeCharge
-		30: ai_McCreeDeadeyeRate
-		31: ai_OptimalDistance
-		32: ai_OptimalDistanceDefault
-		33: ai_ProjectileSpeed
-		34: ai_ProjectileSpeeds
-		35: ai_ReactionTime
-		36: ai_StrafeDistanceMod
-		37: ai_UltimateDisabled
-		38: ai_ViewAngleMod
-		39: ai_WeaponChargeTime
-		40: all_ChangingHero
-		41: all_HealingEnabled
-		42: all_InspireHealID
-		43: all_InspireHealTime
-		44: all_Kills
-		45: all_SubArg
-		46: bot_BotResetComplete
-		47: bot_FlickerEnabled
-		48: bot_MoveCrouchChanceMod
-		49: bot_MoveCrouchEnabled
-		50: bot_MoveCrouchTimeMod
-		51: bot_MoveJumpChanceMod
-		52: bot_MoveJumpEnabled
-		53: bot_MoveJumpTimeMod
-		54: bot_MoveWASDEnabled
-		55: bot_MoveWASDTimeMod
-		56: bot_ThrottleDir
-		57: hud_Debug
-		58: hud_DebugEnabled
-		59: hud_i
-		60: hud_Info
-		61: hud_InfoEnabled
-		62: hud_Main
-		63: hud_SkyMenu
-		64: hud_SkyMenuArrowsVisibleTo
-		65: hud_SkyMenuIsOpen
-		66: hud_SkyMenuSelection
-		67: hud_SkyMenuSound
-		68: hud_SkyMenuVectors
-		69: hud_SkyMenuVisibleTo
-		70: index
-		71: p_BotHeroClass
-		72: p_BotHeroNumber
-		73: p_BotHeroNumberNext
-		74: p_BotTPDistance
-		75: p_CameraEyePos
-		76: p_CameraLookAtPos
-		77: p_DamageModDealtID
-		78: p_DamageModReceivedID
-		79: p_Difficulty
-		80: p_DifficultyNames
-		81: p_Effects
-		82: p_EffectsColor
-		83: p_ElevatorEnabled
-		84: p_ElevatorHeight
-		85: p_ElevatorPosition
-		86: p_EnemyDistanceMax
-		87: p_EnemyDistanceMod
-		88: p_HelpTargetIndicator
-		89: p_HeroClassNames
-		90: p_HeroList
-		91: p_HeroListName
-		92: p_HeroNumberMod
-		93: p_HomeVector
-		94: p_KillGoal
-		95: p_Language
-		96: p_MinusKillOnDeath
-		97: p_MirrorModeEnabled
-		98: p_OneSecCooldown
-		99: p_PlayerHero
-		100: p_PlayerInitialized
-		101: p_QuickModeEnabled
-		102: p_Unkillable
-		103: p_ZoneRadius
-		104: bot_Name
+
+		//
+		// AI variables
+		//
+		0:   ai_AbilityButton
+		1:   ai_AbilityOpt
+		2:   ai_AIEnabled
+		3:   ai_AimBase
+		4:   ai_AimBaseDefault
+		5:   ai_AimDistanceMod
+		6:   ai_AimModX
+		7:   ai_AimModY
+		8:   ai_AimStopTime
+		9:   ai_AimTurnRate
+		10:  ai_AimType
+		11:  ai_AimTypeDefault
+		12:  ai_BMVoiceLine
+		13:  ai_CanAim
+		14:  ai_CanAttack
+		15:  ai_CanUseAbilities
+		16:  ai_ChanceMod
+		17:  ai_DoomfistPunchDamage
+		18:  ai_DoomfistPunchTime
+		19:  ai_FacingAngleMod
+		20:  ai_FacingAnglePow
+		21:  ai_FacingCapMax
+		22:  ai_FacingCapMin
+		23:  ai_FacingPadMax
+		24:  ai_FacingPadMin
+		25:  ai_FacingRelPosMod
+		26:  ai_HeroInitialized
+		27:  ai_IsInAbilitySub
+		28:  ai_LookAtVector
+		29:  ai_McCreeDeadeyeCharge
+		30:  ai_McCreeDeadeyeRate
+		31:  ai_OptimalDistance
+		32:  ai_OptimalDistanceDefault
+		33:  ai_ProjectileSpeed
+		34:  ai_ProjectileSpeeds
+		35:  ai_ReactionTime
+		36:  ai_StrafeDistanceMod
+		37:  ai_UltimateDisabled
+		38:  ai_ViewAngleMod
+		39:  ai_WeaponChargeTime
+
+		//
+		// Shared variables
+		//
+		40:  all_ChangingHero
+		41:  all_HealingEnabled
+		42:  all_Index
+		43:  all_InspireHealID
+		44:  all_InspireHealTime
+		45:  all_Kills
+		46:  all_SubArg
+
+		//
+		// Bot variables
+		//
+		47:  bot_BotResetComplete
+		48:  bot_FlickerEnabled
+		49:  bot_MoveCrouchChanceMod
+		50:  bot_MoveCrouchEnabled
+		51:  bot_MoveCrouchTimeMod
+		52:  bot_MoveJumpChanceMod
+		53:  bot_MoveJumpEnabled
+		54:  bot_MoveJumpTimeMod
+		55:  bot_MoveWASDEnabled
+		56:  bot_MoveWASDTimeMod
+		57:  bot_Name
+		58:  bot_ThrottleDir
+
+		//
+		// HUD variables
+		//
+		59:  hud_Debug
+		60:  hud_DebugEnabled
+		61:  hud_i
+		62:  hud_Info
+		63:  hud_InfoEnabled
+		64:  hud_Main
+		65:  hud_SkyMenu
+		66:  hud_SkyMenuArrowsVisibleTo
+		67:  hud_SkyMenuIsOpen
+		68:  hud_SkyMenuSelection
+		69:  hud_SkyMenuSound
+		70:  hud_SkyMenuVectors
+		71:  hud_SkyMenuVisibleTo
+
+		//
+		// Player variables
+		//
+		72:  p_BotHeroClass
+		73:  p_BotHeroNumber
+		74:  p_BotHeroNumberNext
+		75:  p_BotTPDistance
+		76:  p_CameraEyePos
+		77:  p_CameraLookAtPos
+		78:  p_DamageModDealtID
+		79:  p_DamageModReceivedID
+		80:  p_Difficulty
+		81:  p_DifficultyNames
+		82:  p_Effects
+		83:  p_EffectsColor
+		84:  p_ElevatorEnabled
+		85:  p_ElevatorHeight
+		86:  p_ElevatorPosition
+		87:  p_EnemyDistanceMax
+		88:  p_EnemyDistanceMod
+		89:  p_HelpTargetIndicator
+		90:  p_HeroClassNames
+		91:  p_HeroList
+		92:  p_HeroListName
+		93:  p_HeroNumberMod
+		94:  p_HomeVector
+		95:  p_KillGoal
+		96:  p_Language
+		97:  p_MinusKillOnDeath
+		98:  p_MirrorModeEnabled
+		99:  p_OneSecCooldown
+		100: p_PlayerHero
+		101: p_PlayerInitialized
+		102: p_QuickModeEnabled
+		103: p_Unkillable
+		104: p_ZoneRadius
 }
 
 subroutines
 {
+	//
+	// AI subroutines
+	//
 	0: aiSub_Abilities_Ana
 	1: aiSub_Abilities_Ashe
 	2: aiSub_Abilities_Baptiste
@@ -260,9 +298,17 @@ subroutines
 	39: aiSub_FlickIn
 	40: aiSub_FlickOut
 	41: aiSub_ReactionDelay
+
+	//
+	// Shared subroutines
+	//
 	42: allSub_ButtonsAllow
 	43: allSub_ButtonsDisallow
 	44: allSub_WaitForFrame
+
+	//
+	// Bot subroutines
+	//
 	45: botSub_MoveCrouch
 	46: botSub_MoveJump
 	47: botSub_MoveWASD
@@ -270,12 +316,20 @@ subroutines
 	49: botSub_SetHero
 	50: botSub_TeleportBot
 	51: botSub_ThrottleStop
+
+	//
+	// HUD subroutines
+	//
 	52: hudSub_DebugToggle
 	53: hudSub_InfoToggle
 	54: hudSub_MainToggle
 	55: hudSub_SkyMenuArrowSet
 	56: hudSub_SkyMenuPlaySound
 	57: hudSub_SkyMenuToggle
+
+	//
+	// Player subroutines
+	//
 	58: pSub_Elevator
 	59: pSub_QuickMode
 	60: pSub_SetDifficulty

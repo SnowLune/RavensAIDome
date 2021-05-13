@@ -42,17 +42,19 @@ rule("botSub_ResetBot")
 			If(Players In Slot(Slot Of(Event Player), Team 1).p_MirrorModeEnabled == True);
 				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Custom String("{0}", Players In Slot(Slot Of(Event Player), Team 1)));
 			"Give the bot a silly name. For Fun."
-			Else If(Global.namesUseNames == True);
-				If(Count Of(Global.namesBotNames[0]) - Count Of(All Players(Team 1)) == 0);
-					For Player Variable(Players In Slot(Slot Of(Event Player), Team 2), index, 0, Count Of(Global.namesBotNames[0]), 1);
-						Modify Global Variable At Index(namesBotNames, 1, Append To Array, Global.namesBotNames[0][Players In Slot(Slot Of(Event Player), Team 2).index]);
-					End;
-					Global.namesBotNames[0] = Global.namesBotNames[1];
-					Global.namesBotNames[1] = Empty Array;
+			Else If(Global.g_UseBotNames == True);
+				If(Count Of(Global.g_BotNames) - Count Of(Mapped Array(All Players(Team 1), Custom String("{0}", Current Array Element))) <= 0);
+					Global.g_BotNames = Append To Array(Global.c_BotNamesConst, Global.g_PlayerNames);
 				End;
-				Players In Slot(Slot Of(Event Player), Team 2).bot_Name = Random Value In Array(Remove From Array(Global.namesBotNames[0], Mapped Array(All Players(Team 1), Custom String("{0}", Current Array Element))));
-				Global.namesBotNames[0] = Remove From Array(Global.namesBotNames[0], Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
-				Modify Global Variable At Index(namesBotNames, 1, Append To Array, Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
+
+				Players In Slot(Slot Of(Event Player), Team 2).bot_Name = Random Value In Array(
+					Remove From Array(
+						Global.g_BotNames,
+						Mapped Array(All Players(Team 1), Custom String("{0}", Current Array Element))
+					)
+				);
+
+				Modify Global Variable(g_BotNames, Remove From Array By Value, Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
 				Stop Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2));
 				Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
 			End;
@@ -146,7 +148,7 @@ rule("botSub_TeleportBot")
 			.p_EnemyDistanceMax / Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal * 2;
 		Call Subroutine(allSub_WaitForFrame);
 		If(Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal != 1 && Players In Slot(Slot Of(Event Player), Team 1)
-			.p_KillGoal != Global.pseudoInfinity);
+			.p_KillGoal != Global.c_PseudoInfinity);
 			Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance = Empty Array;
 			Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[0] = (Players In Slot(Slot Of(Event Player), Team 1)
 				.p_KillGoal - 1 - Players In Slot(Slot Of(Event Player), Team 1).all_Kills) % (Players In Slot(Slot Of(Event Player), Team 1)

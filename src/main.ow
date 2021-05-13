@@ -1,22 +1,3 @@
-rule("Info")
-{
-	event
-	{
-		Ongoing - Global;
-	}
-
-	actions
-	{
-		Global.version = Custom String("0.12.1-test.7");
-		Global.buildDate = Custom String("20210501");
-		Global.workshopCode = Custom String("5DPKQ");
-		Global.programmerName = Custom String("Snow#15707");
-		Global.twitchURL = Custom String("twitch.tv/SnowwwLuna");
-		Global.githubURL = Custom String("github.com/SnowLune/PracticeFieldExpanse/tree/dev");
-		Global.discordInvite = Custom String("TBA");
-	}
-}
-
 rule("Global Settings")
 {
 	event
@@ -43,7 +24,7 @@ rule("Global Settings")
 			"Player Healing / 플레이어 치유"), True, 4);
 		Global.g_BotHealing = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Bot Healing / 인공지는 치유"),
 			False, 5);
-		Global.namesUseNames = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Random Names For Bots"),
+		Global.g_UseBotNames = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Random Names For Bots"),
 			True, 5.5);
 		Global.g_DebugMode = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug Mode / 디버그 모드"), False,
 			6);
@@ -81,7 +62,7 @@ rule("Global Main Tick Loop")
 
 	actions
 	{
-		For Global Variable(gameTick, 0, 60, 1);
+		For Global Variable(g_Tick, 0, 60, 1);
 			"Dynamically lower the tick rate under high load"
 			If(Server Load >= 240);
 				Wait(2 / 60, Ignore Condition);

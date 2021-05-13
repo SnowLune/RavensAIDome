@@ -130,7 +130,7 @@ rule("AI D.Va Defense Matrix")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In Alternate Form(Event Player) == False;
-		Array Contains(Global.projectileHeroes, Hero Of(Attacker)) == True;
+		Array Contains(Global.c_ProjectileHeroes, Hero Of(Attacker)) == True;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 60 + Event Player.ai_ViewAngleMod) == True;
 		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 10 + Event Player.ai_ViewAngleMod) == True;
 		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
@@ -165,7 +165,7 @@ rule("AI D.Va Boosters")
 		Is In Alternate Form(Event Player) == False;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
 		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-			< Global.playerBubbleRadius;
+			< Global.c_BubbleRadius;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 90 + Event Player.ai_ViewAngleMod) == True;
 		Ultimate Charge Percent(Event Player) <= 95;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;

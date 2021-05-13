@@ -21,9 +21,9 @@ rule("pSub_SetDifficulty")
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.difficultyMax - Players In Slot(Slot Of(
+		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
 			Event Player), Team 1).p_Difficulty);
-		Players In Slot(Slot Of(Event Player), Team 2).ai_ViewAngleMod = (Global.difficultyMax - Players In Slot(Slot Of(Event Player),
+		Players In Slot(Slot Of(Event Player), Team 2).ai_ViewAngleMod = (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player),
 			Team 1).p_Difficulty) / 2;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchChanceMod = 0.100 + Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty * 0.010;
@@ -52,13 +52,13 @@ rule("pSub_SetHeroClass")
 	actions
 	{
 		If(Array Contains(All Heroes, Global.g_DebugHero[1]));
-			Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal = Global.pseudoInfinity;
+			Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal = Global.c_PseudoInfinity;
 			Players In Slot(Slot Of(Event Player), Team 1).p_HeroList = Array(Global.g_DebugHero[1]);
 			Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName = Global.g_DebugHero[1];
 		Else;
 			If(Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName != Players In Slot(Slot Of(Event Player), Team 1)
 				.p_HeroClassNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroClass]);
-				Players In Slot(Slot Of(Event Player), Team 1).p_HeroList = Randomized Array(Global.heroClasses[Players In Slot(Slot Of(
+				Players In Slot(Slot Of(Event Player), Team 1).p_HeroList = Randomized Array(Global.c_HeroClasses[Players In Slot(Slot Of(
 					Event Player), Team 1).p_BotHeroClass]);
 				Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName = Players In Slot(Slot Of(Event Player), Team 1)
 					.p_HeroClassNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroClass];
@@ -142,18 +142,18 @@ rule("Player Set Distances")
 
 	actions
 	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius = Global.playerZoneRadiusDefault;
-		If(Array Contains(Global.longRangeHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
-			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.longDistance;
-		Else If(Array Contains(Global.mediumRangeHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
-			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.mediumDistance;
-		Else If(Array Contains(Global.shortRangeHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
-			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.shortDistance;
-		Else If(Array Contains(Global.largePlayerZoneHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
-			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.shortDistance;
+		Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius = Global.c_ZoneRadiusDefault;
+		If(Array Contains(Global.c_LongRangeHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
+			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.c_LongDistance;
+		Else If(Array Contains(Global.c_MediumRangeHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
+			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.c_MediumDistance;
+		Else If(Array Contains(Global.c_ShortRangeHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
+			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.c_ShortDistance;
+		Else If(Array Contains(Global.c_LargeZoneHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
+			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.c_ShortDistance;
 			Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius = Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax;
-		Else If(Array Contains(Global.veryShortRangeHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
-			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.veryShortDistance;
+		Else If(Array Contains(Global.c_VeryShortRangeHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True);
+			Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax = Global.c_VeryShortDistance;
 			Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius = Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax;
 		End;
 	}

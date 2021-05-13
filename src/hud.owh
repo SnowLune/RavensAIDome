@@ -35,30 +35,30 @@ rule("hudSub_DebugToggle")
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Server Load: {0}% ({1})", Round To Integer(
 				Server Load / 2.550, Down), Server Load), Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550,
 				Down), Server Load Average), Custom String("Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down),
-				Server Load Peak), Top, 100, Global.colorLightPink, Global.colorLightTeal, Global.colorDarkTeal, Visible To and String,
+				Server Load Peak), Top, 100, Global.c_Color_LightPink, Global.c_Color_LightTeal, Global.c_Color_DarkTeal, Visible To and String,
 				Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Null, Custom String("Enemy Pos: {0}", Position Of(Players In Slot(
 				Slot Of(Event Player), Team 2))), Custom String("Player Pos: {0}", Position Of(Event Player)), Left, 4, Color(White),
-				Global.colorLightPink, Global.colorLightTeal, Visible To and String, Default Visibility);
+				Global.c_Color_LightPink, Global.c_Color_LightTeal, Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Null, Custom String("Enemy Dist From Home: {0}", Distance Between(
 				Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)), Custom String(
 				"Player Dist From Home: {0}", Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(
-				Event Player), Team 1).p_HomeVector)), Left, 5, Color(White), Global.colorLightPink, Global.colorLightTeal,
+				Event Player), Team 1).p_HomeVector)), Left, 5, Color(White), Global.c_Color_LightPink, Global.c_Color_LightTeal,
 				Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Enemy Distance From Player: {0}", Distance Between(
 				Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 2))), Null, Null, Left, 5.200,
-				Global.colorLightPink, Color(White), Color(White), Visible To and String, Default Visibility);
+				Global.c_Color_LightPink, Color(White), Color(White), Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Enemy Ult Charge: {0}", Ultimate Charge Percent(
-				Players In Slot(Slot Of(Event Player), Team 2))), Null, Null, Right, 6, Global.colorLightGrey, Color(White), Color(White),
+				Players In Slot(Slot Of(Event Player), Team 2))), Null, Null, Right, 6, Global.c_Color_LightGrey, Color(White), Color(White),
 				Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Player Facing Dir: {0}", Facing Direction Of(
 				Event Player)), Null, Custom String("Enemy Facing Dir: {0}", Facing Direction Of(Players In Slot(Slot Of(Event Player),
-				Team 2))), Left, 6.100, Global.colorLightTeal, Color(White), Global.colorLightPink, Visible To and String, Default Visibility);
+				Team 2))), Left, 6.100, Global.c_Color_LightTeal, Color(White), Global.c_Color_LightPink, Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Debug, Append To Array, Last Text ID);
 		End;
 	}
@@ -127,18 +127,18 @@ rule("hudSub_MainToggle")
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("{0} 킬: {1} / {2}", Hero Icon String(Players In Slot(Slot Of(Event Player), Team 1)
 				.p_HeroList[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber]), Players In Slot(Slot Of(Event Player), Team 1)
-				.all_Kills, Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal == Global.pseudoInfinity ? Custom String("무한")
+				.all_Kills, Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal == Global.c_PseudoInfinity ? Custom String("무한")
 				: Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal) : Custom String("{0} Kills: {1} / {2}", Hero Icon String(
 				Players In Slot(Slot Of(Event Player), Team 1).p_HeroList[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber]),
 				Players In Slot(Slot Of(Event Player), Team 1).all_Kills, Players In Slot(Slot Of(Event Player), Team 1)
-				.p_KillGoal == Global.pseudoInfinity ? Custom String("Infinite") : Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal),
+				.p_KillGoal == Global.c_PseudoInfinity ? Custom String("Infinite") : Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal),
 				Null, Null, Right, -3, Color(White), Color(White), Color(White), Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Null, Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("{0} 당신을 {1} 번 죽였습니다", Hero Of(Players In Slot(Slot Of(Event Player), Team 2)),
 				Players In Slot(Slot Of(Event Player), Team 2).all_Kills) : Custom String("{0} killed you {1} time(s).", Hero Of(
 				Players In Slot(Slot Of(Event Player), Team 2)), Players In Slot(Slot Of(Event Player), Team 2).all_Kills), Null, Right,
-				-2.900, Color(White), Global.colorLightPink, Color(Red), Visible To and String, Default Visibility);
+				-2.900, Color(White), Global.c_Color_LightPink, Color(Red), Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Null, Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("영웅 유형: {0}", Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName) : Custom String(
@@ -146,7 +146,7 @@ rule("hudSub_MainToggle")
 				Team 1).p_Language == 1 ? Custom String("영웅: {0} / {1}", 1 + Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber,
 				Count Of(Players In Slot(Slot Of(Event Player), Team 1).p_HeroList)) : Custom String("Hero: {0} / {1}", 1 + Players In Slot(
 				Slot Of(Event Player), Team 1).p_BotHeroNumber, Count Of(Players In Slot(Slot Of(Event Player), Team 1).p_HeroList)), Right,
-				-2.200, Color(White), Color(White), Global.colorLightTeal, Visible To and String, Default Visibility);
+				-2.200, Color(White), Color(White), Global.c_Color_LightTeal, Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Null, Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("다음 영웅: {0}", Players In Slot(Slot Of(Event Player), Team 1)
@@ -154,14 +154,14 @@ rule("hudSub_MainToggle")
 				.p_HeroList[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumberNext])) : Custom String("Next Hero: {0}",
 				Players In Slot(Slot Of(Event Player), Team 1).p_QuickModeEnabled == True ? Custom String("?") : Hero Icon String(
 				Players In Slot(Slot Of(Event Player), Team 1).p_HeroList[Players In Slot(Slot Of(Event Player), Team 1)
-				.p_BotHeroNumberNext])), Null, Right, -2, Color(White), Global.colorDarkTeal, Color(Aqua), Visible To and String,
+				.p_BotHeroNumberNext])), Null, Right, -2, Color(White), Global.c_Color_DarkTeal, Color(Aqua), Visible To and String,
 				Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Null, Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("난이도: {0}", Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[Players In Slot(
 				Slot Of(Event Player), Team 1).p_Difficulty]) : Custom String("Difficulty: {0}", Players In Slot(Slot Of(Event Player), Team 1)
 				.p_DifficultyNames[Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty]), Null, Right, -0.900, Color(White),
-				Global.colorLightGrey, Color(White), Visible To and String, Default Visibility);
+				Global.c_Color_LightGrey, Color(White), Visible To and String, Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_Main, Append To Array, Last Text ID);
 		End;
 	}
@@ -311,9 +311,9 @@ rule("hudSub_SkyMenuToggle")
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("필요한 킬 수: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-				.p_KillGoal == Global.pseudoInfinity ? Custom String("무한") : Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal)
+				.p_KillGoal == Global.c_PseudoInfinity ? Custom String("무한") : Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal)
 				: Custom String("Kill Goal: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-				.p_KillGoal == Global.pseudoInfinity ? Custom String("Infinite") : Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal),
+				.p_KillGoal == Global.c_PseudoInfinity ? Custom String("Infinite") : Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[1], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
@@ -419,7 +419,7 @@ rule("hudSub_SkyMenuToggle")
 				.p_Language == 1 ? Custom String("메뉴를 탐색하려면 WASD 버튼을 사용하십시오") : Custom String("Use WASD to navigate the menu"));
 			Big Message(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("[{0} 및 {1}]를 길게 누르면 메뉴가 닫힙니다", Input Binding String(Button(Reload)), Input Binding String(
-				Button(Melee))) : Custom String("Press and hold {0} and {1} to close the menu", Input Binding String(Button(Reload)),
+				Button(Melee))) : Custom String("Press {0} and {1} to close the menu", Input Binding String(Button(Reload)),
 				Input Binding String(Button(Melee))));
 		End;
 		Play Effect(Players In Slot(Slot Of(Event Player), Team 1), Buff Explosion Sound, Color(White), Players In Slot(Slot Of(

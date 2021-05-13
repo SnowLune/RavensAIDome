@@ -17,9 +17,9 @@ rule("Global HUD")
 			White), Visible To, Default Visibility);
 		Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
 			White), Visible To, Default Visibility);
-		Create HUD Text(All Players(All Teams), Custom String("{0}", Global.workshopCode), Custom String("{0}+{1}, {2}", Global.version,
-			Global.buildDate, Global.programmerName), Custom String("Practice Field: Expanse"), Left, -3, Global.colorLightPink,
-			Global.colorLightGrey, Global.colorLightTeal, Visible To, Default Visibility);
+		Create HUD Text(All Players(All Teams), Custom String("{0}", Global.c_WorkshopCode), Custom String("{0}+{1}, {2}", Global.c_Version,
+			Global.c_BuildDate, Global.c_DeveloperName), Custom String("Practice Field: Expanse"), Left, -3, Global.c_Color_LightPink,
+			Global.c_Color_LightGrey, Global.c_Color_LightTeal, Visible To, Default Visibility);
 		"Create Left Side HUD Text EN"
 		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to show/hide info",
 			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White),
@@ -32,8 +32,8 @@ rule("Global HUD")
 			Secondary Fire))), Null, Left, -1.600, Color(White), Color(White), Color(Yellow), Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and {1} to select specific enemy hero",
 			Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String(
-			"Hold {0} and {1} to open/close the menu", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left,
-			-1.500, Color(White), Color(White), Global.colorDarkPink, Visible To and String, Default Visibility);
+			"Press {0} and {1} to open/close the menu", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left,
+			-1.500, Color(White), Color(White), Global.c_Color_DarkPink, Visible To and String, Default Visibility);
 		"Create Left Side HUD Text KR"
 		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼을 [{0} 및 {1}] 눌러 힌트 창을 닫습니다", Input Binding String(
 			Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White), Color(White),
@@ -47,40 +47,40 @@ rule("Global HUD")
 		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 선택합니다",
 			Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다",
 			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left, -1.500, Color(White), Color(White),
-			Global.colorDarkPink, Visible To and String, Default Visibility);
+			Global.c_Color_DarkPink, Visible To and String, Default Visibility);
 		"Create Info HUD EN"
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Practice Field: Expanse!"), Global.twitchURL, Custom String(
-			"Created by {0}", Global.programmerName), Top, 3, Global.colorLightTeal, Global.colorLightPink, Global.colorLightPink,
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Practice Field: Expanse!"), Global.c_TwitchURL, Custom String(
+			"Created by {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
 			Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
 			"This workshop mode allows you to thoroughly warm up/practice your movement and aim on and against ALL heroes."),
 			Custom String(
 			"You are placed in a bubble against one bot opponent. When you kill them enough times it progresses to the next hero in the list."),
-			Top, 5, Color(Yellow), Color(White), Global.colorDarkPink, Visible To and String, Default Visibility);
+			Top, 5, Color(Yellow), Color(White), Global.c_Color_DarkPink, Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String(
 			"The AI modes contain AI for all heroes written from scratch by myself. The bots do not attack below the difficulty \"AI Bronze\"."),
 			Top, 5.100, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String(
 			"There are many difficulties and they correspond to many variables that affect the bots' movement, aim, and reaction time."),
 			Top, 5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String("Hold {0} and {1} to toggle the menu!",
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String("Press {0} and {1} to toggle the menu!",
 			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White),
-			Global.colorDarkTeal, Visible To and String, Default Visibility);
+			Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
 			"There are many settings so you can customize your warmup!"), Custom String("See the top left corner for controls."), Top,
-			5.300, Color(Yellow), Color(White), Global.colorDarkTeal, Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("{0}", Global.githubURL),
-			Custom String("For the most recent version: Please import code: {0}", Global.workshopCode), Top, 7, Color(Yellow),
-			Global.colorLightTeal, Global.colorLightPink, Visible To and String, Default Visibility);
+			5.300, Color(Yellow), Color(White), Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
+		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("{0}", Global.c_GithubURL),
+			Custom String("For the most recent c_Version: Please import code: {0}", Global.c_WorkshopCode), Top, 7, Color(Yellow),
+			Global.c_Color_LightTeal, Global.c_Color_LightPink, Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to hide this text",
 			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
-			Global.colorLightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
+			Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
 		"Create Info HUD KR"
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Practice Field: Expanse 어서 오십시오!"), Global.twitchURL, Custom String(
-			"창조자: {0}", Global.programmerName), Top, 3, Global.colorLightTeal, Global.colorLightPink, Global.colorLightPink,
+		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Practice Field: Expanse 어서 오십시오!"), Global.c_TwitchURL, Custom String(
+			"창조자: {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
 			Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 모드를 사용하면 워밍업하고 철저하게 연습 할 수 있습니다."), Custom String(
-			"적을 충분한 횟수로 처치하면 다음 영웅이 생성됩니다."), Top, 5, Color(Yellow), Color(White), Global.colorDarkPink, Visible To and String,
+			"적을 충분한 횟수로 처치하면 다음 영웅이 생성됩니다."), Top, 5, Color(Yellow), Color(White), Global.c_Color_DarkPink, Visible To and String,
 			Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String(
 			"나는 모든 영웅을 위해 인공 지능을 프로그래밍했습니다. 난이도가 \"인공지능 브론즈\" 미만이면 봇은 공격하지 않습니다."), Top, 5.100, Color(Yellow), Color(White), Color(White),
@@ -89,23 +89,23 @@ rule("Global HUD")
 			5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다!",
 			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White),
-			Global.colorDarkTeal, Visible To and String, Default Visibility);
+			Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("당신이 당신의 연습 루틴을 사용자 정의 할 수 있도록 많은 설정이 있습니다!"),
-			Custom String("컨트롤은 왼쪽 상단을 참조하십시오."), Top, 5.300, Color(Yellow), Color(White), Global.colorDarkTeal, Visible To and String,
+			Custom String("컨트롤은 왼쪽 상단을 참조하십시오."), Top, 5.300, Color(Yellow), Color(White), Global.c_Color_DarkTeal, Visible To and String,
 			Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String(
-			"{0}", Global.githubURL), Custom String(
-			"최신 버전을 얻으려면 코드 {0}를 사용하십시오!", Global.workshopCode), Top, 7, Color(Yellow), Global.colorLightTeal, Global.colorLightPink,
+			"{0}", Global.c_GithubURL), Custom String(
+			"최신 버전을 얻으려면 코드 {0}를 사용하십시오!", Global.c_WorkshopCode), Top, 7, Color(Yellow), Global.c_Color_LightTeal, Global.c_Color_LightPink,
 			Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 정보를 숨기려면 {0} 및 {1} 버튼을 사용하십시오",
 			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
-			Global.colorLightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
+			Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
 		"Global Debug HUD"
 		If(Global.g_DebugHUD == True);
 			Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(Server Load / 2.550, Down), Server Load),
 				Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550, Down), Server Load Average), Custom String(
-				"Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down), Server Load Peak), Top, 100, Global.colorLightPink,
-				Global.colorLightTeal, Global.colorDarkTeal, Visible To and String, Visible Always);
+				"Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down), Server Load Peak), Top, 100, Global.c_Color_LightPink,
+				Global.c_Color_LightTeal, Global.c_Color_DarkTeal, Visible To and String, Visible Always);
 		End;
 	}
 }
@@ -128,7 +128,7 @@ rule("Player Sky Menu Toggle")
 
 	actions
 	{
-		Wait(6 / 60, Abort When False);
+		Call Subroutine(allSub_WaitForFrame);
 		Call Subroutine(hudSub_SkyMenuToggle);
 	}
 }
@@ -218,8 +218,8 @@ rule("Player Sky Menu Move Selection Decrease")
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_KillGoal <= 4);
-				Event Player.p_KillGoal = Global.pseudoInfinity;
-			Else If(Event Player.p_KillGoal == Global.pseudoInfinity);
+				Event Player.p_KillGoal = Global.c_PseudoInfinity;
+			Else If(Event Player.p_KillGoal == Global.c_PseudoInfinity);
 				Event Player.p_KillGoal = 64;
 			Else;
 				Event Player.p_KillGoal -= 4;
@@ -293,10 +293,10 @@ rule("Player Sky Menu Move Selection Decrease")
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_EffectsColor == Global.effectColors[0]);
-				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.effectColors[Count Of(Global.effectColors) - 1];
+			If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[0]);
+				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1];
 			Else;
-				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.effectColors[Index Of Array Value(Global.effectColors,
+				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
 					Event Player.p_EffectsColor) - 1];
 			End;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14] && Event Player.p_Language == 1);
@@ -337,8 +337,8 @@ rule("Player Sky Menu Move Selection Increase")
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_KillGoal == 64);
-				Event Player.p_KillGoal = Global.pseudoInfinity;
-			Else If(Event Player.p_KillGoal == Global.pseudoInfinity);
+				Event Player.p_KillGoal = Global.c_PseudoInfinity;
+			Else If(Event Player.p_KillGoal == Global.c_PseudoInfinity);
 				Event Player.p_KillGoal = 4;
 			Else;
 				Event Player.p_KillGoal += 4;
@@ -414,10 +414,10 @@ rule("Player Sky Menu Move Selection Increase")
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_EffectsColor == Global.effectColors[Count Of(Global.effectColors) - 1]);
-				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.effectColors[0];
+			If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1]);
+				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[0];
 			Else;
-				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.effectColors[Index Of Array Value(Global.effectColors,
+				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
 					Event Player.p_EffectsColor) + 1];
 			End;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14] && Event Player.p_Language == 0);
