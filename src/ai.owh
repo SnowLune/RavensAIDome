@@ -14,6 +14,7 @@ rule("aiSub_EnableAI")
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = True;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpEnabled = True;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled = True;
+		Call Subroutine(aiSub_FacingReset);
 	}
 }
 

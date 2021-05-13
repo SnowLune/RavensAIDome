@@ -359,7 +359,7 @@ rule("Global Defines")
     }
     actions
     {
-        Global.c_Version = Custom String("0.14.0-test.1");
+        Global.c_Version = Custom String("0.14.0-test.2");
         Global.c_BuildDate = Custom String("20210513");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Snow#15707");
@@ -3372,6 +3372,7 @@ rule("aiSub_EnableAI")
         Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = True;
         Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpEnabled = True;
         Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled = True;
+        Call Subroutine(aiSub_FacingReset);
     }
 }
 rule("aiSub_ReactionDelay")
