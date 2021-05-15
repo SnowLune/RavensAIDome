@@ -359,7 +359,7 @@ rule("Global Defines")
     }
     actions
     {
-        Global.c_Version = Custom String("0.14.0-test.2");
+        Global.c_Version = Custom String("0.14.0-test.3");
         Global.c_BuildDate = Custom String("20210513");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Snow#15707");
@@ -406,6 +406,7 @@ rule("Global Defines")
         Global.c_VeryShortRangeHeroes[7] = Hero(Symmetra);
         Global.c_VeryShortRangeHeroes[8] = Hero(Winston);
         Global.c_VeryShortRangeHeroes[9] = Hero(Zarya);
+        Global.c_VeryShortRangeHeroes[10] = Hero(Doomfist);
         Global.c_ProjectileHeroes = Array();
         Global.c_ProjectileHeroes[0] = Hero(Ana);
         Global.c_ProjectileHeroes[1] = Hero(Ashe);
@@ -432,15 +433,14 @@ rule("Global Defines")
         Global.c_ProjectileHeroes[22] = Hero(Wrecking Ball);
         Global.c_ProjectileHeroes[23] = Hero(Zenyatta);
         Global.c_LargeZoneHeroes = Array();
-        Global.c_LargeZoneHeroes[0] = Hero(Doomfist);
-        Global.c_LargeZoneHeroes[1] = Hero(Echo);
-        Global.c_LargeZoneHeroes[2] = Hero(Genji);
-        Global.c_LargeZoneHeroes[3] = Hero(Junkrat);
-        Global.c_LargeZoneHeroes[4] = Hero(Mercy);
-        Global.c_LargeZoneHeroes[5] = Hero(Pharah);
-        Global.c_LargeZoneHeroes[6] = Hero(Sombra);
-        Global.c_LargeZoneHeroes[7] = Hero(Tracer);
-        Global.c_LargeZoneHeroes[8] = Hero(Wrecking Ball);
+        Global.c_LargeZoneHeroes[0] = Hero(Echo);
+        Global.c_LargeZoneHeroes[1] = Hero(Genji);
+        Global.c_LargeZoneHeroes[2] = Hero(Junkrat);
+        Global.c_LargeZoneHeroes[3] = Hero(Mercy);
+        Global.c_LargeZoneHeroes[4] = Hero(Pharah);
+        Global.c_LargeZoneHeroes[5] = Hero(Sombra);
+        Global.c_LargeZoneHeroes[6] = Hero(Tracer);
+        Global.c_LargeZoneHeroes[7] = Hero(Wrecking Ball);
         Global.c_ScopeHeroes = Array();
         Global.c_ScopeHeroes[0] = Hero(Ana);
         Global.c_ScopeHeroes[1] = Hero(Ashe);
@@ -1053,7 +1053,7 @@ rule("Global HUD")
             "There are many settings so you can customize your warmup!"), Custom String("See the top left corner for controls."), Top,
             5.300, Color(Yellow), Color(White), Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
         Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("{0}", Global.c_GithubURL),
-            Custom String("For the most recent c_Version: Please import code: {0}", Global.c_WorkshopCode), Top, 7, Color(Yellow),
+            Custom String("For the most recent version: Please import code: {0}", Global.c_WorkshopCode), Top, 7, Color(Yellow),
             Global.c_Color_LightTeal, Global.c_Color_LightPink, Visible To and String, Default Visibility);
         Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to hide this text",
             Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
@@ -3209,30 +3209,6 @@ rule("Special Rule: Doomfist Rocket Punch Damage")
         Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) == True;
         Distance Between(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Players In Slot(Slot Of(
             Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
-    }
-    actions
-    {
-        Apply Impulse(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Direction Towards(Players In Slot(
-            Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player), 1, To World, Cancel Contrary Motion);
-        Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player,
-            Event Player.ai_DoomfistPunchDamage);
-        Event Player.ai_DoomfistPunchTime = 0;
-        Event Player.ai_DoomfistPunchDamage = 0;
-    }
-}
-rule("Special Rule: Doomfist Rocket Punch Damage")
-{
-    event
-    {
-        Ongoing - Each Player;
-        All;
-        Doomfist;
-    }
-    conditions
-    {
-        Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) == True;
-        Distance Between(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Players In Slot(Slot Of(
-            Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 1;
     }
     actions
     {
@@ -5684,11 +5660,13 @@ rule("AI Doomfist")
             Press Button(Event Player, Button(Ability 1));
         Else If(Event Player.ai_AbilityButton == Button(Ability 2));
             Press Button(Event Player, Button(Jump));
-            Event Player.ai_AimBase = 2;
+            Event Player.ai_AimType = 0;
+            Event Player.ai_AimBase = 3;
+            Event Player.ai_FacingRelPosMod = Vector(0, -2, 0);
             Call Subroutine(aiSub_FacingStart);
-            Call Subroutine(aiSub_ReactionDelay);
+            Wait(Random Real(0.150, 0.350), Ignore Condition);
             Press Button(Event Player, Button(Ability 2));
-            Wait(0.250, Ignore Condition);
+            Call Subroutine(aiSub_ReactionDelay);
             Call Subroutine(aiSub_FacingReset);
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             Press Button(Event Player, Button(Ultimate));
@@ -5863,8 +5841,9 @@ rule("AI Doomfist Seismic Slam")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 2 || Is In Air(Event Player)) == True;
-        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 14;
+        Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+        (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 9 || Is In Air(Event Player)) == True;
+        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
         Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
         Is Button Held(Event Player, Button(Secondary Fire)) == False;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;

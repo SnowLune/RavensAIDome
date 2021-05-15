@@ -70,7 +70,7 @@ rule("Global HUD")
 			"There are many settings so you can customize your warmup!"), Custom String("See the top left corner for controls."), Top,
 			5.300, Color(Yellow), Color(White), Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("{0}", Global.c_GithubURL),
-			Custom String("For the most recent c_Version: Please import code: {0}", Global.c_WorkshopCode), Top, 7, Color(Yellow),
+			Custom String("For the most recent version: Please import code: {0}", Global.c_WorkshopCode), Top, 7, Color(Yellow),
 			Global.c_Color_LightTeal, Global.c_Color_LightPink, Visible To and String, Default Visibility);
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to hide this text",
 			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),

@@ -72,33 +72,6 @@ rule("Special Rule: Doomfist Rocket Punch Damage")
 	}
 }
 
-rule("Special Rule: Doomfist Rocket Punch Damage")
-{
-	event
-	{
-		Ongoing - Each Player;
-		All;
-		Doomfist;
-	}
-
-	conditions
-	{
-		Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) == True;
-		Distance Between(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Players In Slot(Slot Of(
-			Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 1;
-	}
-
-	actions
-	{
-		Apply Impulse(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Direction Towards(Players In Slot(
-			Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player), 1, To World, Cancel Contrary Motion);
-		Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player,
-			Event Player.ai_DoomfistPunchDamage);
-		Event Player.ai_DoomfistPunchTime = 0;
-		Event Player.ai_DoomfistPunchDamage = 0;
-	}
-}
-
 rule("Special Rule: Reinhardt Charge")
 {
 	event

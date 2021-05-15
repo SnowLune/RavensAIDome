@@ -10,7 +10,7 @@ rule("Global Defines")
 		//
 		//	Info: version, build, links...
 		//
-		Global.c_Version = Custom String("0.14.0-test.2");
+		Global.c_Version = Custom String("0.14.0-test.3");
 		Global.c_BuildDate = Custom String("20210513");
 		Global.c_WorkshopCode = Custom String("5DPKQ");
 		Global.c_DeveloperName = Custom String("Snow#15707");
@@ -69,6 +69,7 @@ rule("Global Defines")
 		Global.c_VeryShortRangeHeroes[7] = Hero(Symmetra);
 		Global.c_VeryShortRangeHeroes[8] = Hero(Winston);
 		Global.c_VeryShortRangeHeroes[9] = Hero(Zarya);
+		Global.c_VeryShortRangeHeroes[10] = Hero(Doomfist);
 
 		Global.c_ProjectileHeroes = Array();
 		Global.c_ProjectileHeroes[0] = Hero(Ana);
@@ -97,15 +98,14 @@ rule("Global Defines")
 		Global.c_ProjectileHeroes[23] = Hero(Zenyatta);
 		
 		Global.c_LargeZoneHeroes = Array();
-		Global.c_LargeZoneHeroes[0] = Hero(Doomfist);
-		Global.c_LargeZoneHeroes[1] = Hero(Echo);
-		Global.c_LargeZoneHeroes[2] = Hero(Genji);
-		Global.c_LargeZoneHeroes[3] = Hero(Junkrat);
-		Global.c_LargeZoneHeroes[4] = Hero(Mercy);
-		Global.c_LargeZoneHeroes[5] = Hero(Pharah);
-		Global.c_LargeZoneHeroes[6] = Hero(Sombra);
-		Global.c_LargeZoneHeroes[7] = Hero(Tracer);
-		Global.c_LargeZoneHeroes[8] = Hero(Wrecking Ball);
+		Global.c_LargeZoneHeroes[0] = Hero(Echo);
+		Global.c_LargeZoneHeroes[1] = Hero(Genji);
+		Global.c_LargeZoneHeroes[2] = Hero(Junkrat);
+		Global.c_LargeZoneHeroes[3] = Hero(Mercy);
+		Global.c_LargeZoneHeroes[4] = Hero(Pharah);
+		Global.c_LargeZoneHeroes[5] = Hero(Sombra);
+		Global.c_LargeZoneHeroes[6] = Hero(Tracer);
+		Global.c_LargeZoneHeroes[7] = Hero(Wrecking Ball);
 		
 		Global.c_ScopeHeroes = Array();
 		Global.c_ScopeHeroes[0] = Hero(Ana);
