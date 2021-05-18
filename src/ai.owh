@@ -344,57 +344,197 @@ rule("aiSub_FacingStart")
 		// Arcing Projectile
 		//
 		Else If(Players In Slot(Slot Of(Event Player), Team 2).ai_AimType == 2);
+
+			// Body
 			If(Players In Slot(Slot Of(Event Player), Team 2).ai_AimBase == 0);
-				Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Direction From Angles(Horizontal Angle Towards(Players In Slot(Slot Of(Event Player), Team 2),
-					World Vector Of(Speed Of(Players In Slot(Slot Of(Event Player), Team 1)) * Throttle Of(Players In Slot(Slot Of(Event Player),
-					Team 1)), Players In Slot(Slot Of(Event Player), Team 1), Rotation) * (Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Eye Position(
-					Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250, 0)) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed) + Eye Position(
-					Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250, 0)) + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModX,
-					Vertical Angle From Direction(Direction Towards(Eye Position(Players In Slot(Slot Of(Event Player), Team 2)), World Vector Of(Speed Of(Players In Slot(Slot Of(
-					Event Player), Team 1)) * Throttle Of(Players In Slot(Slot Of(Event Player), Team 1)), Players In Slot(Slot Of(Event Player),
-					Team 1), Rotation) * (Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0,
-					0.250, 0)) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed) + Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250,
-					0))) + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY + Arcsine In Degrees(-9.800 * (Distance Between(Eye Position(Players In Slot(Slot Of(Event Player), Team 2)), Eye Position(
-					Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250, 0)) - Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod)
-					/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2) / 2), Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate, To Player, Direction and Turn Rate);
+				Start Facing(
+					Players In Slot(Slot Of(Event Player), Team 2),
+					Direction From Angles(
+						Horizontal Angle Towards(
+							Players In Slot(Slot Of(Event Player), Team 2),
+							World Vector Of(
+								Speed Of(Players In Slot(Slot Of(Event Player), Team 1))
+								* Throttle Of(Players In Slot(Slot Of(Event Player), Team 1)),
+								Players In Slot(Slot Of(Event Player), Team 1),
+								Rotation
+							)
+							* (
+								Distance Between(
+									Position Of(Players In Slot(Slot Of(Event Player), Team 2)),
+									Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+								)
+								/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed
+							)
+							+ Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+						)
+						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModX,
+					
+						Vertical Angle From Direction(
+							Direction Towards(
+								Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
+								Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250, 0)
+							)
+						)
+						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
+						+ Arcsine In Degrees(
+							-9.800 * (
+								Distance Between(
+									Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
+									Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250, 0)
+								) 
+								- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+							)
+							/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
+						) / 2
+					),
+					Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate,
+					To Player,
+					Direction and Turn Rate
+				);
+			
+			// Head
 			Else If(Players In Slot(Slot Of(Event Player), Team 2).ai_AimBase == 1);
-				Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Direction From Angles(Horizontal Angle Towards(Players In Slot(Slot Of(Event Player), Team 2),
-					World Vector Of(Speed Of(Players In Slot(Slot Of(Event Player), Team 1)) * Throttle Of(Players In Slot(Slot Of(Event Player),
-					Team 1)), Players In Slot(Slot Of(Event Player), Team 1), Rotation) * (Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Eye Position(
-					Players In Slot(Slot Of(Event Player), Team 1))) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed) + Eye Position(Players In Slot(Slot Of(
-					Event Player), Team 1))) + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModX, Vertical Angle From Direction(Direction Towards(Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
-					World Vector Of(Speed Of(Players In Slot(Slot Of(Event Player), Team 1)) * Throttle Of(Players In Slot(Slot Of(Event Player),
-					Team 1)), Players In Slot(Slot Of(Event Player), Team 1), Rotation) * (Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Eye Position(
-					Players In Slot(Slot Of(Event Player), Team 1))) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed) + Eye Position(Players In Slot(Slot Of(
-					Event Player), Team 1)))) + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY + Arcsine In Degrees(-9.800 * (Distance Between(Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
-					Eye Position(Players In Slot(Slot Of(Event Player), Team 1))) - Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod)
-					/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2) / 2), Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate, To Player, Direction and Turn Rate);
+				Start Facing(
+					Players In Slot(Slot Of(Event Player), Team 2),
+					Direction From Angles(
+						Horizontal Angle Towards(
+							Players In Slot(Slot Of(Event Player), Team 2),
+							World Vector Of(
+								Speed Of(Players In Slot(Slot Of(Event Player), Team 1))
+								* Throttle Of(Players In Slot(Slot Of(Event Player), Team 1)),
+								Players In Slot(Slot Of(Event Player), Team 1),
+								Rotation
+							)
+							* (
+								Distance Between(
+									Position Of(Players In Slot(Slot Of(Event Player), Team 2)),
+									Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+								)
+								/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed
+							)
+							+ Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+						)
+						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModX,
+					
+						Vertical Angle From Direction(
+							Direction Towards(
+								Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
+								Eye Position(Players In Slot(Slot Of(Event Player), Team 1))
+							)
+						)
+						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
+						+ Arcsine In Degrees(
+							-9.800 * (
+								Distance Between(
+									Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
+									Eye Position(Players In Slot(Slot Of(Event Player), Team 1))
+								) 
+								- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+							)
+							/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
+						) / 2
+					),
+					Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate,
+					To Player,
+					Direction and Turn Rate
+				);
+			
+			// Position
 			Else If(Players In Slot(Slot Of(Event Player), Team 2).ai_AimBase == 2);
-				Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Direction From Angles(Horizontal Angle Towards(Players In Slot(Slot Of(Event Player), Team 2),
-					World Vector Of(Speed Of(Players In Slot(Slot Of(Event Player), Team 1)) * Throttle Of(Players In Slot(Slot Of(Event Player),
-					Team 1)), Players In Slot(Slot Of(Event Player), Team 1), Rotation) * (Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Position Of(
-					Players In Slot(Slot Of(Event Player), Team 1))) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed) + Position Of(Players In Slot(Slot Of(
-					Event Player), Team 1))) + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModX, Vertical Angle From Direction(Direction Towards(Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
-					World Vector Of(Speed Of(Players In Slot(Slot Of(Event Player), Team 1)) * Throttle Of(Players In Slot(Slot Of(Event Player),
-					Team 1)), Players In Slot(Slot Of(Event Player), Team 1), Rotation) * (Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Position Of(
-					Players In Slot(Slot Of(Event Player), Team 1))) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed) + Position Of(Players In Slot(Slot Of(
-					Event Player), Team 1)))) + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY + Arcsine In Degrees(-9.800 * (Distance Between(Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
-					Position Of(Players In Slot(Slot Of(Event Player), Team 1))) - Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod)
-					/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2) / 2), Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate, To Player, Direction and Turn Rate);
+				Start Facing(
+					Players In Slot(Slot Of(Event Player), Team 2),
+					Direction From Angles(
+						Horizontal Angle Towards(
+							Players In Slot(Slot Of(Event Player), Team 2),
+							World Vector Of(
+								Speed Of(Players In Slot(Slot Of(Event Player), Team 1))
+								* Throttle Of(Players In Slot(Slot Of(Event Player), Team 1)),
+								Players In Slot(Slot Of(Event Player), Team 1),
+								Rotation
+							)
+							* (
+								Distance Between(
+									Position Of(Players In Slot(Slot Of(Event Player), Team 2)),
+									Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+								)
+								/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed
+							)
+							+ Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+						)
+						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModX,
+					
+						Vertical Angle From Direction(
+							Direction Towards(
+								Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
+								Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+							)
+						)
+						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
+						+ Arcsine In Degrees(
+							-9.800 * (
+								Distance Between(
+									Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
+									Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+								) 
+								- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+							)
+							/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
+						) / 2
+					),
+					Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate,
+					To Player,
+					Direction and Turn Rate
+				);
+
+			// Relative
 			Else If(Players In Slot(Slot Of(Event Player), Team 2).ai_AimBase == 3);
-				Start Facing(Players In Slot(Slot Of(Event Player), Team 2), Direction From Angles(Horizontal Angle Towards(Players In Slot(Slot Of(Event Player), Team 2),
-					World Vector Of(Speed Of(Players In Slot(Slot Of(Event Player), Team 1)) * Throttle Of(Players In Slot(Slot Of(Event Player),
-					Team 1)), Players In Slot(Slot Of(Event Player), Team 1), Rotation) * (Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Position Of(
-					Players In Slot(Slot Of(Event Player), Team 1)) + Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed)
-					+ Position Of(Players In Slot(Slot Of(Event Player), Team 1)) + Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod) + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModX,
-					Vertical Angle From Direction(Direction Towards(Eye Position(Players In Slot(Slot Of(Event Player), Team 2)), World Vector Of(Speed Of(Players In Slot(Slot Of(
-					Event Player), Team 1)) * Throttle Of(Players In Slot(Slot Of(Event Player), Team 1)), Players In Slot(Slot Of(Event Player),
-					Team 1), Rotation) * (Distance Between(Players In Slot(Slot Of(Event Player), Team 2), Position Of(Players In Slot(Slot Of(Event Player), Team 1))
-					+ Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed) + Position Of(Players In Slot(Slot Of(Event Player),
-					Team 1)) + Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod)) + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY + Arcsine In Degrees(-9.800 * (Distance Between(
-					Eye Position(Players In Slot(Slot Of(Event Player), Team 2)), Position Of(Players In Slot(Slot Of(Event Player), Team 1)) + Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod)
-					- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod) / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2) / 2), Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate, To Player,
-					Direction and Turn Rate);
+				Start Facing(
+					Players In Slot(Slot Of(Event Player), Team 2),
+					Direction From Angles(
+						Horizontal Angle Towards(
+							Players In Slot(Slot Of(Event Player), Team 2),
+							World Vector Of(
+								Speed Of(Players In Slot(Slot Of(Event Player), Team 1))
+								* Throttle Of(Players In Slot(Slot Of(Event Player), Team 1)),
+								Players In Slot(Slot Of(Event Player), Team 1),
+								Rotation
+							)
+							* (
+								Distance Between(
+									Position Of(Players In Slot(Slot Of(Event Player), Team 2)),
+									Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+								)
+								/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed
+							)
+							+ Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+							+ Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod
+						)
+						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModX,
+					
+						Vertical Angle From Direction(
+							Direction Towards(
+								Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
+								Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+								+ Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod
+							)
+						)
+						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
+						+ Arcsine In Degrees(
+							-9.800 * (
+								Distance Between(
+									Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
+									Position Of(Players In Slot(Slot Of(Event Player), Team 1))
+									+ Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod
+								) 
+								- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+							)
+							/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
+						) / 2
+					),
+					Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate,
+					To Player,
+					Direction and Turn Rate
+				);
 			End;
 		End;
 	}

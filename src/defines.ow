@@ -10,8 +10,8 @@ rule("Global Defines")
 		//
 		//	Info: version, build, links...
 		//
-		Global.c_Version = Custom String("0.14.0-test.3");
-		Global.c_BuildDate = Custom String("20210513");
+		Global.c_Version = Custom String("0.14.0-test.4");
+		Global.c_BuildDate = Custom String("20210518");
 		Global.c_WorkshopCode = Custom String("5DPKQ");
 		Global.c_DeveloperName = Custom String("Snow#15707");
 		Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
