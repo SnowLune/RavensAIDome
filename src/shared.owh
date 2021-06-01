@@ -14,6 +14,41 @@ rule("allSub_WaitForFrame")
 	}
 }
 
+rule("allSub_HealAfterDamage")
+{
+	event
+	{
+		Subroutine;
+		allSub_HealAfterDamage;
+	}
+
+	actions
+	{
+		"Essentially Brigitte's Inspire"
+		If(Event Player.all_InspireHealID != 0);
+			Stop Heal Over Time(Event Player.all_InspireHealID);
+		End;
+		Start Heal Over Time(Event Player, Null, 6, 15);
+		Event Player.all_InspireHealID = Last Heal Over Time ID;
+		Event Player.all_InspireHealTime = Total Time Elapsed;
+	}
+}
+
+rule("allSub_HealAfterElim")
+{
+	event
+	{
+		Subroutine;
+		allSub_HealAfterElim;
+	}
+
+	actions
+	{
+		Wait(6 / 60, Ignore Condition);
+		Start Heal Over Time(Event Player, Null, 2, 55);
+	}
+}
+
 rule("allSub_ButtonsDisallow")
 {
 	event

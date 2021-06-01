@@ -1,34 +1,3 @@
-rule("Bot Init")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
-
-	conditions
-	{
-		Event Player.p_PlayerInitialized == True;
-	}
-
-	actions
-	{
-		Wait(0.100, Ignore Condition);
-		Call Subroutine(botSub_SetHero);
-		"Setup difficulty"
-		Call Subroutine(pSub_SetDifficulty);
-		Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled = Global.g_BotHealing;
-		"Face enemy bot after it is created"
-		Stop Facing(Event Player);
-		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
-			Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
-			Players In Slot(Slot Of(Event Player), Team 2)))) * 10, To World, None);
-		Wait(12 / 60, Ignore Condition);
-		Stop Facing(Event Player);
-	}
-}
-
 rule("Player Leave Destroy All Objects")
 {
 	event
@@ -116,9 +85,13 @@ rule("Bot Elimination")
 	actions
 	{
 		Event Player.all_Kills += 1;
-		If(Players In Slot(Slot Of(Event Player), Team 1).p_MinusKillOnDeath == True && Players In Slot(Slot Of(Event Player), Team 1)
+		If(Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath > 0 && Players In Slot(Slot Of(Event Player), Team 1)
 			.all_Kills > 0);
-			Players In Slot(Slot Of(Event Player), Team 1).all_Kills -= 1;
+			If(Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath > Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal);
+				Players In Slot(Slot Of(Event Player), Team 1).all_Kills = 0;
+			Else;
+				Players In Slot(Slot Of(Event Player), Team 1).all_Kills -= Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath;
+			End;
 		End;
 		"Bad Manners"
 		If(Random Real(0, 1) < 0.600);
@@ -136,6 +109,52 @@ rule("Bot Elimination")
 		End;
 		Call Subroutine(aiSub_ReactionDelay);
 		Call Subroutine(aiSub_ButtonsReset);
+	}
+}
+
+rule("Bot Heal After Elim")
+{
+	event
+	{
+		Player Dealt Final Blow;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Health(Event Player) != Max Health(Event Player);
+		Players In Slot(Slot Of(Event Player), Team 1).p_BotHealingEnabled == True;
+	}
+
+	actions
+	{
+		Call Subroutine(allSub_HealAfterElim);
+	}
+}
+
+rule("Bot Heal After Damage")
+{
+	event
+	{
+		Player Dealt Damage;
+		Team 2;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_BotHealingEnabled == True;
+		Total Time Elapsed >= Event Player.all_InspireHealTime + 1;
+		Event Damage > 5;
+	}
+
+	actions
+	{
+		Call Subroutine(allSub_HealAfterDamage);
 	}
 }
 
@@ -410,7 +429,7 @@ rule("Bot Flicker")
 	conditions
 	{
 		Is Alive(Event Player) == True;
-		Event Player.bot_FlickerEnabled == True;
+		Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True;
 		Event Player.bot_BotResetComplete == True;
 	}
 

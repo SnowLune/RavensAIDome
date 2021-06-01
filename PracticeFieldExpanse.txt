@@ -141,18 +141,15 @@ variables
         34:  ai_ProjectileSpeeds
         35:  ai_ReactionTime
         36:  ai_StrafeDistanceMod
-        37:  ai_UltimateDisabled
         38:  ai_ViewAngleMod
         39:  ai_WeaponChargeTime
         40:  all_ChangingHero
-        41:  all_HealingEnabled
         42:  all_Index
         43:  all_InspireHealID
         44:  all_InspireHealTime
         45:  all_Kills
         46:  all_SubArg
         47:  bot_BotResetComplete
-        48:  bot_FlickerEnabled
         49:  bot_MoveCrouchChanceMod
         50:  bot_MoveCrouchEnabled
         51:  bot_MoveCrouchTimeMod
@@ -201,14 +198,18 @@ variables
         94:  p_HomeVector
         95:  p_KillGoal
         96:  p_Language
-        97:  p_MinusKillOnDeath
+        97:  p_KillsLostOnDeath
         98:  p_MirrorModeEnabled
         99:  p_OneSecCooldown
         100: p_PlayerHero
         101: p_PlayerInitialized
         102: p_QuickModeEnabled
-        103: p_Unkillable
+        103: p_Invulnerable
         104: p_ZoneRadius
+        48:  p_BotFlickerEnabled
+        41:  p_HealingEnabled
+        105: p_BotHealingEnabled
+        37:  p_BotUltimateDisabled
 }
 subroutines
 {
@@ -257,6 +258,8 @@ subroutines
     42: allSub_ButtonsAllow
     43: allSub_ButtonsDisallow
     44: allSub_WaitForFrame
+    65: allSub_HealAfterElim
+    66: allSub_HealAfterDamage
     45: botSub_MoveCrouch
     46: botSub_MoveJump
     47: botSub_MoveWASD
@@ -277,6 +280,7 @@ subroutines
     62: pSub_SetHeroClass
     63: pSub_SetNames
     64: pSub_SetLanguage
+    67: pSub_SetInvulnerable
 }
 rule("Global Settings")
 {
@@ -359,8 +363,9 @@ rule("Global Defines")
     }
     actions
     {
-        Global.c_Version = Custom String("0.14.0-test.4");
-        Global.c_BuildDate = Custom String("20210518");
+        Global.g_Initialized = False;
+        Global.c_Version = Custom String("0.14.0-test.5");
+        Global.c_BuildDate = Custom String("20210527");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Snow#15707");
         Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -571,6 +576,7 @@ rule("Global Defines")
         Global.c_BotNamesConst[81] = Custom String("Alien");
         Global.c_BotNamesConst[82] = Custom String("MyMainIsT500");
         Global.g_PlayerNames = Array();
+        Global.g_Initialized = True;
     }
 }
 rule("hudSub_DebugToggle")
@@ -850,6 +856,7 @@ rule("hudSub_SkyMenuToggle")
                 Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection + Vector(-4.500, 0, 0), 1.250, Clip Against Surfaces,
                 Visible To Position and String, Color(White), Default Visibility);
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+            "Selection Beams"
             Create Beam Effect(Players In Slot(Slot Of(Event Player), Team 1), Bad Beam, Players In Slot(Slot Of(Event Player), Team 1)
                 .hud_SkyMenuSelection + Vector(-4.500, 0, -0.500), Players In Slot(Slot Of(Event Player), Team 1)
                 .hud_SkyMenuSelection + Vector(4.500, 0, -0.500), Event Player.p_EffectsColor, Position Radius and Color);
@@ -907,43 +914,46 @@ rule("hudSub_SkyMenuToggle")
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
             Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
                 Team 1).p_Language == 1 ? Custom String("킬 점수 패널티: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-                .p_MinusKillOnDeath == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("-1 Kill On Death: {0}",
-                Players In Slot(Slot Of(Event Player), Team 1).p_MinusKillOnDeath == True ? Custom String("On") : Custom String("Off")),
+                .p_KillsLostOnDeath) : Custom String("Points Lost On Death: {0}",
+                Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath == Global.c_PseudoInfinity ? Custom String("All") : 
+                Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath),
                 Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[6], 1.500, Clip Against Surfaces, Visible To and String,
                 Color(White), Default Visibility);
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
             Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
                 Team 1).p_Language == 1 ? Custom String("플레이어 치유: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-                .all_HealingEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Healing: {0}",
-                Players In Slot(Slot Of(Event Player), Team 1).all_HealingEnabled == True ? Custom String("On") : Custom String("Off")),
+                .p_HealingEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Healing: {0}",
+                Players In Slot(Slot Of(Event Player), Team 1).p_HealingEnabled == True ? Custom String("On") : Custom String("Off")),
                 Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[7], 1.500, Clip Against Surfaces, Visible To and String,
                 Color(White), Default Visibility);
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
             Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
-                Team 1).p_Language == 1 ? Custom String("인공지는 치유: {0}", Players In Slot(Slot Of(Event Player), Team 2)
-                .all_HealingEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Bot Healing: {0}",
-                Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled == True ? Custom String("On") : Custom String("Off")),
+                Team 1).p_Language == 1 ? Custom String("인공지는 치유: {0}", Players In Slot(Slot Of(Event Player), Team 1)
+                .p_BotHealingEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Bot Healing: {0}",
+                Players In Slot(Slot Of(Event Player), Team 1).p_BotHealingEnabled == True ? Custom String("On") : Custom String("Off")),
                 Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[8], 1.500, Clip Against Surfaces, Visible To and String,
                 Color(White), Default Visibility);
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
             Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
                 Team 1).p_Language == 1 ? Custom String("플레이어는 죽일 수 없다: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-                .p_Unkillable == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Unkillable: {0}",
-                Players In Slot(Slot Of(Event Player), Team 1).p_Unkillable == True ? Custom String("On") : Custom String("Off")),
+                .p_Invulnerable == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Unkillable: {0}",
+                Players In Slot(Slot Of(Event Player), Team 1).p_Invulnerable == 3 ? Custom String("On (Invincible)")
+                : Players In Slot(Slot Of(Event Player), Team 1).p_Invulnerable == 2 ? Custom String("On (Phased Out)")
+                : Players In Slot(Slot Of(Event Player), Team 1).p_Invulnerable == 1 ? Custom String("On (Unkillable)") : Custom String("Off")),
                 Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[9], 1.500, Clip Against Surfaces, Visible To and String,
                 Color(White), Default Visibility);
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
             Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
-                Team 1).p_Language == 1 ? Custom String("인공지는 궁극적 인 장애인: {0}", Players In Slot(Slot Of(Event Player), Team 2)
-                .ai_UltimateDisabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Disable Bot Ultimate: {0}",
-                Players In Slot(Slot Of(Event Player), Team 2).ai_UltimateDisabled == True ? Custom String("On") : Custom String("Off")),
+                Team 1).p_Language == 1 ? Custom String("인공지는 궁극적 인 장애인: {0}", Players In Slot(Slot Of(Event Player), Team 1)
+                .p_BotUltimateDisabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Disable Bot Ultimate: {0}",
+                Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True ? Custom String("On") : Custom String("Off")),
                 Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[10], 1.500, Clip Against Surfaces, Visible To and String,
                 Color(White), Default Visibility);
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
             Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
-                Team 1).p_Language == 1 ? Custom String("인공지는 깜박거리는: {0}", Players In Slot(Slot Of(Event Player), Team 2)
-                .bot_FlickerEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Bot Flicker: {0}",
-                Players In Slot(Slot Of(Event Player), Team 2).bot_FlickerEnabled == True ? Custom String("On") : Custom String("Off")),
+                Team 1).p_Language == 1 ? Custom String("인공지는 깜박거리는: {0}", Players In Slot(Slot Of(Event Player), Team 1)
+                .p_BotFlickerEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Bot Flicker: {0}",
+                Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True ? Custom String("On") : Custom String("Off")),
                 Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[11], 1.500, Clip Against Surfaces, Visible To and String,
                 Color(White), Default Visibility);
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
@@ -969,6 +979,7 @@ rule("hudSub_SkyMenuToggle")
             Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
             Call Subroutine(hudSub_SkyMenuArrowSet);
             Stop Camera(Event Player);
+            Call Subroutine(allSub_WaitForFrame);
             Start Camera(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
                 .hud_SkyMenuSelection - Vector(0, 15, 0.001), Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection, 30);
             Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuIsOpen = True;
@@ -1179,7 +1190,6 @@ rule("Player Sky Menu Move Selection Decrease")
     }
     actions
     {
-        "Difficulty"
         If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0] && Event Player.p_Difficulty > 0);
             Event Player.hud_SkyMenuSound = 2;
             Call Subroutine(hudSub_SkyMenuPlaySound);
@@ -1222,35 +1232,44 @@ rule("Player Sky Menu Move Selection Decrease")
             Else;
                 Event Player.p_OneSecCooldown -= 1;
             End;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6] && Event Player.p_MinusKillOnDeath == True);
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Event Player.p_MinusKillOnDeath = False;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7] && Event Player.all_HealingEnabled == True);
+            If(Event Player.p_KillsLostOnDeath == 0);
+                Event Player.p_KillsLostOnDeath = Global.c_PseudoInfinity;
+            Else If(Event Player.p_KillsLostOnDeath == Global.c_PseudoInfinity);
+                Event Player.p_KillsLostOnDeath = 10;
+            Else;
+                Event Player.p_KillsLostOnDeath -= 1;
+            End;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7] && Event Player.p_HealingEnabled == True);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Event Player.all_HealingEnabled = False;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Players In Slot(Slot Of(Event Player), Team 2)
-                .all_HealingEnabled == True);
+            Event Player.p_HealingEnabled = False;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_BotHealingEnabled == True);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled = False;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9] && Event Player.p_Unkillable == True);
+            Event Player.p_BotHealingEnabled = False;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Clear Status(Event Player, Unkillable);
-            Event Player.p_Unkillable = False;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10] && Players In Slot(Slot Of(Event Player), Team 2)
-                .ai_UltimateDisabled == True);
+            If(Event Player.p_Invulnerable > 0);
+                Event Player.p_Invulnerable -= 1;
+            Else;
+                Event Player.p_Invulnerable = 3;
+            End;
+            Call Subroutine(pSub_SetInvulnerable);
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]
+            && Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
             Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), True);
-            Players In Slot(Slot Of(Event Player), Team 2).ai_UltimateDisabled = False;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Players In Slot(Slot Of(Event Player), Team 2)
-                .bot_FlickerEnabled == True);
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled = False;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]
+            && Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 2).bot_FlickerEnabled = False;
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled = False;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Players In Slot(Slot Of(Event Player), Team 1)
                 .p_ElevatorEnabled == True);
             Event Player.hud_SkyMenuSound = 1;
@@ -1295,7 +1314,6 @@ rule("Player Sky Menu Move Selection Increase")
     }
     actions
     {
-        "Difficulty"
         If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0] && Event Player.p_Difficulty < 10);
             Event Player.hud_SkyMenuSound = 2;
             Call Subroutine(hudSub_SkyMenuPlaySound);
@@ -1339,35 +1357,44 @@ rule("Player Sky Menu Move Selection Increase")
             Else;
                 Event Player.p_OneSecCooldown += 1;
             End;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6] && Event Player.p_MinusKillOnDeath == False);
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Event Player.p_MinusKillOnDeath = True;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7] && Event Player.all_HealingEnabled == False);
+            If(Event Player.p_KillsLostOnDeath == Global.c_PseudoInfinity);
+                Event Player.p_KillsLostOnDeath = 0;
+            Else If(Event Player.p_KillsLostOnDeath == 10);
+                Event Player.p_KillsLostOnDeath = Global.c_PseudoInfinity;
+            Else;
+                Event Player.p_KillsLostOnDeath += 1;
+            End;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7] && Event Player.p_HealingEnabled == False);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Event Player.all_HealingEnabled = True;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Players In Slot(Slot Of(Event Player), Team 2)
-                .all_HealingEnabled == False);
+            Event Player.p_HealingEnabled = True;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_BotHealingEnabled == False);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled = True;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9] && Event Player.p_Unkillable == False);
+            Event Player.p_BotHealingEnabled = True;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Set Status(Event Player, Null, Unkillable, 9999);
-            Event Player.p_Unkillable = True;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10] && Players In Slot(Slot Of(Event Player), Team 2)
-                .ai_UltimateDisabled == False);
+            If(Event Player.p_Invulnerable < 3);
+                Event Player.p_Invulnerable += 1;
+            Else;
+                Event Player.p_Invulnerable = 0;
+            End;
+            Call Subroutine(pSub_SetInvulnerable);
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10] && Players In Slot(Slot Of(Event Player), Team 1)
+                .p_BotUltimateDisabled == False);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
             Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
-            Players In Slot(Slot Of(Event Player), Team 2).ai_UltimateDisabled = True;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Players In Slot(Slot Of(Event Player), Team 2)
-                .bot_FlickerEnabled == False);
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled = True;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Players In Slot(Slot Of(Event Player), Team 1)
+                .p_BotFlickerEnabled == False);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 2).bot_FlickerEnabled = True;
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled = True;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Players In Slot(Slot Of(Event Player), Team 1)
                 .p_ElevatorEnabled == False);
             Event Player.hud_SkyMenuSound = 0;
@@ -1444,50 +1471,40 @@ rule("Player Sky Menu Arrow Visibility")
             Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
-            If(Event Player.p_MinusKillOnDeath == False);
-                Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-                Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Event Player.p_MinusKillOnDeath == True);
-                Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-                Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-            End;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
-            If(Event Player.all_HealingEnabled == False);
+            If(Event Player.p_HealingEnabled == False);
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Event Player.all_HealingEnabled == True);
+            Else If(Event Player.p_HealingEnabled == True);
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8]);
-            If(Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled == False);
+            If(Event Player.p_BotHealingEnabled == False);
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled == True);
+            Else If(Event Player.p_BotHealingEnabled == True);
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
-            If(Event Player.p_Unkillable == False);
-                Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-                Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Event Player.p_Unkillable == True);
-                Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-                Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-            End;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
-            If(Players In Slot(Slot Of(Event Player), Team 2).ai_UltimateDisabled == False);
+            If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == False);
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Players In Slot(Slot Of(Event Player), Team 2).ai_UltimateDisabled == True);
+            Else If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]);
-            If(Players In Slot(Slot Of(Event Player), Team 2).bot_FlickerEnabled == False);
+            If(Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == False);
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Players In Slot(Slot Of(Event Player), Team 2).bot_FlickerEnabled == True);
+            Else If(Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True);
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             End;
@@ -1752,6 +1769,27 @@ rule("pSub_Elevator")
             Event Player.p_ElevatorHeight) : Custom String("Height: {0} Meters", Event Player.p_ElevatorHeight));
     }
 }
+rule("pSub_SetInvulnerable")
+{
+    event
+    {
+        Subroutine;
+        pSub_SetInvulnerable;
+    }
+    actions
+    {
+        Clear Status(Event Player, Unkillable);
+        Clear Status(Event Player, Phased Out);
+        Clear Status(Event Player, Invincible);
+        If(Event Player.p_Invulnerable == 1);
+            Set Status(Event Player, Null, Unkillable, Global.c_PseudoInfinity);
+        Else If(Event Player.p_Invulnerable == 2);
+            Set Status(Event Player, Null, Phased Out, Global.c_PseudoInfinity);
+        Else If(Event Player.p_Invulnerable == 3);
+            Set Status(Event Player, Null, Invincible, Global.c_PseudoInfinity);
+        End;
+    }
+}
 rule("Player Init")
 {
     event
@@ -1762,9 +1800,9 @@ rule("Player Init")
     }
     conditions
     {
-        Is Game In Progress == True;
-        Has Spawned(Event Player) == True;
+        Global.g_Initialized == True;
         Event Player.p_PlayerInitialized == False;
+        Has Spawned(Event Player) == True;
     }
     actions
     {
@@ -1794,9 +1832,9 @@ rule("Player Init")
         Event Player.p_KillGoal = Global.g_KillGoal;
         Call Subroutine(pSub_SetHeroClass);
         Event Player.hud_InfoEnabled = False;
-        Event Player.all_HealingEnabled = Global.g_PlayerHealing;
+        Event Player.p_HealingEnabled = Global.g_PlayerHealing;
         Event Player.p_OneSecCooldown = False;
-        Event Player.p_MinusKillOnDeath = False;
+        Event Player.p_KillsLostOnDeath = 0;
         Event Player.p_MirrorModeEnabled = False;
         Event Player.p_Difficulty = Global.g_Difficulty;
         Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
@@ -1873,6 +1911,19 @@ rule("Player Init")
             Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
             Modify Global Variable(g_BotNames, Append To Array, Custom String("{0}", Event Player));
         End;
+        "Bot Init"
+        Wait(0.100, Ignore Condition);
+        Call Subroutine(botSub_SetHero);
+        "Setup difficulty"
+        Call Subroutine(pSub_SetDifficulty);
+        Event Player.p_BotHealingEnabled = Global.g_BotHealing;
+        "Face enemy bot after it is created"
+        Stop Facing(Event Player);
+        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
+            Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
+            Players In Slot(Slot Of(Event Player), Team 2)))) * 10, To World, None);
+        Wait(12 / 60, Ignore Condition);
+        Stop Facing(Event Player);
     }
 }
 rule("Player Died")
@@ -1892,6 +1943,46 @@ rule("Player Died")
         Stop Heal Over Time(Event Player.all_InspireHealID);
         Set Status(Event Player, Null, Invincible, 2.250);
         Stop Forcing Player Position(Event Player);
+    }
+}
+rule("Player Heal After Elim")
+{
+    event
+    {
+        Player Dealt Final Blow;
+        Team 1;
+        All;
+    }
+    conditions
+    {
+        Is Alive(Event Player) == True;
+        Health(Event Player) != Max Health(Event Player);
+        Event Player.p_HealingEnabled == True;
+    }
+    actions
+    {
+        Call Subroutine(allSub_HealAfterElim);
+    }
+}
+rule("Player Heal After Damage")
+{
+    event
+    {
+        Player Dealt Damage;
+        Team 1;
+        All;
+    }
+    conditions
+    {
+        Is Alive(Event Player) == True;
+        Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+        Event Player.p_HealingEnabled == True;
+        Total Time Elapsed >= Event Player.all_InspireHealTime + 1;
+        Event Damage > 5;
+    }
+    actions
+    {
+        Call Subroutine(allSub_HealAfterDamage);
     }
 }
 rule("Increment Kills")
@@ -2493,6 +2584,10 @@ rule("botSub_ResetBot")
                 Call Subroutine(aiSub_EnableAI);
             End;
         End;
+        "Disable Ultimate if player has that option set"
+        If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
+            Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
+        End;
         Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete = True;
     }
 }
@@ -2660,34 +2755,6 @@ rule("botSub_ThrottleStop")
         Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2));
     }
 }
-rule("Bot Init")
-{
-    event
-    {
-        Ongoing - Each Player;
-        Team 1;
-        All;
-    }
-    conditions
-    {
-        Event Player.p_PlayerInitialized == True;
-    }
-    actions
-    {
-        Wait(0.100, Ignore Condition);
-        Call Subroutine(botSub_SetHero);
-        "Setup difficulty"
-        Call Subroutine(pSub_SetDifficulty);
-        Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled = Global.g_BotHealing;
-        "Face enemy bot after it is created"
-        Stop Facing(Event Player);
-        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
-            Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
-            Players In Slot(Slot Of(Event Player), Team 2)))) * 10, To World, None);
-        Wait(12 / 60, Ignore Condition);
-        Stop Facing(Event Player);
-    }
-}
 rule("Player Leave Destroy All Objects")
 {
     event
@@ -2767,9 +2834,13 @@ rule("Bot Elimination")
     actions
     {
         Event Player.all_Kills += 1;
-        If(Players In Slot(Slot Of(Event Player), Team 1).p_MinusKillOnDeath == True && Players In Slot(Slot Of(Event Player), Team 1)
+        If(Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath > 0 && Players In Slot(Slot Of(Event Player), Team 1)
             .all_Kills > 0);
-            Players In Slot(Slot Of(Event Player), Team 1).all_Kills -= 1;
+            If(Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath > Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal);
+                Players In Slot(Slot Of(Event Player), Team 1).all_Kills = 0;
+            Else;
+                Players In Slot(Slot Of(Event Player), Team 1).all_Kills -= Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath;
+            End;
         End;
         "Bad Manners"
         If(Random Real(0, 1) < 0.600);
@@ -2787,6 +2858,46 @@ rule("Bot Elimination")
         End;
         Call Subroutine(aiSub_ReactionDelay);
         Call Subroutine(aiSub_ButtonsReset);
+    }
+}
+rule("Bot Heal After Elim")
+{
+    event
+    {
+        Player Dealt Final Blow;
+        Team 2;
+        All;
+    }
+    conditions
+    {
+        Is Alive(Event Player) == True;
+        Health(Event Player) != Max Health(Event Player);
+        Players In Slot(Slot Of(Event Player), Team 1).p_BotHealingEnabled == True;
+    }
+    actions
+    {
+        Call Subroutine(allSub_HealAfterElim);
+    }
+}
+rule("Bot Heal After Damage")
+{
+    event
+    {
+        Player Dealt Damage;
+        Team 2;
+        All;
+    }
+    conditions
+    {
+        Is Alive(Event Player) == True;
+        Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+        Players In Slot(Slot Of(Event Player), Team 1).p_BotHealingEnabled == True;
+        Total Time Elapsed >= Event Player.all_InspireHealTime + 1;
+        Event Damage > 5;
+    }
+    actions
+    {
+        Call Subroutine(allSub_HealAfterDamage);
     }
 }
 rule("Bot Reset Position Non AI Difficulty")
@@ -3032,7 +3143,7 @@ rule("Bot Flicker")
     conditions
     {
         Is Alive(Event Player) == True;
-        Event Player.bot_FlickerEnabled == True;
+        Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True;
         Event Player.bot_BotResetComplete == True;
     }
     actions
@@ -3065,6 +3176,37 @@ rule("allSub_WaitForFrame")
         Wait Until(((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) || (Slot Of(Event Player)
             % 2 != 0 && Global.g_Tick % 2 != 0)) == True, 2 / 60);
         Wait(0.500 / 60, Ignore Condition);
+    }
+}
+rule("allSub_HealAfterDamage")
+{
+    event
+    {
+        Subroutine;
+        allSub_HealAfterDamage;
+    }
+    actions
+    {
+        "Essentially Brigitte's Inspire"
+        If(Event Player.all_InspireHealID != 0);
+            Stop Heal Over Time(Event Player.all_InspireHealID);
+        End;
+        Start Heal Over Time(Event Player, Null, 6, 15);
+        Event Player.all_InspireHealID = Last Heal Over Time ID;
+        Event Player.all_InspireHealTime = Total Time Elapsed;
+    }
+}
+rule("allSub_HealAfterElim")
+{
+    event
+    {
+        Subroutine;
+        allSub_HealAfterElim;
+    }
+    actions
+    {
+        Wait(6 / 60, Ignore Condition);
+        Start Heal Over Time(Event Player, Null, 2, 55);
     }
 }
 rule("allSub_ButtonsDisallow")
@@ -3105,54 +3247,6 @@ rule("allSub_ButtonsAllow")
         Allow Button(Event Player, Button(Crouch));
         Allow Button(Event Player, Button(Melee));
         Allow Button(Event Player, Button(Reload));
-    }
-}
-rule("Player/Bot Elimination Heal")
-{
-    event
-    {
-        Player Dealt Final Blow;
-        All;
-        All;
-    }
-    conditions
-    {
-        Is Alive(Event Player) == True;
-        Health(Event Player) != Max Health(Event Player);
-        Event Player.all_HealingEnabled == True;
-    }
-    actions
-    {
-        Wait(6 / 60, Ignore Condition);
-        Start Heal Over Time(Event Player, Null, 2, 55);
-    }
-}
-rule("Player/Bot Inspire Heal")
-{
-    event
-    {
-        Player Dealt Damage;
-        All;
-        All;
-    }
-    conditions
-    {
-        Is Game In Progress == True;
-        Is Alive(Event Player) == True;
-        Is Alive(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) == True;
-        Event Player.all_HealingEnabled == True;
-        Total Time Elapsed >= Event Player.all_InspireHealTime + 1;
-        Event Damage > 5;
-    }
-    actions
-    {
-        "Essentially Brigitte's Inspire"
-        If(Event Player.all_InspireHealID != 0);
-            Stop Heal Over Time(Event Player.all_InspireHealID);
-        End;
-        Start Heal Over Time(Event Player, Null, 6, 15);
-        Event Player.all_InspireHealID = Last Heal Over Time ID;
-        Event Player.all_InspireHealTime = Total Time Elapsed;
     }
 }
 rule("Special Rule: Doomfist Rocket Punch Start")
@@ -9133,6 +9227,7 @@ rule("AI Reinhardt Charge")
         Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) < 2;
         Altitude Of(Event Player) < 2;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+        Ultimate Charge Percent(Event Player) < 90;
     }
     actions
     {
@@ -9187,6 +9282,7 @@ rule("AI Reinhardt Firestrike")
             Eye Position(Event Player)), 0), 15) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 20;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+        Ultimate Charge Percent(Event Player) < 90;
     }
     actions
     {
@@ -9213,9 +9309,9 @@ rule("AI Reinhardt Earthshatter")
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
         Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+            Eye Position(Event Player)), 0), 20) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 16;
-        Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
+        Health(Players In Slot(Slot Of(Event Player), Team 1)) > 80;
         Health(Event Player) >= 50;
         Is On Ground(Event Player) == True;
         Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;

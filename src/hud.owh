@@ -204,6 +204,7 @@ rule("hudSub_SkyMenuToggle")
 
 	actions
 	{
+		// Close other HUD elements if they're open because Effects budget
 		If(Players In Slot(Slot Of(Event Player), Team 1).hud_InfoEnabled == True);
 			Call Subroutine(hudSub_InfoToggle);
 		End;
@@ -213,7 +214,10 @@ rule("hudSub_SkyMenuToggle")
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_Main) > 0);
 			Call Subroutine(hudSub_MainToggle);
 		End;
+
 		Wait(3 / 60, Ignore Condition);
+
+		// Exit the menu
 		If(Count Of(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu) > 0);
 			For Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_i, Count Of(Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenu), -1, -1);
@@ -246,6 +250,8 @@ rule("hudSub_SkyMenuToggle")
 			Else;
 				Call Subroutine(botSub_TeleportBot);
 			End;
+
+		// Open the menu
 		Else;
 			If(Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled == True);
 				Call Subroutine(botSub_ResetBot);
@@ -265,6 +271,7 @@ rule("hudSub_SkyMenuToggle")
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo = Players In Slot(Slot Of(Event Player), Team 1);
 			Call Subroutine(hudSub_SkyMenuArrowSet);
 			Disable Hero HUD(Players In Slot(Slot Of(Event Player), Team 1));
+
 			"Generate Menu"
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors = Empty Array;
 			For Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_i, -1, 14, 1);
@@ -273,15 +280,7 @@ rule("hudSub_SkyMenuToggle")
 			End;
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection = Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuVectors[0];
-			// "Start Camera"
-			// Stop Camera(Event Player);
-			// Event Player.p_CameraEyePos = Eye Position(Event Player);
-			// Event Player.p_CameraLookAtPos = Ray Cast Hit Position(Eye Position(Event Player), Eye Position(Event Player)
-			// + Facing Direction Of(Event Player) * 1, Null, Event Player, False);
-			// Start Camera(Event Player, Event Player.p_CameraEyePos, Event Player.p_CameraLookAtPos, 10);
-			// Chase Player Variable Over Time(Event Player, p_CameraEyePos, Players In Slot(Slot Of(Event Player), Team 1)
-			// 	.hud_SkyMenuSelection - Vector(0, 15, 0.001), 0.500, Destination And Duration);
-			// Chase Player Variable Over Time(Event Player, p_CameraLookAtPos, Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection, 0.500, Destination And Duration);
+			
 			"Menu Selection Arrows"
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo = Array(Null, Null);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu = Empty Array;
@@ -293,6 +292,8 @@ rule("hudSub_SkyMenuToggle")
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection + Vector(-4.500, 0, 0), 1.250, Clip Against Surfaces,
 				Visible To Position and String, Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
+			"Selection Beams"
 			Create Beam Effect(Players In Slot(Slot Of(Event Player), Team 1), Bad Beam, Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuSelection + Vector(-4.500, 0, -0.500), Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuSelection + Vector(4.500, 0, -0.500), Event Player.p_EffectsColor, Position Radius and Color);
@@ -301,6 +302,7 @@ rule("hudSub_SkyMenuToggle")
 				.hud_SkyMenuSelection + Vector(-4.500, 0, -1.500), Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuSelection + Vector(4.500, 0, -1.500), Event Player.p_EffectsColor, Position Radius and Color);
 			Players In Slot(Slot Of(Event Player), Team 1).p_Effects[11] = Last Created Entity;
+
 			"Menu Text"
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("난이도: {0}", Players In Slot(Slot Of(Event Player), Team 1)
@@ -309,6 +311,7 @@ rule("hudSub_SkyMenuToggle")
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[0], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("필요한 킬 수: {0}", Players In Slot(Slot Of(Event Player), Team 1)
 				.p_KillGoal == Global.c_PseudoInfinity ? Custom String("무한") : Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal)
@@ -317,6 +320,7 @@ rule("hudSub_SkyMenuToggle")
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[1], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("영웅 유형: {0}", Players In Slot(Slot Of(Event Player), Team 1)
 				.p_HeroClassNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroClass]) : Custom String("Hero Class: {0}",
@@ -324,6 +328,7 @@ rule("hudSub_SkyMenuToggle")
 				.p_BotHeroClass]), Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[2], 1.500, Clip Against Surfaces,
 				Visible To and String, Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("빠른 모드: {0}", Players In Slot(Slot Of(Event Player), Team 1)
 				.p_QuickModeEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Quick Mode: {0}", Players In Slot(
@@ -331,6 +336,7 @@ rule("hudSub_SkyMenuToggle")
 				Slot Of(Event Player), Team 1).hud_SkyMenuVectors[3], 1.500, Clip Against Surfaces, Visible To and String, Color(White),
 				Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("같은 영웅 모드: {0}", Players In Slot(Slot Of(Event Player), Team 1)
 				.p_MirrorModeEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Mirror Mode: {0}",
@@ -338,6 +344,7 @@ rule("hudSub_SkyMenuToggle")
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[4], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("1 초 쿨 다운 모드: {0}", Players In Slot(Slot Of(Event Player), Team 1)
 				.p_OneSecCooldown == 3 ? Custom String("플레이어 + 인공 지능") : (Players In Slot(Slot Of(Event Player), Team 1)
@@ -348,48 +355,58 @@ rule("hudSub_SkyMenuToggle")
 				.p_OneSecCooldown == 1 ? Custom String("Player") : Custom String("Off")))), Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuVectors[5], 1.500, Clip Against Surfaces, Visible To and String, Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+			
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("킬 점수 패널티: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-				.p_MinusKillOnDeath == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("-1 Kill On Death: {0}",
-				Players In Slot(Slot Of(Event Player), Team 1).p_MinusKillOnDeath == True ? Custom String("On") : Custom String("Off")),
+				.p_KillsLostOnDeath) : Custom String("Points Lost On Death: {0}",
+				Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath == Global.c_PseudoInfinity ? Custom String("All") : 
+				Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[6], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("플레이어 치유: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-				.all_HealingEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Healing: {0}",
-				Players In Slot(Slot Of(Event Player), Team 1).all_HealingEnabled == True ? Custom String("On") : Custom String("Off")),
+				.p_HealingEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Healing: {0}",
+				Players In Slot(Slot Of(Event Player), Team 1).p_HealingEnabled == True ? Custom String("On") : Custom String("Off")),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[7], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
-				Team 1).p_Language == 1 ? Custom String("인공지는 치유: {0}", Players In Slot(Slot Of(Event Player), Team 2)
-				.all_HealingEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Bot Healing: {0}",
-				Players In Slot(Slot Of(Event Player), Team 2).all_HealingEnabled == True ? Custom String("On") : Custom String("Off")),
+				Team 1).p_Language == 1 ? Custom String("인공지는 치유: {0}", Players In Slot(Slot Of(Event Player), Team 1)
+				.p_BotHealingEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Bot Healing: {0}",
+				Players In Slot(Slot Of(Event Player), Team 1).p_BotHealingEnabled == True ? Custom String("On") : Custom String("Off")),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[8], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("플레이어는 죽일 수 없다: {0}", Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Unkillable == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Unkillable: {0}",
-				Players In Slot(Slot Of(Event Player), Team 1).p_Unkillable == True ? Custom String("On") : Custom String("Off")),
+				.p_Invulnerable == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Unkillable: {0}",
+				Players In Slot(Slot Of(Event Player), Team 1).p_Invulnerable == 3 ? Custom String("On (Invincible)")
+				: Players In Slot(Slot Of(Event Player), Team 1).p_Invulnerable == 2 ? Custom String("On (Phased Out)")
+				: Players In Slot(Slot Of(Event Player), Team 1).p_Invulnerable == 1 ? Custom String("On (Unkillable)") : Custom String("Off")),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[9], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
-				Team 1).p_Language == 1 ? Custom String("인공지는 궁극적 인 장애인: {0}", Players In Slot(Slot Of(Event Player), Team 2)
-				.ai_UltimateDisabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Disable Bot Ultimate: {0}",
-				Players In Slot(Slot Of(Event Player), Team 2).ai_UltimateDisabled == True ? Custom String("On") : Custom String("Off")),
+				Team 1).p_Language == 1 ? Custom String("인공지는 궁극적 인 장애인: {0}", Players In Slot(Slot Of(Event Player), Team 1)
+				.p_BotUltimateDisabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Disable Bot Ultimate: {0}",
+				Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True ? Custom String("On") : Custom String("Off")),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[10], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
-				Team 1).p_Language == 1 ? Custom String("인공지는 깜박거리는: {0}", Players In Slot(Slot Of(Event Player), Team 2)
-				.bot_FlickerEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Bot Flicker: {0}",
-				Players In Slot(Slot Of(Event Player), Team 2).bot_FlickerEnabled == True ? Custom String("On") : Custom String("Off")),
+				Team 1).p_Language == 1 ? Custom String("인공지는 깜박거리는: {0}", Players In Slot(Slot Of(Event Player), Team 1)
+				.p_BotFlickerEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Bot Flicker: {0}",
+				Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True ? Custom String("On") : Custom String("Off")),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[11], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("플레이어 엘리베이터: {0}", Players In Slot(Slot Of(Event Player), Team 1)
 				.p_ElevatorEnabled == True ? Custom String("활성화") : Custom String("비활성화")) : Custom String("Player Elevator: {0}",
@@ -397,12 +414,14 @@ rule("hudSub_SkyMenuToggle")
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors[12], 1.500, Clip Against Surfaces, Visible To and String,
 				Color(White), Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("색깔: {0}", Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor)
 				: Custom String("Bubble & Effect Color: {0}", Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor), Players In Slot(
 				Slot Of(Event Player), Team 1).hud_SkyMenuVectors[13], 1.500, Clip Against Surfaces, Visible To and String, Color(White),
 				Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo, Players In Slot(Slot Of(Event Player),
 				Team 1).p_Language == 1 ? Custom String("언어: {0}", Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("한국어") : Custom String("English")) : Custom String("Language: {0}", Players In Slot(Slot Of(
@@ -410,8 +429,10 @@ rule("hudSub_SkyMenuToggle")
 				Event Player), Team 1).hud_SkyMenuVectors[14], 1.500, Clip Against Surfaces, Visible To and String, Color(White),
 				Default Visibility);
 			Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenu, Append To Array, Last Text ID);
+			
 			Call Subroutine(hudSub_SkyMenuArrowSet);
 			Stop Camera(Event Player);
+			Call Subroutine(allSub_WaitForFrame);
 			Start Camera(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.hud_SkyMenuSelection - Vector(0, 15, 0.001), Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection, 30);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuIsOpen = True;
@@ -422,6 +443,7 @@ rule("hudSub_SkyMenuToggle")
 				Button(Melee))) : Custom String("Press {0} and {1} to close the menu", Input Binding String(Button(Reload)),
 				Input Binding String(Button(Melee))));
 		End;
+
 		Play Effect(Players In Slot(Slot Of(Event Player), Team 1), Buff Explosion Sound, Color(White), Players In Slot(Slot Of(
 			Event Player), Team 1).hud_SkyMenuSelection - Vector(0, 15, 0), 75);
 	}

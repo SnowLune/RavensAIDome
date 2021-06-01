@@ -165,7 +165,6 @@ variables
 		34:  ai_ProjectileSpeeds
 		35:  ai_ReactionTime
 		36:  ai_StrafeDistanceMod
-		37:  ai_UltimateDisabled
 		38:  ai_ViewAngleMod
 		39:  ai_WeaponChargeTime
 
@@ -173,7 +172,6 @@ variables
 		// Shared variables
 		//
 		40:  all_ChangingHero
-		41:  all_HealingEnabled
 		42:  all_Index
 		43:  all_InspireHealID
 		44:  all_InspireHealTime
@@ -184,7 +182,6 @@ variables
 		// Bot variables
 		//
 		47:  bot_BotResetComplete
-		48:  bot_FlickerEnabled
 		49:  bot_MoveCrouchChanceMod
 		50:  bot_MoveCrouchEnabled
 		51:  bot_MoveCrouchTimeMod
@@ -241,14 +238,18 @@ variables
 		94:  p_HomeVector
 		95:  p_KillGoal
 		96:  p_Language
-		97:  p_MinusKillOnDeath
+		97:  p_KillsLostOnDeath
 		98:  p_MirrorModeEnabled
 		99:  p_OneSecCooldown
 		100: p_PlayerHero
 		101: p_PlayerInitialized
 		102: p_QuickModeEnabled
-		103: p_Unkillable
+		103: p_Invulnerable
 		104: p_ZoneRadius
+		48:  p_BotFlickerEnabled
+		41:  p_HealingEnabled
+		105: p_BotHealingEnabled
+		37:  p_BotUltimateDisabled
 }
 
 subroutines
@@ -305,6 +306,8 @@ subroutines
 	42: allSub_ButtonsAllow
 	43: allSub_ButtonsDisallow
 	44: allSub_WaitForFrame
+	65: allSub_HealAfterElim
+	66: allSub_HealAfterDamage
 
 	//
 	// Bot subroutines
@@ -337,5 +340,6 @@ subroutines
 	62: pSub_SetHeroClass
 	63: pSub_SetNames
 	64: pSub_SetLanguage
+	67: pSub_SetInvulnerable
 }
 

@@ -9,9 +9,9 @@ rule("Player Init")
 
 	conditions
 	{
-		Is Game In Progress == True;
-		Has Spawned(Event Player) == True;
+		Global.g_Initialized == True;
 		Event Player.p_PlayerInitialized == False;
+		Has Spawned(Event Player) == True;
 	}
 
 	actions
@@ -42,9 +42,9 @@ rule("Player Init")
 		Event Player.p_KillGoal = Global.g_KillGoal;
 		Call Subroutine(pSub_SetHeroClass);
 		Event Player.hud_InfoEnabled = False;
-		Event Player.all_HealingEnabled = Global.g_PlayerHealing;
+		Event Player.p_HealingEnabled = Global.g_PlayerHealing;
 		Event Player.p_OneSecCooldown = False;
-		Event Player.p_MinusKillOnDeath = False;
+		Event Player.p_KillsLostOnDeath = 0;
 		Event Player.p_MirrorModeEnabled = False;
 		Event Player.p_Difficulty = Global.g_Difficulty;
 		Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
@@ -123,6 +123,21 @@ rule("Player Init")
 			Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
 			Modify Global Variable(g_BotNames, Append To Array, Custom String("{0}", Event Player));
 		End;
+
+		"Bot Init"
+		Wait(0.100, Ignore Condition);
+		Call Subroutine(botSub_SetHero);
+
+		"Setup difficulty"
+		Call Subroutine(pSub_SetDifficulty);
+		Event Player.p_BotHealingEnabled = Global.g_BotHealing;
+		"Face enemy bot after it is created"
+		Stop Facing(Event Player);
+		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
+			Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
+			Players In Slot(Slot Of(Event Player), Team 2)))) * 10, To World, None);
+		Wait(12 / 60, Ignore Condition);
+		Stop Facing(Event Player);
 	}
 }
 
@@ -145,6 +160,52 @@ rule("Player Died")
 		Stop Heal Over Time(Event Player.all_InspireHealID);
 		Set Status(Event Player, Null, Invincible, 2.250);
 		Stop Forcing Player Position(Event Player);
+	}
+}
+
+rule("Player Heal After Elim")
+{
+	event
+	{
+		Player Dealt Final Blow;
+		Team 1;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Health(Event Player) != Max Health(Event Player);
+		Event Player.p_HealingEnabled == True;
+	}
+
+	actions
+	{
+		Call Subroutine(allSub_HealAfterElim);
+	}
+}
+
+rule("Player Heal After Damage")
+{
+	event
+	{
+		Player Dealt Damage;
+		Team 1;
+		All;
+	}
+
+	conditions
+	{
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+		Event Player.p_HealingEnabled == True;
+		Total Time Elapsed >= Event Player.all_InspireHealTime + 1;
+		Event Damage > 5;
+	}
+
+	actions
+	{
+		Call Subroutine(allSub_HealAfterDamage);
 	}
 }
 

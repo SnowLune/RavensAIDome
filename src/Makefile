@@ -16,7 +16,6 @@ FILES=	\
 	bot.owh \
 	bot.ow \
 	shared.owh \
-	shared.ow \
 	special.ow \
 	ai.owh \
 	ai.ow \

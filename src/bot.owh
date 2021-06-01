@@ -67,18 +67,26 @@ rule("botSub_ResetBot")
 			Small Message(Players In Slot(Slot Of(Event Player), Team 1), Custom String("{0}  {1}!", Hero Icon String(Hero Of(Players In Slot(
 				Slot Of(Event Player), Team 2))), Hero Of(Players In Slot(Slot Of(Event Player), Team 2))));
 		End;
+
 		"Set Unkillable"
 		Call Subroutine(allSub_WaitForFrame);
 		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3 && (
 			Global.g_DebugHero[0] == False && Global.g_DebugMode == False) == True);
 			Set Status(Players In Slot(Slot Of(Event Player), Team 2), Null, Unkillable, 9999);
 		End;
+
 		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
 			Players In Slot(Slot Of(Event Player), Team 2).ai_StrafeDistanceMod = 5;
 			If(Global.g_DebugHero[0] == True || Global.g_DebugMode == True);
 				Call Subroutine(aiSub_EnableAI);
 			End;
 		End;
+
+		"Disable Ultimate if player has that option set"
+		If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
+			Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
+		End;
+
 		Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete = True;
 	}
 }

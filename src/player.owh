@@ -213,3 +213,27 @@ rule("pSub_Elevator")
 	}
 }
 
+rule("pSub_SetInvulnerable")
+{
+	event
+	{
+		Subroutine;
+		pSub_SetInvulnerable;
+	}
+
+	actions
+	{
+		Clear Status(Event Player, Unkillable);
+		Clear Status(Event Player, Phased Out);
+		Clear Status(Event Player, Invincible);
+
+		If(Event Player.p_Invulnerable == 1);
+			Set Status(Event Player, Null, Unkillable, Global.c_PseudoInfinity);
+		Else If(Event Player.p_Invulnerable == 2);
+			Set Status(Event Player, Null, Phased Out, Global.c_PseudoInfinity);
+		Else If(Event Player.p_Invulnerable == 3);
+			Set Status(Event Player, Null, Invincible, Global.c_PseudoInfinity);
+		End;
+	}
+}
+
