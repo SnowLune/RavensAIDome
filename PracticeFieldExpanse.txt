@@ -315,7 +315,7 @@ rule("Global Settings")
             7);
         Global.g_OneSecCooldown = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
             "Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"), False, 8);
-        Global.g_DebugHero = Empty Array;
+        Global.g_DebugHero = Array();
         Global.g_DebugHero[0] = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
             "Debug Hero Enabled / 디버그 영웅 활성화"), False, 9);
         If(Global.g_DebugHero[0] == True);
@@ -364,8 +364,8 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.14.0-test.5");
-        Global.c_BuildDate = Custom String("20210527");
+        Global.c_Version = Custom String("0.14.0-test.6");
+        Global.c_BuildDate = Custom String("20210604");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Snow#15707");
         Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -610,7 +610,7 @@ rule("hudSub_DebugToggle")
                 Call Subroutine(hudSub_MainToggle);
             End;
         Else;
-            Players In Slot(Slot Of(Event Player), Team 1).hud_Debug = Empty Array;
+            Players In Slot(Slot Of(Event Player), Team 1).hud_Debug = Array();
             Players In Slot(Slot Of(Event Player), Team 1).hud_DebugEnabled = True;
             Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Server Load: {0}% ({1})", Round To Integer(
                 Server Load / 2.550, Down), Server Load), Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550,
@@ -698,7 +698,7 @@ rule("hudSub_MainToggle")
             End;
         Else;
             Wait(3 / 60, Ignore Condition);
-            Players In Slot(Slot Of(Event Player), Team 1).hud_Main = Empty Array;
+            Players In Slot(Slot Of(Event Player), Team 1).hud_Main = Array();
             "Create Right Side HUD Text"
             Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
                 .p_Language == 1 ? Custom String("{0} 킬: {1} / {2}", Hero Icon String(Players In Slot(Slot Of(Event Player), Team 1)
@@ -838,7 +838,7 @@ rule("hudSub_SkyMenuToggle")
             Call Subroutine(hudSub_SkyMenuArrowSet);
             Disable Hero HUD(Players In Slot(Slot Of(Event Player), Team 1));
             "Generate Menu"
-            Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors = Empty Array;
+            Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors = Array();
             For Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_i, -1, 14, 1);
                 Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenuVectors, Append To Array, Vector(0, 45,
                     1.250 * Players In Slot(Slot Of(Event Player), Team 1).hud_i));
@@ -847,7 +847,7 @@ rule("hudSub_SkyMenuToggle")
                 .hud_SkyMenuVectors[0];
             "Menu Selection Arrows"
             Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo = Array(Null, Null);
-            Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu = Empty Array;
+            Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu = Array();
             Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo[0], Icon String(Arrow: Left),
                 Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection + Vector(4.500, 0, 0), 1.250, Clip Against Surfaces,
                 Visible To Position and String, Color(White), Default Visibility);
@@ -1660,7 +1660,7 @@ rule("Player Set Names")
     }
     actions
     {
-        Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames = Empty Array;
+        Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames = Array();
         Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[0] = Players In Slot(Slot Of(Event Player), Team 1)
             .p_Language == 1 ? Custom String("안전하고 쉬움") : Custom String("No AI Easy");
         Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[1] = Players In Slot(Slot Of(Event Player), Team 1)
@@ -1683,7 +1683,7 @@ rule("Player Set Names")
             .p_Language == 1 ? Custom String("인공지능 그랜드마스터") : Custom String("AI Grandmaster");
         Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[10] = Players In Slot(Slot Of(Event Player), Team 1)
             .p_Language == 1 ? Custom String("인공지능 상위500위") : Custom String("AI Top 500");
-        Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames = Empty Array;
+        Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames = Array();
         Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[0] = Players In Slot(Slot Of(Event Player), Team 1)
             .p_Language == 1 ? Custom String("모든") : Custom String("All");
         Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[1] = Players In Slot(Slot Of(Event Player), Team 1)
@@ -1758,7 +1758,7 @@ rule("pSub_Elevator")
         Wait(0.250, Ignore Condition);
         Stop Forcing Player Position(Event Player);
         Stop Forcing Throttle(Event Player);
-        Event Player.p_ElevatorPosition = Empty Array;
+        Event Player.p_ElevatorPosition = Array();
         Event Player.p_ElevatorPosition[0] = Position Of(Event Player);
         Wait(0.100, Ignore Condition);
         Event Player.p_ElevatorPosition[1] = Position Of(Event Player);
@@ -1842,9 +1842,9 @@ rule("Player Init")
         Event Player.p_PlayerHero = Hero Of(Event Player);
         Call Subroutine(pSub_SetDistances);
         "HUD Object Arrays"
-        Event Player.hud_Info = Empty Array;
-        Event Player.hud_Debug = Empty Array;
-        Event Player.hud_SkyMenu = Empty Array;
+        Event Player.hud_Info = Array();
+        Event Player.hud_Debug = Array();
+        Event Player.hud_SkyMenu = Array();
         "Set Home Vector"
         If(Slot Of(Event Player) == 0);
             Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
@@ -1859,7 +1859,7 @@ rule("Player Init")
         Else If(Slot Of(Event Player) == 5);
             Event Player.p_HomeVector = Vector(0, 0, -380 + Global.c_BubbleRadius);
         End;
-        Event Player.p_Effects = Empty Array;
+        Event Player.p_Effects = Array();
         "Create Player Bubble"
         Create Effect(All Players(All Teams), Sphere, Event Player.p_EffectsColor, Event Player.p_HomeVector, Global.c_BubbleRadius,
             Color);
@@ -2497,7 +2497,7 @@ rule("Player Elevator Movement Stop")
     actions
     {
         Stop Accelerating(Event Player);
-        Event Player.p_ElevatorPosition = Empty Array;
+        Event Player.p_ElevatorPosition = Array();
         Event Player.p_ElevatorPosition[0] = Position Of(Event Player);
         Wait(0.100, Ignore Condition);
         Event Player.p_ElevatorPosition[1] = Position Of(Event Player);
@@ -2534,23 +2534,38 @@ rule("botSub_ResetBot")
         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
         "Force to be current hero or create dummy bot"
         Call Subroutine(allSub_WaitForFrame);
-        If(Hero Of(Players In Slot(Slot Of(Event Player), Team 2)) != Players In Slot(Slot Of(Event Player), Team 1)
-            .p_HeroList[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber]);
+        If(
+            Hero Of(Players In Slot(Slot Of(Event Player), Team 2))
+            != Players In Slot(Slot Of(Event Player), Team 1).p_HeroList
+                [Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber]
+        );
             If(Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)));
                 Call Subroutine(allSub_WaitForFrame);
                 Destroy Dummy Bot(Team 2, Slot Of(Event Player));
                 Wait Until(Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)) == False, 5);
             End;
             Call Subroutine(allSub_WaitForFrame);
-            Create Dummy Bot(Players In Slot(Slot Of(Event Player), Team 1).p_HeroList[Players In Slot(Slot Of(Event Player), Team 1)
-                .p_BotHeroNumber], Team 2, Slot Of(Event Player), Vector(0, 0, 0), Vector(0, 0, 0));
+            Create Dummy Bot(
+                Players In Slot(Slot Of(Event Player), Team 1).p_HeroList
+                    [Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber],
+                Team 2,
+                Slot Of(Event Player),
+                Vector(0, 0, 0),
+                Vector(0, 0, 0)
+            );
             Wait Until(Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)), 5);
             "If Mirror Mode is on use the Player's name"
             If(Players In Slot(Slot Of(Event Player), Team 1).p_MirrorModeEnabled == True);
-                Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Custom String("{0}", Players In Slot(Slot Of(Event Player), Team 1)));
+                Start Forcing Dummy Bot Name(
+                    Players In Slot(Slot Of(Event Player), Team 2),
+                    Custom String("{0}", Players In Slot(Slot Of(Event Player), Team 1))
+                );
             "Give the bot a silly name. For Fun."
             Else If(Global.g_UseBotNames == True);
-                If(Count Of(Global.g_BotNames) - Count Of(Mapped Array(All Players(Team 1), Custom String("{0}", Current Array Element))) <= 0);
+                If(
+                    Count Of(Global.g_BotNames)
+                    - Count Of(Mapped Array(All Players(Team 1), Custom String("{0}", Current Array Element))) <= 0
+                );
                     Global.g_BotNames = Append To Array(Global.c_BotNamesConst, Global.g_PlayerNames);
                 End;
                 Players In Slot(Slot Of(Event Player), Team 2).bot_Name = Random Value In Array(
@@ -2559,9 +2574,16 @@ rule("botSub_ResetBot")
                         Mapped Array(All Players(Team 1), Custom String("{0}", Current Array Element))
                     )
                 );
-                Modify Global Variable(g_BotNames, Remove From Array By Value, Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
+                Modify Global Variable(
+                    g_BotNames,
+                    Remove From Array By Value,
+                    Players In Slot(Slot Of(Event Player), Team 2).bot_Name
+                );
                 Stop Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2));
-                Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 2).bot_Name);
+                Start Forcing Dummy Bot Name(
+                    Players In Slot(Slot Of(Event Player), Team 2),
+                    Players In Slot(Slot Of(Event Player), Team 2).bot_Name
+                );
             End;
             Call Subroutine(pSub_SetDifficulty);
             Disable Built-In Game Mode Respawning(Players In Slot(Slot Of(Event Player), Team 2));
@@ -2569,13 +2591,25 @@ rule("botSub_ResetBot")
             Set Invisible(Players In Slot(Slot Of(Event Player), Team 2), All);
             "Wait a frame after changing hero or creating bot"
             Call Subroutine(allSub_WaitForFrame);
-            Small Message(Players In Slot(Slot Of(Event Player), Team 1), Custom String("{0}  {1}!", Hero Icon String(Hero Of(Players In Slot(
-                Slot Of(Event Player), Team 2))), Hero Of(Players In Slot(Slot Of(Event Player), Team 2))));
+            Small Message(
+                Players In Slot(Slot Of(Event Player), Team 1),
+                Custom String(
+                    "{0}  {1}!",
+                    Hero Icon String(
+                        Hero Of(Players In Slot(Slot Of(Event Player), Team 2))
+                    ),
+                    Hero Of(Players In Slot(Slot Of(Event Player), Team 2))
+                )
+            );
         End;
         "Set Unkillable"
         Call Subroutine(allSub_WaitForFrame);
-        If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3 && (
-            Global.g_DebugHero[0] == False && Global.g_DebugMode == False) == True);
+        If(
+            Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3
+            && 
+            (Global.g_DebugHero[0] == False && Global.g_DebugMode == False)
+            == True
+        );
             Set Status(Players In Slot(Slot Of(Event Player), Team 2), Null, Unkillable, 9999);
         End;
         If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
@@ -2600,8 +2634,16 @@ rule("botSub_SetHero")
     }
     actions
     {
-        If(Health(Players In Slot(Slot Of(Event Player), Team 1)) != Max Health(Players In Slot(Slot Of(Event Player), Team 1)));
-            Heal(Players In Slot(Slot Of(Event Player), Team 1), Null, Max Health(Players In Slot(Slot Of(Event Player), Team 1)));
+        If(
+            Health(Players In Slot(Slot Of(Event Player), Team 1))
+            !=
+            Max Health(Players In Slot(Slot Of(Event Player), Team 1))
+        );
+            Heal(
+                Players In Slot(Slot Of(Event Player), Team 1),
+                Null,
+                Max Health(Players In Slot(Slot Of(Event Player), Team 1))
+            );
         End;
         Players In Slot(Slot Of(Event Player), Team 1).all_Kills = 0;
         Players In Slot(Slot Of(Event Player), Team 2).all_Kills = 0;
@@ -2609,24 +2651,26 @@ rule("botSub_SetHero")
             If(Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber == Count Of(Event Player.p_HeroList) - 1);
                 Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber = 0;
             Else;
-                Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber = Players In Slot(Slot Of(Event Player), Team 1)
-                    .p_BotHeroNumberNext;
+                Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber =
+                    Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumberNext;
             End;
         Else If(Players In Slot(Slot Of(Event Player), Team 1).p_HeroNumberMod == -1);
             If(Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber == 0);
-                Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber = Count Of(Players In Slot(Slot Of(Event Player), Team 1)
-                    .p_HeroList) - 1;
+                Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber = 
+                    Count Of(Players In Slot(Slot Of(Event Player), Team 1).p_HeroList) - 1;
             Else;
                 Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber -= 1;
             End;
-        Else;
         End;
-        If(Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber == Count Of(Players In Slot(Slot Of(Event Player), Team 1)
-            .p_HeroList) - 1);
+        If(
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber
+            ==
+            Count Of(Players In Slot(Slot Of(Event Player), Team 1).p_HeroList) - 1
+        );
             Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumberNext = 0;
         Else;
-            Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumberNext = Players In Slot(Slot Of(Event Player), Team 1)
-                .p_BotHeroNumber + 1;
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumberNext =
+                Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber + 1;
         End;
         Players In Slot(Slot Of(Event Player), Team 1).p_HeroNumberMod = 0;
         Call Subroutine(botSub_ResetBot);
@@ -2646,41 +2690,76 @@ rule("botSub_TeleportBot")
         Call Subroutine(allSub_WaitForFrame);
         Set Invisible(Players In Slot(Slot Of(Event Player), Team 2), All);
         Call Subroutine(allSub_WaitForFrame);
-        Set Facing(Players In Slot(Slot Of(Event Player), Team 2), Vector(Random Real(-1, 1), Random Real(-0.500, 0.500), Random Real(-1,
-            1)), To Player);
+        Set Facing(
+            Players In Slot(Slot Of(Event Player), Team 2),
+            Vector(
+                Random Real(-1, 1),
+                Random Real(-0.500, 0.500),
+                Random Real(-1,    1)
+            ),
+            To Player
+        );
         Call Subroutine(allSub_WaitForFrame);
-        Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMod = Players In Slot(Slot Of(Event Player), Team 1)
-            .p_EnemyDistanceMax / Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal * 2;
+        Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMod = 
+            Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax
+            / Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal * 2;
         Call Subroutine(allSub_WaitForFrame);
-        If(Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal != 1 && Players In Slot(Slot Of(Event Player), Team 1)
-            .p_KillGoal != Global.c_PseudoInfinity);
-            Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance = Empty Array;
-            Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[0] = (Players In Slot(Slot Of(Event Player), Team 1)
-                .p_KillGoal - 1 - Players In Slot(Slot Of(Event Player), Team 1).all_Kills) % (Players In Slot(Slot Of(Event Player), Team 1)
-                .p_KillGoal / 2) * Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMod;
-            Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[1] = Players In Slot(Slot Of(Event Player), Team 1)
-                .p_BotTPDistance[0] + Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMod;
-            If(Players In Slot(Slot Of(Event Player), Team 1).all_Kills == 0 || Players In Slot(Slot Of(Event Player), Team 1)
-                .all_Kills == Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal / 2);
-                Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[1] = Players In Slot(Slot Of(Event Player), Team 1)
-                    .p_BotTPDistance[1] - 2.500;
+        If(
+            Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal != 1 &&
+            Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal != Global.c_PseudoInfinity
+        );
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance = Array();
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[0] = (
+                Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal - 1
+                - Players In Slot(Slot Of(Event Player), Team 1).all_Kills
+            ) % (Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal / 2)
+            * Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMod;
+            Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[1] = 
+                Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[0]
+                + Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMod;
+            If(
+                Players In Slot(Slot Of(Event Player), Team 1).all_Kills == 0 ||
+                Players In Slot(Slot Of(Event Player), Team 1).all_Kills == 
+                    Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal / 2
+            );
+                Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[1] =
+                    Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[1] - 2.500;
             End;
             Call Subroutine(allSub_WaitForFrame);
-            Teleport(Players In Slot(Slot Of(Event Player), Team 2), Direction From Angles(Random Integer(1, 360), 0) * Random Integer(
-                Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[0], Players In Slot(Slot Of(Event Player), Team 1)
-                .p_BotTPDistance[1]) + Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector);
+            Teleport(
+                Players In Slot(Slot Of(Event Player), Team 2),
+                Direction From Angles(Random Integer(1, 360), 0)
+                * Random Integer(
+                    Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[0], 
+                    Players In Slot(Slot Of(Event Player), Team 1).p_BotTPDistance[1]
+                )
+                + Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+            );
         Else;
             Call Subroutine(allSub_WaitForFrame);
-            Teleport(Players In Slot(Slot Of(Event Player), Team 2), Direction From Angles(Random Integer(1, 360), 0) * Random Real(0,
-                Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax) + Players In Slot(Slot Of(Event Player), Team 1)
-                .p_HomeVector);
+            Teleport(
+                Players In Slot(Slot Of(Event Player), Team 2),
+                Direction From Angles(Random Integer(1, 360), 0)
+                * Random Real(0, Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax)
+                + Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+            );
         End;
         Call Subroutine(allSub_WaitForFrame);
-        Play Effect(Players In Slot(Slot Of(Event Player), Team 1), Buff Impact Sound, Color(White), Players In Slot(Slot Of(Event Player),
-            Team 2), 180);
+        Play Effect(
+            Players In Slot(Slot Of(Event Player), Team 1),
+            Buff Impact Sound,
+            Color(White),
+            Players In Slot(Slot Of(Event Player), Team 2),
+            180
+        );
         Call Subroutine(allSub_WaitForFrame);
-        Play Effect(Players In Slot(Slot Of(Event Player), Team 1), Bad Pickup Effect, Color(White), Players In Slot(Slot Of(Event Player),
-            Team 2), 1);
+        Play Effect(
+            Players In Slot(Slot Of(Event Player), Team 1),
+            Bad Pickup Effect,
+            Color(White),
+            Players In Slot(Slot Of(Event Player), Team 2),
+            1
+        );
         Call Subroutine(allSub_WaitForFrame);
         Set Invisible(Players In Slot(Slot Of(Event Player), Team 2), None);
     }
@@ -2694,10 +2773,22 @@ rule("botSub_MoveWASD")
     }
     actions
     {
-        Start Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2), Players In Slot(Slot Of(Event Player), Team 2)
-            .bot_ThrottleDir, 1, To Player, Replace existing throttle, None);
-        Wait(Random Real(Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod / Players In Slot(Slot Of(Event Player),
-            Team 1).p_Difficulty, Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod), Ignore Condition);
+        Start Throttle In Direction(
+            Players In Slot(Slot Of(Event Player), Team 2),
+            Players In Slot(Slot Of(Event Player), Team 2).bot_ThrottleDir,
+            1,
+            To Player,
+            Replace existing throttle,
+            None
+        );
+        Wait(
+            Random Real(
+                Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod
+                / Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty,
+                Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDTimeMod
+            ),
+            Ignore Condition
+        );
     }
 }
 rule("botSub_MoveCrouch")
@@ -2713,8 +2804,13 @@ rule("botSub_MoveCrouch")
         If(Random Real(0, 1) < Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchChanceMod);
             Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch));
             Start Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch));
-            Wait(Random Real(Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchTimeMod / 5, Players In Slot(Slot Of(Event Player),
-                Team 2).bot_MoveCrouchTimeMod), Ignore Condition);
+            Wait(
+                Random Real(
+                    Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchTimeMod / 5,
+                    Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchTimeMod
+                ),
+                Ignore Condition
+            );
         End;
         Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch));
     }
@@ -2737,8 +2833,13 @@ rule("botSub_MoveJump")
                 Press Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
             End;
         End;
-        Wait(Random Real(Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpTimeMod / 5, Players In Slot(Slot Of(Event Player),
-            Team 2).bot_MoveJumpTimeMod), Ignore Condition);
+        Wait(
+            Random Real(
+                Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpTimeMod / 5,
+                Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpTimeMod
+            ),
+            Ignore Condition
+        );
     }
 }
 rule("botSub_ThrottleStop")

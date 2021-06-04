@@ -30,7 +30,7 @@ rule("hudSub_DebugToggle")
 				Call Subroutine(hudSub_MainToggle);
 			End;
 		Else;
-			Players In Slot(Slot Of(Event Player), Team 1).hud_Debug = Empty Array;
+			Players In Slot(Slot Of(Event Player), Team 1).hud_Debug = Array();
 			Players In Slot(Slot Of(Event Player), Team 1).hud_DebugEnabled = True;
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Custom String("Server Load: {0}% ({1})", Round To Integer(
 				Server Load / 2.550, Down), Server Load), Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550,
@@ -122,7 +122,7 @@ rule("hudSub_MainToggle")
 			End;
 		Else;
 			Wait(3 / 60, Ignore Condition);
-			Players In Slot(Slot Of(Event Player), Team 1).hud_Main = Empty Array;
+			Players In Slot(Slot Of(Event Player), Team 1).hud_Main = Array();
 			"Create Right Side HUD Text"
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("{0} 킬: {1} / {2}", Hero Icon String(Players In Slot(Slot Of(Event Player), Team 1)
@@ -273,7 +273,7 @@ rule("hudSub_SkyMenuToggle")
 			Disable Hero HUD(Players In Slot(Slot Of(Event Player), Team 1));
 
 			"Generate Menu"
-			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors = Empty Array;
+			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVectors = Array();
 			For Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_i, -1, 14, 1);
 				Modify Player Variable(Players In Slot(Slot Of(Event Player), Team 1), hud_SkyMenuVectors, Append To Array, Vector(0, 45,
 					1.250 * Players In Slot(Slot Of(Event Player), Team 1).hud_i));
@@ -283,7 +283,7 @@ rule("hudSub_SkyMenuToggle")
 			
 			"Menu Selection Arrows"
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo = Array(Null, Null);
-			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu = Empty Array;
+			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenu = Array();
 			Create In-World Text(Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuArrowsVisibleTo[0], Icon String(Arrow: Left),
 				Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuSelection + Vector(4.500, 0, 0), 1.250, Clip Against Surfaces,
 				Visible To Position and String, Color(White), Default Visibility);

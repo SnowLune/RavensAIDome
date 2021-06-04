@@ -52,9 +52,9 @@ rule("Player Init")
 		Event Player.p_PlayerHero = Hero Of(Event Player);
 		Call Subroutine(pSub_SetDistances);
 		"HUD Object Arrays"
-		Event Player.hud_Info = Empty Array;
-		Event Player.hud_Debug = Empty Array;
-		Event Player.hud_SkyMenu = Empty Array;
+		Event Player.hud_Info = Array();
+		Event Player.hud_Debug = Array();
+		Event Player.hud_SkyMenu = Array();
 		"Set Home Vector"
 		If(Slot Of(Event Player) == 0);
 			Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
@@ -69,7 +69,7 @@ rule("Player Init")
 		Else If(Slot Of(Event Player) == 5);
 			Event Player.p_HomeVector = Vector(0, 0, -380 + Global.c_BubbleRadius);
 		End;
-		Event Player.p_Effects = Empty Array;
+		Event Player.p_Effects = Array();
 		"Create Player Bubble"
 		Create Effect(All Players(All Teams), Sphere, Event Player.p_EffectsColor, Event Player.p_HomeVector, Global.c_BubbleRadius,
 			Color);
@@ -771,7 +771,7 @@ rule("Player Elevator Movement Stop")
 	actions
 	{
 		Stop Accelerating(Event Player);
-		Event Player.p_ElevatorPosition = Empty Array;
+		Event Player.p_ElevatorPosition = Array();
 		Event Player.p_ElevatorPosition[0] = Position Of(Event Player);
 		Wait(0.100, Ignore Condition);
 		Event Player.p_ElevatorPosition[1] = Position Of(Event Player);

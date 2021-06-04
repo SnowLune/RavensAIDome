@@ -97,7 +97,7 @@ rule("Player Set Names")
 
 	actions
 	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames = Empty Array;
+		Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames = Array();
 		Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[0] = Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Language == 1 ? Custom String("안전하고 쉬움") : Custom String("No AI Easy");
 		Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[1] = Players In Slot(Slot Of(Event Player), Team 1)
@@ -120,7 +120,7 @@ rule("Player Set Names")
 			.p_Language == 1 ? Custom String("인공지능 그랜드마스터") : Custom String("AI Grandmaster");
 		Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[10] = Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Language == 1 ? Custom String("인공지능 상위500위") : Custom String("AI Top 500");
-		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames = Empty Array;
+		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames = Array();
 		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[0] = Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Language == 1 ? Custom String("모든") : Custom String("All");
 		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[1] = Players In Slot(Slot Of(Event Player), Team 1)
@@ -201,7 +201,7 @@ rule("pSub_Elevator")
 		Wait(0.250, Ignore Condition);
 		Stop Forcing Player Position(Event Player);
 		Stop Forcing Throttle(Event Player);
-		Event Player.p_ElevatorPosition = Empty Array;
+		Event Player.p_ElevatorPosition = Array();
 		Event Player.p_ElevatorPosition[0] = Position Of(Event Player);
 		Wait(0.100, Ignore Condition);
 		Event Player.p_ElevatorPosition[1] = Position Of(Event Player);

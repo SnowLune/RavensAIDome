@@ -270,6 +270,8 @@ rule("AI Reinhardt Earthshatter")
 		Health(Event Player) >= 50;
 		Is On Ground(Event Player) == True;
 		Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		
+		// If the player is on Reinhardt and NOT using shield
 		(Hero Of(Players In Slot(Slot Of(Event Player), Team 1)) == Hero(Reinhardt) ? Is Firing Secondary(Players In Slot(Slot Of(
 			Event Player), Team 1)) == False : True) == True;
 	}

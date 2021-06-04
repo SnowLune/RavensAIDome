@@ -32,7 +32,7 @@ rule("Global Settings")
 			7);
 		Global.g_OneSecCooldown = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
 			"Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"), False, 8);
-		Global.g_DebugHero = Empty Array;
+		Global.g_DebugHero = Array();
 		Global.g_DebugHero[0] = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
 			"Debug Hero Enabled / 디버그 영웅 활성화"), False, 9);
 		If(Global.g_DebugHero[0] == True);
