@@ -364,7 +364,7 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.14.0-test.7");
+        Global.c_Version = Custom String("0.14.0-test.8");
         Global.c_BuildDate = Custom String("20210613");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Snow#15707");
@@ -499,12 +499,12 @@ rule("Global Defines")
         Global.c_BotNamesConst[4]  = Custom String("BeepBoop");
         Global.c_BotNamesConst[5]  = Custom String("BitsAndBytes");
         Global.c_BotNamesConst[6]  = Custom String("Blue");
-        Global.c_BotNamesConst[7]  = Custom String("Bread");
+        Global.c_BotNamesConst[7]  = Custom String("Mochi");
         Global.c_BotNamesConst[8]  = Custom String("BronzeSmurf");
         Global.c_BotNamesConst[9]  = Custom String("Comfort");
-        Global.c_BotNamesConst[10] = Custom String("CoolGamer");
+        Global.c_BotNamesConst[10] = Custom String("Enceladus");
         Global.c_BotNamesConst[11] = Custom String("Dirt");
-        Global.c_BotNamesConst[12] = Custom String("DontLeaveMe");
+        Global.c_BotNamesConst[12] = Custom String("Ganymede");
         Global.c_BotNamesConst[13] = Custom String("DoomfistOTP");
         Global.c_BotNamesConst[14] = Custom String("DoomSlayer");
         Global.c_BotNamesConst[15] = Custom String("DPSDiff");
@@ -519,12 +519,12 @@ rule("Global Defines")
         Global.c_BotNamesConst[24] = Custom String("GGILY");
         Global.c_BotNamesConst[25] = Custom String("GiveMeHanzo");
         Global.c_BotNamesConst[26] = Custom String("GlaDOS");
-        Global.c_BotNamesConst[27] = Custom String("Granola");
+        Global.c_BotNamesConst[27] = Custom String("Triton");
         Global.c_BotNamesConst[28] = Custom String("Greg");
         Global.c_BotNamesConst[29] = Custom String("HammerOnly");
         Global.c_BotNamesConst[30] = Custom String("HealPls");
-        Global.c_BotNamesConst[31] = Custom String("Healz");
-        Global.c_BotNamesConst[32] = Custom String("Holden");
+        Global.c_BotNamesConst[31] = Custom String("SRVacuum");
+        Global.c_BotNamesConst[32] = Custom String("Eris");
         Global.c_BotNamesConst[33] = Custom String("HotTopic");
         Global.c_BotNamesConst[34] = Custom String("IBMPC");
         Global.c_BotNamesConst[35] = Custom String("IDontMiss");
@@ -533,8 +533,8 @@ rule("Global Defines")
         Global.c_BotNamesConst[38] = Custom String("Instalock");
         Global.c_BotNamesConst[39] = Custom String("IntMain");
         Global.c_BotNamesConst[40] = Custom String("JustLikeBart");
-        Global.c_BotNamesConst[41] = Custom String("Kachow");
-        Global.c_BotNamesConst[42] = Custom String("Kyle");
+        Global.c_BotNamesConst[41] = Custom String("ICantDoMore");
+        Global.c_BotNamesConst[42] = Custom String("Aaron");
         Global.c_BotNamesConst[43] = Custom String("Player");
         Global.c_BotNamesConst[44] = Custom String("Mars");
         Global.c_BotNamesConst[45] = Custom String("Mercury");
@@ -551,9 +551,9 @@ rule("Global Defines")
         Global.c_BotNamesConst[56] = Custom String("OatMilk");
         Global.c_BotNamesConst[57] = Custom String("OnesAndZeros");
         Global.c_BotNamesConst[58] = Custom String("Overclocked");
-        Global.c_BotNamesConst[59] = Custom String("Paul");
+        Global.c_BotNamesConst[59] = Custom String("Deimos");
         Global.c_BotNamesConst[60] = Custom String("Persephone");
-        Global.c_BotNamesConst[61] = Custom String("Pizza");
+        Global.c_BotNamesConst[61] = Custom String("Phobos");
         Global.c_BotNamesConst[62] = Custom String("Princess");
         Global.c_BotNamesConst[63] = Custom String("Ramen");
         Global.c_BotNamesConst[64] = Custom String("Reboot");
@@ -575,6 +575,19 @@ rule("Global Defines")
         Global.c_BotNamesConst[80] = Custom String("HelloWorld");
         Global.c_BotNamesConst[81] = Custom String("Alien");
         Global.c_BotNamesConst[82] = Custom String("MyMainIsT500");
+        Global.c_BotNamesConst[83] = Custom String("SuperFan");
+        Global.c_BotNamesConst[84] = Custom String("Europa");
+        Global.c_BotNamesConst[85] = Custom String("Callisto");
+        Global.c_BotNamesConst[86] = Custom String("Io");
+        Global.c_BotNamesConst[87] = Custom String("LoveYourself");
+        Global.c_BotNamesConst[88] = Custom String("GoodLuck");
+        Global.c_BotNamesConst[89] = Custom String("ILoveCats");
+        Global.c_BotNamesConst[90] = Custom String("LoveDVa");
+        Global.c_BotNamesConst[91] = Custom String("Brig1Trick");
+        Global.c_BotNamesConst[92] = Custom String("Monke");
+        Global.c_BotNamesConst[93] = Custom String("GravNanoRein");
+        Global.c_BotNamesConst[94] = Custom String("StanLOONA");
+        Global.c_BotNamesConst[95] = Custom String("OverTuned");
         Global.g_PlayerNames = Array();
         Global.g_Initialized = True;
     }
@@ -10630,6 +10643,7 @@ rule("AI Torbjorn Deploy Turret")
         Is Using Ultimate(Event Player) == False;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Is Using Ability 1(Event Player) == False;
+        Players In Slot(Slot Of(Event Player), Team 1).all_Kills % 2 == 0;
     }
     actions
     {

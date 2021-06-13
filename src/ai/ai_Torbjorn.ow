@@ -167,6 +167,10 @@ rule("AI Torbjorn Deploy Turret")
 		Is Using Ultimate(Event Player) == False;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 		Is Using Ability 1(Event Player) == False;
+
+		// People REALLY hate Torb turret but I don't want to totally remove it
+		// He can only use it when the player has an Even score
+		Players In Slot(Slot Of(Event Player), Team 1).all_Kills % 2 == 0;
 	}
 
 	actions
