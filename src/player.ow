@@ -121,7 +121,6 @@ rule("Player Init")
 		"Add Player name to pool of names"
 		If(Global.g_UseBotNames == True && Count Of(Global.g_PlayerNames) < 256);
 			Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
-			Modify Global Variable(g_BotNames, Append To Array, Custom String("{0}", Event Player));
 		End;
 
 		"Bot Init"
