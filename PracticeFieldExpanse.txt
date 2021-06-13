@@ -364,12 +364,12 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.14.0-test.8");
+        Global.c_Version = Custom String("0.14.0-test.9");
         Global.c_BuildDate = Custom String("20210613");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Snow#15707");
         Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
-        Global.c_GithubURL = Custom String("github.com/SnowLune/PracticeFieldExpanse/tree/dev");
+        Global.c_GithubURL = Custom String("github.com/SnowLune/PracticeFieldExpanse");
         Global.c_DiscordLink = Custom String("TBA");
         Global.c_LongDistance = 65;
         Global.c_MediumDistance = 50;
@@ -1915,7 +1915,6 @@ rule("Player Init")
         "Add Player name to pool of names"
         If(Global.g_UseBotNames == True && Count Of(Global.g_PlayerNames) < 256);
             Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
-            Modify Global Variable(g_BotNames, Append To Array, Custom String("{0}", Event Player));
         End;
         "Bot Init"
         Wait(0.100, Ignore Condition);
