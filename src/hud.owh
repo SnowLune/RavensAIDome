@@ -229,7 +229,12 @@ rule("hudSub_SkyMenuToggle")
 			End;
 			Destroy Effect(Players In Slot(Slot Of(Event Player), Team 1).p_Effects[10]);
 			Destroy Effect(Players In Slot(Slot Of(Event Player), Team 1).p_Effects[11]);
-			Clear Status(Players In Slot(Slot Of(Event Player), Team 1), Phased Out);
+
+			// Don't clear the Phased Out status if player set the Invulnerable setting to that
+			If(Event Player.p_Invulnerable != 2);
+				Clear Status(Players In Slot(Slot Of(Event Player), Team 1), Phased Out);
+			End;
+
 			Stop Forcing Player Position(Players In Slot(Slot Of(Event Player), Team 1));
 			Stop Facing(Players In Slot(Slot Of(Event Player), Team 1));
 			Call Subroutine(allSub_ButtonsAllow);
@@ -256,7 +261,7 @@ rule("hudSub_SkyMenuToggle")
 			If(Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled == True);
 				Call Subroutine(botSub_ResetBot);
 			End;
-			Set Status(Players In Slot(Slot Of(Event Player), Team 1), Null, Phased Out, 9999);
+			Set Status(Players In Slot(Slot Of(Event Player), Team 1), Null, Phased Out, Global.c_PseudoInfinity);
 			If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True);
 				Start Forcing Player Position(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 					.p_HomeVector + Vector(0, Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorHeight, 0), False);
@@ -267,7 +272,16 @@ rule("hudSub_SkyMenuToggle")
 			Start Facing(Players In Slot(Slot Of(Event Player), Team 1), Facing Direction Of(Players In Slot(Slot Of(Event Player), Team 1)),
 				100, To World, Direction and Turn Rate);
 			Call Subroutine(allSub_ButtonsDisallow);
+
+			// Clear statuses and heal
+			Clear Status(Event Player, Burning);
+			Clear Status(Event Player, Knocked Down);
+			Clear Status(Event Player, Asleep);
+			Clear Status(Event Player, Frozen);
+			Clear Status(Event Player, Stunned);
+			Clear Status(Event Player, Rooted);
 			Heal(Players In Slot(Slot Of(Event Player), Team 1), Null, Max Health(Players In Slot(Slot Of(Event Player), Team 1)));
+
 			Players In Slot(Slot Of(Event Player), Team 1).hud_SkyMenuVisibleTo = Players In Slot(Slot Of(Event Player), Team 1);
 			Call Subroutine(hudSub_SkyMenuArrowSet);
 			Disable Hero HUD(Players In Slot(Slot Of(Event Player), Team 1));
