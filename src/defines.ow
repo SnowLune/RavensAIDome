@@ -13,7 +13,7 @@ rule("Global Defines")
 		//
 		//	Info: version, build, links...
 		//
-		Global.c_Version = Custom String("0.15.0-test.1");
+		Global.c_Version = Custom String("0.15.0-test.2");
 		Global.c_BuildDate = Custom String("20210626");
 		Global.c_WorkshopCode = Custom String("5DPKQ");
 		Global.c_DeveloperName = Custom String("Raven#112503");

@@ -54,7 +54,6 @@ rule("AI Hanzo General")
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 		Event Player.ai_AimBaseDefault = 1;
 		Event Player.ai_AimTypeDefault = 2;
-		Event Player.ai_AimDistanceMod = -25;
 		Event Player.ai_ProjectileSpeed = 110;
 		Call Subroutine(aiSub_FacingReset);
 		Event Player.ai_HeroInitialized = True;

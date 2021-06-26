@@ -68,7 +68,6 @@ rule("AI Zarya General")
 		Event Player.ai_AimTypeDefault = 0;
 		Event Player.ai_ProjectileSpeeds[1] = 25;
 		Event Player.ai_ProjectileSpeeds[4] = 25;
-		Event Player.ai_AimDistanceMod = 16;
 		Call Subroutine(aiSub_FacingReset);
 		Event Player.ai_HeroInitialized = True;
 	}

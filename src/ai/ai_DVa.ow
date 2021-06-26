@@ -31,7 +31,6 @@ rule("AI D.Va")
 					Event Player.ai_AimType = 2;
 					Event Player.ai_AimBase = 2;
 					Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
-					Event Player.ai_AimDistanceMod = -10;
 					Call Subroutine(aiSub_FacingStart);
 					Call Subroutine(aiSub_ReactionDelay);
 					Press Button(Event Player, Button(Ability 1));

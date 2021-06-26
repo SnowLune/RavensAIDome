@@ -61,7 +61,6 @@ rule("AI Junkrat General")
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 		Event Player.ai_AimBaseDefault = 2;
 		Event Player.ai_AimTypeDefault = 2;
-		Event Player.ai_AimDistanceMod = 10;
 		Event Player.ai_ProjectileSpeed = 25;
 		Call Subroutine(aiSub_FacingReset);
 		Event Player.ai_HeroInitialized = True;

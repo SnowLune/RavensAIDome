@@ -36,7 +36,6 @@ rule("AI Ashe")
 			Event Player.ai_AimType = 2;
 			Event Player.ai_AimBase = 2;
 			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[3];
-			Event Player.ai_AimDistanceMod = 0;
 			Call Subroutine(aiSub_FacingStart);
 			Wait(Random Real(0.300, 0.400), Ignore Condition);
 			Press Button(Event Player, Button(Ability 2));

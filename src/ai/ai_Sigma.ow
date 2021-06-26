@@ -93,7 +93,6 @@ rule("AI Sigma General")
 		Event Player.ai_AimTypeDefault = 2;
 		Event Player.ai_ProjectileSpeeds[0] = 50;
 		Event Player.ai_ProjectileSpeeds[3] = 37.500;
-		Event Player.ai_AimDistanceMod = 15;
 		Call Subroutine(aiSub_FacingReset);
 		Event Player.ai_HeroInitialized = True;
 	}

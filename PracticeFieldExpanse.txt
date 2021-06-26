@@ -109,7 +109,6 @@ variables
         2:   ai_AIEnabled
         3:   ai_AimBase
         4:   ai_AimBaseDefault
-        5:   ai_AimDistanceMod
         6:   ai_AimModX
         7:   ai_AimModY
         8:   ai_AimStopTime
@@ -364,7 +363,7 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.15.0-test.1");
+        Global.c_Version = Custom String("0.15.0-test.2");
         Global.c_BuildDate = Custom String("20210626");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Raven#112503");
@@ -4790,7 +4789,6 @@ rule("AI Ana General")
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
         Event Player.ai_AimBaseDefault = 0;
         Event Player.ai_AimTypeDefault = 1;
-        Event Player.ai_AimDistanceMod = -5;
         Event Player.ai_ProjectileSpeeds[0] = 125;
         Event Player.ai_ProjectileSpeeds[2] = 60;
         Event Player.ai_ProjectileSpeeds[3] = 30;
@@ -5055,7 +5053,6 @@ rule("AI Ashe")
             Event Player.ai_AimType = 2;
             Event Player.ai_AimBase = 2;
             Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[3];
-            Event Player.ai_AimDistanceMod = 0;
             Call Subroutine(aiSub_FacingStart);
             Wait(Random Real(0.300, 0.400), Ignore Condition);
             Press Button(Event Player, Button(Ability 2));
@@ -6270,7 +6267,6 @@ rule("AI D.Va")
                     Event Player.ai_AimType = 2;
                     Event Player.ai_AimBase = 2;
                     Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
-                    Event Player.ai_AimDistanceMod = -10;
                     Call Subroutine(aiSub_FacingStart);
                     Call Subroutine(aiSub_ReactionDelay);
                     Press Button(Event Player, Button(Ability 1));
@@ -7149,7 +7145,6 @@ rule("AI Hanzo General")
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
         Event Player.ai_AimBaseDefault = 1;
         Event Player.ai_AimTypeDefault = 2;
-        Event Player.ai_AimDistanceMod = -25;
         Event Player.ai_ProjectileSpeed = 110;
         Call Subroutine(aiSub_FacingReset);
         Event Player.ai_HeroInitialized = True;
@@ -7409,7 +7404,6 @@ rule("AI Junkrat General")
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
         Event Player.ai_AimBaseDefault = 2;
         Event Player.ai_AimTypeDefault = 2;
-        Event Player.ai_AimDistanceMod = 10;
         Event Player.ai_ProjectileSpeed = 25;
         Call Subroutine(aiSub_FacingReset);
         Event Player.ai_HeroInitialized = True;
@@ -9799,7 +9793,6 @@ rule("AI Sigma General")
         Event Player.ai_AimTypeDefault = 2;
         Event Player.ai_ProjectileSpeeds[0] = 50;
         Event Player.ai_ProjectileSpeeds[3] = 37.500;
-        Event Player.ai_AimDistanceMod = 15;
         Call Subroutine(aiSub_FacingReset);
         Event Player.ai_HeroInitialized = True;
     }
@@ -10385,11 +10378,13 @@ rule("AI Symmetra")
             Call Subroutine(aiSub_ButtonsReset);
             Event Player.ai_AimType = 0;
             Event Player.ai_AimBase = 0;
+            Call Subroutine(aiSub_FacingStart);
             Start Holding Button(Event Player, Button(Primary Fire));
         Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
             Event Player.ai_AimType = 1;
             Event Player.ai_AimBase = 0;
             Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
+            Call Subroutine(aiSub_FacingStart);
             Call Subroutine(aiSub_ButtonsReset);
             Start Holding Button(Event Player, Button(Secondary Fire));
             Wait(Random Real(0.500, 1), Ignore Condition);
@@ -10554,7 +10549,6 @@ rule("AI Torbjorn")
         Call Subroutine(aiSub_ReactionDelay);
         If(Event Player.ai_AbilityButton == Button(Primary Fire));
             Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[0];
-            Event Player.ai_AimDistanceMod = 5;
             Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
             Call Subroutine(aiSub_ButtonsReset);
             Start Holding Button(Event Player, Button(Primary Fire));
@@ -10576,7 +10570,6 @@ rule("AI Torbjorn")
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             Call Subroutine(aiSub_ButtonsReset);
             Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
-            Event Player.ai_AimDistanceMod = -30;
             Call Subroutine(aiSub_ReactionDelay);
             Press Button(Event Player, Button(Ultimate));
             Wait(1, Ignore Condition);
@@ -10585,7 +10578,6 @@ rule("AI Torbjorn")
                 Wait(Random Real(0.150, 0.500), Ignore Condition);
             End;
             Call Subroutine(aiSub_FacingReset);
-            Event Player.ai_AimDistanceMod = 5;
         End;
         Event Player.ai_IsInAbilitySub = False;
     }
@@ -10610,7 +10602,6 @@ rule("AI Torbjorn General")
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
         Event Player.ai_AimBaseDefault = 1;
         Event Player.ai_AimTypeDefault = 2;
-        Event Player.ai_AimDistanceMod = 5;
         Event Player.ai_ProjectileSpeeds[0] = 70;
         Event Player.ai_ProjectileSpeeds[1] = 120;
         Event Player.ai_ProjectileSpeeds[4] = 40;
@@ -11074,7 +11065,6 @@ rule("AI Widowmaker General")
         Event Player.ai_AimBaseDefault = 1;
         Event Player.ai_AimTypeDefault = 0;
         Event Player.ai_ProjectileSpeeds[3] = 20;
-        Event Player.ai_AimDistanceMod = -10;
         Call Subroutine(aiSub_FacingReset);
         Event Player.ai_HeroInitialized = True;
     }
@@ -11758,7 +11748,6 @@ rule("AI Zarya General")
         Event Player.ai_AimTypeDefault = 0;
         Event Player.ai_ProjectileSpeeds[1] = 25;
         Event Player.ai_ProjectileSpeeds[4] = 25;
-        Event Player.ai_AimDistanceMod = 16;
         Call Subroutine(aiSub_FacingReset);
         Event Player.ai_HeroInitialized = True;
     }

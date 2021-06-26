@@ -81,7 +81,6 @@ rule("AI Ana General")
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 		Event Player.ai_AimBaseDefault = 0;
 		Event Player.ai_AimTypeDefault = 1;
-		Event Player.ai_AimDistanceMod = -5;
 		Event Player.ai_ProjectileSpeeds[0] = 125;
 		Event Player.ai_ProjectileSpeeds[2] = 60;
 		Event Player.ai_ProjectileSpeeds[3] = 30;

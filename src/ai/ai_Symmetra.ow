@@ -15,11 +15,13 @@ rule("AI Symmetra")
 			Call Subroutine(aiSub_ButtonsReset);
 			Event Player.ai_AimType = 0;
 			Event Player.ai_AimBase = 0;
+			Call Subroutine(aiSub_FacingStart);
 			Start Holding Button(Event Player, Button(Primary Fire));
 		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
 			Event Player.ai_AimType = 1;
 			Event Player.ai_AimBase = 0;
 			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
+			Call Subroutine(aiSub_FacingStart);
 			Call Subroutine(aiSub_ButtonsReset);
 			Start Holding Button(Event Player, Button(Secondary Fire));
 			Wait(Random Real(0.500, 1), Ignore Condition);

@@ -12,7 +12,6 @@ rule("AI Torbjorn")
 		Call Subroutine(aiSub_ReactionDelay);
 		If(Event Player.ai_AbilityButton == Button(Primary Fire));
 			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[0];
-			Event Player.ai_AimDistanceMod = 5;
 			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
 			Call Subroutine(aiSub_ButtonsReset);
 			Start Holding Button(Event Player, Button(Primary Fire));
@@ -34,7 +33,6 @@ rule("AI Torbjorn")
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Call Subroutine(aiSub_ButtonsReset);
 			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
-			Event Player.ai_AimDistanceMod = -30;
 			Call Subroutine(aiSub_ReactionDelay);
 			Press Button(Event Player, Button(Ultimate));
 			Wait(1, Ignore Condition);
@@ -43,7 +41,6 @@ rule("AI Torbjorn")
 				Wait(Random Real(0.150, 0.500), Ignore Condition);
 			End;
 			Call Subroutine(aiSub_FacingReset);
-			Event Player.ai_AimDistanceMod = 5;
 		End;
 		Event Player.ai_IsInAbilitySub = False;
 	}
@@ -71,7 +68,6 @@ rule("AI Torbjorn General")
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 		Event Player.ai_AimBaseDefault = 1;
 		Event Player.ai_AimTypeDefault = 2;
-		Event Player.ai_AimDistanceMod = 5;
 		Event Player.ai_ProjectileSpeeds[0] = 70;
 		Event Player.ai_ProjectileSpeeds[1] = 120;
 		Event Player.ai_ProjectileSpeeds[4] = 40;

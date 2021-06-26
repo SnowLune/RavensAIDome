@@ -95,7 +95,6 @@ rule("AI Widowmaker General")
 		Event Player.ai_AimBaseDefault = 1;
 		Event Player.ai_AimTypeDefault = 0;
 		Event Player.ai_ProjectileSpeeds[3] = 20;
-		Event Player.ai_AimDistanceMod = -10;
 		Call Subroutine(aiSub_FacingReset);
 		Event Player.ai_HeroInitialized = True;
 	}

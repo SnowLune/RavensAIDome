@@ -133,7 +133,6 @@ variables
 		2:   ai_AIEnabled
 		3:   ai_AimBase
 		4:   ai_AimBaseDefault
-		5:   ai_AimDistanceMod
 		6:   ai_AimModX
 		7:   ai_AimModY
 		8:   ai_AimStopTime
