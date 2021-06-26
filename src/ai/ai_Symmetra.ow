@@ -30,7 +30,7 @@ rule("AI Symmetra")
 			Call Subroutine(aiSub_FacingLookAt);
 			Press Button(Event Player, Button(Ability 1));
 			Wait(0.350, Ignore Condition);
-			Event Player.ai_CanAim = True;
+			Event Player.ai_CnAim = True;
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Press Button(Event Player, Button(Ultimate));
 			Wait(0.250, Ignore Condition);
@@ -82,7 +82,7 @@ rule("AI Symmetra Attack Primary")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -112,7 +112,7 @@ rule("AI Symmetra Attack Secondary")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -142,7 +142,7 @@ rule("AI Symmetra Sentry Turret")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -172,7 +172,7 @@ rule("AI Symmetra Photon Barrier")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;

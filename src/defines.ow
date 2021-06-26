@@ -13,10 +13,10 @@ rule("Global Defines")
 		//
 		//	Info: version, build, links...
 		//
-		Global.c_Version = Custom String("0.14.0-test.9");
-		Global.c_BuildDate = Custom String("20210613");
+		Global.c_Version = Custom String("0.15.0-test.1");
+		Global.c_BuildDate = Custom String("20210626");
 		Global.c_WorkshopCode = Custom String("5DPKQ");
-		Global.c_DeveloperName = Custom String("Snow#15707");
+		Global.c_DeveloperName = Custom String("Raven#112503");
 		Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
 		Global.c_GithubURL = Custom String("github.com/SnowLune/PracticeFieldExpanse");
 		Global.c_DiscordLink = Custom String("TBA");
@@ -36,11 +36,11 @@ rule("Global Defines")
 		//
 		//	Hero array constants
 		//
-		Global.c_HeroClasses = Array();
-		Global.c_HeroClasses[0] = All Heroes;
-		Global.c_HeroClasses[1] = All Tank Heroes;
-		Global.c_HeroClasses[2] = All Damage Heroes;
-		Global.c_HeroClasses[3] = All Support Heroes;
+		Global.c_HeroRoles = Array();
+		Global.c_HeroRoles[0] = All Heroes;
+		Global.c_HeroRoles[1] = All Tank Heroes;
+		Global.c_HeroRoles[2] = All Damage Heroes;
+		Global.c_HeroRoles[3] = All Support Heroes;
 
 		Global.c_LongRangeHeroes = Array();
 		Global.c_LongRangeHeroes[0] = Hero(Widowmaker);
@@ -60,6 +60,7 @@ rule("Global Defines")
 		Global.c_ShortRangeHeroes[5] = Hero(Soldier: 76);
 		Global.c_ShortRangeHeroes[6] = Hero(Torbjörn);
 		Global.c_ShortRangeHeroes[7] = Hero(Zenyatta);
+		Global.c_ShortRangeHeroes[8] = Hero(Roadhog);
 
 		Global.c_VeryShortRangeHeroes = Array();
 		Global.c_VeryShortRangeHeroes[0] = Hero(Brigitte);
@@ -67,12 +68,11 @@ rule("Global Defines")
 		Global.c_VeryShortRangeHeroes[2] = Hero(Moira);
 		Global.c_VeryShortRangeHeroes[3] = Hero(Reaper);
 		Global.c_VeryShortRangeHeroes[4] = Hero(Reinhardt);
-		Global.c_VeryShortRangeHeroes[5] = Hero(Roadhog);
-		Global.c_VeryShortRangeHeroes[6] = Hero(Sigma);
-		Global.c_VeryShortRangeHeroes[7] = Hero(Symmetra);
-		Global.c_VeryShortRangeHeroes[8] = Hero(Winston);
-		Global.c_VeryShortRangeHeroes[9] = Hero(Zarya);
-		Global.c_VeryShortRangeHeroes[10] = Hero(Doomfist);
+		Global.c_VeryShortRangeHeroes[5] = Hero(Sigma);
+		Global.c_VeryShortRangeHeroes[6] = Hero(Symmetra);
+		Global.c_VeryShortRangeHeroes[7] = Hero(Winston);
+		Global.c_VeryShortRangeHeroes[8] = Hero(Zarya);
+		Global.c_VeryShortRangeHeroes[9] = Hero(Doomfist);
 
 		Global.c_ProjectileHeroes = Array();
 		Global.c_ProjectileHeroes[0] = Hero(Ana);
@@ -190,7 +190,7 @@ rule("Global Defines")
 		Global.c_BotNamesConst[15] = Custom String("DPSDiff");
 		Global.c_BotNamesConst[16] = Custom String("DPSLucio");
 		Global.c_BotNamesConst[17] = Custom String("DPSMercy");
-		Global.c_BotNamesConst[18] = Custom String("Ecofriendly");
+		Global.c_BotNamesConst[18] = Custom String("DrinkWater");
 		Global.c_BotNamesConst[19] = Custom String("Error");
 		Global.c_BotNamesConst[20] = Custom String("Fallout");
 		Global.c_BotNamesConst[21] = Custom String("Fear");

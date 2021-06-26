@@ -37,11 +37,11 @@ rule("AI Aim Calculation Loop")
 		Is Alive(Event Player) == True;
 		Event Player.bot_BotResetComplete == True;
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAim == True;
+		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
 		Total Time Elapsed >= Event Player.ai_AimStopTime;
-		((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) || (Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0))
-			== True;
+		((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) 
+		|| (Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0)) == True;
 		Global.g_Tick % 5 == 0;
 	}
 
@@ -65,7 +65,7 @@ rule("AI Aim Stop")
 		Is Alive(Event Player) == True;
 		Event Player.bot_BotResetComplete == True;
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAim == True;
+		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
 		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
 			Eye Position(Event Player)), 0), 5) == True;
@@ -77,12 +77,12 @@ rule("AI Aim Stop")
 			If(Global.g_DebugHUD == True);
 				Small Message(Event Player, Custom String("aim stop"));
 			End;
-			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.200, 0.600) - Players In Slot(Slot Of(Event Player), Team 1)
-				.p_Difficulty * 0.020;
+			Event Player.ai_AimStopTime = Total Time Elapsed + 0.050 + Random Real(0.025, 0.045) 
+				* (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty);
 			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
-			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.075, 0.150) - Event Player.ai_ChanceMod);
+			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.150, 0.250));
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.025, 0.075) - Event Player.ai_ChanceMod, None);
+			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.050, 0.100), None);
 			Start Rule(aiSub_AimModSet, Restart Rule);
 		End;
 	}
@@ -102,10 +102,10 @@ rule("AI Aim Flick")
 		Is Alive(Event Player) == True;
 		Event Player.bot_BotResetComplete == True;
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAim == True;
+		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
 		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 1) == False;
+			Eye Position(Event Player)), 0), 3) == False;
 	}
 
 	actions
@@ -129,7 +129,7 @@ rule("AI Attack Melee")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Is Alive(Event Player) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 2.500;
 		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
@@ -158,7 +158,7 @@ rule("AI Aim Start")
 		Event Player.ai_AIEnabled == True;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
-		Event Player.ai_CanAim == True;
+		Event Player.ai_CnAim == True;
 	}
 
 	actions
@@ -189,7 +189,7 @@ rule("AI Rule Can Aim")
 
 	actions
 	{
-		Event Player.ai_CanAim = True;
+		Event Player.ai_CnAim = True;
 	}
 }
 
@@ -215,7 +215,7 @@ rule("AI Rule Can Attack")
 
 	actions
 	{
-		Event Player.ai_CanAttack = True;
+		Event Player.ai_CnAttack = True;
 	}
 }
 
@@ -242,7 +242,7 @@ rule("AI Rule Can Use Abilities")
 
 	actions
 	{
-		Event Player.ai_CanUseAbilities = True;
+		Event Player.ai_CnUseAbilities = True;
 	}
 }
 
@@ -264,7 +264,7 @@ rule("AI Rule Status Hacked")
 
 	actions
 	{
-		Event Player.ai_CanUseAbilities = False;
+		Event Player.ai_CnUseAbilities = False;
 	}
 }
 
@@ -286,9 +286,9 @@ rule("AI Rule Status Knocked Down")
 
 	actions
 	{
-		Event Player.ai_CanAim = False;
-		Event Player.ai_CanAttack = False;
-		Event Player.ai_CanUseAbilities = False;
+		Event Player.ai_CnAim = False;
+		Event Player.ai_CnAttack = False;
+		Event Player.ai_CnUseAbilities = False;
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 	}
 }
@@ -311,9 +311,9 @@ rule("AI Rule Status Asleep")
 
 	actions
 	{
-		Event Player.ai_CanAim = False;
-		Event Player.ai_CanAttack = False;
-		Event Player.ai_CanUseAbilities = False;
+		Event Player.ai_CnAim = False;
+		Event Player.ai_CnAttack = False;
+		Event Player.ai_CnUseAbilities = False;
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 	}
 }
@@ -336,9 +336,9 @@ rule("AI Rule Status Frozen")
 
 	actions
 	{
-		Event Player.ai_CanAim = False;
-		Event Player.ai_CanAttack = False;
-		Event Player.ai_CanUseAbilities = False;
+		Event Player.ai_CnAim = False;
+		Event Player.ai_CnAttack = False;
+		Event Player.ai_CnUseAbilities = False;
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 	}
 }
@@ -361,8 +361,8 @@ rule("AI Rule Status Phased Out")
 
 	actions
 	{
-		Event Player.ai_CanUseAbilities = False;
-		Event Player.ai_CanAttack = False;
+		Event Player.ai_CnUseAbilities = False;
+		Event Player.ai_CnAttack = False;
 	}
 }
 
@@ -384,9 +384,9 @@ rule("AI Rule Status Stunned")
 
 	actions
 	{
-		Event Player.ai_CanAim = False;
-		Event Player.ai_CanAttack = False;
-		Event Player.ai_CanUseAbilities = False;
+		Event Player.ai_CnAim = False;
+		Event Player.ai_CnAttack = False;
+		Event Player.ai_CnUseAbilities = False;
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 	}
 }
@@ -413,7 +413,7 @@ rule("AI Movement WASD Strafe On Dmg")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.700 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.100 + Event Player.ai_ChanceMod);
 			Call Subroutine(aiSub_ReactionDelay);
 			Event Player.bot_ThrottleDir = Random Value In Array(Global.c_MoveDir_Strafe);
 			Start Rule(botSub_MoveWASD, Restart Rule);

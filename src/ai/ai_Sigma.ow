@@ -89,7 +89,7 @@ rule("AI Sigma General")
 	{
 		Event Player.ai_OptimalDistanceDefault = Random Real(12, 15);
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_AimBaseDefault = 0;
+		Event Player.ai_AimBaseDefault = 2;
 		Event Player.ai_AimTypeDefault = 2;
 		Event Player.ai_ProjectileSpeeds[0] = 50;
 		Event Player.ai_ProjectileSpeeds[3] = 37.500;
@@ -111,7 +111,7 @@ rule("AI Sigma Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -144,7 +144,7 @@ rule("AI Sigma Experimental Barrier")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -175,7 +175,7 @@ rule("AI Sigma Kinetic Grasp")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -188,7 +188,7 @@ rule("AI Sigma Kinetic Grasp")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.650 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 1);
 			Call Subroutine(aiSub_Abilities_Sigma);
 		End;
@@ -207,7 +207,7 @@ rule("AI Sigma Accretion")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -237,7 +237,7 @@ rule("AI Sigma Gravitic Flux")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;

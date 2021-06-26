@@ -23,7 +23,7 @@ rule("AI Junkrat")
 			Call Subroutine(aiSub_FacingLookAt);
 			Press Button(Event Player, Button(Ability 2));
 			Call Subroutine(aiSub_ReactionDelay);
-			Event Player.ai_CanAim = True;
+			Event Player.ai_CnAim = True;
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Call Subroutine(aiSub_ButtonsReset);
 			Press Button(Event Player, Button(Ultimate));
@@ -59,7 +59,7 @@ rule("AI Junkrat General")
 	{
 		Event Player.ai_OptimalDistanceDefault = Random Real(9, 12);
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_AimBaseDefault = 0;
+		Event Player.ai_AimBaseDefault = 2;
 		Event Player.ai_AimTypeDefault = 2;
 		Event Player.ai_AimDistanceMod = 10;
 		Event Player.ai_ProjectileSpeed = 25;
@@ -80,13 +80,13 @@ rule("AI Junkrat Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
 		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 20) == True;
+			Eye Position(Event Player)), 0), 30) == True;
 		Is Using Ultimate(Event Player) == False;
 	}
 
@@ -112,7 +112,7 @@ rule("AI Junkrat Concussion Mine")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -142,7 +142,7 @@ rule("AI Junkrat Steel Trap")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -171,7 +171,7 @@ rule("AI Junkrat Riptire")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Ultimate Charge Percent(Event Player) == 100;
 		Is Using Ultimate(Event Player) == False;

@@ -90,8 +90,8 @@ rule("AI Ashe Attack Scope In")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAim == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAim == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -119,8 +119,8 @@ rule("AI Ashe Attack Scope Out")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAim == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAim == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -147,8 +147,8 @@ rule("AI Ashe Attack Scoped")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAim == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAim == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -180,8 +180,8 @@ rule("AI Ashe Attack Unscoped")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAim == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAim == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -211,7 +211,7 @@ rule("AI Ashe Reload")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Ammo(Event Player, 0) == 0;
@@ -236,7 +236,7 @@ rule("AI Ashe Reload After Kill")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 	}
@@ -260,7 +260,7 @@ rule("AI Ashe Coach Gun Defensive")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -288,7 +288,7 @@ rule("AI Ashe Coach Gun Finishing")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -316,8 +316,8 @@ rule("AI Ashe Dynamite")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAim == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnAim == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -347,7 +347,7 @@ rule("AI Ashe B.O.B.")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;

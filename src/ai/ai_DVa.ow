@@ -94,7 +94,7 @@ rule("AI D.Va Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
@@ -125,7 +125,7 @@ rule("AI D.Va Defense Matrix")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -140,7 +140,7 @@ rule("AI D.Va Defense Matrix")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.750 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Secondary Fire);
 			Call Subroutine(aiSub_Abilities_DVa);
 		End;
@@ -159,7 +159,7 @@ rule("AI D.Va Boosters")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In Alternate Form(Event Player) == False;
@@ -193,7 +193,7 @@ rule("AI D.Va Micro Missiles")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -252,7 +252,7 @@ rule("AI D.Va Call Mech")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Ultimate Charge Percent(Event Player) == 100;

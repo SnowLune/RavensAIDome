@@ -37,10 +37,10 @@ rule("Player Init")
 		Call Subroutine(pSub_SetNames);
 		Event Player.all_Kills = 0;
 		Event Player.p_BotHeroNumber = 0;
-		Event Player.p_BotHeroClass = Global.g_HeroClass;
+		Event Player.p_BotHeroRole = Global.g_BotHeroRole;
 		Event Player.p_HeroNumberMod = 0;
 		Event Player.p_KillGoal = Global.g_KillGoal;
-		Call Subroutine(pSub_SetHeroClass);
+		Call Subroutine(pSub_SetHeroRole);
 		Event Player.hud_InfoEnabled = False;
 		Event Player.p_HealingEnabled = Global.g_PlayerHealing;
 		Event Player.p_OneSecCooldown = False;
@@ -364,6 +364,7 @@ rule("Player Self Hero Change Teleport Enemy On Spawn")
 	{
 		Wait(6 / 60, Abort When False);
 		Call Subroutine(pSub_SetDistances);
+		Call Subroutine(pSub_SetInvulnerable);
 		Call Subroutine(botSub_TeleportBot);
 		Event Player.all_ChangingHero = False;
 	}
@@ -426,14 +427,15 @@ rule("Player Change Bot Hero On Spawn")
 	actions
 	{
 		Wait(9 / 60, Abort When False);
-		If(Event Player.p_BotHeroClass != 0);
-			Event Player.p_BotHeroClass = 0;
-			Call Subroutine(pSub_SetHeroClass);
+		If(Event Player.p_BotHeroRole != 0);
+			Event Player.p_BotHeroRole = 0;
+			Call Subroutine(pSub_SetHeroRole);
 		End;
 		Event Player.p_BotHeroNumber = Index Of Array Value(Event Player.p_HeroList, Hero Of(Event Player));
 		Start Forcing Player To Be Hero(Event Player, Event Player.p_PlayerHero);
 		Wait(1 / 60, Ignore Condition);
 		Stop Forcing Player To Be Hero(Event Player);
+		Call Subroutine(pSub_SetInvulnerable);
 		Call Subroutine(botSub_SetHero);
 		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero = False;
 		Set Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 2))
@@ -738,7 +740,7 @@ rule("Player Elevator Movement Start")
 
 	conditions
 	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True;
+		Event Player.p_ElevatorEnabled == True;
 		Is Alive(Event Player) == True;
 		Throttle Of(Event Player) != Vector(0, 0, 0);
 	}
@@ -761,7 +763,7 @@ rule("Player Elevator Movement Stop")
 
 	conditions
 	{
-		Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True;
+		Event Player.p_ElevatorEnabled == True;
 		Is Alive(Event Player) == True;
 		Throttle Of(Event Player) == Vector(0, 0, 0);
 		Speed Of(Event Player) > 0;

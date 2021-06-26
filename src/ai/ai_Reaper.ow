@@ -25,7 +25,7 @@ rule("AI Reaper")
 			Call Subroutine(aiSub_FacingLookAt);
 			Press Button(Event Player, Button(Primary Fire));
 			Wait(1.500, Ignore Condition);
-			Event Player.ai_CanAim = True;
+			Event Player.ai_CnAim = True;
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Press Button(Event Player, Button(Ultimate));
 			Wait Until(Is Using Ultimate(Event Player), 0.500);
@@ -74,7 +74,7 @@ rule("AI Reaper Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Using Ability 1(Event Player) == False;
@@ -109,7 +109,7 @@ rule("AI Reaper Wraith Form")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -138,7 +138,7 @@ rule("AI Reaper Shadow Step")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -170,7 +170,7 @@ rule("AI Reaper Death Blossom")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;

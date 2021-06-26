@@ -27,7 +27,7 @@ rule("AI Torbjorn")
 			Call Subroutine(aiSub_FacingLookAt);
 			Press Button(Event Player, Button(Ability 1));
 			Call Subroutine(aiSub_ReactionDelay);
-			Event Player.ai_CanAim = True;
+			Event Player.ai_CnAim = True;
 			Call Subroutine(aiSub_FacingReset);
 		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
 			Press Button(Event Player, Button(Ability 2));
@@ -92,7 +92,7 @@ rule("AI Torbjorn Attack Primary")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -126,7 +126,7 @@ rule("AI Torbjorn Attack Secondary")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -159,7 +159,7 @@ rule("AI Torbjorn Deploy Turret")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -192,7 +192,7 @@ rule("AI Torbjorn Overload")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -222,7 +222,7 @@ rule("AI Torbjorn Molten Core")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;

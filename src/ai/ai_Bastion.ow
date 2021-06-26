@@ -72,7 +72,7 @@ rule("AI Bastion Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -104,7 +104,7 @@ rule("AI Bastion Reconfigure")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -117,7 +117,7 @@ rule("AI Bastion Reconfigure")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 1);
 			Call Subroutine(aiSub_Abilities_Bastion);
 		End;
@@ -136,7 +136,7 @@ rule("AI Bastion Self-Repair")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Health(Event Player) <= Max Health(Event Player) / 2;
@@ -162,7 +162,7 @@ rule("AI Bastion Configuration: Tank")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;

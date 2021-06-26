@@ -2,7 +2,7 @@ settings
 {
 	main
 	{
-		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Snow#15707\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\"to this description."
+		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Raven#112503\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\"to this description."
 	}
 
 	lobby
@@ -73,7 +73,7 @@ variables
 		9:	c_DeveloperName
 		10:	c_DiscordLink
 		11:	c_GithubURL
-		12:	c_HeroClasses
+		12:	c_HeroRoles
 		13:	c_LargeZoneHeroes
 		14:	c_LongDistance
 		15:	c_LongRangeHeroes
@@ -105,7 +105,7 @@ variables
 		37:	g_DebugHUD
 		38:	g_DebugMode
 		39:	g_Difficulty
-		40:	g_HeroClass
+		40:	g_BotHeroRole
 		41:	g_Initialized
 		42:	g_KillGoal
 		43:	g_Language
@@ -141,9 +141,9 @@ variables
 		10:  ai_AimType
 		11:  ai_AimTypeDefault
 		12:  ai_BMVoiceLine
-		13:  ai_CanAim
-		14:  ai_CanAttack
-		15:  ai_CanUseAbilities
+		13:  ai_CnAim
+		14:  ai_CnAttack
+		15:  ai_CnUseAbilities
 		16:  ai_ChanceMod
 		17:  ai_DoomfistPunchDamage
 		18:  ai_DoomfistPunchTime
@@ -213,7 +213,7 @@ variables
 		//
 		// Player variables
 		//
-		72:  p_BotHeroClass
+		72:  p_BotHeroRole
 		73:  p_BotHeroNumber
 		74:  p_BotHeroNumberNext
 		75:  p_BotTPDistance
@@ -231,7 +231,7 @@ variables
 		87:  p_EnemyDistanceMax
 		88:  p_EnemyDistanceMod
 		89:  p_HelpTargetIndicator
-		90:  p_HeroClassNames
+		90:  p_HeroRoleNames
 		91:  p_HeroList
 		92:  p_HeroListName
 		93:  p_HeroNumberMod
@@ -337,7 +337,7 @@ subroutines
 	59: pSub_QuickMode
 	60: pSub_SetDifficulty
 	61: pSub_SetDistances
-	62: pSub_SetHeroClass
+	62: pSub_SetHeroRole
 	63: pSub_SetNames
 	64: pSub_SetLanguage
 	67: pSub_SetInvulnerable

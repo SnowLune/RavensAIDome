@@ -18,7 +18,7 @@ rule("Global Settings")
 		If(Global.g_KillGoal % 4 != 0 && Global.g_KillGoal > 4);
 			Global.g_KillGoal = Global.g_KillGoal - Global.g_KillGoal % 4;
 		End;
-		Global.g_HeroClass = Workshop Setting Combo(Custom String("Default Settings / 기본 설정"), Custom String("Hero Class / 영웅 유형"), 0,
+		Global.g_BotHeroRole = Workshop Setting Combo(Custom String("Default Settings / 기본 설정"), Custom String("Bot Hero Role / 영웅 유형"), 0,
 			Array(Custom String("All"), Custom String("Tank"), Custom String("Damage"), Custom String("Support")), 3);
 		Global.g_PlayerHealing = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String(
 			"Player Healing / 플레이어 치유"), True, 4);

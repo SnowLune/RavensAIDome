@@ -2,7 +2,7 @@ settings
 {
     main
     {
-        Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Snow#15707\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\"to this description."
+        Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Raven#112503\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\"to this description."
     }
     lobby
     {
@@ -62,7 +62,7 @@ variables
         9:    c_DeveloperName
         10:    c_DiscordLink
         11:    c_GithubURL
-        12:    c_HeroClasses
+        12:    c_HeroRoles
         13:    c_LargeZoneHeroes
         14:    c_LongDistance
         15:    c_LongRangeHeroes
@@ -90,7 +90,7 @@ variables
         37:    g_DebugHUD
         38:    g_DebugMode
         39:    g_Difficulty
-        40:    g_HeroClass
+        40:    g_BotHeroRole
         41:    g_Initialized
         42:    g_KillGoal
         43:    g_Language
@@ -117,9 +117,9 @@ variables
         10:  ai_AimType
         11:  ai_AimTypeDefault
         12:  ai_BMVoiceLine
-        13:  ai_CanAim
-        14:  ai_CanAttack
-        15:  ai_CanUseAbilities
+        13:  ai_CnAim
+        14:  ai_CnAttack
+        15:  ai_CnUseAbilities
         16:  ai_ChanceMod
         17:  ai_DoomfistPunchDamage
         18:  ai_DoomfistPunchTime
@@ -173,7 +173,7 @@ variables
         69:  hud_SkyMenuSound
         70:  hud_SkyMenuVectors
         71:  hud_SkyMenuVisibleTo
-        72:  p_BotHeroClass
+        72:  p_BotHeroRole
         73:  p_BotHeroNumber
         74:  p_BotHeroNumberNext
         75:  p_BotTPDistance
@@ -191,7 +191,7 @@ variables
         87:  p_EnemyDistanceMax
         88:  p_EnemyDistanceMod
         89:  p_HelpTargetIndicator
-        90:  p_HeroClassNames
+        90:  p_HeroRoleNames
         91:  p_HeroList
         92:  p_HeroListName
         93:  p_HeroNumberMod
@@ -277,7 +277,7 @@ subroutines
     59: pSub_QuickMode
     60: pSub_SetDifficulty
     61: pSub_SetDistances
-    62: pSub_SetHeroClass
+    62: pSub_SetHeroRole
     63: pSub_SetNames
     64: pSub_SetLanguage
     67: pSub_SetInvulnerable
@@ -301,7 +301,7 @@ rule("Global Settings")
         If(Global.g_KillGoal % 4 != 0 && Global.g_KillGoal > 4);
             Global.g_KillGoal = Global.g_KillGoal - Global.g_KillGoal % 4;
         End;
-        Global.g_HeroClass = Workshop Setting Combo(Custom String("Default Settings / 기본 설정"), Custom String("Hero Class / 영웅 유형"), 0,
+        Global.g_BotHeroRole = Workshop Setting Combo(Custom String("Default Settings / 기본 설정"), Custom String("Bot Hero Role / 영웅 유형"), 0,
             Array(Custom String("All"), Custom String("Tank"), Custom String("Damage"), Custom String("Support")), 3);
         Global.g_PlayerHealing = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String(
             "Player Healing / 플레이어 치유"), True, 4);
@@ -364,10 +364,10 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.14.0-test.9");
-        Global.c_BuildDate = Custom String("20210613");
+        Global.c_Version = Custom String("0.15.0-test.1");
+        Global.c_BuildDate = Custom String("20210626");
         Global.c_WorkshopCode = Custom String("5DPKQ");
-        Global.c_DeveloperName = Custom String("Snow#15707");
+        Global.c_DeveloperName = Custom String("Raven#112503");
         Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
         Global.c_GithubURL = Custom String("github.com/SnowLune/PracticeFieldExpanse");
         Global.c_DiscordLink = Custom String("TBA");
@@ -379,11 +379,11 @@ rule("Global Defines")
         Global.c_BubbleRadius = 80;
         Global.c_MaxDifficulty = 10;
         Global.c_PseudoInfinity = 999999;
-        Global.c_HeroClasses = Array();
-        Global.c_HeroClasses[0] = All Heroes;
-        Global.c_HeroClasses[1] = All Tank Heroes;
-        Global.c_HeroClasses[2] = All Damage Heroes;
-        Global.c_HeroClasses[3] = All Support Heroes;
+        Global.c_HeroRoles = Array();
+        Global.c_HeroRoles[0] = All Heroes;
+        Global.c_HeroRoles[1] = All Tank Heroes;
+        Global.c_HeroRoles[2] = All Damage Heroes;
+        Global.c_HeroRoles[3] = All Support Heroes;
         Global.c_LongRangeHeroes = Array();
         Global.c_LongRangeHeroes[0] = Hero(Widowmaker);
         Global.c_MediumRangeHeroes = Array();
@@ -400,18 +400,18 @@ rule("Global Defines")
         Global.c_ShortRangeHeroes[5] = Hero(Soldier: 76);
         Global.c_ShortRangeHeroes[6] = Hero(Torbjörn);
         Global.c_ShortRangeHeroes[7] = Hero(Zenyatta);
+        Global.c_ShortRangeHeroes[8] = Hero(Roadhog);
         Global.c_VeryShortRangeHeroes = Array();
         Global.c_VeryShortRangeHeroes[0] = Hero(Brigitte);
         Global.c_VeryShortRangeHeroes[1] = Hero(D.Va);
         Global.c_VeryShortRangeHeroes[2] = Hero(Moira);
         Global.c_VeryShortRangeHeroes[3] = Hero(Reaper);
         Global.c_VeryShortRangeHeroes[4] = Hero(Reinhardt);
-        Global.c_VeryShortRangeHeroes[5] = Hero(Roadhog);
-        Global.c_VeryShortRangeHeroes[6] = Hero(Sigma);
-        Global.c_VeryShortRangeHeroes[7] = Hero(Symmetra);
-        Global.c_VeryShortRangeHeroes[8] = Hero(Winston);
-        Global.c_VeryShortRangeHeroes[9] = Hero(Zarya);
-        Global.c_VeryShortRangeHeroes[10] = Hero(Doomfist);
+        Global.c_VeryShortRangeHeroes[5] = Hero(Sigma);
+        Global.c_VeryShortRangeHeroes[6] = Hero(Symmetra);
+        Global.c_VeryShortRangeHeroes[7] = Hero(Winston);
+        Global.c_VeryShortRangeHeroes[8] = Hero(Zarya);
+        Global.c_VeryShortRangeHeroes[9] = Hero(Doomfist);
         Global.c_ProjectileHeroes = Array();
         Global.c_ProjectileHeroes[0] = Hero(Ana);
         Global.c_ProjectileHeroes[1] = Hero(Ashe);
@@ -510,7 +510,7 @@ rule("Global Defines")
         Global.c_BotNamesConst[15] = Custom String("DPSDiff");
         Global.c_BotNamesConst[16] = Custom String("DPSLucio");
         Global.c_BotNamesConst[17] = Custom String("DPSMercy");
-        Global.c_BotNamesConst[18] = Custom String("Ecofriendly");
+        Global.c_BotNamesConst[18] = Custom String("DrinkWater");
         Global.c_BotNamesConst[19] = Custom String("Error");
         Global.c_BotNamesConst[20] = Custom String("Fallout");
         Global.c_BotNamesConst[21] = Custom String("Fear");
@@ -825,10 +825,10 @@ rule("hudSub_SkyMenuToggle")
             Enable Hero HUD(Event Player);
             Call Subroutine(hudSub_MainToggle);
             If(Event Player.p_HeroListName != Event Player
-                .p_HeroClassNames[Event Player.p_BotHeroClass]);
+                .p_HeroRoleNames[Event Player.p_BotHeroRole]);
                 Event Player.p_BotHeroNumber = 0;
                 Event Player.p_HeroNumberMod = 0;
-                Call Subroutine(pSub_SetHeroClass);
+                Call Subroutine(pSub_SetHeroRole);
                 Call Subroutine(botSub_SetHero);
             Else;
                 Call Subroutine(botSub_TeleportBot);
@@ -901,9 +901,9 @@ rule("hudSub_SkyMenuToggle")
                 Color(White), Default Visibility);
             Modify Player Variable(Event Player, hud_SkyMenu, Append To Array, Last Text ID);
             Create In-World Text(Event Player.hud_SkyMenuVisibleTo, Event Player.p_Language == 1 ? Custom String("영웅 유형: {0}", Event Player
-                .p_HeroClassNames[Event Player.p_BotHeroClass]) : Custom String("Hero Class: {0}",
-                Event Player.p_HeroClassNames[Event Player
-                .p_BotHeroClass]), Event Player.hud_SkyMenuVectors[2], 1.500, Clip Against Surfaces,
+                .p_HeroRoleNames[Event Player.p_BotHeroRole]) : Custom String("Bot Hero Role: {0}",
+                Event Player.p_HeroRoleNames[Event Player
+                .p_BotHeroRole]), Event Player.hud_SkyMenuVectors[2], 1.500, Clip Against Surfaces,
                 Visible To and String, Color(White), Default Visibility);
             Modify Player Variable(Event Player, hud_SkyMenu, Append To Array, Last Text ID);
             Create In-World Text(Event Player.hud_SkyMenuVisibleTo, Event Player.p_Language == 1 ? Custom String("빠른 모드: {0}", Event Player
@@ -922,7 +922,7 @@ rule("hudSub_SkyMenuToggle")
                 .p_OneSecCooldown == 3 ? Custom String("플레이어 + 인공 지능") : (Event Player
                 .p_OneSecCooldown == 2 ? Custom String("인공지는") : (Event Player
                 .p_OneSecCooldown == 1 ? Custom String("플레이어") : Custom String("비활성화")))) : Custom String("1 Sec Cooldown Mode: {0}",
-                Event Player.p_OneSecCooldown == 3 ? Custom String("Player & Bot") : (Players In Slot(
+                Event Player.p_OneSecCooldown == 3 ? Custom String("Player&Bot") : (Players In Slot(
                 Slot Of(Event Player), Team 1).p_OneSecCooldown == 2 ? Custom String("Bot") : (Event Player
                 .p_OneSecCooldown == 1 ? Custom String("Player") : Custom String("Off")))), Event Player
                 .hud_SkyMenuVectors[5], 1.500, Clip Against Surfaces, Visible To and String, Color(White), Default Visibility);
@@ -1217,10 +1217,10 @@ rule("Player Sky Menu Move Selection Decrease")
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
             Event Player.hud_SkyMenuSound = 2;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            If(Event Player.p_BotHeroClass > 0);
-                Event Player.p_BotHeroClass -= 1;
+            If(Event Player.p_BotHeroRole > 0);
+                Event Player.p_BotHeroRole -= 1;
             Else;
-                Event Player.p_BotHeroClass = 3;
+                Event Player.p_BotHeroRole = 3;
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3] && Event Player.p_QuickModeEnabled == True);
             Event Player.hud_SkyMenuSound = 1;
@@ -1266,23 +1266,24 @@ rule("Player Sky Menu Move Selection Decrease")
             End;
             Call Subroutine(pSub_SetInvulnerable);
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]
-            && Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
+            && Event Player.p_BotUltimateDisabled == True);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
             Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), True);
-            Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled = False;
+            Event Player.p_BotUltimateDisabled = False;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]
-            && Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True);
+            && Event Player.p_BotFlickerEnabled == True);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled = False;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Players In Slot(Slot Of(Event Player), Team 1)
-                .p_ElevatorEnabled == True);
+            Event Player.p_BotFlickerEnabled = False;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]
+            && Event Player.p_ElevatorEnabled == True);
             Event Player.hud_SkyMenuSound = 1;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled = False;
+            Event Player.p_ElevatorEnabled = False;
             Stop Chasing Player Variable(Event Player, p_ElevatorHeight);
-            Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorHeight = 0;
+            Event Player.p_ElevatorHeight = 0;
+            Stop Accelerating(Event Player);
             Set Jump Enabled(Event Player, True);
             Set Crouch Enabled(Event Player, True);
             Set Gravity(Event Player, 100);
@@ -1290,15 +1291,15 @@ rule("Player Sky Menu Move Selection Decrease")
             Event Player.hud_SkyMenuSound = 2;
             Call Subroutine(hudSub_SkyMenuPlaySound);
             If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[0]);
-                Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1];
+                Event Player.p_EffectsColor = Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1];
             Else;
-                Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
+                Event Player.p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
                     Event Player.p_EffectsColor) - 1];
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14] && Event Player.p_Language == 1);
             Event Player.hud_SkyMenuSound = 2;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 1).p_Language = 0;
+            Event Player.p_Language = 0;
             Call Subroutine(pSub_SetLanguage);
             Call Subroutine(pSub_SetNames);
         End;
@@ -1341,10 +1342,10 @@ rule("Player Sky Menu Move Selection Increase")
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
             Event Player.hud_SkyMenuSound = 2;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            If(Event Player.p_BotHeroClass < 3);
-                Event Player.p_BotHeroClass += 1;
+            If(Event Player.p_BotHeroRole < 3);
+                Event Player.p_BotHeroRole += 1;
             Else;
-                Event Player.p_BotHeroClass = 0;
+                Event Player.p_BotHeroRole = 0;
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3] && Event Player.p_QuickModeEnabled == False);
             Event Player.hud_SkyMenuSound = 0;
@@ -1390,41 +1391,41 @@ rule("Player Sky Menu Move Selection Increase")
                 Event Player.p_Invulnerable = 0;
             End;
             Call Subroutine(pSub_SetInvulnerable);
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10] && Players In Slot(Slot Of(Event Player), Team 1)
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10] && Event Player
                 .p_BotUltimateDisabled == False);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
             Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
-            Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled = True;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Players In Slot(Slot Of(Event Player), Team 1)
+            Event Player.p_BotUltimateDisabled = True;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Event Player
                 .p_BotFlickerEnabled == False);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled = True;
-        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Players In Slot(Slot Of(Event Player), Team 1)
+            Event Player.p_BotFlickerEnabled = True;
+        Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Event Player
                 .p_ElevatorEnabled == False);
             Event Player.hud_SkyMenuSound = 0;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled = True;
+            Event Player.p_ElevatorEnabled = True;
             Set Jump Enabled(Event Player, False);
             Set Crouch Enabled(Event Player, False);
             Set Gravity(Event Player, 0);
-            Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("{0} = 올리다 / {1} = 낮추다",
+            Small Message(Event Player, Event Player.p_Language == 1 ? Custom String("{0} = 올리다 / {1} = 낮추다",
                 Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))) : Custom String("{0} to go Up / {1} to go Down",
                 Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))));
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]);
             Event Player.hud_SkyMenuSound = 2;
             Call Subroutine(hudSub_SkyMenuPlaySound);
             If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1]);
-                Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[0];
+                Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
             Else;
-                Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
+                Event Player.p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
                     Event Player.p_EffectsColor) + 1];
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14] && Event Player.p_Language == 0);
             Event Player.hud_SkyMenuSound = 2;
             Call Subroutine(hudSub_SkyMenuPlaySound);
-            Players In Slot(Slot Of(Event Player), Team 1).p_Language = 1;
+            Event Player.p_Language = 1;
             Call Subroutine(pSub_SetLanguage);
             Call Subroutine(pSub_SetNames);
         End;
@@ -1499,31 +1500,31 @@ rule("Player Sky Menu Arrow Visibility")
             Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
-            If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == False);
+            If(Event Player.p_BotUltimateDisabled == False);
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
+            Else If(Event Player.p_BotUltimateDisabled == True);
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]);
-            If(Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == False);
+            If(Event Player.p_BotFlickerEnabled == False);
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True);
+            Else If(Event Player.p_BotFlickerEnabled == True);
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]);
-            If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == False);
+            If(Event Player.p_ElevatorEnabled == False);
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-            Else If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True);
+            Else If(Event Player.p_ElevatorEnabled == True);
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
             End;
         Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
-            If(Players In Slot(Slot Of(Event Player), Team 1).p_Language == 0);
+            If(Event Player.p_Language == 0);
                 Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
                 Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
             Else;
@@ -1583,8 +1584,8 @@ rule("pSub_SetDifficulty")
     }
     actions
     {
-        Players In Slot(Slot Of(Event Player), Team 2).ai_ChanceMod = Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty / 100;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAngleMod = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 2).ai_ChanceMod = Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty / 25;
+        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAngleMod = 150 + 10 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
         Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAnglePow = 0.225 + 0.005 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
@@ -1592,9 +1593,9 @@ rule("pSub_SetDifficulty")
             .p_Difficulty;
         Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 300 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
         Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
             Event Player), Team 1).p_Difficulty);
@@ -1615,12 +1616,12 @@ rule("pSub_SetDifficulty")
         End;
     }
 }
-rule("pSub_SetHeroClass")
+rule("pSub_SetHeroRole")
 {
     event
     {
         Subroutine;
-        pSub_SetHeroClass;
+        pSub_SetHeroRole;
     }
     actions
     {
@@ -1630,11 +1631,11 @@ rule("pSub_SetHeroClass")
             Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName = Global.g_DebugHero[1];
         Else;
             If(Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName != Players In Slot(Slot Of(Event Player), Team 1)
-                .p_HeroClassNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroClass]);
-                Players In Slot(Slot Of(Event Player), Team 1).p_HeroList = Randomized Array(Global.c_HeroClasses[Players In Slot(Slot Of(
-                    Event Player), Team 1).p_BotHeroClass]);
+                .p_HeroRoleNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroRole]);
+                Players In Slot(Slot Of(Event Player), Team 1).p_HeroList = Randomized Array(Global.c_HeroRoles[Players In Slot(Slot Of(
+                    Event Player), Team 1).p_BotHeroRole]);
                 Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName = Players In Slot(Slot Of(Event Player), Team 1)
-                    .p_HeroClassNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroClass];
+                    .p_HeroRoleNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroRole];
             End;
         End;
     }
@@ -1689,14 +1690,14 @@ rule("Player Set Names")
             .p_Language == 1 ? Custom String("인공지능 그랜드마스터") : Custom String("AI Grandmaster");
         Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[10] = Players In Slot(Slot Of(Event Player), Team 1)
             .p_Language == 1 ? Custom String("인공지능 상위500위") : Custom String("AI Top 500");
-        Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames = Array();
-        Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[0] = Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames = Array();
+        Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames[0] = Players In Slot(Slot Of(Event Player), Team 1)
             .p_Language == 1 ? Custom String("모든") : Custom String("All");
-        Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[1] = Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames[1] = Players In Slot(Slot Of(Event Player), Team 1)
             .p_Language == 1 ? Custom String("돌격") : Custom String("Tank");
-        Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[2] = Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames[2] = Players In Slot(Slot Of(Event Player), Team 1)
             .p_Language == 1 ? Custom String("공격") : Custom String("Damage");
-        Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[3] = Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames[3] = Players In Slot(Slot Of(Event Player), Team 1)
             .p_Language == 1 ? Custom String("지원") : Custom String("Support");
     }
 }
@@ -1833,10 +1834,10 @@ rule("Player Init")
         Call Subroutine(pSub_SetNames);
         Event Player.all_Kills = 0;
         Event Player.p_BotHeroNumber = 0;
-        Event Player.p_BotHeroClass = Global.g_HeroClass;
+        Event Player.p_BotHeroRole = Global.g_BotHeroRole;
         Event Player.p_HeroNumberMod = 0;
         Event Player.p_KillGoal = Global.g_KillGoal;
-        Call Subroutine(pSub_SetHeroClass);
+        Call Subroutine(pSub_SetHeroRole);
         Event Player.hud_InfoEnabled = False;
         Event Player.p_HealingEnabled = Global.g_PlayerHealing;
         Event Player.p_OneSecCooldown = False;
@@ -2132,6 +2133,7 @@ rule("Player Self Hero Change Teleport Enemy On Spawn")
     {
         Wait(6 / 60, Abort When False);
         Call Subroutine(pSub_SetDistances);
+        Call Subroutine(pSub_SetInvulnerable);
         Call Subroutine(botSub_TeleportBot);
         Event Player.all_ChangingHero = False;
     }
@@ -2188,14 +2190,15 @@ rule("Player Change Bot Hero On Spawn")
     actions
     {
         Wait(9 / 60, Abort When False);
-        If(Event Player.p_BotHeroClass != 0);
-            Event Player.p_BotHeroClass = 0;
-            Call Subroutine(pSub_SetHeroClass);
+        If(Event Player.p_BotHeroRole != 0);
+            Event Player.p_BotHeroRole = 0;
+            Call Subroutine(pSub_SetHeroRole);
         End;
         Event Player.p_BotHeroNumber = Index Of Array Value(Event Player.p_HeroList, Hero Of(Event Player));
         Start Forcing Player To Be Hero(Event Player, Event Player.p_PlayerHero);
         Wait(1 / 60, Ignore Condition);
         Stop Forcing Player To Be Hero(Event Player);
+        Call Subroutine(pSub_SetInvulnerable);
         Call Subroutine(botSub_SetHero);
         Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero = False;
         Set Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 2))
@@ -2474,7 +2477,7 @@ rule("Player Elevator Movement Start")
     }
     conditions
     {
-        Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True;
+        Event Player.p_ElevatorEnabled == True;
         Is Alive(Event Player) == True;
         Throttle Of(Event Player) != Vector(0, 0, 0);
     }
@@ -2494,7 +2497,7 @@ rule("Player Elevator Movement Stop")
     }
     conditions
     {
-        Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True;
+        Event Player.p_ElevatorEnabled == True;
         Is Alive(Event Player) == True;
         Throttle Of(Event Player) == Vector(0, 0, 0);
         Speed Of(Event Player) > 0;
@@ -2829,14 +2832,8 @@ rule("botSub_MoveJump")
     }
     actions
     {
-        If(Hero Of(Players In Slot(Slot Of(Event Player), Team 2)) == Hero(Genji));
-            If(Random Real(0, 1) < Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod * 2.500);
-                Press Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
-            End;
-        Else;
-            If(Random Real(0, 1) < Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod);
-                Press Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
-            End;
+        If(Random Real(0, 1) < Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod);
+            Press Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
         End;
         Wait(
             Random Real(
@@ -3088,7 +3085,7 @@ rule("Bot You Are Welcome")
     }
     actions
     {
-        Wait(Random Real(1, 1.250), Ignore Condition);
+        Wait(Random Real(1.500, 2), Ignore Condition);
         Communicate(Players In Slot(Slot Of(Event Player), Team 2), You are Welcome);
     }
 }
@@ -3256,15 +3253,15 @@ rule("Bot Flicker")
     {
         Cancel Primary Action(Event Player);
         Set Invisible(Event Player, All);
-        Event Player.ai_CanAim = False;
-        Event Player.ai_CanAttack = False;
-        Event Player.ai_CanUseAbilities = False;
+        Event Player.ai_CnAim = False;
+        Event Player.ai_CnAttack = False;
+        Event Player.ai_CnUseAbilities = False;
         Set Status(Event Player, Null, Phased Out, 9999);
         Wait(Random Real(0.300, 3), Ignore Condition);
         Set Invisible(Event Player, None);
-        Event Player.ai_CanAim = True;
-        Event Player.ai_CanAttack = True;
-        Event Player.ai_CanUseAbilities = True;
+        Event Player.ai_CnAim = True;
+        Event Player.ai_CnAttack = True;
+        Event Player.ai_CnUseAbilities = True;
         Clear Status(Event Player, Phased Out);
         Wait(Random Real(0.250, 2.500), Ignore Condition);
         Loop If Condition Is True;
@@ -3439,7 +3436,9 @@ rule("Special Rule: Reinhardt Charge")
     }
     actions
     {
-        Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
+        If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
+            Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
+        End;
         Set Status(Event Player, Null, Stunned, 0.650);
         Start Forcing Player Position(Event Player, Position Of(Event Player), False);
         If(Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) && Distance Between(
@@ -3451,7 +3450,9 @@ rule("Special Rule: Reinhardt Charge")
         Wait(0.650, Ignore Condition);
         Stop Forcing Player Position(Event Player);
         Stop Forcing Player Position(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))));
-        Call Subroutine(aiSub_FacingReset);
+        If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
+            Call Subroutine(aiSub_FacingReset);
+        End;
         If(Event Player == Players In Slot(Slot Of(Event Player), Team 2));
             Event Player.bot_MoveJumpEnabled = True;
         End;
@@ -3515,21 +3516,21 @@ rule("Special Rule: Player Sombra Disable Enemy Attack")
     {
         Wait(Random Real(0.250, 0.500), Ignore Condition);
         Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = False;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_CanAttack = False;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_CanUseAbilities = False;
+        Players In Slot(Slot Of(Event Player), Team 2).ai_CnAttack = False;
+        Players In Slot(Slot Of(Event Player), Team 2).ai_CnUseAbilities = False;
         While(Is Using Ability 1(Event Player) == True && Hero Of(Event Player) == Hero(Sombra));
             Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector = Vector(Random Real(-5, 5), Random Real(1, 2), Random Real(-5, 5))
                 + Position Of(Players In Slot(Slot Of(Event Player), Team 2));
             Call Subroutine(aiSub_FacingLookAt);
             Wait(Random Real(0.250, 1.250), Ignore Condition);
-            Players In Slot(Slot Of(Event Player), Team 2).ai_CanAim = True;
+            Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim = True;
             If(Random Real(0, 1) < 0.050);
                 Communicate(Players In Slot(Slot Of(Event Player), Team 2), Hello);
             End;
         End;
         Wait(Random Real(0.250, 0.500), Ignore Condition);
-        Players In Slot(Slot Of(Event Player), Team 2).ai_CanAttack = True;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_CanUseAbilities = True;
+        Players In Slot(Slot Of(Event Player), Team 2).ai_CnAttack = True;
+        Players In Slot(Slot Of(Event Player), Team 2).ai_CnUseAbilities = True;
         Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = True;
     }
 }
@@ -3595,7 +3596,7 @@ rule("aiSub_FacingStart")
     actions
     {
         Call Subroutine(allSub_WaitForFrame);
-        Abort If(Players In Slot(Slot Of(Event Player), Team 2).ai_CanAim == False);
+        Abort If(Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim == False);
         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
         "0 == hitscan/beam, 1 == projectile, 2 == arcing projectile"
         If(Players In Slot(Slot Of(Event Player), Team 2).ai_AimType == 0);
@@ -3857,12 +3858,11 @@ rule("aiSub_FacingStart")
                         )
                         + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
                         + Arcsine In Degrees(
-                            -9.800 * (
+                            -15.800 * (
                                 Distance Between(
                                     Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
                                     Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250, 0)
-                                ) 
-                                - Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+                                )
                             )
                             / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
                         ) / 2
@@ -3901,12 +3901,11 @@ rule("aiSub_FacingStart")
                         )
                         + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
                         + Arcsine In Degrees(
-                            -9.800 * (
+                            -15.800 * (
                                 Distance Between(
                                     Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
                                     Eye Position(Players In Slot(Slot Of(Event Player), Team 1))
-                                ) 
-                                - Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+                                )
                             )
                             / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
                         ) / 2
@@ -3945,12 +3944,11 @@ rule("aiSub_FacingStart")
                         )
                         + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
                         + Arcsine In Degrees(
-                            -9.800 * (
+                            -15.800 * (
                                 Distance Between(
                                     Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
                                     Position Of(Players In Slot(Slot Of(Event Player), Team 1))
                                 ) 
-                                - Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
                             )
                             / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
                         ) / 2
@@ -3991,13 +3989,12 @@ rule("aiSub_FacingStart")
                         )
                         + Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
                         + Arcsine In Degrees(
-                            -9.800 * (
+                            -15.800 * (
                                 Distance Between(
                                     Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
                                     Position Of(Players In Slot(Slot Of(Event Player), Team 1))
                                     + Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod
-                                ) 
-                                - Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+                                )
                             )
                             / Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
                         ) / 2
@@ -4019,7 +4016,7 @@ rule("aiSub_FacingLookAt")
     }
     actions
     {
-        Players In Slot(Slot Of(Event Player), Team 2).ai_CanAim = False;
+        Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim = False;
         Wait(2 / 60, Ignore Condition);
         Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate = Random Real(Players In Slot(Slot Of(Event Player), Team 2)
             .ai_FacingCapMin, Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin * 1.500);
@@ -4060,26 +4057,58 @@ rule("AI Aim Mod Calculation")
         Stop Chasing Player Variable(Event Player, ai_AimModY);
         If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
             If(Horizontal Angle Towards(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 0);
-                Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(0, (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-                    Event Player), Team 1).p_Difficulty) * 0.450), Random Real(0.100, 0.500), None);
+                Chase Player Variable Over Time(
+                    Event Player,
+                    ai_AimModX,
+                    Random Real(0, 
+                        (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * 0.250 + 0.250
+                    ),
+                    Random Real(0.100, 0.250),
+                    None
+                );
             Else;
-                Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(-0.450 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-                    Event Player), Team 1).p_Difficulty), 0), Random Real(0.100, 0.500), None);
+                Chase Player Variable Over Time(
+                    Event Player,
+                    ai_AimModX,
+                    Random Real(
+                        (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * -0.250 - 0.250, 
+                        0
+                    ),
+                    Random Real(0.100, 0.250),
+                    None
+                );
             End;
-            Chase Player Variable Over Time(Event Player, ai_AimModY, Random Real(-0.300 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-                Event Player), Team 1).p_Difficulty), (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty)
-                * 0.300), Random Real(0.100, 0.500), None);
+            Event Player.ai_AimModY = Random Real(
+                (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * -0.250 - 0.250,
+                (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * 0.250 + 0.250
+            );
         Else;
             If(Horizontal Angle Towards(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 0);
-                Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(0, (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-                    Event Player), Team 1).p_Difficulty) * 0.750), Random Real(0.100, 0.500), None);
+                Chase Player Variable Over Time(
+                    Event Player,
+                    ai_AimModX,
+                    Random Real(0, 
+                        (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * 0.500 + 0.500
+                    ),
+                    Random Real(0.100, 0.250),
+                    None
+                );
             Else;
-                Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(-0.750 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-                    Event Player), Team 1).p_Difficulty), 0), Random Real(0.100, 0.500), None);
+                Chase Player Variable Over Time(
+                    Event Player,
+                    ai_AimModX,
+                    Random Real(
+                        (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * -0.500 - 0.500,
+                        0
+                    ),
+                    Random Real(0.100, 0.250),
+                    None
+                );
             End;
-            Chase Player Variable Over Time(Event Player, ai_AimModY, Random Real(-0.550 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-                Event Player), Team 1).p_Difficulty), (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty)
-                * 0.550), Random Real(0.100, 0.500), None);
+            Event Player.ai_AimModY = Random Real(
+                (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * -0.350 - 0.350,
+                (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * 0.350 + 0.350
+            );
         End;
     }
 }
@@ -4092,22 +4121,20 @@ rule("AI Aim Calculation")
     }
     actions
     {
+        Call Subroutine(allSub_WaitForFrame);
         If(Event Player.ai_AimTurnRate == 0);
-            Call Subroutine(allSub_WaitForFrame);
-            Chase Player Variable Over Time(Event Player, ai_AimTurnRate, Random Real(Event Player.ai_FacingPadMin,
-                Event Player.ai_FacingPadMax), Random Real(0.050, 0.150), None);
+            Chase Player Variable Over Time(Event Player, ai_AimTurnRate, Random Real(Event Player.ai_FacingPadMin / 2,
+                Event Player.ai_FacingPadMax / 2), Random Real(0.050, 0.100), None);
             Wait(0.150, Ignore Condition);
             Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-        Else If(Random Real(0, 1) < 0.350 - Event Player.ai_ChanceMod);
-            Call Subroutine(allSub_WaitForFrame);
-            Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.150, 0.250) - Event Player.ai_ChanceMod;
+        Else If(Random Real(0, 1) < 0.850 - Event Player.ai_ChanceMod);
+            Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.650, 0.750) - Event Player.ai_ChanceMod;
             Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(250, 500), Destination and Rate);
-            Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.150, 0.250) - Event Player.ai_ChanceMod);
+            Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod);
             Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-            Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.150, 0.250) - Event Player.ai_ChanceMod, None);
+            Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod, None);
             Call Subroutine(aiSub_AimModSet);
         Else;
-            Call Subroutine(allSub_WaitForFrame);
             Event Player.ai_AimTurnRate = (Event Player.ai_FacingAngleMod * Angle Between Vectors(Facing Direction Of(Event Player),
                 Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300,
                 0)))) ^ Event Player.ai_FacingAnglePow + Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax);
@@ -4200,11 +4227,11 @@ rule("AI Aim Calculation Loop")
         Is Alive(Event Player) == True;
         Event Player.bot_BotResetComplete == True;
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
+        Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
         Total Time Elapsed >= Event Player.ai_AimStopTime;
-        ((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) || (Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0))
-            == True;
+        ((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) 
+        || (Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0)) == True;
         Global.g_Tick % 5 == 0;
     }
     actions
@@ -4225,7 +4252,7 @@ rule("AI Aim Stop")
         Is Alive(Event Player) == True;
         Event Player.bot_BotResetComplete == True;
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
+        Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
         Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
             Eye Position(Event Player)), 0), 5) == True;
@@ -4236,12 +4263,12 @@ rule("AI Aim Stop")
             If(Global.g_DebugHUD == True);
                 Small Message(Event Player, Custom String("aim stop"));
             End;
-            Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.200, 0.600) - Players In Slot(Slot Of(Event Player), Team 1)
-                .p_Difficulty * 0.020;
+            Event Player.ai_AimStopTime = Total Time Elapsed + 0.050 + Random Real(0.025, 0.045) 
+                * (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty);
             Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
-            Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.075, 0.150) - Event Player.ai_ChanceMod);
+            Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.150, 0.250));
             Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-            Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.025, 0.075) - Event Player.ai_ChanceMod, None);
+            Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.050, 0.100), None);
             Start Rule(aiSub_AimModSet, Restart Rule);
         End;
     }
@@ -4259,10 +4286,10 @@ rule("AI Aim Flick")
         Is Alive(Event Player) == True;
         Event Player.bot_BotResetComplete == True;
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
+        Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
         Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 1) == False;
+            Eye Position(Event Player)), 0), 3) == False;
     }
     actions
     {
@@ -4283,7 +4310,7 @@ rule("AI Attack Melee")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Is Alive(Event Player) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 2.500;
         Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
@@ -4309,7 +4336,7 @@ rule("AI Aim Start")
         Event Player.ai_AIEnabled == True;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
-        Event Player.ai_CanAim == True;
+        Event Player.ai_CnAim == True;
     }
     actions
     {
@@ -4336,7 +4363,7 @@ rule("AI Rule Can Aim")
     }
     actions
     {
-        Event Player.ai_CanAim = True;
+        Event Player.ai_CnAim = True;
     }
 }
 rule("AI Rule Can Attack")
@@ -4359,7 +4386,7 @@ rule("AI Rule Can Attack")
     }
     actions
     {
-        Event Player.ai_CanAttack = True;
+        Event Player.ai_CnAttack = True;
     }
 }
 rule("AI Rule Can Use Abilities")
@@ -4383,7 +4410,7 @@ rule("AI Rule Can Use Abilities")
     }
     actions
     {
-        Event Player.ai_CanUseAbilities = True;
+        Event Player.ai_CnUseAbilities = True;
     }
 }
 rule("AI Rule Status Hacked")
@@ -4402,7 +4429,7 @@ rule("AI Rule Status Hacked")
     }
     actions
     {
-        Event Player.ai_CanUseAbilities = False;
+        Event Player.ai_CnUseAbilities = False;
     }
 }
 rule("AI Rule Status Knocked Down")
@@ -4421,9 +4448,9 @@ rule("AI Rule Status Knocked Down")
     }
     actions
     {
-        Event Player.ai_CanAim = False;
-        Event Player.ai_CanAttack = False;
-        Event Player.ai_CanUseAbilities = False;
+        Event Player.ai_CnAim = False;
+        Event Player.ai_CnAttack = False;
+        Event Player.ai_CnUseAbilities = False;
         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
     }
 }
@@ -4443,9 +4470,9 @@ rule("AI Rule Status Asleep")
     }
     actions
     {
-        Event Player.ai_CanAim = False;
-        Event Player.ai_CanAttack = False;
-        Event Player.ai_CanUseAbilities = False;
+        Event Player.ai_CnAim = False;
+        Event Player.ai_CnAttack = False;
+        Event Player.ai_CnUseAbilities = False;
         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
     }
 }
@@ -4465,9 +4492,9 @@ rule("AI Rule Status Frozen")
     }
     actions
     {
-        Event Player.ai_CanAim = False;
-        Event Player.ai_CanAttack = False;
-        Event Player.ai_CanUseAbilities = False;
+        Event Player.ai_CnAim = False;
+        Event Player.ai_CnAttack = False;
+        Event Player.ai_CnUseAbilities = False;
         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
     }
 }
@@ -4487,8 +4514,8 @@ rule("AI Rule Status Phased Out")
     }
     actions
     {
-        Event Player.ai_CanUseAbilities = False;
-        Event Player.ai_CanAttack = False;
+        Event Player.ai_CnUseAbilities = False;
+        Event Player.ai_CnAttack = False;
     }
 }
 rule("AI Rule Status Stunned")
@@ -4507,9 +4534,9 @@ rule("AI Rule Status Stunned")
     }
     actions
     {
-        Event Player.ai_CanAim = False;
-        Event Player.ai_CanAttack = False;
-        Event Player.ai_CanUseAbilities = False;
+        Event Player.ai_CnAim = False;
+        Event Player.ai_CnAttack = False;
+        Event Player.ai_CnUseAbilities = False;
         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
     }
 }
@@ -4533,7 +4560,7 @@ rule("AI Movement WASD Strafe On Dmg")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.700 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.100 + Event Player.ai_ChanceMod);
             Call Subroutine(aiSub_ReactionDelay);
             Event Player.bot_ThrottleDir = Random Value In Array(Global.c_MoveDir_Strafe);
             Start Rule(botSub_MoveWASD, Restart Rule);
@@ -4734,7 +4761,7 @@ rule("AI Ana")
                 Call Subroutine(aiSub_FacingLookAt);
                 Press Button(Event Player, Button(Ability 2));
                 Wait(0.100, Ignore Condition);
-                Event Player.ai_CanAim = True;
+                Event Player.ai_CnAim = True;
             End;
             Event Player.ai_AimType = 1;
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
@@ -4782,7 +4809,7 @@ rule("AI Ana Scope In")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -4809,7 +4836,7 @@ rule("AI Ana Scope Out")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -4833,7 +4860,7 @@ rule("AI Ana Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -4860,7 +4887,7 @@ rule("AI Ana Sleep Dart")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -4887,7 +4914,7 @@ rule("AI Ana Sleep Dart Face Enemy Asleep")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
+        Event Player.ai_CnAim == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -4901,9 +4928,9 @@ rule("AI Ana Sleep Dart Face Enemy Asleep")
         Event Player.ai_FacingRelPosMod = Vector(0, 0.250, 0);
         Call Subroutine(aiSub_FacingStart);
         If(Ability Cooldown(Event Player, Button(Ability 2)) <= 4 && Ability Cooldown(Event Player, Button(Ability 2)) > 0);
-            Event Player.ai_CanAttack = False;
+            Event Player.ai_CnAttack = False;
             Wait Until(Ability Cooldown(Event Player, Button(Ability 2)) == 0, 4);
-            Event Player.ai_CanAttack = True;
+            Event Player.ai_CnAttack = True;
         End;
         Wait Until(Has Status(Players In Slot(Slot Of(Event Player), Team 1), Asleep) == False, 6);
         Call Subroutine(aiSub_FacingReset);
@@ -4920,7 +4947,7 @@ rule("AI Ana Biotic Grenade")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -4951,7 +4978,7 @@ rule("AI Ana Biotic Grenade Self")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Health(Event Player) <= 100;
@@ -4977,7 +5004,7 @@ rule("AI Ana Nano Boost")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5077,8 +5104,8 @@ rule("AI Ashe Attack Scope In")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAim == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5103,8 +5130,8 @@ rule("AI Ashe Attack Scope Out")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAim == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5128,8 +5155,8 @@ rule("AI Ashe Attack Scoped")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAim == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5158,8 +5185,8 @@ rule("AI Ashe Attack Unscoped")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAim == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5186,7 +5213,7 @@ rule("AI Ashe Reload")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Ammo(Event Player, 0) == 0;
@@ -5208,7 +5235,7 @@ rule("AI Ashe Reload After Kill")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
     }
@@ -5229,7 +5256,7 @@ rule("AI Ashe Coach Gun Defensive")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5254,7 +5281,7 @@ rule("AI Ashe Coach Gun Finishing")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5279,8 +5306,8 @@ rule("AI Ashe Dynamite")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAim == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnAim == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5307,7 +5334,7 @@ rule("AI Ashe B.O.B.")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5349,15 +5376,15 @@ rule("AI Baptiste")
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Ability 2));
             Call Subroutine(aiSub_ReactionDelay);
-            Event Player.ai_CanAim = True;
+            Event Player.ai_CnAim = True;
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             Call Subroutine(aiSub_ButtonsReset);
             Press Button(Event Player, Button(Ultimate));
-            Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(0, 0, 3), Event Player, Rotation);
+            Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(0, 0, 5), Event Player, Rotation);
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Primary Fire));
             Call Subroutine(aiSub_ReactionDelay);
-            Event Player.ai_CanAim = True;
+            Event Player.ai_CnAim = True;
         End;
         Event Player.ai_IsInAbilitySub = False;
     }
@@ -5397,7 +5424,7 @@ rule("AI Baptiste Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5424,7 +5451,7 @@ rule("AI Baptiste Reload")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Ammo(Event Player, 0) <= 0;
@@ -5446,7 +5473,7 @@ rule("AI Baptiste Regenerative Burst")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
@@ -5470,7 +5497,7 @@ rule("AI Baptiste Immortality Field")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5496,13 +5523,13 @@ rule("AI Baptiste Amplification Matrix")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
-        Altitude Of(Event Player) == 0;
+        Is On Ground(Event Player) == True;
     }
     actions
     {
@@ -5578,7 +5605,7 @@ rule("AI Bastion Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5607,7 +5634,7 @@ rule("AI Bastion Reconfigure")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5619,7 +5646,7 @@ rule("AI Bastion Reconfigure")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 1);
             Call Subroutine(aiSub_Abilities_Bastion);
         End;
@@ -5636,7 +5663,7 @@ rule("AI Bastion Self-Repair")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Health(Event Player) <= Max Health(Event Player) / 2;
@@ -5659,7 +5686,7 @@ rule("AI Bastion Configuration: Tank")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5774,7 +5801,7 @@ rule("AI Brigitte Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5803,7 +5830,7 @@ rule("AI Brigitte Use Shield")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5814,7 +5841,7 @@ rule("AI Brigitte Use Shield")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.500 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.300 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Secondary Fire);
             Call Subroutine(aiSub_Abilities_Brigitte);
         End;
@@ -5834,7 +5861,7 @@ rule("AI Brigitte Shield Bash")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5846,7 +5873,7 @@ rule("AI Brigitte Shield Bash")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.850 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Primary Fire);
             Event Player.ai_AbilityOpt = 1;
             Call Subroutine(aiSub_Abilities_Brigitte);
@@ -5864,7 +5891,7 @@ rule("AI Brigitte Shield Bash Gap Closer")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5891,7 +5918,7 @@ rule("AI Brigitte Whip Shot Final")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5917,7 +5944,7 @@ rule("AI Brigitte Whip Shot Boop")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -5944,7 +5971,7 @@ rule("AI Brigitte Rally")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6051,7 +6078,7 @@ rule("AI Doomfist Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
@@ -6081,7 +6108,7 @@ rule("AI Doomfist Rocket Punch")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6112,7 +6139,7 @@ rule("AI Doomfist Rocket Punch Gap Closer")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6139,7 +6166,7 @@ rule("AI Doomfist Uppercut")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6165,7 +6192,7 @@ rule("AI Doomfist Seismic Slam")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6193,7 +6220,7 @@ rule("AI Doomfist Meteor Strike")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6301,7 +6328,7 @@ rule("AI D.Va Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
@@ -6329,7 +6356,7 @@ rule("AI D.Va Defense Matrix")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6343,7 +6370,7 @@ rule("AI D.Va Defense Matrix")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.750 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Secondary Fire);
             Call Subroutine(aiSub_Abilities_DVa);
         End;
@@ -6360,7 +6387,7 @@ rule("AI D.Va Boosters")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is In Alternate Form(Event Player) == False;
@@ -6391,7 +6418,7 @@ rule("AI D.Va Micro Missiles")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6444,7 +6471,7 @@ rule("AI D.Va Call Mech")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Ultimate Charge Percent(Event Player) == 100;
@@ -6545,7 +6572,7 @@ rule("AI Echo Glide")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Is Alive(Event Player) == True;
         Is In Air(Event Player) == True;
     }
@@ -6567,7 +6594,7 @@ rule("AI Echo Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6594,7 +6621,7 @@ rule("AI Echo Flight")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6618,7 +6645,7 @@ rule("AI Echo Focusing Beam")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6645,7 +6672,7 @@ rule("AI Echo Sticky Bombs")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6659,7 +6686,7 @@ rule("AI Echo Sticky Bombs")
         Call Subroutine(aiSub_Abilities_Echo);
     }
 }
-rule("AI Echo Duplicate")
+disabled rule("AI Echo Duplicate")
 {
     event
     {
@@ -6670,7 +6697,7 @@ rule("AI Echo Duplicate")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6745,7 +6772,7 @@ rule("AI Genji")
                 Call Subroutine(aiSub_FacingLookAt);
                 Press Button(Event Player, Button(Ability 1));
                 Wait Until(Is Using Ability 1(Event Player) == False, 0.300);
-                Event Player.ai_CanAim = True;
+                Event Player.ai_CnAim = True;
                 Press Button(Event Player, Button(Ultimate));
             End;
             Wait Until(Is Using Ultimate(Event Player) == True, 1);
@@ -6794,7 +6821,7 @@ rule("AI Genji Attack Primary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6825,7 +6852,7 @@ rule("AI Genji Attack Secondary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6855,7 +6882,7 @@ rule("AI Genji Swift Strike Movement")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6867,7 +6894,7 @@ rule("AI Genji Swift Strike Movement")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.350 - Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 1);
             Event Player.ai_AbilityOpt = 0;
             Call Subroutine(aiSub_Abilities_Genji);
@@ -6885,7 +6912,7 @@ rule("AI Genji Swift Strike Final")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6913,7 +6940,7 @@ rule("AI Genji Deflect")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6926,7 +6953,7 @@ rule("AI Genji Deflect")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.550 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 2);
             Call Subroutine(aiSub_Abilities_Genji);
         End;
@@ -6943,7 +6970,7 @@ rule("AI Genji Deflect Deadeye")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6958,7 +6985,7 @@ rule("AI Genji Deflect Deadeye")
         Call Subroutine(aiSub_Abilities_Genji);
     }
 }
-rule("AI Genji Dragonblade")
+rule("AI Genji Dragonblde")
 {
     event
     {
@@ -6969,7 +6996,7 @@ rule("AI Genji Dragonblade")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -6990,7 +7017,7 @@ rule("AI Genji Dragonblade")
         Event Player.ai_StrafeDistanceMod = Event Player.ai_OptimalDistance + 5;
     }
 }
-rule("AI Genji Dragonblade Swift Strike Gap Closer")
+rule("AI Genji Dragonblde Swift Strike Gap Closer")
 {
     event
     {
@@ -7001,7 +7028,7 @@ rule("AI Genji Dragonblade Swift Strike Gap Closer")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7019,7 +7046,7 @@ rule("AI Genji Dragonblade Swift Strike Gap Closer")
         Call Subroutine(aiSub_Abilities_Genji);
     }
 }
-rule("AI Genji Dragonblade Swing")
+rule("AI Genji Dragonblde Swing")
 {
     event
     {
@@ -7030,7 +7057,7 @@ rule("AI Genji Dragonblade Swing")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7064,7 +7091,7 @@ rule("AI Genji Double Jump")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.850 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.375 + Event Player.ai_ChanceMod);
             Wait(Random Real(0.150, 0.250), Ignore Condition);
             Press Button(Event Player, Button(Jump));
         End;
@@ -7139,7 +7166,7 @@ rule("AI Hanzo Lunge")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7148,7 +7175,7 @@ rule("AI Hanzo Lunge")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.600 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
             Wait(Random Real(0.150, 0.250), Ignore Condition);
             Press Button(Event Player, Button(Jump));
         End;
@@ -7165,7 +7192,7 @@ rule("AI Hanzo Attack Charge")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Using Ability 2(Event Player) == False;
@@ -7191,7 +7218,7 @@ rule("AI Hanzo Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Using Ability 2(Event Player) == False;
@@ -7220,7 +7247,7 @@ rule("AI Hanzo Sonic Arrow")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -7247,7 +7274,7 @@ rule("AI Hanzo Storm Arrows Start")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -7276,7 +7303,7 @@ rule("AI Hanzo Storm Arrows Fire")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -7304,7 +7331,7 @@ rule("AI Hanzo Dragonstrike")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Using Ability 2(Event Player) == False;
@@ -7347,7 +7374,7 @@ rule("AI Junkrat")
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Ability 2));
             Call Subroutine(aiSub_ReactionDelay);
-            Event Player.ai_CanAim = True;
+            Event Player.ai_CnAim = True;
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             Call Subroutine(aiSub_ButtonsReset);
             Press Button(Event Player, Button(Ultimate));
@@ -7380,7 +7407,7 @@ rule("AI Junkrat General")
     {
         Event Player.ai_OptimalDistanceDefault = Random Real(9, 12);
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-        Event Player.ai_AimBaseDefault = 0;
+        Event Player.ai_AimBaseDefault = 2;
         Event Player.ai_AimTypeDefault = 2;
         Event Player.ai_AimDistanceMod = 10;
         Event Player.ai_ProjectileSpeed = 25;
@@ -7399,13 +7426,13 @@ rule("AI Junkrat Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
         Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 20) == True;
+            Eye Position(Event Player)), 0), 30) == True;
         Is Using Ultimate(Event Player) == False;
     }
     actions
@@ -7428,7 +7455,7 @@ rule("AI Junkrat Concussion Mine")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7455,7 +7482,7 @@ rule("AI Junkrat Steel Trap")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7481,7 +7508,7 @@ rule("AI Junkrat Riptire")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
@@ -7562,7 +7589,7 @@ rule("AI Lucio Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7589,7 +7616,7 @@ rule("AI Lucio Crossfade Heal Self")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
@@ -7613,7 +7640,7 @@ rule("AI Lucio Crossfade Speed Self")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
@@ -7637,7 +7664,7 @@ rule("AI Lucio Amp It Up")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         (Health(Event Player) <= 75 || Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 15) == True;
@@ -7662,7 +7689,7 @@ rule("AI Lucio Soundwave Boop")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7688,7 +7715,7 @@ rule("AI Lucio Soundwave Final")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7714,7 +7741,7 @@ rule("AI Lucio Sound Barrier")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7798,7 +7825,7 @@ rule("AI McCree Attack Primary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7827,7 +7854,7 @@ rule("AI McCree Attack Secondary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7856,7 +7883,7 @@ rule("AI McCree Combat Roll")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7867,7 +7894,7 @@ rule("AI McCree Combat Roll")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.750 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 1);
             Call Subroutine(aiSub_Abilities_McCree);
         End;
@@ -7884,7 +7911,7 @@ rule("AI McCree Flashbang")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7895,7 +7922,7 @@ rule("AI McCree Flashbang")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.750 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 2);
             Call Subroutine(aiSub_Abilities_McCree);
         End;
@@ -7912,7 +7939,7 @@ rule("AI McCree Deadeye Start")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7994,7 +8021,7 @@ rule("AI Mei")
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Primary Fire));
             Wait(0.100, Ignore Condition);
-            Event Player.ai_CanAim = True;
+            Event Player.ai_CnAim = True;
             Event Player.bot_MoveCrouchEnabled = True;
             Event Player.bot_MoveJumpEnabled = True;
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
@@ -8046,7 +8073,7 @@ rule("AI Mei Attack Primary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8076,7 +8103,7 @@ rule("AI Mei Attack Secondary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8107,7 +8134,7 @@ rule("AI Mei Attack Secondary Frozen")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8142,7 +8169,7 @@ rule("AI Mei Cryo-Freeze")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8167,7 +8194,7 @@ rule("AI Mei Ice Wall")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8193,7 +8220,7 @@ rule("AI Mei Blizzrd")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8230,7 +8257,7 @@ rule("AI Mercy")
                 Call Subroutine(aiSub_FacingLookAt);
                 Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, Direction and Magnitude);
                 Wait(Random Real(0.500, 1), Ignore Condition);
-                Event Player.ai_CanAim = True;
+                Event Player.ai_CnAim = True;
                 Start Throttle In Direction(Event Player, Backward, 1, To Player, Replace existing throttle, Direction and Magnitude);
                 Wait(Random Real(0.500, 1), Ignore Condition);
                 Event Player.bot_MoveWASDEnabled = True;
@@ -8298,7 +8325,7 @@ rule("AI Mercy Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8325,7 +8352,7 @@ rule("AI Mercy Valkyrie")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -8422,7 +8449,7 @@ rule("AI Moira Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8451,7 +8478,7 @@ rule("AI Moira Fade")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8476,7 +8503,7 @@ rule("AI Moira Fade Gap Closer")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8503,7 +8530,7 @@ rule("AI Moira Fade Ultimate")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8530,7 +8557,7 @@ rule("AI Moira Biotic Orb Damage")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8562,7 +8589,7 @@ rule("AI Moira Biotic Orb Healing")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Health(Event Player) <= 100;
@@ -8587,7 +8614,7 @@ rule("AI Moira Coalescence")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
@@ -8637,7 +8664,7 @@ rule("AI Orisa")
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Ability 2));
             Call Subroutine(aiSub_ReactionDelay);
-            Event Player.ai_CanAim = True;
+            Event Player.ai_CnAim = True;
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             Press Button(Event Player, Button(Ultimate));
         End;
@@ -8681,7 +8708,7 @@ rule("AI Orisa Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
@@ -8708,7 +8735,7 @@ rule("AI Orisa Halt!")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8733,7 +8760,7 @@ rule("AI Orisa Fortify")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8759,7 +8786,7 @@ rule("AI Orisa Protective Barrier")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8785,7 +8812,7 @@ rule("AI Orisa Supercharger")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -8869,7 +8896,7 @@ rule("AI Pharah Hover Jets")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -8896,7 +8923,7 @@ rule("AI Pharah Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -8925,7 +8952,7 @@ rule("AI Pharah Jump Jet")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -8950,7 +8977,7 @@ rule("AI Pharah Concussive Blast")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -8977,7 +9004,7 @@ rule("AI Pharah Barrage")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9023,7 +9050,7 @@ rule("AI Reaper")
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Primary Fire));
             Wait(1.500, Ignore Condition);
-            Event Player.ai_CanAim = True;
+            Event Player.ai_CnAim = True;
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             Press Button(Event Player, Button(Ultimate));
             Wait Until(Is Using Ultimate(Event Player), 0.500);
@@ -9067,7 +9094,7 @@ rule("AI Reaper Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Using Ability 1(Event Player) == False;
@@ -9099,7 +9126,7 @@ rule("AI Reaper Wraith Form")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9125,7 +9152,7 @@ rule("AI Reaper Shadow Step")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9154,7 +9181,7 @@ rule("AI Reaper Death Blossom")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9234,7 +9261,7 @@ rule("AI Reinhardt General")
     }
     actions
     {
-        Event Player.ai_OptimalDistanceDefault = Random Real(3.5, 5);
+        Event Player.ai_OptimalDistanceDefault = Random Real(3.5, 4.5);
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
         Event Player.ai_StrafeDistanceMod = 0;
         Event Player.ai_AimBaseDefault = 0;
@@ -9255,7 +9282,7 @@ rule("AI Reinhardt Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9284,12 +9311,11 @@ rule("AI Reinhardt Use Shield")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Health(Event Player) < 450;
         Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
             Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 10) == True;
         (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 7.500 || Health(Event Player) <= 250) == True;
@@ -9300,12 +9326,41 @@ rule("AI Reinhardt Use Shield")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.650 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Secondary Fire);
             Call Subroutine(aiSub_Abilities_Reinhardt);
         End;
         Loop If Condition Is True;
         Stop Holding Button(Event Player, Button(Secondary Fire));
+    }
+}
+rule("AI Reinhardt Block Earthshtter")
+{
+    event
+    {
+        Ongoing - Each Player;
+        Team 2;
+        Reinhardt;
+    }
+    conditions
+    {
+        Event Player.ai_AIEnabled == True;
+        Event Player.ai_CnUseAbilities == True;
+        Event Player.ai_IsInAbilitySub == False;
+        Event Player.ai_HeroInitialized == True;
+        Is Alive(Event Player) == True;
+        Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
+        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+        Ultimate Charge Percent(Players In Slot(Slot Of(Event Player), Team 1)) == 0;
+    }
+    actions
+    {
+        If(Random Real(0, 1) < 0.200 + Event Player.ai_ChanceMod);
+            Event Player.ai_AbilityButton = Button(Secondary Fire);
+            Call Subroutine(aiSub_Abilities_Reinhardt);
+        End;
     }
 }
 rule("AI Reinhardt Charge")
@@ -9319,7 +9374,7 @@ rule("AI Reinhardt Charge")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9352,7 +9407,7 @@ rule("AI Reinhardt Charge Gap Closer")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9379,7 +9434,7 @@ rule("AI Reinhardt Firestrike")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9396,7 +9451,7 @@ rule("AI Reinhardt Firestrike")
         Call Subroutine(aiSub_Abilities_Reinhardt);
     }
 }
-rule("AI Reinhardt Earthshatter")
+rule("AI Reinhardt EarthEarthshtter")
 {
     event
     {
@@ -9407,7 +9462,7 @@ rule("AI Reinhardt Earthshatter")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -9421,6 +9476,7 @@ rule("AI Reinhardt Earthshatter")
         Health(Event Player) >= 50;
         Is On Ground(Event Player) == True;
         Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+        Is Jumping(Event Player) == False;
         (Hero Of(Players In Slot(Slot Of(Event Player), Team 1)) == Hero(Reinhardt) ? Is Firing Secondary(Players In Slot(Slot Of(
             Event Player), Team 1)) == False : True) == True;
     }
@@ -9514,7 +9570,7 @@ rule("AI Roadhog Attack Primary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9545,7 +9601,7 @@ rule("AI Roadhog Attack Secondary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9577,7 +9633,7 @@ rule("AI Roadhog Chain Hook")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Ammo(Event Player, 0) > 1;
         Is Alive(Event Player) == True;
@@ -9609,7 +9665,7 @@ rule("AI Roadhog Take A Breather")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Health(Event Player) < 100;
@@ -9635,7 +9691,7 @@ rule("AI Roadhog Whole Hog")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9739,7 +9795,7 @@ rule("AI Sigma General")
     {
         Event Player.ai_OptimalDistanceDefault = Random Real(12, 15);
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-        Event Player.ai_AimBaseDefault = 0;
+        Event Player.ai_AimBaseDefault = 2;
         Event Player.ai_AimTypeDefault = 2;
         Event Player.ai_ProjectileSpeeds[0] = 50;
         Event Player.ai_ProjectileSpeeds[3] = 37.500;
@@ -9759,7 +9815,7 @@ rule("AI Sigma Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9789,7 +9845,7 @@ rule("AI Sigma Experimental Barrier")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9817,7 +9873,7 @@ rule("AI Sigma Kinetic Grasp")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9829,7 +9885,7 @@ rule("AI Sigma Kinetic Grasp")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.650 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 1);
             Call Subroutine(aiSub_Abilities_Sigma);
         End;
@@ -9846,7 +9902,7 @@ rule("AI Sigma Accretion")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9873,7 +9929,7 @@ rule("AI Sigma Gravitic Flux")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9963,7 +10019,7 @@ rule("AI Soldier: 76 Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -9993,7 +10049,7 @@ rule("AI Soldier: 76 Helix Rockets")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10019,7 +10075,7 @@ rule("AI Soldier: 76 Sprint")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10046,7 +10102,7 @@ rule("AI Soldier: 76 Biotic Field")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Health(Event Player) < 100;
@@ -10070,7 +10126,7 @@ rule("AI Soldier: 76 Tactical Visor")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10123,7 +10179,7 @@ rule("AI Sombra")
                 Call Subroutine(aiSub_FacingLookAt);
                 Press Button(Event Player, Button(Ability 2));
                 Wait(0.100, Ignore Condition);
-                Event Player.ai_CanAim = True;
+                Event Player.ai_CnAim = True;
             End;
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             Press Button(Event Player, Button(Ultimate));
@@ -10171,7 +10227,7 @@ rule("AI Sombra Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10200,7 +10256,7 @@ rule("AI Sombra Hack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10226,7 +10282,7 @@ rule("AI Sombra Stealth")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
@@ -10249,7 +10305,7 @@ rule("AI Sombra Translocator Place")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Using Ability 2(Event Player) == False;
@@ -10273,7 +10329,7 @@ rule("AI Sombra Translocator Use")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Health(Event Player) <= 75;
@@ -10298,7 +10354,7 @@ rule("AI Sombra EMP")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10344,7 +10400,7 @@ rule("AI Symmetra")
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Ability 1));
             Wait(0.350, Ignore Condition);
-            Event Player.ai_CanAim = True;
+            Event Player.ai_CnAim = True;
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             Press Button(Event Player, Button(Ultimate));
             Wait(0.250, Ignore Condition);
@@ -10391,7 +10447,7 @@ rule("AI Symmetra Attack Primary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10418,7 +10474,7 @@ rule("AI Symmetra Attack Secondary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10445,7 +10501,7 @@ rule("AI Symmetra Sentry Turret")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10472,7 +10528,7 @@ rule("AI Symmetra Photon Barrier")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10513,7 +10569,7 @@ rule("AI Torbjorn")
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Ability 1));
             Call Subroutine(aiSub_ReactionDelay);
-            Event Player.ai_CanAim = True;
+            Event Player.ai_CnAim = True;
             Call Subroutine(aiSub_FacingReset);
         Else If(Event Player.ai_AbilityButton == Button(Ability 2));
             Press Button(Event Player, Button(Ability 2));
@@ -10573,7 +10629,7 @@ rule("AI Torbjorn Attack Primary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10604,7 +10660,7 @@ rule("AI Torbjorn Attack Secondary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10634,7 +10690,7 @@ rule("AI Torbjorn Deploy Turret")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10661,7 +10717,7 @@ rule("AI Torbjorn Overload")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10688,7 +10744,7 @@ rule("AI Torbjorn Molten Core")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10772,7 +10828,7 @@ rule("AI Tracer Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10802,7 +10858,7 @@ rule("AI Tracer Blink")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10814,7 +10870,7 @@ rule("AI Tracer Blink")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.500 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.300 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 1);
             Call Subroutine(aiSub_Abilities_Tracer);
         End;
@@ -10831,11 +10887,11 @@ rule("AI Tracer Recall")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
-        Health(Event Player) < 70;
+        Health(Event Player) < 85;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Is Using Ability 2(Event Player) == False;
     }
@@ -10856,7 +10912,7 @@ rule("AI Tracer Pulse Bomb Update Range")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -10880,7 +10936,7 @@ rule("AI Tracer Pulse Bomb Toss")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10909,7 +10965,7 @@ rule("AI Tracer Pulse Bomb Stick Recall")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -10970,15 +11026,15 @@ rule("AI Widowmaker")
                 End;
             End;
         Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-            Event Player.ai_CanAttack = False;
+            Event Player.ai_CnAttack = False;
             Call Subroutine(aiSub_ButtonsReset);
             Call Subroutine(aiSub_FacingLookAt);
             Press Button(Event Player, Button(Ability 1));
             Stop Facing(Event Player);
             Wait Until(Is Using Ability 1(Event Player) == True, 2);
             Wait Until(Is Using Ability 1(Event Player) == False, 2);
-            Event Player.ai_CanAim = True;
-            Event Player.ai_CanAttack = True;
+            Event Player.ai_CnAim = True;
+            Event Player.ai_CnAttack = True;
         Else If(Event Player.ai_AbilityButton == Button(Ability 2));
             Stop Holding Button(Event Player, Button(Secondary Fire));
             Event Player.ai_AimType = 2;
@@ -11012,7 +11068,7 @@ rule("AI Widowmaker General")
     }
     actions
     {
-        Event Player.ai_OptimalDistanceDefault = Random Integer(20, 40);
+        Event Player.ai_OptimalDistanceDefault = Random Integer(20, 35);
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
         Event Player.ai_StrafeDistanceMod = 10;
         Event Player.ai_AimBaseDefault = 1;
@@ -11034,7 +11090,7 @@ rule("AI Widowmaker Scope In")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11063,7 +11119,7 @@ rule("AI Widowmaker Scope Out")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11113,7 +11169,7 @@ rule("AI Widowmaker Charge And Fire")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11141,7 +11197,7 @@ rule("AI Widowmaker Attack SMG")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11170,14 +11226,14 @@ rule("AI Widowmaker Grappling Hook Closer")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is Using Ability 1(Event Player) == False;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > Event Player.ai_OptimalDistance + 5;
+        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= Event Player.ai_OptimalDistance + 10;
         Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
             < Global.c_BubbleRadius;
     }
@@ -11200,14 +11256,16 @@ rule("AI Widowmaker Grappling Hook Farther")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is Using Ability 1(Event Player) == False;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < Event Player.ai_OptimalDistance - 5;
+        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Event Player.ai_OptimalDistance - 10;
+        Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+            < Global.c_BubbleRadius;
     }
     actions
     {
@@ -11228,7 +11286,7 @@ rule("AI Widowmaker Venom Mine")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11255,7 +11313,7 @@ rule("AI Widowmaker Infra-Sight")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11346,7 +11404,7 @@ rule("AI Winston Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11375,7 +11433,7 @@ rule("AI Winston Jump Pack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11405,7 +11463,7 @@ rule("AI Winston Barrier Projector")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11417,7 +11475,7 @@ rule("AI Winston Barrier Projector")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.700 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 2);
             Call Subroutine(aiSub_Abilities_Winston);
         End;
@@ -11434,7 +11492,7 @@ rule("AI Winston Primal Rage")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
@@ -11521,7 +11579,7 @@ rule("AI Wrecking Ball Attack")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11548,7 +11606,7 @@ rule("AI Wrecking Ball Roll")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 15;
@@ -11572,7 +11630,7 @@ rule("AI Wrecking Ball Adaptive Shield")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Health(Event Player) <= 150;
@@ -11595,7 +11653,7 @@ rule("AI Wrecking Ball Piledriver")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
@@ -11618,7 +11676,7 @@ rule("AI Wrecking Ball Minefield")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11716,7 +11774,7 @@ rule("AI Zarya Attack Primary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11744,7 +11802,7 @@ rule("AI Zarya Attack Secondary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11773,7 +11831,7 @@ rule("AI Zarya Use Bubble")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11784,7 +11842,7 @@ rule("AI Zarya Use Bubble")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.700 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.300 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 1);
             Call Subroutine(aiSub_Abilities_Zarya);
         End;
@@ -11801,7 +11859,7 @@ rule("AI Zarya Graviton Surge")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11883,7 +11941,7 @@ rule("AI Zenyatta Attack Primary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11912,7 +11970,7 @@ rule("AI Zenyatta Attack Secondary")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanAttack == True;
+        Event Player.ai_CnAttack == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11940,7 +11998,7 @@ rule("AI Zenyatta Orb of Discord")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -11966,7 +12024,7 @@ rule("AI Zenyatta Transcendence")
     conditions
     {
         Event Player.ai_AIEnabled == True;
-        Event Player.ai_CanUseAbilities == True;
+        Event Player.ai_CnUseAbilities == True;
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;

@@ -80,7 +80,7 @@ rule("AI Winston Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -112,7 +112,7 @@ rule("AI Winston Jump Pack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -145,7 +145,7 @@ rule("AI Winston Barrier Projector")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -158,7 +158,7 @@ rule("AI Winston Barrier Projector")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.700 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 2);
 			Call Subroutine(aiSub_Abilities_Winston);
 		End;
@@ -177,7 +177,7 @@ rule("AI Winston Primal Rage")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;

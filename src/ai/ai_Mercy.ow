@@ -21,7 +21,7 @@ rule("AI Mercy")
 				Call Subroutine(aiSub_FacingLookAt);
 				Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, Direction and Magnitude);
 				Wait(Random Real(0.500, 1), Ignore Condition);
-				Event Player.ai_CanAim = True;
+				Event Player.ai_CnAim = True;
 				Start Throttle In Direction(Event Player, Backward, 1, To Player, Replace existing throttle, Direction and Magnitude);
 				Wait(Random Real(0.500, 1), Ignore Condition);
 				Event Player.bot_MoveWASDEnabled = True;
@@ -97,7 +97,7 @@ rule("AI Mercy Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -127,7 +127,7 @@ rule("AI Mercy Valkyrie")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;

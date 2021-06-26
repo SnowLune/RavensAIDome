@@ -57,7 +57,7 @@ rule("aiSub_ButtonsReset")
 }
 
 //
-// Start AI bot aiming at player, inputs: ai_CanAim, ai_AimType, ai_AimBase
+// Start AI bot aiming at player, inputs: ai_CnAim, ai_AimType, ai_AimBase
 //
 rule("aiSub_FacingStart")
 {
@@ -70,7 +70,7 @@ rule("aiSub_FacingStart")
 	actions
 	{
 		Call Subroutine(allSub_WaitForFrame);
-		Abort If(Players In Slot(Slot Of(Event Player), Team 2).ai_CanAim == False);
+		Abort If(Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim == False);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 
 		"0 == hitscan/beam, 1 == projectile, 2 == arcing projectile"
@@ -377,12 +377,11 @@ rule("aiSub_FacingStart")
 						)
 						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
 						+ Arcsine In Degrees(
-							-9.800 * (
+							-15.800 * (
 								Distance Between(
 									Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
 									Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250, 0)
-								) 
-								- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+								)
 							)
 							/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
 						) / 2
@@ -424,12 +423,11 @@ rule("aiSub_FacingStart")
 						)
 						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
 						+ Arcsine In Degrees(
-							-9.800 * (
+							-15.800 * (
 								Distance Between(
 									Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
 									Eye Position(Players In Slot(Slot Of(Event Player), Team 1))
-								) 
-								- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+								)
 							)
 							/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
 						) / 2
@@ -471,12 +469,11 @@ rule("aiSub_FacingStart")
 						)
 						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
 						+ Arcsine In Degrees(
-							-9.800 * (
+							-15.800 * (
 								Distance Between(
 									Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
 									Position Of(Players In Slot(Slot Of(Event Player), Team 1))
 								) 
-								- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
 							)
 							/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
 						) / 2
@@ -520,13 +517,12 @@ rule("aiSub_FacingStart")
 						)
 						+ Players In Slot(Slot Of(Event Player), Team 2).ai_AimModY
 						+ Arcsine In Degrees(
-							-9.800 * (
+							-15.800 * (
 								Distance Between(
 									Eye Position(Players In Slot(Slot Of(Event Player), Team 2)),
 									Position Of(Players In Slot(Slot Of(Event Player), Team 1))
 									+ Players In Slot(Slot Of(Event Player), Team 2).ai_FacingRelPosMod
-								) 
-								- Players In Slot(Slot Of(Event Player), Team 2).ai_AimDistanceMod
+								)
 							)
 							/ Players In Slot(Slot Of(Event Player), Team 2).ai_ProjectileSpeed ^ 2
 						) / 2
@@ -550,7 +546,7 @@ rule("aiSub_FacingLookAt")
 
 	actions
 	{
-		Players In Slot(Slot Of(Event Player), Team 2).ai_CanAim = False;
+		Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim = False;
 		Wait(2 / 60, Ignore Condition);
 		Players In Slot(Slot Of(Event Player), Team 2).ai_AimTurnRate = Random Real(Players In Slot(Slot Of(Event Player), Team 2)
 			.ai_FacingCapMin, Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin * 1.500);
@@ -595,26 +591,61 @@ rule("AI Aim Mod Calculation")
 		Stop Chasing Player Variable(Event Player, ai_AimModY);
 		If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
 			If(Horizontal Angle Towards(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 0);
-				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(0, (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-					Event Player), Team 1).p_Difficulty) * 0.450), Random Real(0.100, 0.500), None);
+				Chase Player Variable Over Time(
+					Event Player,
+					ai_AimModX,
+					Random Real(0, 
+						(Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * 0.250 + 0.250
+					),
+					Random Real(0.100, 0.250),
+					None
+				);
 			Else;
-				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(-0.450 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-					Event Player), Team 1).p_Difficulty), 0), Random Real(0.100, 0.500), None);
+				Chase Player Variable Over Time(
+					Event Player,
+					ai_AimModX,
+					Random Real(
+						(Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * -0.250 - 0.250, 
+						0
+					),
+					Random Real(0.100, 0.250),
+					None
+				);
 			End;
-			Chase Player Variable Over Time(Event Player, ai_AimModY, Random Real(-0.300 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-				Event Player), Team 1).p_Difficulty), (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty)
-				* 0.300), Random Real(0.100, 0.500), None);
+
+			Event Player.ai_AimModY = Random Real(
+				(Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * -0.250 - 0.250,
+				(Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * 0.250 + 0.250
+			);
+
 		Else;
 			If(Horizontal Angle Towards(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 0);
-				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(0, (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-					Event Player), Team 1).p_Difficulty) * 0.750), Random Real(0.100, 0.500), None);
+				Chase Player Variable Over Time(
+					Event Player,
+					ai_AimModX,
+					Random Real(0, 
+						(Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * 0.500 + 0.500
+					),
+					Random Real(0.100, 0.250),
+					None
+				);
 			Else;
-				Chase Player Variable Over Time(Event Player, ai_AimModX, Random Real(-0.750 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-					Event Player), Team 1).p_Difficulty), 0), Random Real(0.100, 0.500), None);
+				Chase Player Variable Over Time(
+					Event Player,
+					ai_AimModX,
+					Random Real(
+						(Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * -0.500 - 0.500,
+						0
+					),
+					Random Real(0.100, 0.250),
+					None
+				);
 			End;
-			Chase Player Variable Over Time(Event Player, ai_AimModY, Random Real(-0.550 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
-				Event Player), Team 1).p_Difficulty), (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty)
-				* 0.550), Random Real(0.100, 0.500), None);
+
+			Event Player.ai_AimModY = Random Real(
+				(Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * -0.350 - 0.350,
+				(Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty) * 0.350 + 0.350
+			);
 		End;
 	}
 }
@@ -629,26 +660,28 @@ rule("AI Aim Calculation")
 
 	actions
 	{
+		Call Subroutine(allSub_WaitForFrame);
+
 		If(Event Player.ai_AimTurnRate == 0);
-			Call Subroutine(allSub_WaitForFrame);
-			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, Random Real(Event Player.ai_FacingPadMin,
-				Event Player.ai_FacingPadMax), Random Real(0.050, 0.150), None);
+			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, Random Real(Event Player.ai_FacingPadMin / 2,
+				Event Player.ai_FacingPadMax / 2), Random Real(0.050, 0.100), None);
 			Wait(0.150, Ignore Condition);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-		Else If(Random Real(0, 1) < 0.350 - Event Player.ai_ChanceMod);
-			Call Subroutine(allSub_WaitForFrame);
-			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.150, 0.250) - Event Player.ai_ChanceMod;
+
+		Else If(Random Real(0, 1) < 0.850 - Event Player.ai_ChanceMod);
+			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.650, 0.750) - Event Player.ai_ChanceMod;
 			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(250, 500), Destination and Rate);
-			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.150, 0.250) - Event Player.ai_ChanceMod);
+			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.150, 0.250) - Event Player.ai_ChanceMod, None);
+			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod, None);
 			Call Subroutine(aiSub_AimModSet);
+
 		Else;
-			Call Subroutine(allSub_WaitForFrame);
 			Event Player.ai_AimTurnRate = (Event Player.ai_FacingAngleMod * Angle Between Vectors(Facing Direction Of(Event Player),
 				Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300,
 				0)))) ^ Event Player.ai_FacingAnglePow + Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax);
 		End;
+
 		If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
 			Event Player.ai_AimTurnRate = Event Player.ai_AimTurnRate / 1.500;
 		End;

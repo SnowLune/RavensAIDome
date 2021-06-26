@@ -247,10 +247,10 @@ rule("hudSub_SkyMenuToggle")
 			Enable Hero HUD(Event Player);
 			Call Subroutine(hudSub_MainToggle);
 			If(Event Player.p_HeroListName != Event Player
-				.p_HeroClassNames[Event Player.p_BotHeroClass]);
+				.p_HeroRoleNames[Event Player.p_BotHeroRole]);
 				Event Player.p_BotHeroNumber = 0;
 				Event Player.p_HeroNumberMod = 0;
-				Call Subroutine(pSub_SetHeroClass);
+				Call Subroutine(pSub_SetHeroRole);
 				Call Subroutine(botSub_SetHero);
 			Else;
 				Call Subroutine(botSub_TeleportBot);
@@ -334,9 +334,9 @@ rule("hudSub_SkyMenuToggle")
 			Modify Player Variable(Event Player, hud_SkyMenu, Append To Array, Last Text ID);
 
 			Create In-World Text(Event Player.hud_SkyMenuVisibleTo, Event Player.p_Language == 1 ? Custom String("영웅 유형: {0}", Event Player
-				.p_HeroClassNames[Event Player.p_BotHeroClass]) : Custom String("Hero Class: {0}",
-				Event Player.p_HeroClassNames[Event Player
-				.p_BotHeroClass]), Event Player.hud_SkyMenuVectors[2], 1.500, Clip Against Surfaces,
+				.p_HeroRoleNames[Event Player.p_BotHeroRole]) : Custom String("Bot Hero Role: {0}",
+				Event Player.p_HeroRoleNames[Event Player
+				.p_BotHeroRole]), Event Player.hud_SkyMenuVectors[2], 1.500, Clip Against Surfaces,
 				Visible To and String, Color(White), Default Visibility);
 			Modify Player Variable(Event Player, hud_SkyMenu, Append To Array, Last Text ID);
 
@@ -358,7 +358,7 @@ rule("hudSub_SkyMenuToggle")
 				.p_OneSecCooldown == 3 ? Custom String("플레이어 + 인공 지능") : (Event Player
 				.p_OneSecCooldown == 2 ? Custom String("인공지는") : (Event Player
 				.p_OneSecCooldown == 1 ? Custom String("플레이어") : Custom String("비활성화")))) : Custom String("1 Sec Cooldown Mode: {0}",
-				Event Player.p_OneSecCooldown == 3 ? Custom String("Player & Bot") : (Players In Slot(
+				Event Player.p_OneSecCooldown == 3 ? Custom String("Player&Bot") : (Players In Slot(
 				Slot Of(Event Player), Team 1).p_OneSecCooldown == 2 ? Custom String("Bot") : (Event Player
 				.p_OneSecCooldown == 1 ? Custom String("Player") : Custom String("Off")))), Event Player
 				.hud_SkyMenuVectors[5], 1.500, Clip Against Surfaces, Visible To and String, Color(White), Default Visibility);

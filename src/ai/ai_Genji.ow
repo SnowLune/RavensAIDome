@@ -58,7 +58,7 @@ rule("AI Genji")
 				Call Subroutine(aiSub_FacingLookAt);
 				Press Button(Event Player, Button(Ability 1));
 				Wait Until(Is Using Ability 1(Event Player) == False, 0.300);
-				Event Player.ai_CanAim = True;
+				Event Player.ai_CnAim = True;
 				Press Button(Event Player, Button(Ultimate));
 			End;
 			Wait Until(Is Using Ultimate(Event Player) == True, 1);
@@ -112,7 +112,7 @@ rule("AI Genji Attack Primary")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -146,7 +146,7 @@ rule("AI Genji Attack Secondary")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -179,7 +179,7 @@ rule("AI Genji Swift Strike Movement")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -192,7 +192,7 @@ rule("AI Genji Swift Strike Movement")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.350 - Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 1);
 			Event Player.ai_AbilityOpt = 0;
 			Call Subroutine(aiSub_Abilities_Genji);
@@ -212,7 +212,7 @@ rule("AI Genji Swift Strike Final")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -243,7 +243,7 @@ rule("AI Genji Deflect")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -257,7 +257,7 @@ rule("AI Genji Deflect")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.550 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 2);
 			Call Subroutine(aiSub_Abilities_Genji);
 		End;
@@ -276,7 +276,7 @@ rule("AI Genji Deflect Deadeye")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -293,7 +293,7 @@ rule("AI Genji Deflect Deadeye")
 	}
 }
 
-rule("AI Genji Dragonblade")
+rule("AI Genji Dragonblde")
 {
 	event
 	{
@@ -305,7 +305,7 @@ rule("AI Genji Dragonblade")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -328,7 +328,7 @@ rule("AI Genji Dragonblade")
 	}
 }
 
-rule("AI Genji Dragonblade Swift Strike Gap Closer")
+rule("AI Genji Dragonblde Swift Strike Gap Closer")
 {
 	event
 	{
@@ -340,7 +340,7 @@ rule("AI Genji Dragonblade Swift Strike Gap Closer")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -360,7 +360,7 @@ rule("AI Genji Dragonblade Swift Strike Gap Closer")
 	}
 }
 
-rule("AI Genji Dragonblade Swing")
+rule("AI Genji Dragonblde Swing")
 {
 	event
 	{
@@ -372,7 +372,7 @@ rule("AI Genji Dragonblade Swing")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -410,7 +410,7 @@ rule("AI Genji Double Jump")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.850 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.375 + Event Player.ai_ChanceMod);
 			Wait(Random Real(0.150, 0.250), Ignore Condition);
 			Press Button(Event Player, Button(Jump));
 		End;

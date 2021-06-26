@@ -74,7 +74,7 @@ rule("AI McCree Attack Primary")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -106,7 +106,7 @@ rule("AI McCree Attack Secondary")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -138,7 +138,7 @@ rule("AI McCree Combat Roll")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -150,7 +150,7 @@ rule("AI McCree Combat Roll")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.750 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 1);
 			Call Subroutine(aiSub_Abilities_McCree);
 		End;
@@ -169,7 +169,7 @@ rule("AI McCree Flashbang")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -181,7 +181,7 @@ rule("AI McCree Flashbang")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.750 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 2);
 			Call Subroutine(aiSub_Abilities_McCree);
 		End;
@@ -200,7 +200,7 @@ rule("AI McCree Deadeye Start")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;

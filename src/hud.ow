@@ -243,10 +243,10 @@ rule("Player Sky Menu Move Selection Decrease")
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_BotHeroClass > 0);
-				Event Player.p_BotHeroClass -= 1;
+			If(Event Player.p_BotHeroRole > 0);
+				Event Player.p_BotHeroRole -= 1;
 			Else;
-				Event Player.p_BotHeroClass = 3;
+				Event Player.p_BotHeroRole = 3;
 			End;
 
 		// Quick Mode
@@ -311,31 +311,32 @@ rule("Player Sky Menu Move Selection Decrease")
 
 		// Disable Bot Ultimate
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]
-			&& Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
+			&& Event Player.p_BotUltimateDisabled == True);
 
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 
 			Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), True);
-			Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled = False;
+			Event Player.p_BotUltimateDisabled = False;
 
 		// Bot Flicker
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]
-			&& Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True);
+			&& Event Player.p_BotFlickerEnabled == True);
 
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 
-			Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled = False;
+			Event Player.p_BotFlickerEnabled = False;
 
 		// Elevator
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Players In Slot(Slot Of(Event Player), Team 1)
-				.p_ElevatorEnabled == True);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]
+			&& Event Player.p_ElevatorEnabled == True);
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled = False;
+			Event Player.p_ElevatorEnabled = False;
 			Stop Chasing Player Variable(Event Player, p_ElevatorHeight);
-			Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorHeight = 0;
+			Event Player.p_ElevatorHeight = 0;
+			Stop Accelerating(Event Player);
 			Set Jump Enabled(Event Player, True);
 			Set Crouch Enabled(Event Player, True);
 			Set Gravity(Event Player, 100);
@@ -345,9 +346,9 @@ rule("Player Sky Menu Move Selection Decrease")
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[0]);
-				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1];
+				Event Player.p_EffectsColor = Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1];
 			Else;
-				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
+				Event Player.p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
 					Event Player.p_EffectsColor) - 1];
 			End;
 
@@ -355,7 +356,8 @@ rule("Player Sky Menu Move Selection Decrease")
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14] && Event Player.p_Language == 1);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Players In Slot(Slot Of(Event Player), Team 1).p_Language = 0;
+
+			Event Player.p_Language = 0;
 			Call Subroutine(pSub_SetLanguage);
 			Call Subroutine(pSub_SetNames);
 		End;
@@ -406,10 +408,10 @@ rule("Player Sky Menu Move Selection Increase")
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_BotHeroClass < 3);
-				Event Player.p_BotHeroClass += 1;
+			If(Event Player.p_BotHeroRole < 3);
+				Event Player.p_BotHeroRole += 1;
 			Else;
-				Event Player.p_BotHeroClass = 0;
+				Event Player.p_BotHeroRole = 0;
 			End;
 
 		// Quick Mode
@@ -474,32 +476,32 @@ rule("Player Sky Menu Move Selection Increase")
 			Call Subroutine(pSub_SetInvulnerable);
 
 		// Disable Bot Ultimate
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10] && Players In Slot(Slot Of(Event Player), Team 1)
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10] && Event Player
 				.p_BotUltimateDisabled == False);
 
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 
 			Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
-			Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled = True;
+			Event Player.p_BotUltimateDisabled = True;
 
 		// Bot Flicker
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Players In Slot(Slot Of(Event Player), Team 1)
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Event Player
 				.p_BotFlickerEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled = True;
+			Event Player.p_BotFlickerEnabled = True;
 		
 		// Elevator
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Players In Slot(Slot Of(Event Player), Team 1)
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Event Player
 				.p_ElevatorEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled = True;
+			Event Player.p_ElevatorEnabled = True;
 			Set Jump Enabled(Event Player, False);
 			Set Crouch Enabled(Event Player, False);
 			Set Gravity(Event Player, 0);
-			Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("{0} = 올리다 / {1} = 낮추다",
+			Small Message(Event Player, Event Player.p_Language == 1 ? Custom String("{0} = 올리다 / {1} = 낮추다",
 				Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))) : Custom String("{0} to go Up / {1} to go Down",
 				Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))));
 
@@ -508,9 +510,9 @@ rule("Player Sky Menu Move Selection Increase")
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1]);
-				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[0];
+				Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
 			Else;
-				Players In Slot(Slot Of(Event Player), Team 1).p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
+				Event Player.p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
 					Event Player.p_EffectsColor) + 1];
 			End;
 
@@ -518,7 +520,7 @@ rule("Player Sky Menu Move Selection Increase")
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14] && Event Player.p_Language == 0);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Players In Slot(Slot Of(Event Player), Team 1).p_Language = 1;
+			Event Player.p_Language = 1;
 			Call Subroutine(pSub_SetLanguage);
 			Call Subroutine(pSub_SetNames);
 		End;
@@ -595,31 +597,31 @@ rule("Player Sky Menu Arrow Visibility")
 			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
-			If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == False);
+			If(Event Player.p_BotUltimateDisabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
+			Else If(Event Player.p_BotUltimateDisabled == True);
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]);
-			If(Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == False);
+			If(Event Player.p_BotFlickerEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Players In Slot(Slot Of(Event Player), Team 1).p_BotFlickerEnabled == True);
+			Else If(Event Player.p_BotFlickerEnabled == True);
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]);
-			If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == False);
+			If(Event Player.p_ElevatorEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Players In Slot(Slot Of(Event Player), Team 1).p_ElevatorEnabled == True);
+			Else If(Event Player.p_ElevatorEnabled == True);
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
-			If(Players In Slot(Slot Of(Event Player), Team 1).p_Language == 0);
+			If(Event Player.p_Language == 0);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
 			Else;

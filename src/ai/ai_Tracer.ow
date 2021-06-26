@@ -73,7 +73,7 @@ rule("AI Tracer Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -106,7 +106,7 @@ rule("AI Tracer Blink")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -119,7 +119,7 @@ rule("AI Tracer Blink")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.500 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.300 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 1);
 			Call Subroutine(aiSub_Abilities_Tracer);
 		End;
@@ -138,11 +138,11 @@ rule("AI Tracer Recall")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
-		Health(Event Player) < 70;
+		Health(Event Player) < 85;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Is Using Ability 2(Event Player) == False;
 	}
@@ -166,7 +166,7 @@ rule("AI Tracer Pulse Bomb Update Range")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -193,7 +193,7 @@ rule("AI Tracer Pulse Bomb Toss")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -225,7 +225,7 @@ rule("AI Tracer Pulse Bomb Stick Recall")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;

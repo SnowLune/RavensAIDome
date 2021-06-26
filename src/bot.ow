@@ -251,7 +251,7 @@ rule("Bot You Are Welcome")
 
 	actions
 	{
-		Wait(Random Real(1, 1.250), Ignore Condition);
+		Wait(Random Real(1.500, 2), Ignore Condition);
 		Communicate(Players In Slot(Slot Of(Event Player), Team 2), You are Welcome);
 	}
 }
@@ -304,6 +304,7 @@ rule("Hard Mode WASD")
 		Start Rule(botSub_MoveJump, Do Nothing);
 		Wait(0.250, Ignore Condition);
 		Loop If Condition Is True;
+		
 		Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2));
 		Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch));
 		Stop Holding Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
@@ -437,15 +438,15 @@ rule("Bot Flicker")
 	{
 		Cancel Primary Action(Event Player);
 		Set Invisible(Event Player, All);
-		Event Player.ai_CanAim = False;
-		Event Player.ai_CanAttack = False;
-		Event Player.ai_CanUseAbilities = False;
+		Event Player.ai_CnAim = False;
+		Event Player.ai_CnAttack = False;
+		Event Player.ai_CnUseAbilities = False;
 		Set Status(Event Player, Null, Phased Out, 9999);
 		Wait(Random Real(0.300, 3), Ignore Condition);
 		Set Invisible(Event Player, None);
-		Event Player.ai_CanAim = True;
-		Event Player.ai_CanAttack = True;
-		Event Player.ai_CanUseAbilities = True;
+		Event Player.ai_CnAim = True;
+		Event Player.ai_CnAttack = True;
+		Event Player.ai_CnUseAbilities = True;
 		Clear Status(Event Player, Phased Out);
 		Wait(Random Real(0.250, 2.500), Ignore Condition);
 		Loop If Condition Is True;

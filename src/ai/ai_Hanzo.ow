@@ -73,7 +73,7 @@ rule("AI Hanzo Lunge")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -83,7 +83,7 @@ rule("AI Hanzo Lunge")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.600 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
 			Wait(Random Real(0.150, 0.250), Ignore Condition);
 			Press Button(Event Player, Button(Jump));
 		End;
@@ -102,7 +102,7 @@ rule("AI Hanzo Attack Charge")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Using Ability 2(Event Player) == False;
@@ -131,7 +131,7 @@ rule("AI Hanzo Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Using Ability 2(Event Player) == False;
@@ -163,7 +163,7 @@ rule("AI Hanzo Sonic Arrow")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -193,7 +193,7 @@ rule("AI Hanzo Storm Arrows Start")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -225,7 +225,7 @@ rule("AI Hanzo Storm Arrows Fire")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -256,7 +256,7 @@ rule("AI Hanzo Dragonstrike")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Using Ability 2(Event Player) == False;

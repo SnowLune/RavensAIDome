@@ -44,15 +44,15 @@ rule("AI Widowmaker")
 				End;
 			End;
 		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-			Event Player.ai_CanAttack = False;
+			Event Player.ai_CnAttack = False;
 			Call Subroutine(aiSub_ButtonsReset);
 			Call Subroutine(aiSub_FacingLookAt);
 			Press Button(Event Player, Button(Ability 1));
 			Stop Facing(Event Player);
 			Wait Until(Is Using Ability 1(Event Player) == True, 2);
 			Wait Until(Is Using Ability 1(Event Player) == False, 2);
-			Event Player.ai_CanAim = True;
-			Event Player.ai_CanAttack = True;
+			Event Player.ai_CnAim = True;
+			Event Player.ai_CnAttack = True;
 		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
 			Stop Holding Button(Event Player, Button(Secondary Fire));
 			Event Player.ai_AimType = 2;
@@ -89,7 +89,7 @@ rule("AI Widowmaker General")
 
 	actions
 	{
-		Event Player.ai_OptimalDistanceDefault = Random Integer(20, 40);
+		Event Player.ai_OptimalDistanceDefault = Random Integer(20, 35);
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 		Event Player.ai_StrafeDistanceMod = 10;
 		Event Player.ai_AimBaseDefault = 1;
@@ -113,7 +113,7 @@ rule("AI Widowmaker Scope In")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -145,7 +145,7 @@ rule("AI Widowmaker Scope Out")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -201,7 +201,7 @@ rule("AI Widowmaker Charge And Fire")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -232,7 +232,7 @@ rule("AI Widowmaker Attack SMG")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -264,14 +264,14 @@ rule("AI Widowmaker Grappling Hook Closer")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is Using Ability 1(Event Player) == False;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > Event Player.ai_OptimalDistance + 5;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= Event Player.ai_OptimalDistance + 10;
 		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
 			< Global.c_BubbleRadius;
 	}
@@ -297,14 +297,16 @@ rule("AI Widowmaker Grappling Hook Farther")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is Using Ability 1(Event Player) == False;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < Event Player.ai_OptimalDistance - 5;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Event Player.ai_OptimalDistance - 10;
+		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+			< Global.c_BubbleRadius;
 	}
 
 	actions
@@ -328,7 +330,7 @@ rule("AI Widowmaker Venom Mine")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -358,7 +360,7 @@ rule("AI Widowmaker Infra-Sight")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;

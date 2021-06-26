@@ -8,8 +8,8 @@ rule("pSub_SetDifficulty")
 
 	actions
 	{
-		Players In Slot(Slot Of(Event Player), Team 2).ai_ChanceMod = Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty / 100;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAngleMod = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_ChanceMod = Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty / 25;
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAngleMod = 150 + 10 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAnglePow = 0.225 + 0.005 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
@@ -17,9 +17,9 @@ rule("pSub_SetDifficulty")
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 300 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 150 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
 			Event Player), Team 1).p_Difficulty);
@@ -41,12 +41,12 @@ rule("pSub_SetDifficulty")
 	}
 }
 
-rule("pSub_SetHeroClass")
+rule("pSub_SetHeroRole")
 {
 	event
 	{
 		Subroutine;
-		pSub_SetHeroClass;
+		pSub_SetHeroRole;
 	}
 
 	actions
@@ -57,11 +57,11 @@ rule("pSub_SetHeroClass")
 			Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName = Global.g_DebugHero[1];
 		Else;
 			If(Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName != Players In Slot(Slot Of(Event Player), Team 1)
-				.p_HeroClassNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroClass]);
-				Players In Slot(Slot Of(Event Player), Team 1).p_HeroList = Randomized Array(Global.c_HeroClasses[Players In Slot(Slot Of(
-					Event Player), Team 1).p_BotHeroClass]);
+				.p_HeroRoleNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroRole]);
+				Players In Slot(Slot Of(Event Player), Team 1).p_HeroList = Randomized Array(Global.c_HeroRoles[Players In Slot(Slot Of(
+					Event Player), Team 1).p_BotHeroRole]);
 				Players In Slot(Slot Of(Event Player), Team 1).p_HeroListName = Players In Slot(Slot Of(Event Player), Team 1)
-					.p_HeroClassNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroClass];
+					.p_HeroRoleNames[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroRole];
 			End;
 		End;
 	}
@@ -120,14 +120,14 @@ rule("Player Set Names")
 			.p_Language == 1 ? Custom String("인공지능 그랜드마스터") : Custom String("AI Grandmaster");
 		Players In Slot(Slot Of(Event Player), Team 1).p_DifficultyNames[10] = Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Language == 1 ? Custom String("인공지능 상위500위") : Custom String("AI Top 500");
-		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames = Array();
-		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[0] = Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames = Array();
+		Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames[0] = Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Language == 1 ? Custom String("모든") : Custom String("All");
-		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[1] = Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames[1] = Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Language == 1 ? Custom String("돌격") : Custom String("Tank");
-		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[2] = Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames[2] = Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Language == 1 ? Custom String("공격") : Custom String("Damage");
-		Players In Slot(Slot Of(Event Player), Team 1).p_HeroClassNames[3] = Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 1).p_HeroRoleNames[3] = Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Language == 1 ? Custom String("지원") : Custom String("Support");
 	}
 }

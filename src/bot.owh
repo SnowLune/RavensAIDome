@@ -361,14 +361,8 @@ rule("botSub_MoveJump")
 
 	actions
 	{
-		If(Hero Of(Players In Slot(Slot Of(Event Player), Team 2)) == Hero(Genji));
-			If(Random Real(0, 1) < Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod * 2.500);
-				Press Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
-			End;
-		Else;
-			If(Random Real(0, 1) < Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod);
-				Press Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
-			End;
+		If(Random Real(0, 1) < Players In Slot(Slot Of(Event Player), Team 2).bot_MoveJumpChanceMod);
+			Press Button(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump));
 		End;
 		Wait(
 			Random Real(

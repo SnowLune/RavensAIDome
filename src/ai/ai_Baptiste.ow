@@ -26,15 +26,15 @@ rule("AI Baptiste")
 			Call Subroutine(aiSub_FacingLookAt);
 			Press Button(Event Player, Button(Ability 2));
 			Call Subroutine(aiSub_ReactionDelay);
-			Event Player.ai_CanAim = True;
+			Event Player.ai_CnAim = True;
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Call Subroutine(aiSub_ButtonsReset);
 			Press Button(Event Player, Button(Ultimate));
-			Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(0, 0, 3), Event Player, Rotation);
+			Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(0, 0, 5), Event Player, Rotation);
 			Call Subroutine(aiSub_FacingLookAt);
 			Press Button(Event Player, Button(Primary Fire));
 			Call Subroutine(aiSub_ReactionDelay);
-			Event Player.ai_CanAim = True;
+			Event Player.ai_CnAim = True;
 		End;
 		Event Player.ai_IsInAbilitySub = False;
 	}
@@ -79,7 +79,7 @@ rule("AI Baptiste Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -109,7 +109,7 @@ rule("AI Baptiste Reload")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Ammo(Event Player, 0) <= 0;
@@ -134,7 +134,7 @@ rule("AI Baptiste Regenerative Burst")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
@@ -161,7 +161,7 @@ rule("AI Baptiste Immortality Field")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -190,13 +190,13 @@ rule("AI Baptiste Amplification Matrix")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Ultimate Charge Percent(Event Player) == 100;
 		Is Using Ultimate(Event Player) == False;
-		Altitude Of(Event Player) == 0;
+		Is On Ground(Event Player) == True;
 	}
 
 	actions

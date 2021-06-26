@@ -66,7 +66,7 @@ rule("AI Reinhardt General")
 
 	actions
 	{
-		Event Player.ai_OptimalDistanceDefault = Random Real(3.5, 5);
+		Event Player.ai_OptimalDistanceDefault = Random Real(3.5, 4.5);
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 		Event Player.ai_StrafeDistanceMod = 0;
 		Event Player.ai_AimBaseDefault = 0;
@@ -89,7 +89,7 @@ rule("AI Reinhardt Attack")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanAttack == True;
+		Event Player.ai_CnAttack == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -121,12 +121,11 @@ rule("AI Reinhardt Use Shield")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Health(Event Player) < 450;
 		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
 			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 10) == True;
 		(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 7.500 || Health(Event Player) <= 250) == True;
@@ -138,12 +137,44 @@ rule("AI Reinhardt Use Shield")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.650 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Secondary Fire);
 			Call Subroutine(aiSub_Abilities_Reinhardt);
 		End;
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Button(Secondary Fire));
+	}
+}
+
+rule("AI Reinhardt Block Earthshtter")
+{
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reinhardt;
+	}
+
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+		Ultimate Charge Percent(Players In Slot(Slot Of(Event Player), Team 1)) == 0;
+	}
+
+	actions
+	{
+		If(Random Real(0, 1) < 0.200 + Event Player.ai_ChanceMod);
+			Event Player.ai_AbilityButton = Button(Secondary Fire);
+			Call Subroutine(aiSub_Abilities_Reinhardt);
+		End;
 	}
 }
 
@@ -159,7 +190,7 @@ rule("AI Reinhardt Charge")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -195,7 +226,7 @@ rule("AI Reinhardt Charge Gap Closer")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -225,7 +256,7 @@ rule("AI Reinhardt Firestrike")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -244,7 +275,7 @@ rule("AI Reinhardt Firestrike")
 	}
 }
 
-rule("AI Reinhardt Earthshatter")
+rule("AI Reinhardt EarthEarthshtter")
 {
 	event
 	{
@@ -256,7 +287,7 @@ rule("AI Reinhardt Earthshatter")
 	conditions
 	{
 		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CanUseAbilities == True;
+		Event Player.ai_CnUseAbilities == True;
 		Event Player.ai_IsInAbilitySub == False;
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
@@ -270,6 +301,7 @@ rule("AI Reinhardt Earthshatter")
 		Health(Event Player) >= 50;
 		Is On Ground(Event Player) == True;
 		Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is Jumping(Event Player) == False;
 		
 		// If the player is on Reinhardt and NOT using shield
 		(Hero Of(Players In Slot(Slot Of(Event Player), Team 1)) == Hero(Reinhardt) ? Is Firing Secondary(Players In Slot(Slot Of(
