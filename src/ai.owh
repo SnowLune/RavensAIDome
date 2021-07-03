@@ -663,9 +663,14 @@ rule("AI Aim Calculation")
 		Call Subroutine(allSub_WaitForFrame);
 
 		If(Event Player.ai_AimTurnRate == 0);
-			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, Random Real(Event Player.ai_FacingPadMin / 2,
-				Event Player.ai_FacingPadMax / 2), Random Real(0.050, 0.100), None);
-			Wait(0.150, Ignore Condition);
+			Chase Player Variable Over Time(
+				Event Player,
+				ai_AimTurnRate,
+				Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax) / 2,
+				Random Real(0.050, 0.100),
+				None
+			);
+			Wait(0.100, Ignore Condition);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
 
 		Else If(Random Real(0, 1) < 0.850 - Event Player.ai_ChanceMod);

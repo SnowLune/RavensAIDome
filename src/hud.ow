@@ -239,8 +239,18 @@ rule("Player Sky Menu Move Selection Decrease")
 				Event Player.all_Kills = Event Player.p_KillGoal - 1;
 			End;
 
-		// Bot Hero Class
+		// Preset
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
+			Event Player.hud_SkyMenuSound = 2;
+			Call Subroutine(hudSub_SkyMenuPlaySound);
+			If(Event Player.p_Preset == 0);
+				Event Player.p_Preset = Count Of(Global.c_PresetNames) - 1;
+			Else;
+				Event Player.p_Preset -= 1;
+			End;
+		
+		// Bot Hero Class
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_BotHeroRole > 0);
@@ -250,19 +260,19 @@ rule("Player Sky Menu Move Selection Decrease")
 			End;
 
 		// Quick Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3] && Event Player.p_QuickModeEnabled == True);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4] && Event Player.p_QuickModeEnabled == True);
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Call Subroutine(pSub_QuickMode);
 
 		// Mirror Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4] && Event Player.p_MirrorModeEnabled == True);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5] && Event Player.p_MirrorModeEnabled == True);
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_MirrorModeEnabled = False;
 
 		// One Second Cooldown Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_OneSecCooldown == 0);
@@ -272,7 +282,7 @@ rule("Player Sky Menu Move Selection Decrease")
 			End;
 
 		// Points Lost On Death
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_KillsLostOnDeath == 0);
@@ -284,19 +294,19 @@ rule("Player Sky Menu Move Selection Decrease")
 			End;
 
 		// Player Healing
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7] && Event Player.p_HealingEnabled == True);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_HealingEnabled == True);
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_HealingEnabled = False;
 
 		// Bot Healing
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_BotHealingEnabled == True);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9] && Event Player.p_BotHealingEnabled == True);
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_BotHealingEnabled = False;
 		
 		// Player Invulnerable
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
 
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
@@ -310,7 +320,7 @@ rule("Player Sky Menu Move Selection Decrease")
 			Call Subroutine(pSub_SetInvulnerable);
 
 		// Disable Bot Ultimate
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]
 			&& Event Player.p_BotUltimateDisabled == True);
 
 			Event Player.hud_SkyMenuSound = 1;
@@ -320,7 +330,7 @@ rule("Player Sky Menu Move Selection Decrease")
 			Event Player.p_BotUltimateDisabled = False;
 
 		// Bot Flicker
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]
 			&& Event Player.p_BotFlickerEnabled == True);
 
 			Event Player.hud_SkyMenuSound = 1;
@@ -329,7 +339,7 @@ rule("Player Sky Menu Move Selection Decrease")
 			Event Player.p_BotFlickerEnabled = False;
 
 		// Elevator
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]
 			&& Event Player.p_ElevatorEnabled == True);
 			Event Player.hud_SkyMenuSound = 1;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
@@ -342,7 +352,7 @@ rule("Player Sky Menu Move Selection Decrease")
 			Set Gravity(Event Player, 100);
 
 		// Effects Color
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[0]);
@@ -353,7 +363,7 @@ rule("Player Sky Menu Move Selection Decrease")
 			End;
 
 		// Language
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14] && Event Player.p_Language == 1);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[15] && Event Player.p_Language == 1);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 
@@ -404,8 +414,19 @@ rule("Player Sky Menu Move Selection Increase")
 				Event Player.all_Kills = Event Player.p_KillGoal - 1;
 			End;
 
-		// Bot Hero Class
+		// Preset
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
+			Event Player.hud_SkyMenuSound = 2;
+			Call Subroutine(hudSub_SkyMenuPlaySound);
+
+			If(Event Player.p_Preset == Count Of(Global.c_PresetNames) - 1);
+				Event Player.p_Preset = 0;
+			Else;
+				Event Player.p_Preset += 1;
+			End;
+
+		// Bot Hero Class
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_BotHeroRole < 3);
@@ -415,20 +436,20 @@ rule("Player Sky Menu Move Selection Increase")
 			End;
 
 		// Quick Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3] && Event Player.p_QuickModeEnabled == False);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4] && Event Player.p_QuickModeEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Call Subroutine(pSub_QuickMode);
 
 		// Mirror Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4] && Event Player.p_MirrorModeEnabled == False);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5] && Event Player.p_MirrorModeEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_MirrorModeEnabled = True;
 			Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Event Player);
 
 		// One Second Cooldown Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_OneSecCooldown == 3);
@@ -438,7 +459,7 @@ rule("Player Sky Menu Move Selection Increase")
 			End;
 
 		// Points Lost On Death
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_KillsLostOnDeath == Global.c_PseudoInfinity);
@@ -450,19 +471,19 @@ rule("Player Sky Menu Move Selection Increase")
 			End;
 
 		// Player Healing
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7] && Event Player.p_HealingEnabled == False);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_HealingEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_HealingEnabled = True;
 
 		// Bot Healing
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_BotHealingEnabled == False);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9] && Event Player.p_BotHealingEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_BotHealingEnabled = True;
 
 		// Player Invulnerable
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
 
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
@@ -476,7 +497,7 @@ rule("Player Sky Menu Move Selection Increase")
 			Call Subroutine(pSub_SetInvulnerable);
 
 		// Disable Bot Ultimate
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10] && Event Player
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Event Player
 				.p_BotUltimateDisabled == False);
 
 			Event Player.hud_SkyMenuSound = 0;
@@ -486,14 +507,14 @@ rule("Player Sky Menu Move Selection Increase")
 			Event Player.p_BotUltimateDisabled = True;
 
 		// Bot Flicker
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Event Player
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Event Player
 				.p_BotFlickerEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_BotFlickerEnabled = True;
 		
 		// Elevator
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Event Player
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13] && Event Player
 				.p_ElevatorEnabled == False);
 			Event Player.hud_SkyMenuSound = 0;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
@@ -506,7 +527,7 @@ rule("Player Sky Menu Move Selection Increase")
 				Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))));
 
 		// Effects Color
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1]);
@@ -517,7 +538,7 @@ rule("Player Sky Menu Move Selection Increase")
 			End;
 
 		// Language
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14] && Event Player.p_Language == 0);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[15] && Event Player.p_Language == 0);
 			Event Player.hud_SkyMenuSound = 2;
 			Call Subroutine(hudSub_SkyMenuPlaySound);
 			Event Player.p_Language = 1;
@@ -556,6 +577,9 @@ rule("Player Sky Menu Arrow Visibility")
 			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
+			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4]);
 			If(Event Player.p_QuickModeEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
@@ -563,7 +587,7 @@ rule("Player Sky Menu Arrow Visibility")
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5]);
 			If(Event Player.p_MirrorModeEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
@@ -571,13 +595,13 @@ rule("Player Sky Menu Arrow Visibility")
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5]);
-			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
 			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
 		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
+			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8]);
 			If(Event Player.p_HealingEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
@@ -585,7 +609,7 @@ rule("Player Sky Menu Arrow Visibility")
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
 			If(Event Player.p_BotHealingEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
@@ -593,10 +617,10 @@ rule("Player Sky Menu Arrow Visibility")
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
 			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]);
 			If(Event Player.p_BotUltimateDisabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
@@ -604,7 +628,7 @@ rule("Player Sky Menu Arrow Visibility")
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]);
 			If(Event Player.p_BotFlickerEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
@@ -612,7 +636,7 @@ rule("Player Sky Menu Arrow Visibility")
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
 			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]);
+		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]);
 			If(Event Player.p_ElevatorEnabled == False);
 				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
 				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;

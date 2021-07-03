@@ -85,15 +85,24 @@ rule("Bot Elimination")
 	actions
 	{
 		Event Player.all_Kills += 1;
-		If(Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath > 0 && Players In Slot(Slot Of(Event Player), Team 1)
-			.all_Kills > 0);
-			If(Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath > Players In Slot(Slot Of(Event Player), Team 1).p_KillGoal);
+		If(
+			Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath > 0
+			&& Players In Slot(Slot Of(Event Player), Team 1).all_Kills > 0
+		);
+			If(
+				Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath 
+				> 
+				Players In Slot(Slot Of(Event Player), Team 1).all_Kills
+			);
 				Players In Slot(Slot Of(Event Player), Team 1).all_Kills = 0;
 			Else;
-				Players In Slot(Slot Of(Event Player), Team 1).all_Kills -= Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath;
+				Players In Slot(Slot Of(Event Player), Team 1).all_Kills 
+				-= 
+				Players In Slot(Slot Of(Event Player), Team 1).p_KillsLostOnDeath;
 			End;
 		End;
-		"Bad Manners"
+
+		// Bot BM
 		If(Random Real(0, 1) < 0.600);
 			Event Player.ai_BMVoiceLine = Random Integer(1, 4);
 			Wait(Random Real(0.650, 1.150), Ignore Condition);
@@ -107,6 +116,7 @@ rule("Bot Elimination")
 				Communicate(Event Player, Goodbye);
 			End;
 		End;
+
 		Call Subroutine(aiSub_ReactionDelay);
 		Call Subroutine(aiSub_ButtonsReset);
 	}

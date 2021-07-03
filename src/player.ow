@@ -46,6 +46,7 @@ rule("Player Init")
 		Event Player.p_OneSecCooldown = False;
 		Event Player.p_KillsLostOnDeath = 0;
 		Event Player.p_MirrorModeEnabled = False;
+		Event Player.p_Preset = 0;
 		Event Player.p_Difficulty = Global.g_Difficulty;
 		Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
 		Event Player.p_ZoneRadius = Global.c_ZoneRadiusDefault;
@@ -251,6 +252,12 @@ rule("Next Hero")
 			Damage(Event Player, Null, 9999);
 			Wait(5, Ignore Condition);
 		End;
+
+		If(Event Player.p_Preset > 0 && Event Player.p_Preset <= 2);
+			Event Player.p_Preset = 0;
+			Call Subroutine(pSub_SetPreset);
+		End;
+
 		Event Player.p_HeroNumberMod = 1;
 		Call Subroutine(botSub_SetHero);
 	}
@@ -489,11 +496,17 @@ rule("Skip Hero")
 
 	actions
 	{
+		If(Event Player.p_Preset > 0 && Event Player.p_Preset <= 2);
+			Event Player.p_Preset = 0;
+			Call Subroutine(pSub_SetPreset);
+		End;
+
 		If(Is Button Held(Event Player, Button(Primary Fire)) == True);
 			Event Player.p_HeroNumberMod = 1;
 		Else;
 			Event Player.p_HeroNumberMod = -1;
 		End;
+		
 		Call Subroutine(botSub_SetHero);
 	}
 }

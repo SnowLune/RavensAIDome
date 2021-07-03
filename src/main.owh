@@ -44,7 +44,7 @@ settings
 
 		General
 		{
-			Ultimate Generation: 200%
+			Ultimate Generation: 250%
 
 			Wrecking Ball
 			{
@@ -95,6 +95,8 @@ variables
 		31:	c_VeryShortRangeHeroes
 		32:	c_WorkshopCode
 		33:	c_ZoneRadiusDefault
+		54: c_PresetNames
+		55: c_DifficultyColors
 
 		//
 		// global variable
@@ -249,6 +251,8 @@ variables
 		41:  p_HealingEnabled
 		105: p_BotHealingEnabled
 		37:  p_BotUltimateDisabled
+		106: p_Preset
+		107: p_PresetName
 }
 
 subroutines
@@ -340,5 +344,6 @@ subroutines
 	63: pSub_SetNames
 	64: pSub_SetLanguage
 	67: pSub_SetInvulnerable
+	68: pSub_SetPreset
 }
 

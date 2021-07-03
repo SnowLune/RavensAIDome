@@ -13,8 +13,8 @@ rule("Global Defines")
 		//
 		//	Info: version, build, links...
 		//
-		Global.c_Version = Custom String("0.15.0-test.2");
-		Global.c_BuildDate = Custom String("20210626");
+		Global.c_Version = Custom String("0.15.0-test.3");
+		Global.c_BuildDate = Custom String("20210702");
 		Global.c_WorkshopCode = Custom String("5DPKQ");
 		Global.c_DeveloperName = Custom String("Raven#112503");
 		Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -273,6 +273,26 @@ rule("Global Defines")
 		//	misc
 		//
 		Global.g_PlayerNames = Array();
+
+		Global.c_PresetNames = Array();
+		Global.c_PresetNames[0] = Custom String("None");
+		Global.c_PresetNames[1] = Custom String("Widowmaker 1v1");
+		Global.c_PresetNames[2] = Custom String("Reinhardt 1v1");
+		Global.c_PresetNames[3] = Custom String("Roadhog Hook Practice");
+		Global.c_PresetNames[4] = Custom String("Ana Sleepdart Practice");
+
+		Global.c_DifficultyColors = Array();
+		Global.c_DifficultyColors[0] = Color(White);
+		Global.c_DifficultyColors[1] = Color(White);
+		Global.c_DifficultyColors[2] = Color(White);
+		Global.c_DifficultyColors[3] = Custom Color(190, 130, 93, 255);
+		Global.c_DifficultyColors[4] = Custom Color(212, 212, 212, 255);
+		Global.c_DifficultyColors[5] = Custom Color(242, 217, 114, 255);
+		Global.c_DifficultyColors[6] = Custom Color(235, 241, 235, 255);
+		Global.c_DifficultyColors[7] = Custom Color(178, 186, 255, 255);
+		Global.c_DifficultyColors[8] = Custom Color(255, 208, 128, 255);
+		Global.c_DifficultyColors[9] = Custom Color(255, 255, 212, 255);
+		Global.c_DifficultyColors[10] = Custom Color(226, 237, 255, 255);
 
 		//	End global variable initialization
 		Global.g_Initialized = True;

@@ -8,6 +8,16 @@ rule("pSub_SetDifficulty")
 
 	actions
 	{
+		If(Event Player.p_Difficulty == 3);
+		Else If(Event Player.p_Difficulty == 4);
+		Else If(Event Player.p_Difficulty == 5);
+		Else If(Event Player.p_Difficulty == 6);
+		Else If(Event Player.p_Difficulty == 7);
+		Else If(Event Player.p_Difficulty == 8);
+		Else If(Event Player.p_Difficulty == 9);
+		Else If(Event Player.p_Difficulty == 10);
+		End;
+
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ChanceMod = Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty / 25;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingAngleMod = 150 + 10 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
@@ -234,6 +244,87 @@ rule("pSub_SetInvulnerable")
 		Else If(Event Player.p_Invulnerable == 3);
 			Set Status(Event Player, Null, Invincible, Global.c_PseudoInfinity);
 		End;
+	}
+}
+
+rule("pSub_SetPreset")
+{
+	event
+	{
+		Subroutine;
+		pSub_SetPreset;
+	}
+
+	actions
+	{
+		// None
+		If(Event Player.p_Preset == 0);
+			Event Player.p_PresetName = Global.c_PresetNames[Event Player.p_Preset];
+			Event Player.p_KillGoal = Global.g_KillGoal;
+			Event Player.p_KillsLostOnDeath = 0;
+			Event Player.p_OneSecCooldown = 0;
+
+			Small Message(Event Player, Custom String("Preset Cleared"));
+
+		// Widow 1v1
+		Else If(Event Player.p_Preset == 1);
+			If(Event Player.p_BotHeroRole != 0);
+				Event Player.p_BotHeroRole = 0;
+				Call Subroutine(pSub_SetHeroRole);
+			End;
+
+			Event Player.p_BotHeroNumber = Index Of Array Value(Event Player.p_HeroList, Hero(Widowmaker));
+			Call Subroutine(botSub_SetHero);
+
+			Start Forcing Player To Be Hero(Event Player, Hero(Widowmaker));
+			Stop Forcing Player To Be Hero(Event Player);
+
+			Event Player.p_OneSecCooldown = 0;
+			Event Player.p_KillGoal = Global.c_PseudoInfinity;
+
+			Small Message(Event Player, Custom String("Preset: Widowmaker 1v1"));
+
+		// Reinhardt 1v1
+		Else If(Event Player.p_Preset == 2);
+			If(Event Player.p_BotHeroRole != 0);
+				Event Player.p_BotHeroRole = 0;
+				Call Subroutine(pSub_SetHeroRole);
+			End;
+
+			Event Player.p_BotHeroNumber = Index Of Array Value(Event Player.p_HeroList, Hero(Reinhardt));
+			Call Subroutine(botSub_SetHero);
+
+			Start Forcing Player To Be Hero(Event Player, Hero(Reinhardt));
+			Stop Forcing Player To Be Hero(Event Player);
+
+			Event Player.p_OneSecCooldown = 0;
+			Event Player.p_KillsLostOnDeath = 2;
+			Event Player.p_KillGoal = 32;
+
+			Small Message(Event Player, Custom String("Preset: Reinhardt 1v1"));
+
+		// Roadhog Hook Practice
+		Else If(Event Player.p_Preset == 3);
+			Start Forcing Player To Be Hero(Event Player, Hero(Roadhog));
+			Stop Forcing Player To Be Hero(Event Player);
+
+			Event Player.p_OneSecCooldown = 1;
+			Event Player.p_KillGoal = Global.g_KillGoal;
+
+			Small Message(Event Player, Custom String("Preset: Roadhog Low Cooldown"));
+
+		// Ana Sleep Practice
+		Else If(Event Player.p_Preset == 4);
+			Start Forcing Player To Be Hero(Event Player, Hero(Ana));
+			Stop Forcing Player To Be Hero(Event Player);
+
+			Event Player.p_OneSecCooldown = 1;
+			Event Player.p_KillGoal = Global.g_KillGoal;
+
+			Small Message(Event Player, Custom String("Preset: Ana Low Cooldown"));
+		End;
+
+		Call Subroutine(pSub_SetDistances);
 	}
 }
 
