@@ -111,108 +111,108 @@ variables
         2:   ai_AIEnabled
         3:   ai_AimBase
         4:   ai_AimBaseDefault
-        6:   ai_AimModX
-        7:   ai_AimModY
-        8:   ai_AimStopTime
-        9:   ai_AimTurnRate
-        10:  ai_AimType
-        11:  ai_AimTypeDefault
-        12:  ai_BMVoiceLine
-        13:  ai_CnAim
-        14:  ai_CnAttack
-        15:  ai_CnUseAbilities
-        16:  ai_ChanceMod
-        17:  ai_DoomfistPunchDamage
-        18:  ai_DoomfistPunchTime
-        19:  ai_FacingAngleMod
-        20:  ai_FacingAnglePow
-        21:  ai_FacingCapMax
-        22:  ai_FacingCapMin
-        23:  ai_FacingPadMax
-        24:  ai_FacingPadMin
-        25:  ai_FacingRelPosMod
-        26:  ai_HeroInitialized
-        27:  ai_IsInAbilitySub
-        28:  ai_LookAtVector
-        29:  ai_McCreeDeadeyeCharge
-        30:  ai_McCreeDeadeyeRate
-        31:  ai_OptimalDistance
-        32:  ai_OptimalDistanceDefault
-        33:  ai_ProjectileSpeed
-        34:  ai_ProjectileSpeeds
-        35:  ai_ReactionTime
-        36:  ai_StrafeDistanceMod
-        38:  ai_ViewAngleMod
-        39:  ai_WeaponChargeTime
-        40:  all_ChangingHero
-        42:  all_Index
-        43:  all_InspireHealID
-        44:  all_InspireHealTime
-        45:  all_Kills
-        46:  all_SubArg
-        47:  bot_BotResetComplete
-        49:  bot_MoveCrouchChanceMod
-        50:  bot_MoveCrouchEnabled
-        51:  bot_MoveCrouchTimeMod
-        52:  bot_MoveJumpChanceMod
-        53:  bot_MoveJumpEnabled
-        54:  bot_MoveJumpTimeMod
-        55:  bot_MoveWASDEnabled
-        56:  bot_MoveWASDTimeMod
-        57:  bot_Name
-        58:  bot_ThrottleDir
-        59:  hud_Debug
-        60:  hud_DebugEnabled
-        61:  hud_i
-        62:  hud_Info
-        63:  hud_InfoEnabled
-        64:  hud_Main
-        65:  hud_SkyMenu
-        66:  hud_SkyMenuArrowsVisibleTo
-        67:  hud_SkyMenuIsOpen
-        68:  hud_SkyMenuSelection
-        69:  hud_SkyMenuSound
-        70:  hud_SkyMenuVectors
-        71:  hud_SkyMenuVisibleTo
-        72:  p_BotHeroRole
-        73:  p_BotHeroNumber
-        74:  p_BotHeroNumberNext
-        75:  p_BotTPDistance
-        76:  p_CameraEyePos
-        77:  p_CameraLookAtPos
-        78:  p_DamageModDealtID
-        79:  p_DamageModReceivedID
-        80:  p_Difficulty
-        81:  p_DifficultyNames
-        82:  p_Effects
-        83:  p_EffectsColor
-        84:  p_ElevatorEnabled
-        85:  p_ElevatorHeight
-        86:  p_ElevatorPosition
-        87:  p_EnemyDistanceMax
-        88:  p_EnemyDistanceMod
-        89:  p_HelpTargetIndicator
-        90:  p_HeroRoleNames
-        91:  p_HeroList
-        92:  p_HeroListName
-        93:  p_HeroNumberMod
-        94:  p_HomeVector
-        95:  p_KillGoal
-        96:  p_Language
-        97:  p_KillsLostOnDeath
-        98:  p_MirrorModeEnabled
-        99:  p_OneSecCooldown
-        100: p_PlayerHero
-        101: p_PlayerInitialized
-        102: p_QuickModeEnabled
-        103: p_Invulnerable
-        104: p_ZoneRadius
-        48:  p_BotFlickerEnabled
-        41:  p_HealingEnabled
-        105: p_BotHealingEnabled
-        37:  p_BotUltimateDisabled
-        106: p_Preset
-        107: p_PresetName
+        5:   ai_AimModX
+        6:   ai_AimModY
+        7:   ai_AimStopTime
+        8:   ai_AimTurnRate
+        9:   ai_AimType
+        10:  ai_AimTypeDefault
+        11:  ai_BMVoiceLine
+        12:  ai_CnAim
+        13:  ai_CnAttack
+        14:  ai_CnUseAbilities
+        15:  ai_ChanceMod
+        16:  ai_DoomfistPunchDamage
+        17:  ai_DoomfistPunchTime
+        18:  ai_FacingAngleMod
+        19:  ai_FacingAnglePow
+        20:  ai_FacingCapMax
+        21:  ai_FacingCapMin
+        22:  ai_FacingPadMax
+        23:  ai_FacingPadMin
+        24:  ai_FacingRelPosMod
+        25:  ai_HeroInitialized
+        26:  ai_IsInAbilitySub
+        27:  ai_LookAtVector
+        28:  ai_McCreeDeadeyeCharge
+        29:  ai_McCreeDeadeyeRate
+        30:  ai_OptimalDistance
+        31:  ai_OptimalDistanceDefault
+        32:  ai_ProjectileSpeed
+        33:  ai_ProjectileSpeeds
+        34:  ai_ReactionTime
+        35:  ai_StrafeDistanceMod
+        36:  ai_WeaponChargeTime
+        37:  ai_RetCastDistance
+        38:  all_ChangingHero
+        39:  all_Index
+        40:  all_InspireHealID
+        41:  all_InspireHealTime
+        42:  all_Kills
+        43:  all_SubArg
+        44:  bot_BotResetComplete
+        45:  bot_MoveCrouchChanceMod
+        46:  bot_MoveCrouchEnabled
+        47:  bot_MoveCrouchTimeMod
+        48:  bot_MoveJumpChanceMod
+        49:  bot_MoveJumpEnabled
+        50:  bot_MoveJumpTimeMod
+        51:  bot_MoveWASDEnabled
+        52:  bot_MoveWASDTimeMod
+        53:  bot_Name
+        54:  bot_ThrottleDir
+        55:  hud_Debug
+        56:  hud_DebugEnabled
+        57:  hud_i
+        58:  hud_Info
+        59:  hud_InfoEnabled
+        60:  hud_Main
+        61:  hud_SkyMenu
+        62:  hud_SkyMenuArrowsVisibleTo
+        63:  hud_SkyMenuIsOpen
+        64:  hud_SkyMenuSelection
+        65:  hud_SkyMenuSound
+        66:  hud_SkyMenuVectors
+        67:  hud_SkyMenuVisibleTo
+        68:  p_BotHeroRole
+        69:  p_BotHeroNumber
+        70:  p_BotHeroNumberNext
+        71:  p_BotTPDistance
+        72:  p_CameraEyePos
+        73:  p_CameraLookAtPos
+        74:  p_DamageModDealtID
+        75:  p_DamageModReceivedID
+        76:  p_Difficulty
+        77:  p_DifficultyNames
+        78:  p_Effects
+        79:  p_EffectsColor
+        80:  p_ElevatorEnabled
+        81:  p_ElevatorHeight
+        82:  p_ElevatorPosition
+        83:  p_EnemyDistanceMax
+        84:  p_EnemyDistanceMod
+        85:  p_HelpTargetIndicator
+        86:  p_HeroRoleNames
+        87:  p_HeroList
+        88:  p_HeroListName
+        89:  p_HeroNumberMod
+        90:  p_HomeVector
+        91:  p_KillGoal
+        92:  p_Language
+        93:  p_KillsLostOnDeath
+        94:  p_MirrorModeEnabled
+        95:  p_OneSecCooldown
+        96:  p_PlayerHero
+        97:  p_PlayerInitialized
+        98:  p_QuickModeEnabled
+        99:  p_Invulnerable
+        100: p_ZoneRadius
+        101: p_BotFlickerEnabled
+        102: p_HealingEnabled
+        103: p_BotHealingEnabled
+        104: p_BotUltimateDisabled
+        105: p_Preset
+        106: p_PresetName
 }
 subroutines
 {
@@ -368,8 +368,8 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.15.0-test.3");
-        Global.c_BuildDate = Custom String("20210702");
+        Global.c_Version = Custom String("0.15.0-test.4");
+        Global.c_BuildDate = Custom String("20210707");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Raven#112503");
         Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -1657,8 +1657,6 @@ rule("pSub_SetDifficulty")
             .p_Difficulty;
         Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
             Event Player), Team 1).p_Difficulty);
-        Players In Slot(Slot Of(Event Player), Team 2).ai_ViewAngleMod = (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player),
-            Team 1).p_Difficulty) / 2;
         Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchChanceMod = 0.100 + Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty * 0.010;
         Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchTimeMod = 0.080 * Players In Slot(Slot Of(Event Player), Team 1)
@@ -2177,7 +2175,13 @@ rule("Reset Player At Home")
         End;
         Play Effect(Event Player, Debuff Impact Sound, Color(White), Event Player, 75);
         Play Effect(Event Player, Bad Pickup Effect, Color(White), Event Player.p_HomeVector, 1);
-        If(Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 2), 20) == True);
+        If(Is In View Angle(
+            Event Player,
+            Eye Position(Players In Slot(Slot Of(Event Player), Team 2)) 
+                - Vector(0, Y Component Of(Eye Position(Event Player)), 0),20
+            ) 
+                == True
+        );
             Teleport(Event Player, Event Player.p_HomeVector);
             Wait(1 / 60, Ignore Condition);
             Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
@@ -2375,38 +2379,6 @@ rule("Skip Hero")
             Event Player.p_HeroNumberMod = -1;
         End;
         Call Subroutine(botSub_SetHero);
-    }
-}
-rule("Target Help Indicator")
-{
-    event
-    {
-        Ongoing - Each Player;
-        Team 1;
-        All;
-    }
-    conditions
-    {
-        Is Game In Progress == True;
-        Has Spawned(Event Player) == True;
-        Is Alive(Event Player) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), 90) == False;
-        Event Player.p_Difficulty < 3;
-        Y Component Of(Facing Direction Of(Event Player)) <= 0.500;
-    }
-    actions
-    {
-        Wait(4, Abort When False);
-        Play Effect(Event Player, Debuff Impact Sound, Color(White), Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(
-            Event Player))), 200);
-        Big Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("제발 돌아서!")
-            : Custom String("Turn Around!"));
-        Create In-World Text(Event Player, Custom String("TARGET!"), Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(
-            Event Player))), 4, Do Not Clip, Visible To Position and String, Color(Yellow), Default Visibility);
-        Event Player.p_HelpTargetIndicator = Last Text ID;
-        Wait(3, Ignore Condition);
-        Destroy In-World Text(Event Player.p_HelpTargetIndicator);
-        Loop If Condition Is True;
     }
 }
 rule("Help Skip Message")
@@ -3559,10 +3531,13 @@ rule("Special Rule: Reinhardt Charge")
     {
         Is Alive(Event Player) == True;
         Is Using Ability 1(Event Player) == True;
-        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(
-            Event Player), Team 1).p_ZoneRadius - 2.500;
-        Distance Between(Position Of(Event Player) + World Vector Of(Vector(0, 0, 4), Event Player, Rotation), Players In Slot(Slot Of(
-            Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 1.250;
+        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) 
+            >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
+        Distance Between(
+            Position Of(Event Player) + World Vector Of(Vector(0, 0, -5), Event Player, Rotation),
+            Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+        ) 
+            <= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
     }
     actions
     {
@@ -4267,12 +4242,25 @@ rule("AI Aim Calculation")
             Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(250, 500), Destination and Rate);
             Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod);
             Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-            Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod, None);
+            Chase Player Variable Over Time(
+                Event Player,
+                ai_AimTurnRate,
+                0,
+                Random Real(0.650, 0.750) - Event Player.ai_ChanceMod,
+                None
+            );
             Call Subroutine(aiSub_AimModSet);
         Else;
-            Event Player.ai_AimTurnRate = (Event Player.ai_FacingAngleMod * Angle Between Vectors(Facing Direction Of(Event Player),
-                Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300,
-                0)))) ^ Event Player.ai_FacingAnglePow + Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax);
+            Event Player.ai_AimTurnRate = (
+                Event Player.ai_FacingAngleMod
+                * Angle Between Vectors(
+                    Facing Direction Of(Event Player),
+                    Direction Towards(
+                        Eye Position(Event Player),
+                        Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300, 0)
+                    )
+                )
+            ) ^ Event Player.ai_FacingAnglePow + Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax);
         End;
         If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
             Event Player.ai_AimTurnRate = Event Player.ai_AimTurnRate / 1.500;
@@ -4371,6 +4359,17 @@ rule("AI Aim Calculation Loop")
     }
     actions
     {
+        Event Player.ai_RetCastDistance = Distance Between(
+            Ray Cast Hit Position(
+                Eye Position(Event Player),
+                Eye Position(Event Player) + Facing Direction Of(Event Player) 
+                    * Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)),
+                All Players(Team 1),
+                Event Player,
+                True
+            ),
+            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))
+        );
         Start Rule(aiSub_AimCalculation, Do Nothing);
     }
 }
@@ -4389,8 +4388,7 @@ rule("AI Aim Stop")
         Event Player.ai_AIEnabled == True;
         Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 5) == True;
+        Event Player.ai_RetCastDistance < 2;
     }
     actions
     {
@@ -4423,8 +4421,7 @@ rule("AI Aim Flick")
         Event Player.ai_AIEnabled == True;
         Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 5) == False;
+        Event Player.ai_RetCastDistance >= 3;
     }
     actions
     {
@@ -4448,7 +4445,7 @@ rule("AI Attack Melee")
         Event Player.ai_CnAttack == True;
         Is Alive(Event Player) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 2.500;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance <= 2;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) > 0;
     }
@@ -4793,8 +4790,7 @@ rule("AI Movement Crouch")
         Event Player.bot_MoveCrouchEnabled == True;
         Is Alive(Event Player) == True;
         Is On Ground(Event Player) == True;
-        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 10) == True;
+        Event Player.ai_RetCastDistance < 5;
     }
     actions
     {
@@ -4947,9 +4943,9 @@ rule("AI Ana Scope In")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
+        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Global.c_BubbleRadius;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 15;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 12.500 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 5;
         Is Button Held(Event Player, Button(Secondary Fire)) == False;
         Has Status(Players In Slot(Slot Of(Event Player), Team 1), Asleep) == False;
     }
@@ -4999,7 +4995,7 @@ rule("AI Ana Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
     }
     actions
     {
@@ -5026,7 +5022,7 @@ rule("AI Ana Sleep Dart")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 15;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 5 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Is Using Ability 1(Event Player) == False;
         Is Using Ability 2(Event Player) == False;
@@ -5086,7 +5082,7 @@ rule("AI Ana Biotic Grenade")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.25;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Is Using Ability 1(Event Player) == False;
         Is Using Ability 2(Event Player) == False;
@@ -5293,7 +5289,7 @@ rule("AI Ashe Attack Scoped")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.25;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 7.500;
         Is Reloading(Event Player) == False;
@@ -5323,7 +5319,7 @@ rule("AI Ashe Attack Unscoped")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 7.500;
         Is Button Held(Event Player, Button(Secondary Fire)) == False;
     }
@@ -5445,7 +5441,7 @@ rule("AI Ashe Dynamite")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) <= 2;
         Is Reloading(Event Player) == False;
@@ -5472,7 +5468,7 @@ rule("AI Ashe B.O.B.")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1;
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
     }
@@ -5561,8 +5557,8 @@ rule("AI Baptiste Attack")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < Global.c_BubbleRadius;
+        Event Player.ai_RetCastDistance < 2;
     }
     actions
     {
@@ -5743,7 +5739,7 @@ rule("AI Bastion Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
         Is Using Ability 1(Event Player) == False;
         Is Firing Secondary(Event Player) == False;
     }
@@ -5772,7 +5768,7 @@ rule("AI Bastion Reconfigure")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Event Player.ai_OptimalDistance;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Is Using Ability 1(Event Player) == False;
         Is Moving(Event Player) == True;
@@ -5939,7 +5935,7 @@ rule("AI Brigitte Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 90 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Is Firing Secondary(Event Player) == False;
     }
     actions
@@ -5967,10 +5963,16 @@ rule("AI Brigitte Use Shield")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 10 + Event Player.ai_ViewAngleMod) == True;
-        (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 6 || Health(Event Player) < 125) == True;
-        Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-            < Global.c_BubbleRadius;
+        Event Player.ai_RetCastDistance < 5;
+        (
+            Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 6
+            || 
+            Health(Event Player) <= 100
+        ) == True;
+        Distance Between(
+            Players In Slot(Slot Of(Event Player), Team 1),
+            Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+        ) < Global.c_BubbleRadius;
     }
     actions
     {
@@ -5998,9 +6000,9 @@ rule("AI Brigitte Shield Bash")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 40 + Event Player.ai_ViewAngleMod) == True;
-        Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) <= 2;
-        Altitude Of(Event Player) <= 2;
+        Event Player.ai_RetCastDistance < 1;
+        Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) < 2;
+        Altitude Of(Event Player) < 2;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 6.850;
         Ability Cooldown(Event Player, Button(Primary Fire)) == 0;
     }
@@ -6055,7 +6057,7 @@ rule("AI Brigitte Whip Shot Final")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 70;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
@@ -6081,7 +6083,7 @@ rule("AI Brigitte Whip Shot Boop")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
         Health(Event Player) < 100;
@@ -6108,9 +6110,9 @@ rule("AI Brigitte Rally")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-        Health(Event Player) >= 75;
+        Health(Event Player) >= 50;
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
     }
@@ -6215,8 +6217,7 @@ rule("AI Doomfist Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 17.5) == True;
+        Event Player.ai_RetCastDistance < 2.5;
         Is Firing Secondary(Event Player) == False;
         Ammo(Event Player, 0) > 0;
         Is Using Ultimate(Event Player) == False;
@@ -6247,7 +6248,7 @@ rule("AI Doomfist Rocket Punch")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 50;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12.500;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
         Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
         (Ability Cooldown(Event Player, Button(Ability 1)) == 0 ? Distance Between(Event Player, Players In Slot(Slot Of(Event Player),
             Team 1)) > 5 : True) == True;
@@ -6304,7 +6305,7 @@ rule("AI Doomfist Uppercut")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 5;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Is Button Held(Event Player, Button(Secondary Fire)) == False;
     }
@@ -6332,7 +6333,7 @@ rule("AI Doomfist Seismic Slam")
         Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 9 || Is In Air(Event Player)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
         Is Button Held(Event Player, Button(Secondary Fire)) == False;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
     }
@@ -6360,7 +6361,7 @@ rule("AI Doomfist Meteor Strike")
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 5;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 1.500;
         Is Button Held(Event Player, Button(Secondary Fire)) == False;
@@ -6415,7 +6416,7 @@ rule("AI D.Va")
                 End;
                 Wait Until(Is In Alternate Form(Event Player), 1.500);
             Else If(Event Player.ai_AbilityOpt == 1);
-                Wait(3.500, Ignore Condition);
+                Wait(3, Ignore Condition);
                 Press Button(Event Player, Button(Ultimate));
             End;
         End;
@@ -6464,7 +6465,7 @@ rule("AI D.Va Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 25 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3.5;
         Is Firing Secondary(Event Player) == False;
     }
     actions
@@ -6494,8 +6495,7 @@ rule("AI D.Va Defense Matrix")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is In Alternate Form(Event Player) == False;
         Array Contains(Global.c_ProjectileHeroes, Hero Of(Attacker)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 60 + Event Player.ai_ViewAngleMod) == True;
-        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 10 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 8;
         Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
         Is Firing Secondary(Event Player) == False;
         Ability Resource(Event Player, Button(Secondary Fire)) > 0;
@@ -6526,7 +6526,7 @@ rule("AI D.Va Boosters")
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
         Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
             < Global.c_BubbleRadius;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 90 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 10;
         Ultimate Charge Percent(Event Player) <= 95;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Is Using Ability 1(Event Player) == False;
@@ -6556,7 +6556,7 @@ rule("AI D.Va Micro Missiles")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is In Alternate Form(Event Player) == False;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Is Using Ability 2(Event Player) == False;
     }
@@ -6731,7 +6731,7 @@ rule("AI Echo Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3.25;
     }
     actions
     {
@@ -6836,8 +6836,7 @@ disabled rule("AI Echo Duplicate")
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 10) == True;
+        Event Player.ai_RetCastDistance < 0.75;
     }
     actions
     {
@@ -6894,6 +6893,7 @@ rule("AI Genji")
             End;
         Else If(Event Player.ai_AbilityButton == Button(Ability 2));
             Press Button(Event Player, Button(Ability 2));
+            Wait(Random Real(1.5, 2), Ignore Condition);
         Else If(Event Player.ai_AbilityButton == Button(Ultimate));
             If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15 && Ability Cooldown(Event Player, Button(
                 Ability 1)) != 0);
@@ -6959,7 +6959,7 @@ rule("AI Genji Attack Primary")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 4;
         Is Using Ability 1(Event Player) == False;
         Is Using Ability 2(Event Player) == False;
         Is Using Ultimate(Event Player) == False;
@@ -6989,7 +6989,7 @@ rule("AI Genji Attack Secondary")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 10;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
         Is Using Ability 1(Event Player) == False;
         Is Using Ability 2(Event Player) == False;
         Is Using Ultimate(Event Player) == False;
@@ -7019,7 +7019,7 @@ rule("AI Genji Swift Strike Movement")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 15;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Is Using Ability 2(Event Player) == False;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Is Using Ultimate(Event Player) == False;
@@ -7049,7 +7049,7 @@ rule("AI Genji Swift Strike Final")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12.500;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) > 0;
@@ -7076,8 +7076,7 @@ rule("AI Genji Deflect")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 5 + Event Player.ai_ViewAngleMod) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 4;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Is Using Ability 2(Event Player) == False;
         Array Contains(Global.c_ProjectileHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
@@ -7085,7 +7084,7 @@ rule("AI Genji Deflect")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 2);
             Call Subroutine(aiSub_Abilities_Genji);
         End;
@@ -7106,7 +7105,7 @@ rule("AI Genji Deflect Deadeye")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 5;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Hero Of(Players In Slot(Slot Of(Event Player), Team 1)) == Hero(McCree);
         Is Using Ultimate(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -7135,7 +7134,7 @@ rule("AI Genji Dragonblde")
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 5;
         Is Using Ability 2(Event Player) == False;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 50;
         Health(Event Player) >= 75;
@@ -7168,7 +7167,7 @@ rule("AI Genji Dragonblde Swift Strike Gap Closer")
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 4.500;
         Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
             < Global.c_BubbleRadius;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
     }
     actions
@@ -7194,7 +7193,7 @@ rule("AI Genji Dragonblde Swing")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
         Is Using Ability 2(Event Player) == False;
         Is Using Ultimate(Event Player) == True;
     }
@@ -7331,6 +7330,7 @@ rule("AI Hanzo Attack Charge")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
         Is Button Held(Event Player, Button(Primary Fire)) == False;
+        Event Player.ai_RetCastDistance < 4;
     }
     actions
     {
@@ -7355,8 +7355,7 @@ rule("AI Hanzo Attack")
         Is Using Ability 2(Event Player) == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 20) == True;
+        Event Player.ai_RetCastDistance < 2;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
         Is Button Held(Event Player, Button(Primary Fire)) == True;
         Total Time Elapsed >= Event Player.ai_WeaponChargeTime + 1.250;
@@ -7412,8 +7411,7 @@ rule("AI Hanzo Storm Arrows Start")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 4;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Is Using Ability 2(Event Player) == False;
     }
@@ -7439,8 +7437,7 @@ rule("AI Hanzo Storm Arrows Fire")
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 2;
         Is Using Ability 2(Event Player) == True;
     }
     actions
@@ -7468,8 +7465,7 @@ rule("AI Hanzo Dragonstrike")
         Is Using Ability 2(Event Player) == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 3;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
         Ultimate Charge Percent(Event Player) == 100;
@@ -7561,8 +7557,7 @@ rule("AI Junkrat Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 30) == True;
+        Event Player.ai_RetCastDistance < 3.5;
         Is Using Ultimate(Event Player) == False;
     }
     actions
@@ -7590,8 +7585,7 @@ rule("AI Junkrat Concussion Mine")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 3.5;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Ability Charge(Event Player, Button(Ability 1)) > 0;
     }
@@ -7617,8 +7611,7 @@ rule("AI Junkrat Steel Trap")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 17.500) == True;
+        Event Player.ai_RetCastDistance < 5;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
     }
     actions
@@ -7724,7 +7717,7 @@ rule("AI Lucio Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
     }
     actions
     {
@@ -7824,7 +7817,7 @@ rule("AI Lucio Soundwave Boop")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Health(Event Player) <= 100;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
         Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
     }
@@ -7850,7 +7843,7 @@ rule("AI Lucio Soundwave Final")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 25;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
         Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
     }
@@ -7959,8 +7952,7 @@ rule("AI McCree Attack Primary")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 1.25;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 45;
         Is Using Ultimate(Event Player) == False;
     }
@@ -7988,8 +7980,7 @@ rule("AI McCree Attack Secondary")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 17.500) == True;
+        Event Player.ai_RetCastDistance < 1;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 7.500;
         (Has Status(Players In Slot(Slot Of(Event Player), Team 1), Stunned) == True || Health(Players In Slot(Slot Of(Event Player),
             Team 1)) <= 75) == True;
@@ -8045,10 +8036,10 @@ rule("AI McCree Flashbang")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 1.35;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+        Ammo(Event Player, 0) > 0;
     }
     actions
     {
@@ -8075,8 +8066,7 @@ rule("AI McCree Deadeye Start")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 20) == True;
+        Event Player.ai_RetCastDistance < 5;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 200;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 125;
@@ -8208,7 +8198,7 @@ rule("AI Mei Attack Primary")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
         Is Using Ability 1(Event Player) == False;
         Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == False;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) > 75;
@@ -8240,7 +8230,7 @@ rule("AI Mei Attack Secondary")
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
         (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10 || Health(Players In Slot(Slot Of(
             Event Player), Team 1)) <= 75) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2.5;
         Is Using Ability 1(Event Player) == False;
         Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == False;
     }
@@ -8269,7 +8259,7 @@ rule("AI Mei Attack Secondary Frozen")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1;
         Is Using Ability 1(Event Player) == False;
         Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == True;
     }
@@ -8459,8 +8449,7 @@ rule("AI Mercy Attack")
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 20) == True;
+        Event Player.ai_RetCastDistance < 3.5;
     }
     actions
     {
@@ -8583,8 +8572,7 @@ rule("AI Moira Attack")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 2;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
         Is Using Ability 2(Event Player) == False;
     }
@@ -8691,8 +8679,7 @@ rule("AI Moira Biotic Orb Damage")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 2.75;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
         Ultimate Charge Percent(Event Player) < 80;
         Health(Event Player) >= 100;
@@ -8750,8 +8737,7 @@ rule("AI Moira Coalescence")
         Is Using Ultimate(Event Player) == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 2;
     }
     actions
     {
@@ -8817,7 +8803,7 @@ rule("AI Orisa General")
     }
     actions
     {
-        Event Player.ai_OptimalDistanceDefault = Random Real(12, 16);
+        Event Player.ai_OptimalDistanceDefault = Random Real(15, 20);
         Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
         Event Player.ai_AimBaseDefault = 0;
         Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
@@ -8842,7 +8828,7 @@ rule("AI Orisa Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
     }
     actions
     {
@@ -8870,7 +8856,7 @@ rule("AI Orisa Halt!")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
         Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
     }
     actions
@@ -8921,7 +8907,13 @@ rule("AI Orisa Protective Barrier")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Event Player.ai_OptimalDistance;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Absolute Value(
+            Horizontal Angle Towards(
+                Event Player,
+                Players In Slot(Slot Of(Event Player), Team 1)
+            )
+        ) 
+            <= 12;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Is Using Ability 2(Event Player) == False;
     }
@@ -9059,8 +9051,7 @@ rule("AI Pharah Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 20) == True;
+        Event Player.ai_RetCastDistance < 3.5;
         Is Using Ultimate(Event Player) == False;
     }
     actions
@@ -9112,8 +9103,7 @@ rule("AI Pharah Concussive Blast")
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 3;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Is Using Ultimate(Event Player) == False;
     }
@@ -9145,8 +9135,7 @@ rule("AI Pharah Barrage")
         Altitude Of(Event Player) <= 12;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 17.500) == True;
+        Event Player.ai_RetCastDistance < 3;
     }
     actions
     {
@@ -9233,8 +9222,7 @@ rule("AI Reaper Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 25;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 2;
     }
     actions
     {
@@ -9418,8 +9406,7 @@ rule("AI Reinhardt Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 8;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 30) == True;
+        Event Player.ai_RetCastDistance < 3;
     }
     actions
     {
@@ -9447,8 +9434,8 @@ rule("AI Reinhardt Use Shield")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 10) == True;
-        (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 7.500 || Health(Event Player) <= 250) == True;
+            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
+        (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 7.500 || Health(Event Player) < 250) == True;
         Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
             < Global.c_BubbleRadius;
         Has Status(Players In Slot(Slot Of(Event Player), Team 1), Knocked Down) == False;
@@ -9509,8 +9496,7 @@ rule("AI Reinhardt Charge")
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 2.5;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) < Players In Slot(Slot Of(
             Event Player), Team 1).p_EnemyDistanceMax - 2.500;
@@ -9542,8 +9528,7 @@ rule("AI Reinhardt Charge Gap Closer")
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 4;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 20;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
     }
@@ -9569,8 +9554,7 @@ rule("AI Reinhardt Firestrike")
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 2.5;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 20;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Ultimate Charge Percent(Event Player) < 90;
@@ -9581,7 +9565,7 @@ rule("AI Reinhardt Firestrike")
         Call Subroutine(aiSub_Abilities_Reinhardt);
     }
 }
-rule("AI Reinhardt EarthEarthshtter")
+rule("AI Reinhardt Earthshtter")
 {
     event
     {
@@ -9599,8 +9583,7 @@ rule("AI Reinhardt EarthEarthshtter")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 20) == True;
+        Event Player.ai_RetCastDistance < 3.5;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 16;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) > 80;
         Health(Event Player) >= 50;
@@ -9705,7 +9688,7 @@ rule("AI Roadhog Attack Primary")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2.5;
         Is Using Ability 1(Event Player) == False;
         Is Using Ability 2(Event Player) == False;
         Is Using Ultimate(Event Player) == False;
@@ -9737,7 +9720,7 @@ rule("AI Roadhog Attack Secondary")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 15;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 38;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
         Is Using Ability 1(Event Player) == False;
         Is Using Ability 2(Event Player) == False;
         Is Using Ultimate(Event Player) == False;
@@ -9769,7 +9752,7 @@ rule("AI Roadhog Chain Hook")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 75;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 4 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2.25;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) <= Players In Slot(Slot Of(
             Event Player), Team 1).p_ZoneRadius;
@@ -9828,7 +9811,7 @@ rule("AI Roadhog Whole Hog")
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
         Is Using Ability 1(Event Player) == False;
         Is Using Ability 2(Event Player) == False;
     }
@@ -9897,7 +9880,7 @@ rule("AI Sigma")
             Press Button(Event Player, Button(Ultimate));
             Start Holding Button(Event Player, Button(Jump));
             Wait(Random Real(0.750, 1.500), Ignore Condition);
-            Wait Until(Is In View Angle(Event Player, Position Of(Players In Slot(Slot Of(Event Player), Team 1)), 10), 4);
+            Wait Until(Event Player.ai_RetCastDistance < 3, 4);
             Start Holding Button(Event Player, Button(Primary Fire));
             Event Player.ai_AimType = 0;
             Event Player.ai_AimBase = 0;
@@ -9949,7 +9932,7 @@ rule("AI Sigma Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 25;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3.25;
         Is Using Ability 1(Event Player) == False;
         Is Using Ability 2(Event Player) == False;
         Is Using Ultimate(Event Player) == False;
@@ -9978,7 +9961,7 @@ rule("AI Sigma Experimental Barrier")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3;
         Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
         Is Firing Secondary(Event Player) == False;
     }
@@ -10006,15 +9989,16 @@ rule("AI Sigma Kinetic Grasp")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
-        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 5;
+        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
         Array Contains(Global.c_ProjectileHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Is Using Ability 1(Event Player) == False;
     }
     actions
     {
-        If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
+        If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
             Event Player.ai_AbilityButton = Button(Ability 1);
             Call Subroutine(aiSub_Abilities_Sigma);
         End;
@@ -10036,7 +10020,7 @@ rule("AI Sigma Accretion")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2.75;
         Speed Of(Players In Slot(Slot Of(Event Player), Team 1)) <= 6;
         Ability Cooldown(Event Player, Button(Ability 2)) == 0;
         Is Using Ability 2(Event Player) == False;
@@ -10066,7 +10050,7 @@ rule("AI Sigma Gravitic Flux")
         Is Using Ultimate(Event Player) == False;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 125;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 4;
     }
     actions
     {
@@ -10153,8 +10137,7 @@ rule("AI Soldier: 76 Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 2.25;
         Is Using Ability 1(Event Player) == False;
         Is Firing Secondary(Event Player) == False;
     }
@@ -10182,8 +10165,7 @@ rule("AI Soldier: 76 Helix Rockets")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 2.75;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
         Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
     }
@@ -10361,7 +10343,7 @@ rule("AI Sombra Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2.5;
         Is Using Ability 1(Event Player) == False;
         Is Button Held(Event Player, Button(Secondary Fire)) == False;
     }
@@ -10390,8 +10372,9 @@ rule("AI Sombra Hack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
-        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 15 + Event Player.ai_ViewAngleMod) == False;
+        Event Player.ai_RetCastDistance < 1.5;
+        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == False;
         Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
     }
     actions
@@ -10583,7 +10566,7 @@ rule("AI Symmetra Attack Primary")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
     }
     actions
     {
@@ -10611,7 +10594,7 @@ rule("AI Symmetra Attack Secondary")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 12;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 3.5;
     }
     actions
     {
@@ -10638,7 +10621,6 @@ rule("AI Symmetra Sentry Turret")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-        Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 15 + Event Player.ai_ViewAngleMod) == True;
         Ability Charge(Event Player, Button(Ability 1)) > 0;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
     }
@@ -10763,8 +10745,7 @@ rule("AI Torbjorn Attack Primary")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 2.25;
         Is Using Ultimate(Event Player) == False;
     }
     actions
@@ -10793,8 +10774,7 @@ rule("AI Torbjorn Attack Secondary")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 1.75;
         Is Using Ultimate(Event Player) == False;
     }
     actions
@@ -10961,8 +10941,7 @@ rule("AI Tracer Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 23;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 2;
         Is Reloading(Event Player) == False;
     }
     actions
@@ -10991,7 +10970,7 @@ rule("AI Tracer Blink")
         Is Alive(Event Player) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
         Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 5) == True;
+            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 7.5) == True;
         Ability Charge(Event Player, Button(Ability 1)) > 0;
         Is Using Ability 1(Event Player) == False;
     }
@@ -11070,8 +11049,7 @@ rule("AI Tracer Pulse Bomb Toss")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 75;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 5;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 10) == True;
+        Event Player.ai_RetCastDistance < 1.5;
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
     }
@@ -11301,9 +11279,8 @@ rule("AI Widowmaker Charge And Fire")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is Firing Secondary(Event Player) == True;
-        Players in View Angle(Event Player, Team 1, 1.250 + Event Player.ai_ViewAngleMod) == Players In Slot(Slot Of(Event Player),
-            Team 1);
         Is Using Ability 1(Event Player) == False;
+        Event Player.ai_RetCastDistance <= 1.25;
         Total Time Elapsed >= Event Player.ai_WeaponChargeTime + 1.250;
     }
     actions
@@ -11329,7 +11306,7 @@ rule("AI Widowmaker Attack SMG")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 7.500;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2;
         Is Using Ability 1(Event Player) == False;
     }
     actions
@@ -11536,8 +11513,7 @@ rule("AI Winston Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 30) == True;
+        Event Player.ai_RetCastDistance < 2.75;
     }
     actions
     {
@@ -11564,8 +11540,7 @@ rule("AI Winston Jump Pack")
         Event Player.ai_HeroInitialized == True;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 3;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 12;
         Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
             < Global.c_BubbleRadius;
@@ -11627,8 +11602,7 @@ rule("AI Winston Primal Rage")
         Is Using Ultimate(Event Player) == False;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 3;
     }
     actions
     {
@@ -11710,7 +11684,7 @@ rule("AI Wrecking Ball Attack")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2.25;
     }
     actions
     {
@@ -11904,8 +11878,7 @@ rule("AI Zarya Attack Primary")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 15) == True;
+        Event Player.ai_RetCastDistance < 2.5;
     }
     actions
     {
@@ -11933,8 +11906,7 @@ rule("AI Zarya Attack Secondary")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 15;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 30) == True;
+        Event Player.ai_RetCastDistance < 3.25;
     }
     actions
     {
@@ -11949,7 +11921,7 @@ rule("AI Zarya Use Bubble")
 {
     event
     {
-        Player Took Damage;
+        Ongoing - Each Player;
         Team 2;
         Zarya;
     }
@@ -11961,7 +11933,7 @@ rule("AI Zarya Use Bubble")
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
+            Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 12) == True;
         Ability Cooldown(Event Player, Button(Ability 1)) == 0;
         Is Using Ability 1(Event Player) == False;
     }
@@ -11991,8 +11963,7 @@ rule("AI Zarya Graviton Surge")
         Ultimate Charge Percent(Event Player) == 100;
         Is Using Ultimate(Event Player) == False;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-        Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-            Eye Position(Event Player)), 0), 12.500) == True;
+        Event Player.ai_RetCastDistance < 2.5;
         Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
     }
     actions
@@ -12072,8 +12043,7 @@ rule("AI Zenyatta Attack Primary")
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
         Is Using Ultimate(Event Player) == False;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
-        Is Firing Primary(Event Player) == False;
+        Event Player.ai_RetCastDistance < 3;
     }
     actions
     {
@@ -12102,7 +12072,7 @@ rule("AI Zenyatta Attack Secondary")
         Is Using Ultimate(Event Player) == False;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 2.5;
         Is Firing Primary(Event Player) == False;
     }
     actions
@@ -12127,7 +12097,7 @@ rule("AI Zenyatta Orb of Discord")
         Event Player.ai_IsInAbilitySub == False;
         Is Alive(Event Player) == True;
         Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-        Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
+        Event Player.ai_RetCastDistance < 1.25;
         Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 75;
         Is Using Ability 2(Event Player) == False;
         Is Using Ultimate(Event Player) == False;

@@ -107,7 +107,7 @@ rule("AI Brigitte Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 90 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.5;
 		Is Firing Secondary(Event Player) == False;
 	}
 
@@ -138,10 +138,16 @@ rule("AI Brigitte Use Shield")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 10 + Event Player.ai_ViewAngleMod) == True;
-		(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 6 || Health(Event Player) < 125) == True;
-		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-			< Global.c_BubbleRadius;
+		Event Player.ai_RetCastDistance < 5;
+		(
+			Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 6
+			|| 
+			Health(Event Player) <= 100
+		) == True;
+		Distance Between(
+			Players In Slot(Slot Of(Event Player), Team 1),
+			Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+		) < Global.c_BubbleRadius;
 	}
 
 	actions
@@ -172,9 +178,9 @@ rule("AI Brigitte Shield Bash")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 40 + Event Player.ai_ViewAngleMod) == True;
-		Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) <= 2;
-		Altitude Of(Event Player) <= 2;
+		Event Player.ai_RetCastDistance < 1;
+		Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) < 2;
+		Altitude Of(Event Player) < 2;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 6.850;
 		Ability Cooldown(Event Player, Button(Primary Fire)) == 0;
 	}
@@ -235,7 +241,7 @@ rule("AI Brigitte Whip Shot Final")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 70;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
@@ -264,7 +270,7 @@ rule("AI Brigitte Whip Shot Boop")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
 		Health(Event Player) < 100;
@@ -294,9 +300,9 @@ rule("AI Brigitte Rally")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-		Health(Event Player) >= 75;
+		Health(Event Player) >= 50;
 		Ultimate Charge Percent(Event Player) == 100;
 		Is Using Ultimate(Event Player) == False;
 	}

@@ -86,8 +86,7 @@ rule("AI Winston Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 30) == True;
+		Event Player.ai_RetCastDistance < 2.75;
 	}
 
 	actions
@@ -117,8 +116,7 @@ rule("AI Winston Jump Pack")
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 12.500) == True;
+		Event Player.ai_RetCastDistance < 3;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 12;
 		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
 			< Global.c_BubbleRadius;
@@ -186,8 +184,7 @@ rule("AI Winston Primal Rage")
 		Is Using Ultimate(Event Player) == False;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 15) == True;
+		Event Player.ai_RetCastDistance < 3;
 	}
 
 	actions

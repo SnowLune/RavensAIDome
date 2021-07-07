@@ -85,10 +85,13 @@ rule("Special Rule: Reinhardt Charge")
 	{
 		Is Alive(Event Player) == True;
 		Is Using Ability 1(Event Player) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(
-			Event Player), Team 1).p_ZoneRadius - 2.500;
-		Distance Between(Position Of(Event Player) + World Vector Of(Vector(0, 0, 4), Event Player, Rotation), Players In Slot(Slot Of(
-			Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 1.250;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) 
+			>= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
+		Distance Between(
+			Position Of(Event Player) + World Vector Of(Vector(0, 0, -5), Event Player, Rotation),
+			Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+		) 
+			<= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
 	}
 
 	actions

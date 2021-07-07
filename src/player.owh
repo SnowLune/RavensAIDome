@@ -33,8 +33,6 @@ rule("pSub_SetDifficulty")
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
 			Event Player), Team 1).p_Difficulty);
-		Players In Slot(Slot Of(Event Player), Team 2).ai_ViewAngleMod = (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player),
-			Team 1).p_Difficulty) / 2;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchChanceMod = 0.100 + Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty * 0.010;
 		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchTimeMod = 0.080 * Players In Slot(Slot Of(Event Player), Team 1)

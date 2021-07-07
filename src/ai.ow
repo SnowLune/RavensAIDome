@@ -47,6 +47,19 @@ rule("AI Aim Calculation Loop")
 
 	actions
 	{
+		// Distance between the ray cast of the bot's facing direction and the position of the Player
+		Event Player.ai_RetCastDistance = Distance Between(
+			Ray Cast Hit Position(
+				Eye Position(Event Player),
+				Eye Position(Event Player) + Facing Direction Of(Event Player) 
+					* Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)),
+				All Players(Team 1),
+				Event Player,
+				True
+			),
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))
+		);
+
 		Start Rule(aiSub_AimCalculation, Do Nothing);
 	}
 }
@@ -67,8 +80,7 @@ rule("AI Aim Stop")
 		Event Player.ai_AIEnabled == True;
 		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 5) == True;
+		Event Player.ai_RetCastDistance < 2;
 	}
 
 	actions
@@ -104,8 +116,7 @@ rule("AI Aim Flick")
 		Event Player.ai_AIEnabled == True;
 		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 5) == False;
+		Event Player.ai_RetCastDistance >= 3;
 	}
 
 	actions
@@ -132,7 +143,7 @@ rule("AI Attack Melee")
 		Event Player.ai_CnAttack == True;
 		Is Alive(Event Player) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 2.500;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance <= 2;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 0;
 	}
@@ -522,8 +533,7 @@ rule("AI Movement Crouch")
 		Event Player.bot_MoveCrouchEnabled == True;
 		Is Alive(Event Player) == True;
 		Is On Ground(Event Player) == True;
-		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 10) == True;
+		Event Player.ai_RetCastDistance < 5;
 	}
 
 	actions

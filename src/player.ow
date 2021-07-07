@@ -290,7 +290,13 @@ rule("Reset Player At Home")
 		End;
 		Play Effect(Event Player, Debuff Impact Sound, Color(White), Event Player, 75);
 		Play Effect(Event Player, Bad Pickup Effect, Color(White), Event Player.p_HomeVector, 1);
-		If(Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 2), 20) == True);
+		If(Is In View Angle(
+			Event Player,
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 2)) 
+				- Vector(0, Y Component Of(Eye Position(Event Player)), 0),20
+			) 
+				== True
+		);
 			Teleport(Event Player, Event Player.p_HomeVector);
 			Wait(1 / 60, Ignore Condition);
 			Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
@@ -508,41 +514,6 @@ rule("Skip Hero")
 		End;
 		
 		Call Subroutine(botSub_SetHero);
-	}
-}
-
-rule("Target Help Indicator")
-{
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
-
-	conditions
-	{
-		Is Game In Progress == True;
-		Has Spawned(Event Player) == True;
-		Is Alive(Event Player) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), 90) == False;
-		Event Player.p_Difficulty < 3;
-		Y Component Of(Facing Direction Of(Event Player)) <= 0.500;
-	}
-
-	actions
-	{
-		Wait(4, Abort When False);
-		Play Effect(Event Player, Debuff Impact Sound, Color(White), Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(
-			Event Player))), 200);
-		Big Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("제발 돌아서!")
-			: Custom String("Turn Around!"));
-		Create In-World Text(Event Player, Custom String("TARGET!"), Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(
-			Event Player))), 4, Do Not Clip, Visible To Position and String, Color(Yellow), Default Visibility);
-		Event Player.p_HelpTargetIndicator = Last Text ID;
-		Wait(3, Ignore Condition);
-		Destroy In-World Text(Event Player.p_HelpTargetIndicator);
-		Loop If Condition Is True;
 	}
 }
 

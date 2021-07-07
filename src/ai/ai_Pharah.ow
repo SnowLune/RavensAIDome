@@ -110,8 +110,7 @@ rule("AI Pharah Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 20) == True;
+		Event Player.ai_RetCastDistance < 3.5;
 		Is Using Ultimate(Event Player) == False;
 	}
 
@@ -169,8 +168,7 @@ rule("AI Pharah Concussive Blast")
 		Event Player.ai_HeroInitialized == True;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 12.500) == True;
+		Event Player.ai_RetCastDistance < 3;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Is Using Ultimate(Event Player) == False;
 	}
@@ -205,8 +203,7 @@ rule("AI Pharah Barrage")
 		Altitude Of(Event Player) <= 12;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 17.500) == True;
+		Event Player.ai_RetCastDistance < 3;
 	}
 
 	actions

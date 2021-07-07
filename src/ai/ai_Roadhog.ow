@@ -90,7 +90,7 @@ rule("AI Roadhog Attack Primary")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2.5;
 		Is Using Ability 1(Event Player) == False;
 		Is Using Ability 2(Event Player) == False;
 		Is Using Ultimate(Event Player) == False;
@@ -125,7 +125,7 @@ rule("AI Roadhog Attack Secondary")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 15;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 38;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3;
 		Is Using Ability 1(Event Player) == False;
 		Is Using Ability 2(Event Player) == False;
 		Is Using Ultimate(Event Player) == False;
@@ -160,7 +160,7 @@ rule("AI Roadhog Chain Hook")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 75;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 4 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2.25;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) <= Players In Slot(Slot Of(
 			Event Player), Team 1).p_ZoneRadius;
@@ -225,7 +225,7 @@ rule("AI Roadhog Whole Hog")
 		Ultimate Charge Percent(Event Player) == 100;
 		Is Using Ultimate(Event Player) == False;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3;
 		Is Using Ability 1(Event Player) == False;
 		Is Using Ability 2(Event Player) == False;
 	}

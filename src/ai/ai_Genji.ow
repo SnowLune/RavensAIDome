@@ -10,6 +10,8 @@ rule("AI Genji")
 	{
 		Event Player.ai_IsInAbilitySub = True;
 		Call Subroutine(aiSub_ReactionDelay);
+
+		// SHURIKEN PRIMARY
 		If(Event Player.ai_AbilityButton == Button(Primary Fire));
 			If(Is Using Ultimate(Event Player));
 				Skip If(Event Player.ai_AimType == 0 && Event Player.ai_AimBase == 0, 3);
@@ -25,6 +27,8 @@ rule("AI Genji")
 			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
 			Call Subroutine(aiSub_ButtonsReset);
 			Start Holding Button(Event Player, Button(Primary Fire));
+
+		// SHURIKEN SECONDARY
 		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
 			If(Event Player.ai_AimType != 1 || Event Player.ai_AimBase != 0);
 				Event Player.ai_AimType = 1;
@@ -34,6 +38,8 @@ rule("AI Genji")
 			Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 2);
 			Call Subroutine(aiSub_ButtonsReset);
 			Start Holding Button(Event Player, Button(Secondary Fire));
+		
+		// SWIFT STRIKE
 		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
 			If(Event Player.ai_AbilityOpt == 0);
 				Press Button(Event Player, Button(Ability 1));
@@ -46,8 +52,13 @@ rule("AI Genji")
 				Wait(0.100, Ignore Condition);
 				Call Subroutine(aiSub_FacingReset);
 			End;
+
+		// DEFLECT
 		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
 			Press Button(Event Player, Button(Ability 2));
+			Wait(Random Real(1.5, 2), Ignore Condition);
+
+		// DRAGONBLADE
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15 && Ability Cooldown(Event Player, Button(
 				Ability 1)) != 0);
@@ -68,6 +79,7 @@ rule("AI Genji")
 			Event Player.ai_AimBase = 0;
 			Call Subroutine(aiSub_FacingStart);
 		End;
+		
 		Event Player.ai_IsInAbilitySub = False;
 	}
 }
@@ -118,7 +130,7 @@ rule("AI Genji Attack Primary")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 4;
 		Is Using Ability 1(Event Player) == False;
 		Is Using Ability 2(Event Player) == False;
 		Is Using Ultimate(Event Player) == False;
@@ -151,7 +163,7 @@ rule("AI Genji Attack Secondary")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 10;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2;
 		Is Using Ability 1(Event Player) == False;
 		Is Using Ability 2(Event Player) == False;
 		Is Using Ultimate(Event Player) == False;
@@ -184,7 +196,7 @@ rule("AI Genji Swift Strike Movement")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 15;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.5;
 		Is Using Ability 2(Event Player) == False;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 		Is Using Ultimate(Event Player) == False;
@@ -217,7 +229,7 @@ rule("AI Genji Swift Strike Final")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12.500;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.5;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 0;
@@ -247,8 +259,7 @@ rule("AI Genji Deflect")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 5 + Event Player.ai_ViewAngleMod) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 4;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Is Using Ability 2(Event Player) == False;
 		Array Contains(Global.c_ProjectileHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
@@ -257,7 +268,7 @@ rule("AI Genji Deflect")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 2);
 			Call Subroutine(aiSub_Abilities_Genji);
 		End;
@@ -280,7 +291,7 @@ rule("AI Genji Deflect Deadeye")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 5;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Hero Of(Players In Slot(Slot Of(Event Player), Team 1)) == Hero(McCree);
 		Is Using Ultimate(Players In Slot(Slot Of(Event Player), Team 1)) == True;
@@ -312,7 +323,7 @@ rule("AI Genji Dragonblde")
 		Ultimate Charge Percent(Event Player) == 100;
 		Is Using Ultimate(Event Player) == False;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 20 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 5;
 		Is Using Ability 2(Event Player) == False;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 50;
 		Health(Event Player) >= 75;
@@ -348,7 +359,7 @@ rule("AI Genji Dragonblde Swift Strike Gap Closer")
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 4.500;
 		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
 			< Global.c_BubbleRadius;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 45 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.5;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 	}
 
@@ -377,7 +388,7 @@ rule("AI Genji Dragonblde Swing")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2;
 		Is Using Ability 2(Event Player) == False;
 		Is Using Ultimate(Event Player) == True;
 	}

@@ -73,7 +73,7 @@ rule("AI Lucio Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3;
 	}
 
 	actions
@@ -185,7 +185,7 @@ rule("AI Lucio Soundwave Boop")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Health(Event Player) <= 100;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.5;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
 		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
 	}
@@ -214,7 +214,7 @@ rule("AI Lucio Soundwave Final")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 25;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.5;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
 		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
 	}

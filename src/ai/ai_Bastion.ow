@@ -77,7 +77,7 @@ rule("AI Bastion Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2;
 		Is Using Ability 1(Event Player) == False;
 		Is Firing Secondary(Event Player) == False;
 	}
@@ -109,7 +109,7 @@ rule("AI Bastion Reconfigure")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Event Player.ai_OptimalDistance;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 		Is Using Ability 1(Event Player) == False;
 		Is Moving(Event Player) == True;

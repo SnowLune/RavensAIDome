@@ -43,7 +43,7 @@ rule("AI D.Va")
 				End;
 				Wait Until(Is In Alternate Form(Event Player), 1.500);
 			Else If(Event Player.ai_AbilityOpt == 1);
-				Wait(3.500, Ignore Condition);
+				Wait(3, Ignore Condition);
 				Press Button(Event Player, Button(Ultimate));
 			End;
 		End;
@@ -97,7 +97,7 @@ rule("AI D.Va Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 25 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3.5;
 		Is Firing Secondary(Event Player) == False;
 	}
 
@@ -130,8 +130,7 @@ rule("AI D.Va Defense Matrix")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In Alternate Form(Event Player) == False;
 		Array Contains(Global.c_ProjectileHeroes, Hero Of(Attacker)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 60 + Event Player.ai_ViewAngleMod) == True;
-		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 10 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 8;
 		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
 		Is Firing Secondary(Event Player) == False;
 		Ability Resource(Event Player, Button(Secondary Fire)) > 0;
@@ -165,7 +164,7 @@ rule("AI D.Va Boosters")
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
 		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
 			< Global.c_BubbleRadius;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 90 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 10;
 		Ultimate Charge Percent(Event Player) <= 95;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 		Is Using Ability 1(Event Player) == False;
@@ -198,7 +197,7 @@ rule("AI D.Va Micro Missiles")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In Alternate Form(Event Player) == False;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Is Using Ability 2(Event Player) == False;
 	}

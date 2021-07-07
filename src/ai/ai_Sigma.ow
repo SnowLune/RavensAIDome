@@ -58,7 +58,7 @@ rule("AI Sigma")
 			Press Button(Event Player, Button(Ultimate));
 			Start Holding Button(Event Player, Button(Jump));
 			Wait(Random Real(0.750, 1.500), Ignore Condition);
-			Wait Until(Is In View Angle(Event Player, Position Of(Players In Slot(Slot Of(Event Player), Team 1)), 10), 4);
+			Wait Until(Event Player.ai_RetCastDistance < 3, 4);
 			Start Holding Button(Event Player, Button(Primary Fire));
 			Event Player.ai_AimType = 0;
 			Event Player.ai_AimBase = 0;
@@ -115,7 +115,7 @@ rule("AI Sigma Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 25;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3.25;
 		Is Using Ability 1(Event Player) == False;
 		Is Using Ability 2(Event Player) == False;
 		Is Using Ultimate(Event Player) == False;
@@ -147,7 +147,7 @@ rule("AI Sigma Experimental Barrier")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3;
 		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
 		Is Firing Secondary(Event Player) == False;
 	}
@@ -178,8 +178,9 @@ rule("AI Sigma Kinetic Grasp")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
-		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Event Player, 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 5;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
 		Array Contains(Global.c_ProjectileHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 		Is Using Ability 1(Event Player) == False;
@@ -187,7 +188,7 @@ rule("AI Sigma Kinetic Grasp")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 1);
 			Call Subroutine(aiSub_Abilities_Sigma);
 		End;
@@ -211,7 +212,7 @@ rule("AI Sigma Accretion")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2.75;
 		Speed Of(Players In Slot(Slot Of(Event Player), Team 1)) <= 6;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Is Using Ability 2(Event Player) == False;
@@ -244,7 +245,7 @@ rule("AI Sigma Gravitic Flux")
 		Is Using Ultimate(Event Player) == False;
 		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 125;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 4;
 	}
 
 	actions

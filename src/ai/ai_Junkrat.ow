@@ -84,8 +84,7 @@ rule("AI Junkrat Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 30) == True;
+		Event Player.ai_RetCastDistance < 3.5;
 		Is Using Ultimate(Event Player) == False;
 	}
 
@@ -116,8 +115,7 @@ rule("AI Junkrat Concussion Mine")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 15) == True;
+		Event Player.ai_RetCastDistance < 3.5;
 		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
 		Ability Charge(Event Player, Button(Ability 1)) > 0;
 	}
@@ -146,8 +144,7 @@ rule("AI Junkrat Steel Trap")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 17.500) == True;
+		Event Player.ai_RetCastDistance < 5;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 	}
 

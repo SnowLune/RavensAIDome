@@ -75,8 +75,7 @@ rule("AI Zenyatta Attack Primary")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is Using Ultimate(Event Player) == False;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
-		Is Firing Primary(Event Player) == False;
+		Event Player.ai_RetCastDistance < 3;
 	}
 
 	actions
@@ -108,7 +107,7 @@ rule("AI Zenyatta Attack Secondary")
 		Is Using Ultimate(Event Player) == False;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 30 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2.5;
 		Is Firing Primary(Event Player) == False;
 	}
 
@@ -136,7 +135,7 @@ rule("AI Zenyatta Orb of Discord")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 7.500 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.25;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 75;
 		Is Using Ability 2(Event Player) == False;
 		Is Using Ultimate(Event Player) == False;

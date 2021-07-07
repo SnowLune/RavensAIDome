@@ -151,7 +151,7 @@ rule("AI Ashe Attack Scoped")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.25;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 7.500;
 		Is Reloading(Event Player) == False;
@@ -184,7 +184,7 @@ rule("AI Ashe Attack Unscoped")
 		Event Player.ai_IsInAbilitySub == False;
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1.5;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 7.500;
 		Is Button Held(Event Player, Button(Secondary Fire)) == False;
 	}
@@ -321,7 +321,7 @@ rule("AI Ashe Dynamite")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 2;
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) <= 2;
 		Is Reloading(Event Player) == False;
@@ -351,7 +351,7 @@ rule("AI Ashe B.O.B.")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 1;
 		Ultimate Charge Percent(Event Player) == 100;
 		Is Using Ultimate(Event Player) == False;
 	}

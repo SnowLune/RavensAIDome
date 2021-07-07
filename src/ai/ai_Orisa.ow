@@ -60,7 +60,7 @@ rule("AI Orisa General")
 
 	actions
 	{
-		Event Player.ai_OptimalDistanceDefault = Random Real(12, 16);
+		Event Player.ai_OptimalDistanceDefault = Random Real(15, 20);
 		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
 		Event Player.ai_AimBaseDefault = 0;
 		Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
@@ -87,7 +87,7 @@ rule("AI Orisa Attack")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 10 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3;
 	}
 
 	actions
@@ -118,7 +118,7 @@ rule("AI Orisa Halt!")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Event Player.ai_RetCastDistance < 3;
 		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
 	}
 
@@ -175,7 +175,14 @@ rule("AI Orisa Protective Barrier")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= Event Player.ai_OptimalDistance;
-		Is In View Angle(Event Player, Players In Slot(Slot Of(Event Player), Team 1), 15 + Event Player.ai_ViewAngleMod) == True;
+		Absolute Value(
+			Horizontal Angle Towards(
+				Event Player,
+				Players In Slot(Slot Of(Event Player), Team 1)
+			)
+		) 
+			<= 12;
+
 		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
 		Is Using Ability 2(Event Player) == False;
 	}

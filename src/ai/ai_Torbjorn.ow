@@ -95,8 +95,7 @@ rule("AI Torbjorn Attack Primary")
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 15) == True;
+		Event Player.ai_RetCastDistance < 2.25;
 		Is Using Ultimate(Event Player) == False;
 	}
 
@@ -128,8 +127,7 @@ rule("AI Torbjorn Attack Secondary")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-		Is In View Angle(Event Player, Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Event Player)), 0), 15) == True;
+		Event Player.ai_RetCastDistance < 1.75;
 		Is Using Ultimate(Event Player) == False;
 	}
 

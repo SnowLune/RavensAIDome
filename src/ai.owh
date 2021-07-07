@@ -678,13 +678,27 @@ rule("AI Aim Calculation")
 			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(250, 500), Destination and Rate);
 			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod, None);
+			Chase Player Variable Over Time(
+				Event Player,
+				ai_AimTurnRate,
+				0,
+				Random Real(0.650, 0.750) - Event Player.ai_ChanceMod,
+				None
+			);
+			
 			Call Subroutine(aiSub_AimModSet);
 
 		Else;
-			Event Player.ai_AimTurnRate = (Event Player.ai_FacingAngleMod * Angle Between Vectors(Facing Direction Of(Event Player),
-				Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300,
-				0)))) ^ Event Player.ai_FacingAnglePow + Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax);
+			Event Player.ai_AimTurnRate = (
+				Event Player.ai_FacingAngleMod
+				* Angle Between Vectors(
+					Facing Direction Of(Event Player),
+					Direction Towards(
+						Eye Position(Event Player),
+						Eye Position(Players In Slot(Slot Of(Event Player), Team 1)) - Vector(0, 0.300, 0)
+					)
+				)
+			) ^ Event Player.ai_FacingAnglePow + Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax);
 		End;
 
 		If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
