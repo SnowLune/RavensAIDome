@@ -27,9 +27,9 @@ rule("pSub_SetDifficulty")
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 300 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 275 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 175 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
 			Event Player), Team 1).p_Difficulty);
@@ -320,6 +320,19 @@ rule("pSub_SetPreset")
 			Event Player.p_KillGoal = Global.g_KillGoal;
 
 			Small Message(Event Player, Custom String("Preset: Ana Low Cooldown"));
+		
+		// Hard and Thorough
+		Else If(Event Player.p_Preset == 5);
+			Event Player.p_KillGoal = 8;
+			Event Player.p_KillsLostOnDeath = 2;
+			Event Player.p_HealingEnabled = True;
+			Event Player.p_BotHealingEnabled = True;
+			Event Player.p_OneSecCooldown = 0;
+
+			Event Player.p_Difficulty = 9;
+			Call Subroutine(pSub_SetDifficulty);
+
+			Small Message(Event Player, Custom String("Preset: Hard and Thorough"));
 		End;
 
 		Call Subroutine(pSub_SetDistances);

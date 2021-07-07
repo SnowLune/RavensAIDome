@@ -40,8 +40,13 @@ rule("AI Aim Calculation Loop")
 		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
 		Total Time Elapsed >= Event Player.ai_AimStopTime;
-		((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) 
-		|| (Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0)) == True;
+
+		(
+			(Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) 
+			|| 
+			(Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0)
+		) == True;
+
 		Global.g_Tick % 5 == 0;
 	}
 
@@ -85,17 +90,8 @@ rule("AI Aim Stop")
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
-			If(Global.g_DebugHUD == True);
-				Small Message(Event Player, Custom String("aim stop"));
-			End;
-			Event Player.ai_AimStopTime = Total Time Elapsed + 0.050 + Random Real(0.025, 0.045) 
-				* (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty);
-			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
-			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.150, 0.250));
-			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-			Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.050, 0.100), None);
-			Start Rule(aiSub_AimModSet, Restart Rule);
+		If(Random Real(0, 1) < 0.900 - Event Player.ai_ChanceMod);
+			Call Subroutine(aiSub_AimMouseStop);
 		End;
 	}
 }

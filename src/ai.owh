@@ -667,27 +667,13 @@ rule("AI Aim Calculation")
 				Event Player,
 				ai_AimTurnRate,
 				Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax) / 2,
-				Random Real(0.050, 0.100),
+				Random Real(0.050, 0.250),
 				None
 			);
-			Wait(0.100, Ignore Condition);
+			Wait(Random Real(0.050, 0.250), Ignore Condition);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-
-		Else If(Random Real(0, 1) < 0.850 - Event Player.ai_ChanceMod);
-			Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.650, 0.750) - Event Player.ai_ChanceMod;
-			Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(250, 500), Destination and Rate);
-			Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod);
-			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-			Chase Player Variable Over Time(
-				Event Player,
-				ai_AimTurnRate,
-				0,
-				Random Real(0.650, 0.750) - Event Player.ai_ChanceMod,
-				None
-			);
-			
-			Call Subroutine(aiSub_AimModSet);
-
+		Else If(Event Player.ai_RetCastDistance < 10 && Random Real(0, 1) < 0.900 - Event Player.ai_ChanceMod);
+			Call Subroutine(aiSub_AimMouseStop);
 		Else;
 			Event Player.ai_AimTurnRate = (
 				Event Player.ai_FacingAngleMod
@@ -704,6 +690,29 @@ rule("AI Aim Calculation")
 		If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
 			Event Player.ai_AimTurnRate = Event Player.ai_AimTurnRate / 1.500;
 		End;
+	}
+}
+
+rule("AI Aim Mouse Stop")
+{
+	event
+	{
+		Subroutine;
+		aiSub_AimMouseStop;
+	}
+
+	actions
+	{
+		If(Global.g_DebugHUD == True);
+				Small Message(Event Player, Custom String("aim stop"));
+		End;
+			
+		Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.600, 0.900) - Event Player.ai_ChanceMod;
+		Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), None);
+		Wait Until(Event Player.ai_AimTurnRate == 0, 0.9);
+		Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
+		
+		Start Rule(aiSub_AimModSet, Restart Rule);
 	}
 }
 

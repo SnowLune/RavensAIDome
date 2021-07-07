@@ -258,6 +258,7 @@ subroutines
     39: aiSub_FlickIn
     40: aiSub_FlickOut
     41: aiSub_ReactionDelay
+    69: aiSub_AimMouseStop
     42: allSub_ButtonsAllow
     43: allSub_ButtonsDisallow
     44: allSub_WaitForFrame
@@ -368,7 +369,7 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.15.0-test.4");
+        Global.c_Version = Custom String("0.15.0-test.5");
         Global.c_BuildDate = Custom String("20210707");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Raven#112503");
@@ -599,6 +600,7 @@ rule("Global Defines")
         Global.c_PresetNames[2] = Custom String("Reinhardt 1v1");
         Global.c_PresetNames[3] = Custom String("Roadhog Hook Practice");
         Global.c_PresetNames[4] = Custom String("Ana Sleepdart Practice");
+        Global.c_PresetNames[5] = Custom String("Hard and Thorough Warmup");
         Global.c_DifficultyColors = Array();
         Global.c_DifficultyColors[0] = Color(White);
         Global.c_DifficultyColors[1] = Color(White);
@@ -1651,9 +1653,9 @@ rule("pSub_SetDifficulty")
             .p_Difficulty;
         Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 300 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 275 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 175 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
         Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
             Event Player), Team 1).p_Difficulty);
@@ -1905,6 +1907,15 @@ rule("pSub_SetPreset")
             Event Player.p_OneSecCooldown = 1;
             Event Player.p_KillGoal = Global.g_KillGoal;
             Small Message(Event Player, Custom String("Preset: Ana Low Cooldown"));
+        Else If(Event Player.p_Preset == 5);
+            Event Player.p_KillGoal = 8;
+            Event Player.p_KillsLostOnDeath = 2;
+            Event Player.p_HealingEnabled = True;
+            Event Player.p_BotHealingEnabled = True;
+            Event Player.p_OneSecCooldown = 0;
+            Event Player.p_Difficulty = 9;
+            Call Subroutine(pSub_SetDifficulty);
+            Small Message(Event Player, Custom String("Preset: Hard and Thorough"));
         End;
         Call Subroutine(pSub_SetDistances);
     }
@@ -4232,24 +4243,13 @@ rule("AI Aim Calculation")
                 Event Player,
                 ai_AimTurnRate,
                 Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax) / 2,
-                Random Real(0.050, 0.100),
+                Random Real(0.050, 0.250),
                 None
             );
-            Wait(0.100, Ignore Condition);
+            Wait(Random Real(0.050, 0.250), Ignore Condition);
             Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-        Else If(Random Real(0, 1) < 0.850 - Event Player.ai_ChanceMod);
-            Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.650, 0.750) - Event Player.ai_ChanceMod;
-            Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(250, 500), Destination and Rate);
-            Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.650, 0.750) - Event Player.ai_ChanceMod);
-            Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-            Chase Player Variable Over Time(
-                Event Player,
-                ai_AimTurnRate,
-                0,
-                Random Real(0.650, 0.750) - Event Player.ai_ChanceMod,
-                None
-            );
-            Call Subroutine(aiSub_AimModSet);
+        Else If(Event Player.ai_RetCastDistance < 10 && Random Real(0, 1) < 0.900 - Event Player.ai_ChanceMod);
+            Call Subroutine(aiSub_AimMouseStop);
         Else;
             Event Player.ai_AimTurnRate = (
                 Event Player.ai_FacingAngleMod
@@ -4265,6 +4265,25 @@ rule("AI Aim Calculation")
         If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
             Event Player.ai_AimTurnRate = Event Player.ai_AimTurnRate / 1.500;
         End;
+    }
+}
+rule("AI Aim Mouse Stop")
+{
+    event
+    {
+        Subroutine;
+        aiSub_AimMouseStop;
+    }
+    actions
+    {
+        If(Global.g_DebugHUD == True);
+                Small Message(Event Player, Custom String("aim stop"));
+        End;
+        Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.600, 0.900) - Event Player.ai_ChanceMod;
+        Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), None);
+        Wait Until(Event Player.ai_AimTurnRate == 0, 0.9);
+        Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
+        Start Rule(aiSub_AimModSet, Restart Rule);
     }
 }
 rule("aiSub_FlickIn")
@@ -4353,8 +4372,11 @@ rule("AI Aim Calculation Loop")
         Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
         Total Time Elapsed >= Event Player.ai_AimStopTime;
-        ((Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) 
-        || (Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0)) == True;
+        (
+            (Slot Of(Event Player) % 2 == 0 && Global.g_Tick % 2 == 0) 
+            || 
+            (Slot Of(Event Player) % 2 != 0 && Global.g_Tick % 2 != 0)
+        ) == True;
         Global.g_Tick % 5 == 0;
     }
     actions
@@ -4392,17 +4414,8 @@ rule("AI Aim Stop")
     }
     actions
     {
-        If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
-            If(Global.g_DebugHUD == True);
-                Small Message(Event Player, Custom String("aim stop"));
-            End;
-            Event Player.ai_AimStopTime = Total Time Elapsed + 0.050 + Random Real(0.025, 0.045) 
-                * (Global.c_MaxDifficulty - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty);
-            Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), Destination and Rate);
-            Wait Until(Event Player.ai_AimTurnRate == 0, Random Real(0.150, 0.250));
-            Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-            Chase Player Variable Over Time(Event Player, ai_AimTurnRate, 0, Random Real(0.050, 0.100), None);
-            Start Rule(aiSub_AimModSet, Restart Rule);
+        If(Random Real(0, 1) < 0.900 - Event Player.ai_ChanceMod);
+            Call Subroutine(aiSub_AimMouseStop);
         End;
     }
 }

@@ -302,6 +302,7 @@ subroutines
 	39: aiSub_FlickIn
 	40: aiSub_FlickOut
 	41: aiSub_ReactionDelay
+	69: aiSub_AimMouseStop
 
 	//
 	// Shared subroutines
