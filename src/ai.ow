@@ -112,7 +112,7 @@ rule("AI Aim Flick")
 		Event Player.ai_AIEnabled == True;
 		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-		Event Player.ai_RetCastDistance >= 3;
+		Event Player.ai_RetCastDistance > 2.5 - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.100;
 	}
 
 	actions
@@ -120,7 +120,8 @@ rule("AI Aim Flick")
 		If(Global.g_DebugHUD == True);
 			Small Message(Event Player, Custom String("aim flick"));
 		End;
-		Start Rule(aiSub_AimModSet, Restart Rule);
+
+		Start Rule(aiSub_AimCalculation, Restart Rule);
 	}
 }
 

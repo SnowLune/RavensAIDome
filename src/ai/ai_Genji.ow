@@ -74,7 +74,7 @@ rule("AI Genji")
 			End;
 			Wait Until(Is Using Ultimate(Event Player) == True, 1);
 			Event Player.ai_StrafeDistanceMod = 0;
-			Event Player.ai_OptimalDistance = Random Real(2, 3.500);
+			Event Player.ai_OptimalDistance = Random Real(1.5, 3);
 			Event Player.ai_AimType = 0;
 			Event Player.ai_AimBase = 0;
 			Call Subroutine(aiSub_FacingStart);

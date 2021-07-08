@@ -47,6 +47,7 @@ rule("Player Init")
 		Event Player.p_KillsLostOnDeath = 0;
 		Event Player.p_MirrorModeEnabled = False;
 		Event Player.p_Preset = 0;
+		Event Player.p_PresetName = Global.c_PresetNames[Event Player.p_Preset];
 		Event Player.p_Difficulty = Global.g_Difficulty;
 		Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
 		Event Player.p_ZoneRadius = Global.c_ZoneRadiusDefault;

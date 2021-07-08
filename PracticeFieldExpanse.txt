@@ -369,7 +369,7 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.15.0-test.5");
+        Global.c_Version = Custom String("0.15.0-test.6");
         Global.c_BuildDate = Custom String("20210707");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Raven#112503");
@@ -1653,9 +1653,9 @@ rule("pSub_SetDifficulty")
             .p_Difficulty;
         Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 275 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 300 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
-        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 175 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+        Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
             .p_Difficulty;
         Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
             Event Player), Team 1).p_Difficulty);
@@ -1967,6 +1967,7 @@ rule("Player Init")
         Event Player.p_KillsLostOnDeath = 0;
         Event Player.p_MirrorModeEnabled = False;
         Event Player.p_Preset = 0;
+        Event Player.p_PresetName = Global.c_PresetNames[Event Player.p_Preset];
         Event Player.p_Difficulty = Global.g_Difficulty;
         Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
         Event Player.p_ZoneRadius = Global.c_ZoneRadiusDefault;
@@ -4239,14 +4240,15 @@ rule("AI Aim Calculation")
     {
         Call Subroutine(allSub_WaitForFrame);
         If(Event Player.ai_AimTurnRate == 0);
+            Start Rule(aiSub_AimModSet, Restart Rule);
             Chase Player Variable Over Time(
                 Event Player,
                 ai_AimTurnRate,
-                Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax) / 2,
-                Random Real(0.050, 0.250),
+                Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax),
+                Random Real(0.050, 0.200),
                 None
             );
-            Wait(Random Real(0.050, 0.250), Ignore Condition);
+            Wait(Random Real(0.050, 0.200), Ignore Condition);
             Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
         Else If(Event Player.ai_RetCastDistance < 10 && Random Real(0, 1) < 0.900 - Event Player.ai_ChanceMod);
             Call Subroutine(aiSub_AimMouseStop);
@@ -4279,11 +4281,10 @@ rule("AI Aim Mouse Stop")
         If(Global.g_DebugHUD == True);
                 Small Message(Event Player, Custom String("aim stop"));
         End;
-        Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.600, 0.900) - Event Player.ai_ChanceMod;
+        Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.450, 0.900) - Event Player.ai_ChanceMod;
         Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), None);
         Wait Until(Event Player.ai_AimTurnRate == 0, 0.9);
         Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-        Start Rule(aiSub_AimModSet, Restart Rule);
     }
 }
 rule("aiSub_FlickIn")
@@ -4434,14 +4435,14 @@ rule("AI Aim Flick")
         Event Player.ai_AIEnabled == True;
         Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-        Event Player.ai_RetCastDistance >= 3;
+        Event Player.ai_RetCastDistance > 2.5 - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.100;
     }
     actions
     {
         If(Global.g_DebugHUD == True);
             Small Message(Event Player, Custom String("aim flick"));
         End;
-        Start Rule(aiSub_AimModSet, Restart Rule);
+        Start Rule(aiSub_AimCalculation, Restart Rule);
     }
 }
 rule("AI Attack Melee")
@@ -6922,7 +6923,7 @@ rule("AI Genji")
             End;
             Wait Until(Is Using Ultimate(Event Player) == True, 1);
             Event Player.ai_StrafeDistanceMod = 0;
-            Event Player.ai_OptimalDistance = Random Real(2, 3.500);
+            Event Player.ai_OptimalDistance = Random Real(1.5, 3);
             Event Player.ai_AimType = 0;
             Event Player.ai_AimBase = 0;
             Call Subroutine(aiSub_FacingStart);

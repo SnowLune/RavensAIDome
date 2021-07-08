@@ -27,9 +27,9 @@ rule("pSub_SetDifficulty")
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingCapMin = 540 + 9 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 275 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMax = 300 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 175 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
+		Players In Slot(Slot Of(Event Player), Team 2).ai_FacingPadMin = 200 + 5 * Players In Slot(Slot Of(Event Player), Team 1)
 			.p_Difficulty;
 		Players In Slot(Slot Of(Event Player), Team 2).ai_ReactionTime = 0.250 + 0.050 * (Global.c_MaxDifficulty - Players In Slot(Slot Of(
 			Event Player), Team 1).p_Difficulty);

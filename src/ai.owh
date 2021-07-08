@@ -663,14 +663,16 @@ rule("AI Aim Calculation")
 		Call Subroutine(allSub_WaitForFrame);
 
 		If(Event Player.ai_AimTurnRate == 0);
+			Start Rule(aiSub_AimModSet, Restart Rule);
+
 			Chase Player Variable Over Time(
 				Event Player,
 				ai_AimTurnRate,
-				Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax) / 2,
-				Random Real(0.050, 0.250),
+				Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax),
+				Random Real(0.050, 0.200),
 				None
 			);
-			Wait(Random Real(0.050, 0.250), Ignore Condition);
+			Wait(Random Real(0.050, 0.200), Ignore Condition);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
 		Else If(Event Player.ai_RetCastDistance < 10 && Random Real(0, 1) < 0.900 - Event Player.ai_ChanceMod);
 			Call Subroutine(aiSub_AimMouseStop);
@@ -707,12 +709,10 @@ rule("AI Aim Mouse Stop")
 				Small Message(Event Player, Custom String("aim stop"));
 		End;
 			
-		Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.600, 0.900) - Event Player.ai_ChanceMod;
+		Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.450, 0.900) - Event Player.ai_ChanceMod;
 		Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), None);
 		Wait Until(Event Player.ai_AimTurnRate == 0, 0.9);
 		Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
-		
-		Start Rule(aiSub_AimModSet, Restart Rule);
 	}
 }
 
