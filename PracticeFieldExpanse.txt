@@ -369,8 +369,8 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.15.0-test.6");
-        Global.c_BuildDate = Custom String("20210707");
+        Global.c_Version = Custom String("0.15.0-test.7");
+        Global.c_BuildDate = Custom String("20210708");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Raven#112503");
         Global.c_TwitchURL = Custom String("twitch.tv/SnowwwLuna");
@@ -4244,11 +4244,11 @@ rule("AI Aim Calculation")
             Chase Player Variable Over Time(
                 Event Player,
                 ai_AimTurnRate,
-                Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax),
-                Random Real(0.050, 0.200),
+                Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax) / 1.5,
+                Random Real(0.025, 0.200),
                 None
             );
-            Wait(Random Real(0.050, 0.200), Ignore Condition);
+            Wait(Random Real(0.025, 0.200), Ignore Condition);
             Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
         Else If(Event Player.ai_RetCastDistance < 10 && Random Real(0, 1) < 0.900 - Event Player.ai_ChanceMod);
             Call Subroutine(aiSub_AimMouseStop);
@@ -4282,6 +4282,7 @@ rule("AI Aim Mouse Stop")
                 Small Message(Event Player, Custom String("aim stop"));
         End;
         Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.450, 0.900) - Event Player.ai_ChanceMod;
+        Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
         Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), None);
         Wait Until(Event Player.ai_AimTurnRate == 0, 0.9);
         Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
@@ -4411,7 +4412,7 @@ rule("AI Aim Stop")
         Event Player.ai_AIEnabled == True;
         Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-        Event Player.ai_RetCastDistance < 2;
+        Event Player.ai_RetCastDistance <= 1;
     }
     actions
     {
@@ -4435,7 +4436,7 @@ rule("AI Aim Flick")
         Event Player.ai_AIEnabled == True;
         Event Player.ai_CnAim == True;
         Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-        Event Player.ai_RetCastDistance > 2.5 - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.100;
+        Event Player.ai_RetCastDistance > 3 - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.250;
     }
     actions
     {

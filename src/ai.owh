@@ -589,6 +589,7 @@ rule("AI Aim Mod Calculation")
 	{
 		Stop Chasing Player Variable(Event Player, ai_AimModX);
 		Stop Chasing Player Variable(Event Player, ai_AimModY);
+		
 		If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
 			If(Horizontal Angle Towards(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 0);
 				Chase Player Variable Over Time(
@@ -668,11 +669,11 @@ rule("AI Aim Calculation")
 			Chase Player Variable Over Time(
 				Event Player,
 				ai_AimTurnRate,
-				Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax),
-				Random Real(0.050, 0.200),
+				Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax) / 1.5,
+				Random Real(0.025, 0.200),
 				None
 			);
-			Wait(Random Real(0.050, 0.200), Ignore Condition);
+			Wait(Random Real(0.025, 0.200), Ignore Condition);
 			Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
 		Else If(Event Player.ai_RetCastDistance < 10 && Random Real(0, 1) < 0.900 - Event Player.ai_ChanceMod);
 			Call Subroutine(aiSub_AimMouseStop);
@@ -687,6 +688,8 @@ rule("AI Aim Calculation")
 					)
 				)
 			) ^ Event Player.ai_FacingAnglePow + Random Real(Event Player.ai_FacingPadMin, Event Player.ai_FacingPadMax);
+
+			// Start Rule(aiSub_AimModSet, Restart Rule);
 		End;
 
 		If(Array Contains(Global.c_ScopeHeroes, Hero Of(Event Player)) && Is Firing Secondary(Event Player));
@@ -710,6 +713,8 @@ rule("AI Aim Mouse Stop")
 		End;
 			
 		Event Player.ai_AimStopTime = Total Time Elapsed + Random Real(0.450, 0.900) - Event Player.ai_ChanceMod;
+		
+		Stop Chasing Player Variable(Event Player, ai_AimTurnRate);
 		Chase Player Variable At Rate(Event Player, ai_AimTurnRate, 0, Random Integer(360, 720), None);
 		Wait Until(Event Player.ai_AimTurnRate == 0, 0.9);
 		Stop Chasing Player Variable(Event Player, ai_AimTurnRate);

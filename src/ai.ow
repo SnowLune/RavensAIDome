@@ -85,7 +85,7 @@ rule("AI Aim Stop")
 		Event Player.ai_AIEnabled == True;
 		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-		Event Player.ai_RetCastDistance < 2;
+		Event Player.ai_RetCastDistance <= 1;
 	}
 
 	actions
@@ -112,7 +112,7 @@ rule("AI Aim Flick")
 		Event Player.ai_AIEnabled == True;
 		Event Player.ai_CnAim == True;
 		Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-		Event Player.ai_RetCastDistance > 2.5 - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.100;
+		Event Player.ai_RetCastDistance > 3 - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.250;
 	}
 
 	actions
