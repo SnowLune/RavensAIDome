@@ -348,7 +348,6 @@ rule("Global Main Tick Loop")
     actions
     {
         For Global Variable(g_Tick, 0, 60, 1);
-            "Dynamically lower the tick rate under high load"
             If(Server Load >= 240);
                 Wait(2 / 60, Ignore Condition);
             Else If(Server Load >= 225);
@@ -369,7 +368,7 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.15.0-test.7");
+        Global.c_Version = Custom String("0.15.0-test.8");
         Global.c_BuildDate = Custom String("20210708");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Raven#112503");
@@ -709,7 +708,6 @@ rule("hudSub_InfoToggle")
                 Modify Global Variable(hud_InfoVisibleToEN, Append To Array, Event Player);
             End;
             Players In Slot(Slot Of(Event Player), Team 1).hud_InfoEnabled = True;
-            "Auto-close after 20 seconds open"
             Wait(20, Ignore Condition);
             If(Event Player.hud_InfoEnabled == True);
                 Call Subroutine(hudSub_InfoToggle);
@@ -736,7 +734,6 @@ rule("hudSub_MainToggle")
         Else;
             Wait(3 / 60, Ignore Condition);
             Players In Slot(Slot Of(Event Player), Team 1).hud_Main = Array();
-            "Create Right Side HUD Text"
             Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
                 .p_Language == 1 ? Custom String("{0} 킬: {1} / {2}", Hero Icon String(Players In Slot(Slot Of(Event Player), Team 1)
                 .p_HeroList[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber]), Players In Slot(Slot Of(Event Player), Team 1)
@@ -788,7 +785,6 @@ rule("hudSub_SkyMenuPlaySound")
     }
     actions
     {
-        "On, Off, Neutral, Other"
         If(Event Player.hud_SkyMenuSound == 0);
             Play Effect(Event Player, Buff Impact Sound, Color(White), Players In Slot(Slot Of(Event Player),
                 Team 1).hud_SkyMenuSelection - Vector(0, 15, 0), 20);
@@ -886,7 +882,6 @@ rule("hudSub_SkyMenuToggle")
             Event Player.hud_SkyMenuVisibleTo = Event Player;
             Call Subroutine(hudSub_SkyMenuArrowSet);
             Disable Hero HUD(Event Player);
-            "Generate Menu"
             Event Player.hud_SkyMenuVectors = Array();
             For Player Variable(Event Player, hud_i, -1, 15, 1);
                 Modify Player Variable(Event Player, hud_SkyMenuVectors, Append To Array, Vector(0, 45,
@@ -894,7 +889,6 @@ rule("hudSub_SkyMenuToggle")
             End;
             Event Player.hud_SkyMenuSelection = Event Player
                 .hud_SkyMenuVectors[0];
-            "Menu Selection Arrows"
             Event Player.hud_SkyMenuArrowsVisibleTo = Array(Null, Null);
             Event Player.hud_SkyMenu = Array();
             Create In-World Text(Event Player.hud_SkyMenuArrowsVisibleTo[0], Icon String(Arrow: Left),
@@ -905,7 +899,6 @@ rule("hudSub_SkyMenuToggle")
                 Event Player.hud_SkyMenuSelection + Vector(-4.500, 0, 0), 1.250, Clip Against Surfaces,
                 Visible To Position and String, Color(White), Default Visibility);
             Modify Player Variable(Event Player, hud_SkyMenu, Append To Array, Last Text ID);
-            "Selection Beams"
             Create Beam Effect(Event Player, Bad Beam, Event Player
                 .hud_SkyMenuSelection + Vector(-4.500, 0, -0.500), Event Player
                 .hud_SkyMenuSelection + Vector(4.500, 0, -0.500), Event Player.p_EffectsColor, Position Radius and Color);
@@ -914,7 +907,6 @@ rule("hudSub_SkyMenuToggle")
                 .hud_SkyMenuSelection + Vector(-4.500, 0, -1.500), Event Player
                 .hud_SkyMenuSelection + Vector(4.500, 0, -1.500), Event Player.p_EffectsColor, Position Radius and Color);
             Event Player.p_Effects[11] = Last Created Entity;
-            "Menu Text"
             Create In-World Text(Event Player.hud_SkyMenuVisibleTo, Event Player.p_Language == 1 ? Custom String("난이도: {0}", Event Player
                 .p_DifficultyNames[Event Player.p_Difficulty]) : Custom String("Difficulty: {0}",
                 Event Player.p_DifficultyNames[Event Player.p_Difficulty]),
@@ -1044,7 +1036,6 @@ rule("Global HUD")
     }
     actions
     {
-        "Padding"
         Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
             White), Visible To, Default Visibility);
         Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
@@ -1052,7 +1043,6 @@ rule("Global HUD")
         Create HUD Text(All Players(All Teams), Custom String("{0}", Global.c_WorkshopCode), Custom String("{0}+{1}, {2}", Global.c_Version,
             Global.c_BuildDate, Global.c_DeveloperName), Custom String("Practice Field: Expanse"), Left, -3, Global.c_Color_LightPink,
             Global.c_Color_LightGrey, Global.c_Color_LightTeal, Visible To, Default Visibility);
-        "Create Left Side HUD Text EN"
         Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to show/hide info",
             Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White),
             Color(White), Visible To and String, Default Visibility);
@@ -1066,7 +1056,6 @@ rule("Global HUD")
             Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String(
             "Press {0} and {1} to open/close the menu", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left,
             -1.500, Color(White), Color(White), Global.c_Color_DarkPink, Visible To and String, Default Visibility);
-        "Create Left Side HUD Text KR"
         Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼을 [{0} 및 {1}] 눌러 힌트 창을 닫습니다", Input Binding String(
             Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White), Color(White),
             Visible To and String, Default Visibility);
@@ -1080,7 +1069,6 @@ rule("Global HUD")
             Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다",
             Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left, -1.500, Color(White), Color(White),
             Global.c_Color_DarkPink, Visible To and String, Default Visibility);
-        "Create Info HUD EN"
         Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Practice Field: Expanse!"), Global.c_TwitchURL, Custom String(
             "Created by {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
             Visible To and String, Default Visibility);
@@ -1107,7 +1095,6 @@ rule("Global HUD")
         Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to hide this text",
             Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
             Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
-        "Create Info HUD KR"
         Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Practice Field: Expanse 어서 오십시오!"), Global.c_TwitchURL, Custom String(
             "창조자: {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
             Visible To and String, Default Visibility);
@@ -1132,7 +1119,6 @@ rule("Global HUD")
         Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 정보를 숨기려면 {0} 및 {1} 버튼을 사용하십시오",
             Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
             Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
-        "Global Debug HUD"
         If(Global.g_DebugHUD == True);
             Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(Server Load / 2.550, Down), Server Load),
                 Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550, Down), Server Load Average), Custom String(
@@ -1936,24 +1922,17 @@ rule("Player Init")
     }
     actions
     {
-        "Disable Buttons"
         Call Subroutine(allSub_ButtonsDisallow);
-        "Force facing and prevent movement"
         Start Facing(Event Player, Vector(0, 0, 0), 1000, To World, None);
         Start Forcing Throttle(Event Player, 0, 0, 0, 0, 0, 0);
-        "Set Language"
         Event Player.p_Language = Global.g_Language;
         Call Subroutine(pSub_SetLanguage);
-        "Show info"
         Start Rule(hudSub_InfoToggle, Restart Rule);
-        "Disable HUDs"
         Disable Game Mode HUD(Event Player);
         Disable Hero HUD(Event Player);
-        "Start Camera"
         Event Player.p_CameraEyePos = Vector(0, Global.c_BubbleRadius * 2, 0);
         Event Player.p_CameraLookAtPos = Vector(0, 200, 0);
         Start Camera(Event Player, Event Player.p_CameraEyePos, Event Player.p_CameraLookAtPos, 10);
-        "Initialize Variables"
         Call Subroutine(pSub_SetNames);
         Event Player.all_Kills = 0;
         Event Player.p_BotHeroNumber = 0;
@@ -1973,11 +1952,9 @@ rule("Player Init")
         Event Player.p_ZoneRadius = Global.c_ZoneRadiusDefault;
         Event Player.p_PlayerHero = Hero Of(Event Player);
         Call Subroutine(pSub_SetDistances);
-        "HUD Object Arrays"
         Event Player.hud_Info = Array();
         Event Player.hud_Debug = Array();
         Event Player.hud_SkyMenu = Array();
-        "Set Home Vector"
         If(Slot Of(Event Player) == 0);
             Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
         Else If(Slot Of(Event Player) == 1);
@@ -1992,21 +1969,17 @@ rule("Player Init")
             Event Player.p_HomeVector = Vector(0, 0, -380 + Global.c_BubbleRadius);
         End;
         Event Player.p_Effects = Array();
-        "Create Player Bubble"
         Create Effect(All Players(All Teams), Sphere, Event Player.p_EffectsColor, Event Player.p_HomeVector, Global.c_BubbleRadius,
             Color);
         Event Player.p_Effects[0] = Last Created Entity;
-        "Create Player Movement Zone"
         Create Effect(All Players(All Teams), Ring, Event Player.p_EffectsColor, Event Player.p_HomeVector,
             Event Player.p_ZoneRadius + 1.250, Position Radius and Color);
         Event Player.p_Effects[1] = Last Created Entity;
-        "Create Maximum Enemy Distance Zone"
         Create Effect(All Players(All Teams), Light Shaft, Event Player.p_EffectsColor, Event Player.p_HomeVector,
             Event Player.p_EnemyDistanceMax + 1.250, Position Radius and Color);
         Event Player.p_Effects[2] = Last Created Entity;
         Wait(1, Ignore Condition);
         Event Player.p_CameraLookAtPos = Event Player.p_HomeVector;
-        "Intro tip"
         Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("메뉴를 열어 환경 설정을 구성하십시오.")
             : Custom String("Open menu for options"));
         Wait(1, Ignore Condition);
@@ -2015,16 +1988,13 @@ rule("Player Init")
             : Custom String("Attack the bot to start"));
         Wait(1, Ignore Condition);
         Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, 5, 0.001);
-        "Preload Heroes"
         For Player Variable(Event Player, all_Index, 0, Count Of(All Heroes), 1);
             Preload Hero(Event Player, All Heroes[Event Player.all_Index]);
             Wait(1 / 60, Ignore Condition);
         End;
-        "Global 1 Second Cooldown"
         If(Global.g_OneSecCooldown == True);
             Event Player.p_OneSecCooldown = 3;
         End;
-        "Teleport Player Home And Reset HUD"
         Teleport(Event Player, Event Player.p_HomeVector);
         Event Player.p_CameraEyePos = Eye Position(Event Player);
         Event Player.p_CameraLookAtPos = Ray Cast Hit Position(Eye Position(Event Player), Eye Position(Event Player)
@@ -2035,20 +2005,15 @@ rule("Player Init")
         Enable Hero HUD(Event Player);
         Call Subroutine(allSub_ButtonsAllow);
         Stop Forcing Throttle(Event Player);
-        "Player initialization is complete"
         Event Player.p_PlayerInitialized = True;
         Log To Inspector(Custom String("{0} spawned as {1} at vector {2}", Custom String("{0}: {1}", Total Time Elapsed, Event Player), Hero Of(Event Player), Event Player.p_HomeVector));
-        "Add Player name to pool of names"
         If(Global.g_UseBotNames == True && Count Of(Global.g_PlayerNames) < 256);
             Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
         End;
-        "Bot Init"
         Wait(0.100, Ignore Condition);
         Call Subroutine(botSub_SetHero);
-        "Setup difficulty"
         Call Subroutine(pSub_SetDifficulty);
         Event Player.p_BotHealingEnabled = Global.g_BotHealing;
-        "Face enemy bot after it is created"
         Stop Facing(Event Player);
         Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
             Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
@@ -2148,9 +2113,7 @@ rule("Next Hero")
     }
     actions
     {
-        "Echo locks you out of switching heroes for ~5 seconds"
         If(Is Duplicating(Event Player));
-            "So this was causing an issue with Create Dummy Bot"
             Damage(Event Player, Null, 9999);
             Wait(5, Ignore Condition);
         End;
@@ -2180,7 +2143,6 @@ rule("Reset Player At Home")
     }
     actions
     {
-        "Prevent Widowmaker Doomfist loop bug"
         If(((Hero Of(Event Player) == Hero(Widowmaker) && Is Using Ability 1(Event Player)) || (Hero Of(Event Player) == Hero(Doomfist)
             && Is Using Ability 2(Event Player))) == True);
             Cancel Primary Action(Event Player);
@@ -2631,7 +2593,6 @@ rule("botSub_ResetBot")
     actions
     {
         Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete = False;
-        "Disable AI Mode"
         If(Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled == True && Global.g_DebugMode == False);
             Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled = False;
             Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDEnabled = False;
@@ -2641,13 +2602,10 @@ rule("botSub_ResetBot")
             Players In Slot(Slot Of(Event Player), Team 2).ai_HeroInitialized = False;
             Players In Slot(Slot Of(Event Player), Team 2).ai_StrafeDistanceMod = 5;
         End;
-        "Cancel Current Abilities and Disable Buttons"
         Cancel Primary Action(Players In Slot(Slot Of(Event Player), Team 2));
         Call Subroutine(aiSub_ButtonsReset);
-        "Stop facing and throttle"
         Call Subroutine(botSub_ThrottleStop);
         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
-        "Force to be current hero or create dummy bot"
         Call Subroutine(allSub_WaitForFrame);
         If(
             Hero Of(Players In Slot(Slot Of(Event Player), Team 2))
@@ -2669,13 +2627,11 @@ rule("botSub_ResetBot")
                 Vector(0, 0, 0)
             );
             Wait Until(Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)), 5);
-            "If Mirror Mode is on use the Player's name"
             If(Players In Slot(Slot Of(Event Player), Team 1).p_MirrorModeEnabled == True);
                 Start Forcing Dummy Bot Name(
                     Players In Slot(Slot Of(Event Player), Team 2),
                     Custom String("{0}", Players In Slot(Slot Of(Event Player), Team 1))
                 );
-            "Give the bot a silly name. For Fun."
             Else If(Global.g_UseBotNames == True);
                 If(
                     Count Of(Global.g_BotNames)
@@ -2704,7 +2660,6 @@ rule("botSub_ResetBot")
             Disable Built-In Game Mode Respawning(Players In Slot(Slot Of(Event Player), Team 2));
             Call Subroutine(allSub_WaitForFrame);
             Set Invisible(Players In Slot(Slot Of(Event Player), Team 2), All);
-            "Wait a frame after changing hero or creating bot"
             Call Subroutine(allSub_WaitForFrame);
             Small Message(
                 Players In Slot(Slot Of(Event Player), Team 1),
@@ -2717,7 +2672,6 @@ rule("botSub_ResetBot")
                 )
             );
         End;
-        "Set Unkillable"
         Call Subroutine(allSub_WaitForFrame);
         If(
             Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3
@@ -2733,7 +2687,6 @@ rule("botSub_ResetBot")
                 Call Subroutine(aiSub_EnableAI);
             End;
         End;
-        "Disable Ultimate if player has that option set"
         If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
             Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
         End;
@@ -2960,7 +2913,6 @@ rule("botSub_ThrottleStop")
     }
     actions
     {
-        "Wait 4 frames before"
         Wait(4 / 60, Ignore Condition);
         Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2));
     }
@@ -3134,7 +3086,6 @@ rule("Bot Reset Position Non AI Difficulty")
     }
     actions
     {
-        "Flip 180"
         Stop Facing(Event Player);
         Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Event Player) + World Vector Of(Vector(0, 0,
             -5), Event Player, Rotation)), Random Integer(300, 500), To Player, None);
@@ -3404,7 +3355,6 @@ rule("allSub_HealAfterDamage")
     }
     actions
     {
-        "Essentially Brigitte's Inspire"
         If(Event Player.all_InspireHealID != 0);
             Stop Heal Over Time(Event Player.all_InspireHealID);
         End;
@@ -3715,7 +3665,6 @@ rule("aiSub_FacingStart")
         Call Subroutine(allSub_WaitForFrame);
         Abort If(Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim == False);
         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
-        "0 == hitscan/beam, 1 == projectile, 2 == arcing projectile"
         If(Players In Slot(Slot Of(Event Player), Team 2).ai_AimType == 0);
             If(Players In Slot(Slot Of(Event Player), Team 2).ai_AimBase == 0);
                 Start Facing(

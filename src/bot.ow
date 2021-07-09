@@ -187,7 +187,7 @@ rule("Bot Reset Position Non AI Difficulty")
 
 	actions
 	{
-		"Flip 180"
+		// Flip 180
 		Stop Facing(Event Player);
 		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Event Player) + World Vector Of(Vector(0, 0,
 			-5), Event Player, Rotation)), Random Integer(300, 500), To Player, None);

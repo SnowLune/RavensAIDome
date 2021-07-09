@@ -63,15 +63,18 @@ rule("Global Main Tick Loop")
 	actions
 	{
 		For Global Variable(g_Tick, 0, 60, 1);
-			"Dynamically lower the tick rate under high load"
+
+			// Dynamically lower the tick rate under high load
 			If(Server Load >= 240);
 				Wait(2 / 60, Ignore Condition);
 			Else If(Server Load >= 225);
 				Wait(1 / 60, Ignore Condition);
+				
 			Else;
 				Wait(0.500 / 60, Ignore Condition);
 			End;
 		End;
+
 		Loop If Condition Is True;
 	}
 }

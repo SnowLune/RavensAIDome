@@ -24,7 +24,7 @@ rule("allSub_HealAfterDamage")
 
 	actions
 	{
-		"Essentially Brigitte's Inspire"
+		// Essentially Brigitte's Inspire
 		If(Event Player.all_InspireHealID != 0);
 			Stop Heal Over Time(Event Player.all_InspireHealID);
 		End;

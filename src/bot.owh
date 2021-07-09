@@ -10,7 +10,7 @@ rule("botSub_ResetBot")
 	{
 		Players In Slot(Slot Of(Event Player), Team 2).bot_BotResetComplete = False;
 
-		"Disable AI Mode"
+		// Disable AI Mode
 		If(Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled == True && Global.g_DebugMode == False);
 			Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled = False;
 			Players In Slot(Slot Of(Event Player), Team 2).bot_MoveWASDEnabled = False;
@@ -21,15 +21,15 @@ rule("botSub_ResetBot")
 			Players In Slot(Slot Of(Event Player), Team 2).ai_StrafeDistanceMod = 5;
 		End;
 
-		"Cancel Current Abilities and Disable Buttons"
+		// Cancel Current Abilities and Disable Buttons
 		Cancel Primary Action(Players In Slot(Slot Of(Event Player), Team 2));
 		Call Subroutine(aiSub_ButtonsReset);
 
-		"Stop facing and throttle"
+		// Stop facing and throttle
 		Call Subroutine(botSub_ThrottleStop);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 
-		"Force to be current hero or create dummy bot"
+		// Force to be current hero or create dummy bot
 		Call Subroutine(allSub_WaitForFrame);
 		If(
 			Hero Of(Players In Slot(Slot Of(Event Player), Team 2))
@@ -52,14 +52,14 @@ rule("botSub_ResetBot")
 			);
 			Wait Until(Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)), 5);
 
-			"If Mirror Mode is on use the Player's name"
+			// If Mirror Mode is on use the Player's name
 			If(Players In Slot(Slot Of(Event Player), Team 1).p_MirrorModeEnabled == True);
 				Start Forcing Dummy Bot Name(
 					Players In Slot(Slot Of(Event Player), Team 2),
 					Custom String("{0}", Players In Slot(Slot Of(Event Player), Team 1))
 				);
 
-			"Give the bot a silly name. For Fun."
+			// Give the bot a silly name. For Fun.
 			Else If(Global.g_UseBotNames == True);
 				If(
 					Count Of(Global.g_BotNames)
@@ -93,7 +93,7 @@ rule("botSub_ResetBot")
 			Call Subroutine(allSub_WaitForFrame);
 			Set Invisible(Players In Slot(Slot Of(Event Player), Team 2), All);
 			
-			"Wait a frame after changing hero or creating bot"
+			// Wait a frame after changing hero or creating bot
 			Call Subroutine(allSub_WaitForFrame);
 			Small Message(
 				Players In Slot(Slot Of(Event Player), Team 1),
@@ -107,7 +107,7 @@ rule("botSub_ResetBot")
 			);
 		End;
 
-		"Set Unkillable"
+		// Set Unkillable
 		Call Subroutine(allSub_WaitForFrame);
 		If(
 			Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3
@@ -125,7 +125,7 @@ rule("botSub_ResetBot")
 			End;
 		End;
 
-		"Disable Ultimate if player has that option set"
+		// Disable Ultimate if player has that option set
 		If(Players In Slot(Slot Of(Event Player), Team 1).p_BotUltimateDisabled == True);
 			Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
 		End;
@@ -384,7 +384,7 @@ rule("botSub_ThrottleStop")
 
 	actions
 	{
-		"Wait 4 frames before"
+		// Wait 4 frames before
 		Wait(4 / 60, Ignore Condition);
 		Stop Throttle In Direction(Players In Slot(Slot Of(Event Player), Team 2));
 	}

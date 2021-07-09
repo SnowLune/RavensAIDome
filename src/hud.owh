@@ -94,7 +94,8 @@ rule("hudSub_InfoToggle")
 				Modify Global Variable(hud_InfoVisibleToEN, Append To Array, Event Player);
 			End;
 			Players In Slot(Slot Of(Event Player), Team 1).hud_InfoEnabled = True;
-			"Auto-close after 20 seconds open"
+			
+			// Auto-close after 20 seconds open
 			Wait(20, Ignore Condition);
 			If(Event Player.hud_InfoEnabled == True);
 				Call Subroutine(hudSub_InfoToggle);
@@ -123,7 +124,8 @@ rule("hudSub_MainToggle")
 		Else;
 			Wait(3 / 60, Ignore Condition);
 			Players In Slot(Slot Of(Event Player), Team 1).hud_Main = Array();
-			"Create Right Side HUD Text"
+			
+			// Create Right Side HUD Text
 			Create HUD Text(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1)
 				.p_Language == 1 ? Custom String("{0} 킬: {1} / {2}", Hero Icon String(Players In Slot(Slot Of(Event Player), Team 1)
 				.p_HeroList[Players In Slot(Slot Of(Event Player), Team 1).p_BotHeroNumber]), Players In Slot(Slot Of(Event Player), Team 1)
@@ -177,7 +179,7 @@ rule("hudSub_SkyMenuPlaySound")
 
 	actions
 	{
-		"On, Off, Neutral, Other"
+		// On, Off, Neutral, Other
 		If(Event Player.hud_SkyMenuSound == 0);
 			Play Effect(Event Player, Buff Impact Sound, Color(White), Players In Slot(Slot Of(Event Player),
 				Team 1).hud_SkyMenuSelection - Vector(0, 15, 0), 20);
@@ -292,7 +294,7 @@ rule("hudSub_SkyMenuToggle")
 			Call Subroutine(hudSub_SkyMenuArrowSet);
 			Disable Hero HUD(Event Player);
 
-			"Generate Menu"
+			// Generate Menu
 			Event Player.hud_SkyMenuVectors = Array();
 			For Player Variable(Event Player, hud_i, -1, 15, 1);
 				Modify Player Variable(Event Player, hud_SkyMenuVectors, Append To Array, Vector(0, 45,
@@ -301,7 +303,7 @@ rule("hudSub_SkyMenuToggle")
 			Event Player.hud_SkyMenuSelection = Event Player
 				.hud_SkyMenuVectors[0];
 			
-			"Menu Selection Arrows"
+			// Menu Selection Arrows
 			Event Player.hud_SkyMenuArrowsVisibleTo = Array(Null, Null);
 			Event Player.hud_SkyMenu = Array();
 			Create In-World Text(Event Player.hud_SkyMenuArrowsVisibleTo[0], Icon String(Arrow: Left),
@@ -313,7 +315,7 @@ rule("hudSub_SkyMenuToggle")
 				Visible To Position and String, Color(White), Default Visibility);
 			Modify Player Variable(Event Player, hud_SkyMenu, Append To Array, Last Text ID);
 
-			"Selection Beams"
+			// Selection Beams
 			Create Beam Effect(Event Player, Bad Beam, Event Player
 				.hud_SkyMenuSelection + Vector(-4.500, 0, -0.500), Event Player
 				.hud_SkyMenuSelection + Vector(4.500, 0, -0.500), Event Player.p_EffectsColor, Position Radius and Color);
@@ -323,7 +325,7 @@ rule("hudSub_SkyMenuToggle")
 				.hud_SkyMenuSelection + Vector(4.500, 0, -1.500), Event Player.p_EffectsColor, Position Radius and Color);
 			Event Player.p_Effects[11] = Last Created Entity;
 
-			"Menu Text"
+			// Menu Text
 			Create In-World Text(Event Player.hud_SkyMenuVisibleTo, Event Player.p_Language == 1 ? Custom String("난이도: {0}", Event Player
 				.p_DifficultyNames[Event Player.p_Difficulty]) : Custom String("Difficulty: {0}",
 				Event Player.p_DifficultyNames[Event Player.p_Difficulty]),

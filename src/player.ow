@@ -16,24 +16,30 @@ rule("Player Init")
 
 	actions
 	{
-		"Disable Buttons"
+		// Disable Buttons
 		Call Subroutine(allSub_ButtonsDisallow);
-		"Force facing and prevent movement"
+		
+		// Force facing and prevent movement
 		Start Facing(Event Player, Vector(0, 0, 0), 1000, To World, None);
 		Start Forcing Throttle(Event Player, 0, 0, 0, 0, 0, 0);
-		"Set Language"
+
+		// Set Language
 		Event Player.p_Language = Global.g_Language;
 		Call Subroutine(pSub_SetLanguage);
-		"Show info"
+
+		// Show info
 		Start Rule(hudSub_InfoToggle, Restart Rule);
-		"Disable HUDs"
+
+		// Disable HUDs
 		Disable Game Mode HUD(Event Player);
 		Disable Hero HUD(Event Player);
-		"Start Camera"
+
+		// Start Camera
 		Event Player.p_CameraEyePos = Vector(0, Global.c_BubbleRadius * 2, 0);
 		Event Player.p_CameraLookAtPos = Vector(0, 200, 0);
 		Start Camera(Event Player, Event Player.p_CameraEyePos, Event Player.p_CameraLookAtPos, 10);
-		"Initialize Variables"
+
+		// Initialize Variables
 		Call Subroutine(pSub_SetNames);
 		Event Player.all_Kills = 0;
 		Event Player.p_BotHeroNumber = 0;
@@ -53,11 +59,13 @@ rule("Player Init")
 		Event Player.p_ZoneRadius = Global.c_ZoneRadiusDefault;
 		Event Player.p_PlayerHero = Hero Of(Event Player);
 		Call Subroutine(pSub_SetDistances);
-		"HUD Object Arrays"
+
+		// HUD Object Arrays
 		Event Player.hud_Info = Array();
 		Event Player.hud_Debug = Array();
 		Event Player.hud_SkyMenu = Array();
-		"Set Home Vector"
+
+		// Set Home Vector
 		If(Slot Of(Event Player) == 0);
 			Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
 		Else If(Slot Of(Event Player) == 1);
@@ -71,22 +79,27 @@ rule("Player Init")
 		Else If(Slot Of(Event Player) == 5);
 			Event Player.p_HomeVector = Vector(0, 0, -380 + Global.c_BubbleRadius);
 		End;
+
 		Event Player.p_Effects = Array();
-		"Create Player Bubble"
+
+		// Create Player Bubble
 		Create Effect(All Players(All Teams), Sphere, Event Player.p_EffectsColor, Event Player.p_HomeVector, Global.c_BubbleRadius,
 			Color);
 		Event Player.p_Effects[0] = Last Created Entity;
-		"Create Player Movement Zone"
+
+		// Create Player Movement Zone
 		Create Effect(All Players(All Teams), Ring, Event Player.p_EffectsColor, Event Player.p_HomeVector,
 			Event Player.p_ZoneRadius + 1.250, Position Radius and Color);
 		Event Player.p_Effects[1] = Last Created Entity;
-		"Create Maximum Enemy Distance Zone"
+
+		// Create Maximum Enemy Distance Zone
 		Create Effect(All Players(All Teams), Light Shaft, Event Player.p_EffectsColor, Event Player.p_HomeVector,
 			Event Player.p_EnemyDistanceMax + 1.250, Position Radius and Color);
 		Event Player.p_Effects[2] = Last Created Entity;
 		Wait(1, Ignore Condition);
 		Event Player.p_CameraLookAtPos = Event Player.p_HomeVector;
-		"Intro tip"
+
+		// Intro tip
 		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("메뉴를 열어 환경 설정을 구성하십시오.")
 			: Custom String("Open menu for options"));
 		Wait(1, Ignore Condition);
@@ -95,16 +108,19 @@ rule("Player Init")
 			: Custom String("Attack the bot to start"));
 		Wait(1, Ignore Condition);
 		Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, 5, 0.001);
-		"Preload Heroes"
+
+		// Preload Heroes
 		For Player Variable(Event Player, all_Index, 0, Count Of(All Heroes), 1);
 			Preload Hero(Event Player, All Heroes[Event Player.all_Index]);
 			Wait(1 / 60, Ignore Condition);
 		End;
-		"Global 1 Second Cooldown"
+
+		// Global 1 Second Cooldown
 		If(Global.g_OneSecCooldown == True);
 			Event Player.p_OneSecCooldown = 3;
 		End;
-		"Teleport Player Home And Reset HUD"
+
+		// Teleport Player Home And Reset HUD
 		Teleport(Event Player, Event Player.p_HomeVector);
 		Event Player.p_CameraEyePos = Eye Position(Event Player);
 		Event Player.p_CameraLookAtPos = Ray Cast Hit Position(Eye Position(Event Player), Eye Position(Event Player)
@@ -116,23 +132,24 @@ rule("Player Init")
 		Call Subroutine(allSub_ButtonsAllow);
 		Stop Forcing Throttle(Event Player);
 
-		"Player initialization is complete"
+		// Player initialization is complete
 		Event Player.p_PlayerInitialized = True;
 		Log To Inspector(Custom String("{0} spawned as {1} at vector {2}", Custom String("{0}: {1}", Total Time Elapsed, Event Player), Hero Of(Event Player), Event Player.p_HomeVector));
 
-		"Add Player name to pool of names"
+		// Add Player name to pool of names
 		If(Global.g_UseBotNames == True && Count Of(Global.g_PlayerNames) < 256);
 			Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
 		End;
 
-		"Bot Init"
+		// Bot Init
 		Wait(0.100, Ignore Condition);
 		Call Subroutine(botSub_SetHero);
 
-		"Setup difficulty"
+		// Setup difficulty
 		Call Subroutine(pSub_SetDifficulty);
 		Event Player.p_BotHealingEnabled = Global.g_BotHealing;
-		"Face enemy bot after it is created"
+
+		// Face enemy bot after it is created
 		Stop Facing(Event Player);
 		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
 			Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
@@ -247,9 +264,9 @@ rule("Next Hero")
 
 	actions
 	{
-		"Echo locks you out of switching heroes for ~5 seconds"
+		// Echo locks you out of switching heroes for ~5 seconds
 		If(Is Duplicating(Event Player));
-			"So this was causing an issue with Create Dummy Bot"
+			// So this was causing an issue with Create Dummy Bot
 			Damage(Event Player, Null, 9999);
 			Wait(5, Ignore Condition);
 		End;
@@ -284,7 +301,7 @@ rule("Reset Player At Home")
 
 	actions
 	{
-		"Prevent Widowmaker Doomfist loop bug"
+		// Prevent Widowmaker Doomfist loop bug
 		If(((Hero Of(Event Player) == Hero(Widowmaker) && Is Using Ability 1(Event Player)) || (Hero Of(Event Player) == Hero(Doomfist)
 			&& Is Using Ability 2(Event Player))) == True);
 			Cancel Primary Action(Event Player);

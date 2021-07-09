@@ -12,7 +12,7 @@ rule("Global HUD")
 
 	actions
 	{
-		"Padding"
+		// Padding
 		Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
 			White), Visible To, Default Visibility);
 		Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
@@ -21,7 +21,7 @@ rule("Global HUD")
 			Global.c_BuildDate, Global.c_DeveloperName), Custom String("Practice Field: Expanse"), Left, -3, Global.c_Color_LightPink,
 			Global.c_Color_LightGrey, Global.c_Color_LightTeal, Visible To, Default Visibility);
 
-		"Create Left Side HUD Text EN"
+		// Create Left Side HUD Text EN
 		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to show/hide info",
 			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White),
 			Color(White), Visible To and String, Default Visibility);
@@ -36,7 +36,7 @@ rule("Global HUD")
 			"Press {0} and {1} to open/close the menu", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left,
 			-1.500, Color(White), Color(White), Global.c_Color_DarkPink, Visible To and String, Default Visibility);
 
-		"Create Left Side HUD Text KR"
+		// Create Left Side HUD Text KR
 		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼을 [{0} 및 {1}] 눌러 힌트 창을 닫습니다", Input Binding String(
 			Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White), Color(White),
 			Visible To and String, Default Visibility);
@@ -51,7 +51,7 @@ rule("Global HUD")
 			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left, -1.500, Color(White), Color(White),
 			Global.c_Color_DarkPink, Visible To and String, Default Visibility);
 
-		"Create Info HUD EN"
+		// Create Info HUD EN
 		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Practice Field: Expanse!"), Global.c_TwitchURL, Custom String(
 			"Created by {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
 			Visible To and String, Default Visibility);
@@ -79,7 +79,7 @@ rule("Global HUD")
 			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
 			Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
 
-		"Create Info HUD KR"
+		// Create Info HUD KR
 		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Practice Field: Expanse 어서 오십시오!"), Global.c_TwitchURL, Custom String(
 			"창조자: {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
 			Visible To and String, Default Visibility);
@@ -105,7 +105,7 @@ rule("Global HUD")
 			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
 			Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
 			
-		"Global Debug HUD"
+		// Global Debug HUD
 		If(Global.g_DebugHUD == True);
 			Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(Server Load / 2.550, Down), Server Load),
 				Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550, Down), Server Load Average), Custom String(

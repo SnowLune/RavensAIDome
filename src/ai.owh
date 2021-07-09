@@ -73,7 +73,7 @@ rule("aiSub_FacingStart")
 		Abort If(Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim == False);
 		Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
 
-		"0 == hitscan/beam, 1 == projectile, 2 == arcing projectile"
+		// 0 == hitscan/beam, 1 == projectile, 2 == arcing projectile
 		
 		//
 		// Hitscan
