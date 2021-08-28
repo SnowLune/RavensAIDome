@@ -15,6 +15,7 @@ rule("AI Reinhardt")
 			Call Subroutine(aiSub_ButtonsReset);
 			Start Holding Button(Event Player, Button(Primary Fire));
 		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+			Call Subroutine(aiSub_ButtonsReset);
 			Start Holding Button(Event Player, Button(Secondary Fire));
 			Wait Until(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 6.500, Random Real(0.500, 2.750));
 			Stop Holding Button(Event Player, Button(Secondary Fire));
@@ -163,14 +164,14 @@ rule("AI Reinhardt Block Earthshtter")
 		Is Alive(Event Player) == True;
 		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
 		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
-			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 30) == True;
 		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
 		Ultimate Charge Percent(Players In Slot(Slot Of(Event Player), Team 1)) == 0;
 	}
 
 	actions
 	{
-		If(Random Real(0, 1) < 0.200 + Event Player.ai_ChanceMod);
+		If(Random Real(0, 1) < 0.250 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Secondary Fire);
 			Call Subroutine(aiSub_Abilities_Reinhardt);
 		End;
@@ -305,6 +306,7 @@ rule("AI Reinhardt Earthshtter")
 
 	actions
 	{
+		Wait(Random Real(0.150, 0.600), Abort When False);
 		Event Player.ai_AbilityButton = Button(Ultimate);
 		Call Subroutine(aiSub_Abilities_Reinhardt);
 		Wait Until(Has Status(Players In Slot(Slot Of(Event Player), Team 1), Knocked Down) == False, 2.500);

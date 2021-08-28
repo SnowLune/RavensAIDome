@@ -274,8 +274,10 @@ rule("pSub_SetPreset")
 			Event Player.p_BotHeroNumber = Index Of Array Value(Event Player.p_HeroList, Hero(Widowmaker));
 			Call Subroutine(botSub_SetHero);
 
-			Start Forcing Player To Be Hero(Event Player, Hero(Widowmaker));
-			Stop Forcing Player To Be Hero(Event Player);
+			If(Hero Of(Event Player) != Hero(Widowmaker));
+				Start Forcing Player To Be Hero(Event Player, Hero(Widowmaker));
+				Stop Forcing Player To Be Hero(Event Player);
+			End;
 
 			Event Player.p_OneSecCooldown = 0;
 			Event Player.p_KillGoal = Global.c_PseudoInfinity;
@@ -292,8 +294,10 @@ rule("pSub_SetPreset")
 			Event Player.p_BotHeroNumber = Index Of Array Value(Event Player.p_HeroList, Hero(Reinhardt));
 			Call Subroutine(botSub_SetHero);
 
-			Start Forcing Player To Be Hero(Event Player, Hero(Reinhardt));
-			Stop Forcing Player To Be Hero(Event Player);
+			If(Hero Of(Event Player) != Hero(Reinhardt));
+				Start Forcing Player To Be Hero(Event Player, Hero(Reinhardt));
+				Stop Forcing Player To Be Hero(Event Player);
+			End;
 
 			Event Player.p_OneSecCooldown = 0;
 			Event Player.p_KillsLostOnDeath = 2;
@@ -303,8 +307,10 @@ rule("pSub_SetPreset")
 
 		// Roadhog Hook Practice
 		Else If(Event Player.p_Preset == 3);
-			Start Forcing Player To Be Hero(Event Player, Hero(Roadhog));
-			Stop Forcing Player To Be Hero(Event Player);
+			If(Hero Of(Event Player) != Hero(Roadhog));
+				Start Forcing Player To Be Hero(Event Player, Hero(Roadhog));
+				Stop Forcing Player To Be Hero(Event Player);
+			End;
 
 			Event Player.p_OneSecCooldown = 1;
 			Event Player.p_KillGoal = Global.g_KillGoal;
@@ -313,8 +319,10 @@ rule("pSub_SetPreset")
 
 		// Ana Sleep Practice
 		Else If(Event Player.p_Preset == 4);
-			Start Forcing Player To Be Hero(Event Player, Hero(Ana));
-			Stop Forcing Player To Be Hero(Event Player);
+			If(Hero Of(Event Player) != Hero(Ana));
+				Start Forcing Player To Be Hero(Event Player, Hero(Ana));
+				Stop Forcing Player To Be Hero(Event Player);
+			End;
 
 			Event Player.p_OneSecCooldown = 1;
 			Event Player.p_KillGoal = Global.g_KillGoal;
