@@ -332,7 +332,7 @@ rule("pSub_SetPreset")
 		// Hard and Thorough
 		Else If(Event Player.p_Preset == 5);
 			Event Player.p_KillGoal = 8;
-			Event Player.p_KillsLostOnDeath = 2;
+			Event Player.p_KillsLostOnDeath = 1;
 			Event Player.p_HealingEnabled = True;
 			Event Player.p_BotHealingEnabled = True;
 			Event Player.p_OneSecCooldown = 0;
@@ -340,7 +340,20 @@ rule("pSub_SetPreset")
 			Event Player.p_Difficulty = 9;
 			Call Subroutine(pSub_SetDifficulty);
 
-			Small Message(Event Player, Custom String("Preset: Hard and Thorough"));
+			Small Message(Event Player, Custom String("Preset: Hard, Thorough Warmup"));
+
+		// Easy and Thorough
+		Else If(Event Player.p_Preset == 6);
+			Event Player.p_KillGoal = 8;
+			Event Player.p_KillsLostOnDeath = 0;
+			Event Player.p_HealingEnabled = True;
+			Event Player.p_BotHealingEnabled = False;
+			Event Player.p_OneSecCooldown = 0;
+
+			Event Player.p_Difficulty = 0;
+			Call Subroutine(pSub_SetDifficulty);
+
+			Small Message(Event Player, Custom String("Preset: Easy, Thorough Warmup"));
 		End;
 
 		Call Subroutine(pSub_SetDistances);

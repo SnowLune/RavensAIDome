@@ -368,8 +368,8 @@ rule("Global Defines")
     actions
     {
         Global.g_Initialized = False;
-        Global.c_Version = Custom String("0.15.0-test.9");
-        Global.c_BuildDate = Custom String("20210827");
+        Global.c_Version = Custom String("0.15.0-test.10");
+        Global.c_BuildDate = Custom String("20210921");
         Global.c_WorkshopCode = Custom String("5DPKQ");
         Global.c_DeveloperName = Custom String("Raven#112503");
         Global.c_TwitchURL = Custom String("twitch.tv/RavenLuna");
@@ -599,7 +599,8 @@ rule("Global Defines")
         Global.c_PresetNames[2] = Custom String("Reinhardt 1v1");
         Global.c_PresetNames[3] = Custom String("Roadhog Hook Practice");
         Global.c_PresetNames[4] = Custom String("Ana Sleepdart Practice");
-        Global.c_PresetNames[5] = Custom String("Hard and Thorough Warmup");
+        Global.c_PresetNames[5] = Custom String("Hard, Thorough Warmup");
+        Global.c_PresetNames[6] = Custom String("Easy, Thorough Warmup");
         Global.c_DifficultyColors = Array();
         Global.c_DifficultyColors[0] = Color(White);
         Global.c_DifficultyColors[1] = Color(White);
@@ -1903,13 +1904,22 @@ rule("pSub_SetPreset")
             Small Message(Event Player, Custom String("Preset: Ana Low Cooldown"));
         Else If(Event Player.p_Preset == 5);
             Event Player.p_KillGoal = 8;
-            Event Player.p_KillsLostOnDeath = 2;
+            Event Player.p_KillsLostOnDeath = 1;
             Event Player.p_HealingEnabled = True;
             Event Player.p_BotHealingEnabled = True;
             Event Player.p_OneSecCooldown = 0;
             Event Player.p_Difficulty = 9;
             Call Subroutine(pSub_SetDifficulty);
-            Small Message(Event Player, Custom String("Preset: Hard and Thorough"));
+            Small Message(Event Player, Custom String("Preset: Hard, Thorough Warmup"));
+        Else If(Event Player.p_Preset == 6);
+            Event Player.p_KillGoal = 8;
+            Event Player.p_KillsLostOnDeath = 0;
+            Event Player.p_HealingEnabled = True;
+            Event Player.p_BotHealingEnabled = False;
+            Event Player.p_OneSecCooldown = 0;
+            Event Player.p_Difficulty = 0;
+            Call Subroutine(pSub_SetDifficulty);
+            Small Message(Event Player, Custom String("Preset: Easy, Thorough Warmup"));
         End;
         Call Subroutine(pSub_SetDistances);
     }

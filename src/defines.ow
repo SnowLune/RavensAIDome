@@ -13,8 +13,8 @@ rule("Global Defines")
 		//
 		//	Info: version, build, links...
 		//
-		Global.c_Version = Custom String("0.15.0-test.9");
-		Global.c_BuildDate = Custom String("20210827");
+		Global.c_Version = Custom String("0.15.0-test.10");
+		Global.c_BuildDate = Custom String("20210921");
 		Global.c_WorkshopCode = Custom String("5DPKQ");
 		Global.c_DeveloperName = Custom String("Raven#112503");
 		Global.c_TwitchURL = Custom String("twitch.tv/RavenLuna");
@@ -280,7 +280,8 @@ rule("Global Defines")
 		Global.c_PresetNames[2] = Custom String("Reinhardt 1v1");
 		Global.c_PresetNames[3] = Custom String("Roadhog Hook Practice");
 		Global.c_PresetNames[4] = Custom String("Ana Sleepdart Practice");
-		Global.c_PresetNames[5] = Custom String("Hard and Thorough Warmup");
+		Global.c_PresetNames[5] = Custom String("Hard, Thorough Warmup");
+		Global.c_PresetNames[6] = Custom String("Easy, Thorough Warmup");
 
 		Global.c_DifficultyColors = Array();
 		Global.c_DifficultyColors[0] = Color(White);
