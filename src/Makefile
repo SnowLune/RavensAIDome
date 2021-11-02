@@ -24,6 +24,7 @@ FILES=	\
 	ai/ai_Baptiste.ow \
 	ai/ai_Bastion.ow \
 	ai/ai_Brigitte.ow \
+	ai/ai_Cassidy.ow \
 	ai/ai_Doomfist.ow \
 	ai/ai_DVa.ow \
 	ai/ai_Echo.ow \
@@ -31,7 +32,6 @@ FILES=	\
 	ai/ai_Hanzo.ow \
 	ai/ai_Junkrat.ow \
 	ai/ai_Lucio.ow \
-	ai/ai_McCree.ow \
 	ai/ai_Mei.ow \
 	ai/ai_Mercy.ow \
 	ai/ai_Moira.ow \

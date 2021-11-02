@@ -1,9 +1,9 @@
-rule("AI McCree")
+rule("AI Cassidy")
 {
 	event
 	{
 		Subroutine;
-		aiSub_Abilities_McCree;
+		aiSub_Abilities_Cassidy;
 	}
 
 	actions
@@ -26,22 +26,22 @@ rule("AI McCree")
 		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
 			Call Subroutine(aiSub_ButtonsReset);
 			Press Button(Event Player, Button(Ultimate));
-			Wait Until(Event Player.ai_McCreeDeadeyeCharge >= Health(Players In Slot(Slot Of(Event Player), Team 1)), 5);
+			Wait Until(Event Player.ai_CassidyDeadeyeCharge >= Health(Players In Slot(Slot Of(Event Player), Team 1)), 5);
 			Call Subroutine(aiSub_ReactionDelay);
-			Stop Chasing Player Variable(Event Player, ai_McCreeDeadeyeCharge);
+			Stop Chasing Player Variable(Event Player, ai_CassidyDeadeyeCharge);
 			Start Holding Button(Event Player, Button(Primary Fire));
 		End;
 		Event Player.ai_IsInAbilitySub = False;
 	}
 }
 
-rule("AI McCree General")
+rule("AI Cassidy General")
 {
 	event
 	{
 		Ongoing - Each Player;
 		Team 2;
-		McCree;
+		Cassidy;
 	}
 
 	conditions
@@ -62,13 +62,13 @@ rule("AI McCree General")
 	}
 }
 
-rule("AI McCree Attack Primary")
+rule("AI Cassidy Attack Primary")
 {
 	event
 	{
 		Ongoing - Each Player;
 		Team 2;
-		McCree;
+		Cassidy;
 	}
 
 	conditions
@@ -86,20 +86,20 @@ rule("AI McCree Attack Primary")
 	actions
 	{
 		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_McCree);
+		Call Subroutine(aiSub_Abilities_Cassidy);
 		Wait(0.500, Ignore Condition);
 		Loop If Condition Is True;
 		Stop Holding Button(Event Player, Button(Primary Fire));
 	}
 }
 
-rule("AI McCree Attack Secondary")
+rule("AI Cassidy Attack Secondary")
 {
 	event
 	{
 		Ongoing - Each Player;
 		Team 2;
-		McCree;
+		Cassidy;
 	}
 
 	conditions
@@ -120,17 +120,17 @@ rule("AI McCree Attack Secondary")
 	actions
 	{
 		Event Player.ai_AbilityButton = Button(Secondary Fire);
-		Call Subroutine(aiSub_Abilities_McCree);
+		Call Subroutine(aiSub_Abilities_Cassidy);
 	}
 }
 
-rule("AI McCree Combat Roll")
+rule("AI Cassidy Combat Roll")
 {
 	event
 	{
 		Ongoing - Each Player;
 		Team 2;
-		McCree;
+		Cassidy;
 	}
 
 	conditions
@@ -150,18 +150,18 @@ rule("AI McCree Combat Roll")
 	{
 		If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 1);
-			Call Subroutine(aiSub_Abilities_McCree);
+			Call Subroutine(aiSub_Abilities_Cassidy);
 		End;
 	}
 }
 
-rule("AI McCree Flashbang")
+rule("AI Cassidy Flashbang")
 {
 	event
 	{
 		Ongoing - Each Player;
 		Team 2;
-		McCree;
+		Cassidy;
 	}
 
 	conditions
@@ -181,18 +181,18 @@ rule("AI McCree Flashbang")
 	{
 		If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
 			Event Player.ai_AbilityButton = Button(Ability 2);
-			Call Subroutine(aiSub_Abilities_McCree);
+			Call Subroutine(aiSub_Abilities_Cassidy);
 		End;
 	}
 }
 
-rule("AI McCree Deadeye Start")
+rule("AI Cassidy Deadeye Start")
 {
 	event
 	{
 		Ongoing - Each Player;
 		Team 2;
-		McCree;
+		Cassidy;
 	}
 
 	conditions
@@ -213,17 +213,17 @@ rule("AI McCree Deadeye Start")
 	actions
 	{
 		Event Player.ai_AbilityButton = Button(Ultimate);
-		Call Subroutine(aiSub_Abilities_McCree);
+		Call Subroutine(aiSub_Abilities_Cassidy);
 	}
 }
 
-rule("AI McCree Deadeye Charge")
+rule("AI Cassidy Deadeye Charge")
 {
 	event
 	{
 		Ongoing - Each Player;
 		Team 2;
-		McCree;
+		Cassidy;
 	}
 
 	conditions
@@ -236,17 +236,17 @@ rule("AI McCree Deadeye Charge")
 
 	actions
 	{
-		Event Player.ai_McCreeDeadeyeCharge = 0;
-		Event Player.ai_McCreeDeadeyeRate = 100;
+		Event Player.ai_CassidyDeadeyeCharge = 0;
+		Event Player.ai_CassidyDeadeyeRate = 100;
 		Wait(0.200, Ignore Condition);
-		Chase Player Variable At Rate(Event Player, ai_McCreeDeadeyeCharge, 2802.500, Event Player.ai_McCreeDeadeyeRate,
+		Chase Player Variable At Rate(Event Player, ai_CassidyDeadeyeCharge, 2802.500, Event Player.ai_CassidyDeadeyeRate,
 			Destination and Rate);
 		Wait(0.800, Ignore Condition);
-		Event Player.ai_McCreeDeadeyeRate = 275;
+		Event Player.ai_CassidyDeadeyeRate = 275;
 		Wait(0.500, Ignore Condition);
-		Event Player.ai_McCreeDeadeyeRate = 550;
+		Event Player.ai_CassidyDeadeyeRate = 550;
 		Wait Until(Is Using Ultimate(Event Player) == False, 4.600);
-		Event Player.ai_McCreeDeadeyeCharge = 0;
+		Event Player.ai_CassidyDeadeyeCharge = 0;
 	}
 }
 

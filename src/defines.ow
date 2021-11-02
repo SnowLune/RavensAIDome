@@ -13,8 +13,8 @@ rule("Global Defines")
 		//
 		//	Info: version, build, links...
 		//
-		Global.c_Version = Custom String("0.15.0-test.10");
-		Global.c_BuildDate = Custom String("20210921");
+		Global.c_Version = Custom String("0.15.0");
+		Global.c_BuildDate = Custom String("20211101");
 		Global.c_WorkshopCode = Custom String("5DPKQ");
 		Global.c_DeveloperName = Custom String("Raven#112503");
 		Global.c_TwitchURL = Custom String("twitch.tv/RavenLuna");
@@ -54,7 +54,7 @@ rule("Global Defines")
 		Global.c_ShortRangeHeroes = Array();
 		Global.c_ShortRangeHeroes[0] = Hero(Bastion);
 		Global.c_ShortRangeHeroes[1] = Hero(Lúcio);
-		Global.c_ShortRangeHeroes[2] = Hero(McCree);
+		Global.c_ShortRangeHeroes[2] = Hero(Cassidy);
 		Global.c_ShortRangeHeroes[3] = Hero(Mei);
 		Global.c_ShortRangeHeroes[4] = Hero(Orisa);
 		Global.c_ShortRangeHeroes[5] = Hero(Soldier: 76);
@@ -85,7 +85,7 @@ rule("Global Defines")
 		Global.c_ProjectileHeroes[7] = Hero(Hanzo);
 		Global.c_ProjectileHeroes[8] = Hero(Junkrat);
 		Global.c_ProjectileHeroes[9] = Hero(Lúcio);
-		Global.c_ProjectileHeroes[10] = Hero(McCree);
+		Global.c_ProjectileHeroes[10] = Hero(Cassidy);
 		Global.c_ProjectileHeroes[11] = Hero(Mercy);
 		Global.c_ProjectileHeroes[12] = Hero(Orisa);
 		Global.c_ProjectileHeroes[13] = Hero(Pharah);

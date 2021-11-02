@@ -306,7 +306,7 @@ rule("AI Reinhardt Earthshtter")
 
 	actions
 	{
-		Wait(Random Real(0.150, 0.600), Abort When False);
+		Wait(Random Real(0.100, 0.500), Abort When False);
 		Event Player.ai_AbilityButton = Button(Ultimate);
 		Call Subroutine(aiSub_Abilities_Reinhardt);
 		Wait Until(Has Status(Players In Slot(Slot Of(Event Player), Team 1), Knocked Down) == False, 2.500);

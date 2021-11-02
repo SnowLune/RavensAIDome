@@ -3,6 +3,7 @@ settings
 	main
 	{
 		Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Raven#112503\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\"to this description."
+		Mode Name: "Practice Field: Expanse"
 	}
 
 	lobby
@@ -158,8 +159,8 @@ variables
 		25:  ai_HeroInitialized
 		26:  ai_IsInAbilitySub
 		27:  ai_LookAtVector
-		28:  ai_McCreeDeadeyeCharge
-		29:  ai_McCreeDeadeyeRate
+		28:  ai_CassidyDeadeyeCharge
+		29:  ai_CassidyDeadeyeRate
 		30:  ai_OptimalDistance
 		31:  ai_OptimalDistanceDefault
 		32:  ai_ProjectileSpeed
@@ -272,7 +273,7 @@ subroutines
 	9: aiSub_Abilities_Hanzo
 	10: aiSub_Abilities_Junkrat
 	11: aiSub_Abilities_Lucio
-	12: aiSub_Abilities_McCree
+	12: aiSub_Abilities_Cassidy
 	13: aiSub_Abilities_Mei
 	14: aiSub_Abilities_Mercy
 	15: aiSub_Abilities_Moira
