@@ -15,3 +15,13 @@ For this reason, it is __**NOT RECOMMENDED**__ to attempt to open it in the Work
 After a version is ready for release, I import it into a custom game, then recopy it and save *that* as the mode file. This formats the text and eliminates any parenthetical discrepancies, making math bugs easier to identify.
 ## Development History
 I started this project in January 2020 as soon as the "Workshop Expanse" map was released on the PTR. The idea came from my first practice mode on the Practice Range that spawned random types of enemies and gave them *very* rudimentary movement. I knew I wanted something that would spawn enemies at random distances from me and facing a random direction. Initially I only intended it to be a small Widowmaker warm-up and flick practice mode. It is currently in the pre-release stage with changes happening rapidly.
+## Support Me
+I've put more hours into this project than I have an any one job most likely. It's been a passion project, but I have put my soul and *a lot* of time into it.
+Consider supporting me if you enjoy this project.
+
+<pre><code>CashApp: $RavenQueenLuna
+BTC: 3ApiPv3yjmZKo9T5SGSNTyNQVyPthobBEE
+ETH: 0x3e1C67b95Db61f7F444bbDb74Dad8e2a689eA8a4
+DOGE: DEAbvFjBbJb6yyABDjVrmJr8Z3Afi2qwSQ
+Email snowluna@protonmail.com for different coin addresses not listed here</code></pre>
+
