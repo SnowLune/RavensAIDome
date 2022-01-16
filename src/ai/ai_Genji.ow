@@ -1,430 +1,430 @@
 rule("AI Genji")
 {
-	event
-	{
-		Subroutine;
-		aiSub_Abilities_Genji;
-	}
+  event
+  {
+    Subroutine;
+    aiSub_Abilities_Genji;
+  }
 
-	actions
-	{
-		Event Player.ai_IsInAbilitySub = True;
-		Call Subroutine(aiSub_ReactionDelay);
+  actions
+  {
+    Event Player.ai_IsInAbilitySub = True;
+    Call Subroutine(aiSub_ReactionDelay);
 
-		// SHURIKEN PRIMARY
-		If(Event Player.ai_AbilityButton == Button(Primary Fire));
-			If(Is Using Ultimate(Event Player));
-				Skip If(Event Player.ai_AimType == 0 && Event Player.ai_AimBase == 0, 3);
-				Event Player.ai_AimType = 0;
-				Event Player.ai_AimBase = 0;
-				Call Subroutine(aiSub_FacingStart);
-			Else;
-				Skip If(Event Player.ai_AimType == 1 && Event Player.ai_AimBase == 0, 3);
-				Event Player.ai_AimType = 1;
-				Event Player.ai_AimBase = 0;
-				Call Subroutine(aiSub_FacingStart);
-			End;
-			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Primary Fire));
+    // SHURIKEN PRIMARY
+    If(Event Player.ai_AbilityButton == Button(Primary Fire));
+      If(Is Using Ultimate(Event Player));
+        Skip If(Event Player.ai_AimType == 0 && Event Player.ai_AimBase == 0, 3);
+        Event Player.ai_AimType = 0;
+        Event Player.ai_AimBase = 0;
+        Call Subroutine(aiSub_FacingStart);
+      Else;
+        Skip If(Event Player.ai_AimType == 1 && Event Player.ai_AimBase == 0, 3);
+        Event Player.ai_AimType = 1;
+        Event Player.ai_AimBase = 0;
+        Call Subroutine(aiSub_FacingStart);
+      End;
+      Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+      Call Subroutine(aiSub_ButtonsReset);
+      Start Holding Button(Event Player, Button(Primary Fire));
 
-		// SHURIKEN SECONDARY
-		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-			If(Event Player.ai_AimType != 1 || Event Player.ai_AimBase != 0);
-				Event Player.ai_AimType = 1;
-				Event Player.ai_AimBase = 0;
-				Call Subroutine(aiSub_FacingStart);
-			End;
-			Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 2);
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Secondary Fire));
-		
-		// SWIFT STRIKE
-		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-			If(Event Player.ai_AbilityOpt == 0);
-				Press Button(Event Player, Button(Ability 1));
-			Else If(Event Player.ai_AbilityOpt == 1);
-				Event Player.ai_AimBase = 3;
-				Event Player.ai_FacingRelPosMod = Vector(0, 0.500, 0);
-				Call Subroutine(aiSub_FacingStart);
-				Wait(Random Real(0.100, 0.200), Ignore Condition);
-				Press Button(Event Player, Button(Ability 1));
-				Wait(0.100, Ignore Condition);
-				Call Subroutine(aiSub_FacingReset);
-			End;
+    // SHURIKEN SECONDARY
+    Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+      If(Event Player.ai_AimType != 1 || Event Player.ai_AimBase != 0);
+        Event Player.ai_AimType = 1;
+        Event Player.ai_AimBase = 0;
+        Call Subroutine(aiSub_FacingStart);
+      End;
+      Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 2);
+      Call Subroutine(aiSub_ButtonsReset);
+      Start Holding Button(Event Player, Button(Secondary Fire));
+    
+    // SWIFT STRIKE
+    Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+      If(Event Player.ai_AbilityOpt == 0);
+        Press Button(Event Player, Button(Ability 1));
+      Else If(Event Player.ai_AbilityOpt == 1);
+        Event Player.ai_AimBase = 3;
+        Event Player.ai_FacingRelPosMod = Vector(0, 0.500, 0);
+        Call Subroutine(aiSub_FacingStart);
+        Wait(Random Real(0.100, 0.200), Ignore Condition);
+        Press Button(Event Player, Button(Ability 1));
+        Wait(0.100, Ignore Condition);
+        Call Subroutine(aiSub_FacingReset);
+      End;
 
-		// DEFLECT
-		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-			Press Button(Event Player, Button(Ability 2));
-			Wait(Random Real(1.5, 2), Ignore Condition);
+    // DEFLECT
+    Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+      Press Button(Event Player, Button(Ability 2));
+      Wait(Random Real(1.5, 2), Ignore Condition);
 
-		// DRAGONBLADE
-		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-			If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15 && Ability Cooldown(Event Player, Button(
-				Ability 1)) != 0);
-				Press Button(Event Player, Button(Ultimate));
-			Else;
-				Event Player.ai_LookAtVector = Vector(X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), Random Real(5,
-					15), Z Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))));
-				Call Subroutine(aiSub_FacingLookAt);
-				Press Button(Event Player, Button(Ability 1));
-				Wait Until(Is Using Ability 1(Event Player) == False, 0.300);
-				Event Player.ai_CnAim = True;
-				Press Button(Event Player, Button(Ultimate));
-			End;
-			Wait Until(Is Using Ultimate(Event Player) == True, 1);
-			Event Player.ai_StrafeDistanceMod = 0;
-			Event Player.ai_OptimalDistance = Random Real(1.5, 3);
-			Event Player.ai_AimType = 0;
-			Event Player.ai_AimBase = 0;
-			Call Subroutine(aiSub_FacingStart);
-		End;
-		
-		Event Player.ai_IsInAbilitySub = False;
-	}
+    // DRAGONBLADE
+    Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+      If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15 && Ability Cooldown(Event Player, Button(
+        Ability 1)) != 0);
+        Press Button(Event Player, Button(Ultimate));
+      Else;
+        Event Player.ai_LookAtVector = Vector(X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), Random Real(5,
+          15), Z Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))));
+        Call Subroutine(aiSub_FacingLookAt);
+        Press Button(Event Player, Button(Ability 1));
+        Wait Until(Is Using Ability 1(Event Player) == False, 0.300);
+        Event Player.ai_CnAim = True;
+        Press Button(Event Player, Button(Ultimate));
+      End;
+      Wait Until(Is Using Ultimate(Event Player) == True, 1);
+      Event Player.ai_StrafeDistanceMod = 0;
+      Event Player.ai_OptimalDistance = Random Real(1.5, 3);
+      Event Player.ai_AimType = 0;
+      Event Player.ai_AimBase = 0;
+      Call Subroutine(aiSub_FacingStart);
+    End;
+    
+    Event Player.ai_IsInAbilitySub = False;
+  }
 }
 
 rule("AI Genji General")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Is Game In Progress == True;
-		Is Alive(Event Player) == True;
-		Event Player.ai_AIEnabled == True;
-	}
+  conditions
+  {
+    Is Game In Progress == True;
+    Is Alive(Event Player) == True;
+    Event Player.ai_AIEnabled == True;
+  }
 
-	actions
-	{
-		Event Player.ai_OptimalDistanceDefault = Random Real(5, 10);
-		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_AimBaseDefault = 0;
-		Event Player.ai_AimTypeDefault = 1;
-		Event Player.ai_ProjectileSpeed = 60;
-		Call Subroutine(aiSub_FacingReset);
-		Event Player.ai_HeroInitialized = True;
-	}
+  actions
+  {
+    Event Player.ai_OptimalDistanceDefault = Random Real(5, 10);
+    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+    Event Player.ai_AimBaseDefault = 0;
+    Event Player.ai_AimTypeDefault = 1;
+    Event Player.ai_ProjectileSpeed = 60;
+    Call Subroutine(aiSub_FacingReset);
+    Event Player.ai_HeroInitialized = True;
+  }
 }
 
 rule("AI Genji Attack Primary")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
-		Event Player.ai_RetCastDistance < 4;
-		Is Using Ability 1(Event Player) == False;
-		Is Using Ability 2(Event Player) == False;
-		Is Using Ultimate(Event Player) == False;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnAttack == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 35;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
+    Event Player.ai_RetCastDistance < 4;
+    Is Using Ability 1(Event Player) == False;
+    Is Using Ability 2(Event Player) == False;
+    Is Using Ultimate(Event Player) == False;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_Genji);
-		Wait(0.950, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Primary Fire));
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Primary Fire);
+    Call Subroutine(aiSub_Abilities_Genji);
+    Wait(0.950, Ignore Condition);
+    Loop If Condition Is True;
+    Stop Holding Button(Event Player, Button(Primary Fire));
+  }
 }
 
 rule("AI Genji Attack Secondary")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 10;
-		Event Player.ai_RetCastDistance < 2;
-		Is Using Ability 1(Event Player) == False;
-		Is Using Ability 2(Event Player) == False;
-		Is Using Ultimate(Event Player) == False;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnAttack == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 10;
+    Event Player.ai_RetCastDistance < 2;
+    Is Using Ability 1(Event Player) == False;
+    Is Using Ability 2(Event Player) == False;
+    Is Using Ultimate(Event Player) == False;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Secondary Fire);
-		Call Subroutine(aiSub_Abilities_Genji);
-		Wait(0.750, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Secondary Fire));
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Secondary Fire);
+    Call Subroutine(aiSub_Abilities_Genji);
+    Wait(0.750, Ignore Condition);
+    Loop If Condition Is True;
+    Stop Holding Button(Event Player, Button(Secondary Fire));
+  }
 }
 
 rule("AI Genji Swift Strike Movement")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 15;
-		Event Player.ai_RetCastDistance < 1.5;
-		Is Using Ability 2(Event Player) == False;
-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Is Using Ultimate(Event Player) == False;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 15;
+    Event Player.ai_RetCastDistance < 1.5;
+    Is Using Ability 2(Event Player) == False;
+    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+    Is Using Ultimate(Event Player) == False;
+  }
 
-	actions
-	{
-		If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
-			Event Player.ai_AbilityButton = Button(Ability 1);
-			Event Player.ai_AbilityOpt = 0;
-			Call Subroutine(aiSub_Abilities_Genji);
-		End;
-	}
+  actions
+  {
+    If(Random Real(0, 1) < 0.750 - Event Player.ai_ChanceMod);
+      Event Player.ai_AbilityButton = Button(Ability 1);
+      Event Player.ai_AbilityOpt = 0;
+      Call Subroutine(aiSub_Abilities_Genji);
+    End;
+  }
 }
 
 rule("AI Genji Swift Strike Final")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12.500;
-		Event Player.ai_RetCastDistance < 1.5;
-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 0;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12.500;
+    Event Player.ai_RetCastDistance < 1.5;
+    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+    Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
+    Health(Players In Slot(Slot Of(Event Player), Team 1)) > 0;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 1);
-		Event Player.ai_AbilityOpt = 0;
-		Call Subroutine(aiSub_Abilities_Genji);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ability 1);
+    Event Player.ai_AbilityOpt = 0;
+    Call Subroutine(aiSub_Abilities_Genji);
+  }
 }
 
 rule("AI Genji Deflect")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Event Player.ai_RetCastDistance < 4;
-		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-		Is Using Ability 2(Event Player) == False;
-		Array Contains(Global.c_ProjectileHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
-		Is Button Held(Players In Slot(Slot Of(Event Player), Team 1), Button(Primary Fire)) == True;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Event Player.ai_RetCastDistance < 4;
+    Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+    Is Using Ability 2(Event Player) == False;
+    Array Contains(Global.c_ProjectileHeroes, Hero Of(Players In Slot(Slot Of(Event Player), Team 1))) == True;
+    Is Button Held(Players In Slot(Slot Of(Event Player), Team 1), Button(Primary Fire)) == True;
+  }
 
-	actions
-	{
-		If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
-			Event Player.ai_AbilityButton = Button(Ability 2);
-			Call Subroutine(aiSub_Abilities_Genji);
-		End;
-	}
+  actions
+  {
+    If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
+      Event Player.ai_AbilityButton = Button(Ability 2);
+      Call Subroutine(aiSub_Abilities_Genji);
+    End;
+  }
 }
 
 rule("AI Genji Deflect Deadeye")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Event Player.ai_RetCastDistance < 5;
-		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-		Hero Of(Players In Slot(Slot Of(Event Player), Team 1)) == Hero(Cassidy);
-		Is Using Ultimate(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Event Player.ai_RetCastDistance < 5;
+    Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+    Hero Of(Players In Slot(Slot Of(Event Player), Team 1)) == Hero(Cassidy);
+    Is Using Ultimate(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 2);
-		Call Subroutine(aiSub_Abilities_Genji);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ability 2);
+    Call Subroutine(aiSub_Abilities_Genji);
+  }
 }
 
 rule("AI Genji Dragonblde")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Ultimate Charge Percent(Event Player) == 100;
-		Is Using Ultimate(Event Player) == False;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-		Event Player.ai_RetCastDistance < 5;
-		Is Using Ability 2(Event Player) == False;
-		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 50;
-		Health(Event Player) >= 75;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Ultimate Charge Percent(Event Player) == 100;
+    Is Using Ultimate(Event Player) == False;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
+    Event Player.ai_RetCastDistance < 5;
+    Is Using Ability 2(Event Player) == False;
+    Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 50;
+    Health(Event Player) >= 75;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ultimate);
-		Call Subroutine(aiSub_Abilities_Genji);
-		Wait Until(Is Using Ultimate(Event Player) == False, 8);
-		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_StrafeDistanceMod = Event Player.ai_OptimalDistance + 5;
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ultimate);
+    Call Subroutine(aiSub_Abilities_Genji);
+    Wait Until(Is Using Ultimate(Event Player) == False, 8);
+    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+    Event Player.ai_StrafeDistanceMod = Event Player.ai_OptimalDistance + 5;
+  }
 }
 
 rule("AI Genji Dragonblde Swift Strike Gap Closer")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is Using Ultimate(Event Player) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 4.500;
-		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-			< Global.c_BubbleRadius;
-		Event Player.ai_RetCastDistance < 1.5;
-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Is Using Ultimate(Event Player) == True;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 4.500;
+    Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+      < Global.c_BubbleRadius;
+    Event Player.ai_RetCastDistance < 1.5;
+    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 1);
-		Event Player.ai_AbilityOpt = 1;
-		Call Subroutine(aiSub_Abilities_Genji);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ability 1);
+    Event Player.ai_AbilityOpt = 1;
+    Call Subroutine(aiSub_Abilities_Genji);
+  }
 }
 
 rule("AI Genji Dragonblde Swing")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-		Event Player.ai_RetCastDistance < 2;
-		Is Using Ability 2(Event Player) == False;
-		Is Using Ultimate(Event Player) == True;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnAttack == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
+    Event Player.ai_RetCastDistance < 2;
+    Is Using Ability 2(Event Player) == False;
+    Is Using Ultimate(Event Player) == True;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_Genji);
-		Wait(0.900, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Primary Fire));
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Primary Fire);
+    Call Subroutine(aiSub_Abilities_Genji);
+    Wait(0.900, Ignore Condition);
+    Loop If Condition Is True;
+    Stop Holding Button(Event Player, Button(Primary Fire));
+  }
 }
 
 rule("AI Genji Double Jump")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Genji;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Genji;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Is Alive(Event Player) == True;
-		Is In Air(Event Player) == True;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Is Alive(Event Player) == True;
+    Is In Air(Event Player) == True;
+  }
 
-	actions
-	{
-		If(Random Real(0, 1) < 0.375 + Event Player.ai_ChanceMod);
-			Wait(Random Real(0.150, 0.250), Ignore Condition);
-			Press Button(Event Player, Button(Jump));
-		End;
-	}
+  actions
+  {
+    If(Random Real(0, 1) < 0.375 + Event Player.ai_ChanceMod);
+      Wait(Random Real(0.150, 0.250), Ignore Condition);
+      Press Button(Event Player, Button(Jump));
+    End;
+  }
 }
 

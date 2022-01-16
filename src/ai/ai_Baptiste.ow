@@ -1,208 +1,208 @@
 rule("AI Baptiste")
 {
-	event
-	{
-		Subroutine;
-		aiSub_Abilities_Baptiste;
-	}
+  event
+  {
+    Subroutine;
+    aiSub_Abilities_Baptiste;
+  }
 
-	actions
-	{
-		Event Player.ai_IsInAbilitySub = True;
-		Call Subroutine(aiSub_ReactionDelay);
-		If(Event Player.ai_AbilityButton == Button(Primary Fire));
-			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Primary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Reload));
-			Press Button(Event Player, Button(Reload));
-			Wait Until(Ammo(Event Player, 0) == Max Ammo(Event Player, 0), 1.500);
-		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-			Call Subroutine(aiSub_ButtonsReset);
-			Press Button(Event Player, Button(Ability 1));
-		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-			Call Subroutine(aiSub_ButtonsReset);
-			Event Player.ai_LookAtVector = Position Of(Event Player);
-			Call Subroutine(aiSub_FacingLookAt);
-			Press Button(Event Player, Button(Ability 2));
-			Call Subroutine(aiSub_ReactionDelay);
-			Event Player.ai_CnAim = True;
-		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-			Call Subroutine(aiSub_ButtonsReset);
-			Press Button(Event Player, Button(Ultimate));
-			Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(0, 0, 5), Event Player, Rotation);
-			Call Subroutine(aiSub_FacingLookAt);
-			Press Button(Event Player, Button(Primary Fire));
-			Call Subroutine(aiSub_ReactionDelay);
-			Event Player.ai_CnAim = True;
-		End;
-		Event Player.ai_IsInAbilitySub = False;
-	}
+  actions
+  {
+    Event Player.ai_IsInAbilitySub = True;
+    Call Subroutine(aiSub_ReactionDelay);
+    If(Event Player.ai_AbilityButton == Button(Primary Fire));
+      Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+      Call Subroutine(aiSub_ButtonsReset);
+      Start Holding Button(Event Player, Button(Primary Fire));
+    Else If(Event Player.ai_AbilityButton == Button(Reload));
+      Press Button(Event Player, Button(Reload));
+      Wait Until(Ammo(Event Player, 0) == Max Ammo(Event Player, 0), 1.500);
+    Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+      Call Subroutine(aiSub_ButtonsReset);
+      Press Button(Event Player, Button(Ability 1));
+    Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+      Call Subroutine(aiSub_ButtonsReset);
+      Event Player.ai_LookAtVector = Position Of(Event Player);
+      Call Subroutine(aiSub_FacingLookAt);
+      Press Button(Event Player, Button(Ability 2));
+      Call Subroutine(aiSub_ReactionDelay);
+      Event Player.ai_CnAim = True;
+    Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+      Call Subroutine(aiSub_ButtonsReset);
+      Press Button(Event Player, Button(Ultimate));
+      Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(0, 0, 5), Event Player, Rotation);
+      Call Subroutine(aiSub_FacingLookAt);
+      Press Button(Event Player, Button(Primary Fire));
+      Call Subroutine(aiSub_ReactionDelay);
+      Event Player.ai_CnAim = True;
+    End;
+    Event Player.ai_IsInAbilitySub = False;
+  }
 }
 
 rule("AI Baptiste General")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Baptiste;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Baptiste;
+  }
 
-	conditions
-	{
-		Is Game In Progress == True;
-		Is Alive(Event Player) == True;
-		Event Player.ai_AIEnabled == True;
-	}
+  conditions
+  {
+    Is Game In Progress == True;
+    Is Alive(Event Player) == True;
+    Event Player.ai_AIEnabled == True;
+  }
 
-	actions
-	{
-		Event Player.ai_OptimalDistanceDefault = Random Real(14, 18);
-		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_AimBaseDefault = 0;
-		Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
-		Event Player.ai_AimType = 0;
-		Event Player.ai_HeroInitialized = True;
-	}
+  actions
+  {
+    Event Player.ai_OptimalDistanceDefault = Random Real(14, 18);
+    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+    Event Player.ai_AimBaseDefault = 0;
+    Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
+    Event Player.ai_AimType = 0;
+    Event Player.ai_HeroInitialized = True;
+  }
 }
 
 rule("AI Baptiste Attack")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Baptiste;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Baptiste;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < Global.c_BubbleRadius;
-		Event Player.ai_RetCastDistance < 2;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnAttack == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < Global.c_BubbleRadius;
+    Event Player.ai_RetCastDistance < 2;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_Baptiste);
-		Wait(0.580, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Primary Fire));
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Primary Fire);
+    Call Subroutine(aiSub_Abilities_Baptiste);
+    Wait(0.580, Ignore Condition);
+    Loop If Condition Is True;
+    Stop Holding Button(Event Player, Button(Primary Fire));
+  }
 }
 
 rule("AI Baptiste Reload")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Baptiste;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Baptiste;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Ammo(Event Player, 0) <= 0;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnAttack == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Ammo(Event Player, 0) <= 0;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Reload);
-		Call Subroutine(aiSub_Abilities_Baptiste);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Reload);
+    Call Subroutine(aiSub_Abilities_Baptiste);
+  }
 }
 
 rule("AI Baptiste Regenerative Burst")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Baptiste;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Baptiste;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Is Using Ability 1(Event Player) == False;
-		Health(Event Player) <= 100;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+    Is Using Ability 1(Event Player) == False;
+    Health(Event Player) <= 100;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 1);
-		Call Subroutine(aiSub_Abilities_Baptiste);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ability 1);
+    Call Subroutine(aiSub_Abilities_Baptiste);
+  }
 }
 
 rule("AI Baptiste Immortality Field")
 {
-	event
-	{
-		Player Took Damage;
-		Team 2;
-		Baptiste;
-	}
+  event
+  {
+    Player Took Damage;
+    Team 2;
+    Baptiste;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-		Is Using Ability 2(Event Player) == False;
-		Health(Event Player) <= 75;
-		Altitude Of(Event Player) < 3;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+    Is Using Ability 2(Event Player) == False;
+    Health(Event Player) <= 75;
+    Altitude Of(Event Player) < 3;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 2);
-		Call Subroutine(aiSub_Abilities_Baptiste);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ability 2);
+    Call Subroutine(aiSub_Abilities_Baptiste);
+  }
 }
 
 rule("AI Baptiste Amplification Matrix")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Baptiste;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    Baptiste;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Ultimate Charge Percent(Event Player) == 100;
-		Is Using Ultimate(Event Player) == False;
-		Is On Ground(Event Player) == True;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Ultimate Charge Percent(Event Player) == 100;
+    Is Using Ultimate(Event Player) == False;
+    Is On Ground(Event Player) == True;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ultimate);
-		Call Subroutine(aiSub_Abilities_Baptiste);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ultimate);
+    Call Subroutine(aiSub_Abilities_Baptiste);
+  }
 }
 

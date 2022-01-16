@@ -1,268 +1,268 @@
 rule("AI D.Va")
 {
-	event
-	{
-		Subroutine;
-		aiSub_Abilities_DVa;
-	}
+  event
+  {
+    Subroutine;
+    aiSub_Abilities_DVa;
+  }
 
-	actions
-	{
-		Event Player.ai_IsInAbilitySub = True;
-		Call Subroutine(aiSub_ReactionDelay);
-		If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Secondary Fire));
-			Wait Until(Is Firing Secondary(Event Player), 0.100);
-			Wait Until(Is Firing Secondary(Event Player) == False, Random Real(0.500, 1.250));
-			Stop Holding Button(Event Player, Button(Secondary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-			Event Player.ai_AimType = 1;
-			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[3];
-			Press Button(Event Player, Button(Ability 2));
-			Wait Until(Is Using Ability 2(Event Player), 0.100);
-			Wait Until(Is Using Ability 2(Event Player) == False, 2);
-			Event Player.ai_AimType = 0;
-			Call Subroutine(aiSub_FacingReset);
-		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-			Call Subroutine(aiSub_ButtonsReset);
-			If(Event Player.ai_AbilityOpt == 0);
-				If(Ability Cooldown(Event Player, Button(Ability 1)) == 0);
-					Event Player.ai_AimType = 2;
-					Event Player.ai_AimBase = 2;
-					Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
-					Call Subroutine(aiSub_FacingStart);
-					Call Subroutine(aiSub_ReactionDelay);
-					Press Button(Event Player, Button(Ability 1));
-					Call Subroutine(aiSub_ReactionDelay);
-					Press Button(Event Player, Button(Ultimate));
-					Call Subroutine(aiSub_ReactionDelay);
-					Call Subroutine(aiSub_FacingReset);
-				Else;
-					Press Button(Event Player, Button(Ultimate));
-				End;
-				Wait Until(Is In Alternate Form(Event Player), 1.500);
-			Else If(Event Player.ai_AbilityOpt == 1);
-				Wait(3, Ignore Condition);
-				Press Button(Event Player, Button(Ultimate));
-			End;
-		End;
-		Event Player.ai_IsInAbilitySub = False;
-	}
+  actions
+  {
+    Event Player.ai_IsInAbilitySub = True;
+    Call Subroutine(aiSub_ReactionDelay);
+    If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+      Call Subroutine(aiSub_ButtonsReset);
+      Start Holding Button(Event Player, Button(Secondary Fire));
+      Wait Until(Is Firing Secondary(Event Player), 0.100);
+      Wait Until(Is Firing Secondary(Event Player) == False, Random Real(0.500, 1.250));
+      Stop Holding Button(Event Player, Button(Secondary Fire));
+    Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+      Event Player.ai_AimType = 1;
+      Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[3];
+      Press Button(Event Player, Button(Ability 2));
+      Wait Until(Is Using Ability 2(Event Player), 0.100);
+      Wait Until(Is Using Ability 2(Event Player) == False, 2);
+      Event Player.ai_AimType = 0;
+      Call Subroutine(aiSub_FacingReset);
+    Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+      Call Subroutine(aiSub_ButtonsReset);
+      If(Event Player.ai_AbilityOpt == 0);
+        If(Ability Cooldown(Event Player, Button(Ability 1)) == 0);
+          Event Player.ai_AimType = 2;
+          Event Player.ai_AimBase = 2;
+          Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
+          Call Subroutine(aiSub_FacingStart);
+          Call Subroutine(aiSub_ReactionDelay);
+          Press Button(Event Player, Button(Ability 1));
+          Call Subroutine(aiSub_ReactionDelay);
+          Press Button(Event Player, Button(Ultimate));
+          Call Subroutine(aiSub_ReactionDelay);
+          Call Subroutine(aiSub_FacingReset);
+        Else;
+          Press Button(Event Player, Button(Ultimate));
+        End;
+        Wait Until(Is In Alternate Form(Event Player), 1.500);
+      Else If(Event Player.ai_AbilityOpt == 1);
+        Wait(3, Ignore Condition);
+        Press Button(Event Player, Button(Ultimate));
+      End;
+    End;
+    Event Player.ai_IsInAbilitySub = False;
+  }
 }
 
 rule("AI D.Va General")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		D.Va;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    D.Va;
+  }
 
-	conditions
-	{
-		Is Game In Progress == True;
-		Is Alive(Event Player) == True;
-		Event Player.ai_AIEnabled == True;
-	}
+  conditions
+  {
+    Is Game In Progress == True;
+    Is Alive(Event Player) == True;
+    Event Player.ai_AIEnabled == True;
+  }
 
-	actions
-	{
-		Event Player.ai_OptimalDistanceDefault = Random Real(4, 8);
-		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_AimBaseDefault = 0;
-		Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
-		Event Player.ai_AimType = 0;
-		Event Player.ai_ProjectileSpeeds[0] = 50;
-		Event Player.ai_ProjectileSpeeds[3] = 40;
-		Event Player.ai_ProjectileSpeeds[4] = 12;
-		Event Player.ai_HeroInitialized = True;
-	}
+  actions
+  {
+    Event Player.ai_OptimalDistanceDefault = Random Real(4, 8);
+    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+    Event Player.ai_AimBaseDefault = 0;
+    Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
+    Event Player.ai_AimType = 0;
+    Event Player.ai_ProjectileSpeeds[0] = 50;
+    Event Player.ai_ProjectileSpeeds[3] = 40;
+    Event Player.ai_ProjectileSpeeds[4] = 12;
+    Event Player.ai_HeroInitialized = True;
+  }
 }
 
 rule("AI D.Va Attack")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		D.Va;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    D.Va;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-		Event Player.ai_RetCastDistance < 3.5;
-		Is Firing Secondary(Event Player) == False;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnAttack == True;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
+    Event Player.ai_RetCastDistance < 3.5;
+    Is Firing Secondary(Event Player) == False;
+  }
 
-	actions
-	{
-		Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
-		Call Subroutine(aiSub_ButtonsReset);
-		Start Holding Button(Event Player, Button(Primary Fire));
-		Wait(0.250, Abort When False);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Primary Fire));
-	}
+  actions
+  {
+    Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+    Call Subroutine(aiSub_ButtonsReset);
+    Start Holding Button(Event Player, Button(Primary Fire));
+    Wait(0.250, Abort When False);
+    Loop If Condition Is True;
+    Stop Holding Button(Event Player, Button(Primary Fire));
+  }
 }
 
 rule("AI D.Va Defense Matrix")
 {
-	event
-	{
-		Player Took Damage;
-		Team 2;
-		D.Va;
-	}
+  event
+  {
+    Player Took Damage;
+    Team 2;
+    D.Va;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In Alternate Form(Event Player) == False;
-		Array Contains(Global.c_ProjectileHeroes, Hero Of(Attacker)) == True;
-		Event Player.ai_RetCastDistance < 8;
-		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
-		Is Firing Secondary(Event Player) == False;
-		Ability Resource(Event Player, Button(Secondary Fire)) > 0;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Is In Alternate Form(Event Player) == False;
+    Array Contains(Global.c_ProjectileHeroes, Hero Of(Attacker)) == True;
+    Event Player.ai_RetCastDistance < 8;
+    Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
+    Is Firing Secondary(Event Player) == False;
+    Ability Resource(Event Player, Button(Secondary Fire)) > 0;
+  }
 
-	actions
-	{
-		If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
-			Event Player.ai_AbilityButton = Button(Secondary Fire);
-			Call Subroutine(aiSub_Abilities_DVa);
-		End;
-	}
+  actions
+  {
+    If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
+      Event Player.ai_AbilityButton = Button(Secondary Fire);
+      Call Subroutine(aiSub_Abilities_DVa);
+    End;
+  }
 }
 
 rule("AI D.Va Boosters")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		D.Va;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    D.Va;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In Alternate Form(Event Player) == False;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
-		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-			< Global.c_BubbleRadius;
-		Event Player.ai_RetCastDistance < 10;
-		Ultimate Charge Percent(Event Player) <= 95;
-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Is Using Ability 1(Event Player) == False;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Is In Alternate Form(Event Player) == False;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
+    Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+      < Global.c_BubbleRadius;
+    Event Player.ai_RetCastDistance < 10;
+    Ultimate Charge Percent(Event Player) <= 95;
+    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+    Is Using Ability 1(Event Player) == False;
+  }
 
-	actions
-	{
-		Press Button(Event Player, Button(Ability 1));
-		Wait Until(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 5, 2);
-		Call Subroutine(aiSub_ReactionDelay);
-		Press Button(Event Player, Button(Ability 1));
-	}
+  actions
+  {
+    Press Button(Event Player, Button(Ability 1));
+    Wait Until(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 5, 2);
+    Call Subroutine(aiSub_ReactionDelay);
+    Press Button(Event Player, Button(Ability 1));
+  }
 }
 
 rule("AI D.Va Micro Missiles")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		D.Va;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    D.Va;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In Alternate Form(Event Player) == False;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-		Event Player.ai_RetCastDistance < 2;
-		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-		Is Using Ability 2(Event Player) == False;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Is In Alternate Form(Event Player) == False;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
+    Event Player.ai_RetCastDistance < 2;
+    Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+    Is Using Ability 2(Event Player) == False;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 2);
-		Call Subroutine(aiSub_Abilities_DVa);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ability 2);
+    Call Subroutine(aiSub_Abilities_DVa);
+  }
 }
 
 rule("AI D.Va Self-Destruct")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		D.Va;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    D.Va;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is In Alternate Form(Event Player) == False;
-		Ultimate Charge Percent(Event Player) == 100;
-		Is Using Ultimate(Event Player) == False;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+    Is In Alternate Form(Event Player) == False;
+    Ultimate Charge Percent(Event Player) == 100;
+    Is Using Ultimate(Event Player) == False;
+    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ultimate);
-		Event Player.ai_AbilityOpt = 0;
-		Call Subroutine(aiSub_Abilities_DVa);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ultimate);
+    Event Player.ai_AbilityOpt = 0;
+    Call Subroutine(aiSub_Abilities_DVa);
+  }
 }
 
 rule("AI D.Va Call Mech")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		D.Va;
-	}
+  event
+  {
+    Ongoing - Each Player;
+    Team 2;
+    D.Va;
+  }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Ultimate Charge Percent(Event Player) == 100;
-		Is Using Ultimate(Event Player) == False;
-		Is In Alternate Form(Event Player) == True;
-	}
+  conditions
+  {
+    Event Player.ai_AIEnabled == True;
+    Event Player.ai_CnUseAbilities == True;
+    Event Player.ai_IsInAbilitySub == False;
+    Is Alive(Event Player) == True;
+    Ultimate Charge Percent(Event Player) == 100;
+    Is Using Ultimate(Event Player) == False;
+    Is In Alternate Form(Event Player) == True;
+  }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ultimate);
-		Event Player.ai_AbilityOpt = 1;
-		Call Subroutine(aiSub_Abilities_DVa);
-	}
+  actions
+  {
+    Event Player.ai_AbilityButton = Button(Ultimate);
+    Event Player.ai_AbilityOpt = 1;
+    Call Subroutine(aiSub_Abilities_DVa);
+  }
 }
 
