@@ -1,316 +1,316 @@
 rule("AI Brigitte")
 {
-  event
-  {
-    Subroutine;
-    aiSub_Abilities_Brigitte;
-  }
+	event
+	{
+		Subroutine;
+		aiSub_Abilities_Brigitte;
+	}
 
-  actions
-  {
-    Event Player.ai_IsInAbilitySub = True;
-    Call Subroutine(aiSub_ReactionDelay);
-    If(Event Player.ai_AbilityButton == Button(Primary Fire));
-      If(Event Player.ai_AbilityOpt == 0);
-        Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
-        Start Holding Button(Event Player, Button(Primary Fire));
-        Wait(0.200, Ignore Condition);
-      Else If(Event Player.ai_AbilityOpt == 1);
-        Stop Holding Button(Event Player, Button(Primary Fire));
-        Start Holding Button(Event Player, Button(Secondary Fire));
-        Wait(Random Real(0.100, 0.150), Ignore Condition);
-        Press Button(Event Player, Button(Primary Fire));
-        Wait(0.100, Ignore Condition);
-        Stop Holding Button(Event Player, Button(Secondary Fire));
-      Else If(Event Player.ai_AbilityOpt == 2);
-        Event Player.bot_MoveJumpEnabled = False;
-        Event Player.bot_MoveCrouchEnabled = False;
-        Event Player.bot_MoveWASDEnabled = False;
-        Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, Direction and Magnitude);
-        Start Holding Button(Event Player, Button(Secondary Fire));
-        Wait(Random Real(0.150, 0.250), Ignore Condition);
-        Press Button(Event Player, Button(Primary Fire));
-        Wait(0.150, Ignore Condition);
-        Start Holding Button(Event Player, Button(Jump));
-        Wait(0.500, Ignore Condition);
-        Stop Holding Button(Event Player, Button(Secondary Fire));
-        Stop Holding Button(Event Player, Button(Jump));
-        Stop Throttle In Direction(Event Player);
-        Event Player.bot_MoveWASDEnabled = True;
-        Event Player.bot_MoveJumpEnabled = True;
-        Event Player.bot_MoveCrouchEnabled = True;
-      End;
-    Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-      Stop Holding Button(Event Player, Button(Primary Fire));
-      Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 1);
-      Start Holding Button(Event Player, Button(Secondary Fire));
-      Wait(Random Real(0.500, 2), Ignore Condition);
-      Stop Holding Button(Event Player, Button(Secondary Fire));
-    Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-      Call Subroutine(aiSub_ButtonsReset);
-      Event Player.ai_AimType = 1;
-      Wait(Random Real(0.100, 0.200), Ignore Condition);
-      Press Button(Event Player, Button(Ability 1));
-      Wait(Random Real(0.100, 0.200), Ignore Condition);
-      Event Player.ai_AimType = 0;
-    Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-    Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-      Press Button(Event Player, Button(Ultimate));
-    End;
-    Event Player.ai_IsInAbilitySub = False;
-  }
+	actions
+	{
+		Event Player.ai_IsInAbilitySub = True;
+		Call Subroutine(aiSub_ReactionDelay);
+		If(Event Player.ai_AbilityButton == Button(Primary Fire));
+			If(Event Player.ai_AbilityOpt == 0);
+				Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+				Start Holding Button(Event Player, Button(Primary Fire));
+				Wait(0.200, Ignore Condition);
+			Else If(Event Player.ai_AbilityOpt == 1);
+				Stop Holding Button(Event Player, Button(Primary Fire));
+				Start Holding Button(Event Player, Button(Secondary Fire));
+				Wait(Random Real(0.100, 0.150), Ignore Condition);
+				Press Button(Event Player, Button(Primary Fire));
+				Wait(0.100, Ignore Condition);
+				Stop Holding Button(Event Player, Button(Secondary Fire));
+			Else If(Event Player.ai_AbilityOpt == 2);
+				Event Player.bot_MoveJumpEnabled = False;
+				Event Player.bot_MoveCrouchEnabled = False;
+				Event Player.bot_MoveWASDEnabled = False;
+				Start Throttle In Direction(Event Player, Forward, 1, To Player, Replace existing throttle, Direction and Magnitude);
+				Start Holding Button(Event Player, Button(Secondary Fire));
+				Wait(Random Real(0.150, 0.250), Ignore Condition);
+				Press Button(Event Player, Button(Primary Fire));
+				Wait(0.150, Ignore Condition);
+				Start Holding Button(Event Player, Button(Jump));
+				Wait(0.500, Ignore Condition);
+				Stop Holding Button(Event Player, Button(Secondary Fire));
+				Stop Holding Button(Event Player, Button(Jump));
+				Stop Throttle In Direction(Event Player);
+				Event Player.bot_MoveWASDEnabled = True;
+				Event Player.bot_MoveJumpEnabled = True;
+				Event Player.bot_MoveCrouchEnabled = True;
+			End;
+		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+			Stop Holding Button(Event Player, Button(Primary Fire));
+			Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 1);
+			Start Holding Button(Event Player, Button(Secondary Fire));
+			Wait(Random Real(0.500, 2), Ignore Condition);
+			Stop Holding Button(Event Player, Button(Secondary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+			Call Subroutine(aiSub_ButtonsReset);
+			Event Player.ai_AimType = 1;
+			Wait(Random Real(0.100, 0.200), Ignore Condition);
+			Press Button(Event Player, Button(Ability 1));
+			Wait(Random Real(0.100, 0.200), Ignore Condition);
+			Event Player.ai_AimType = 0;
+		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+			Press Button(Event Player, Button(Ultimate));
+		End;
+		Event Player.ai_IsInAbilitySub = False;
+	}
 }
 
 rule("AI Brigitte General")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Brigitte;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Brigitte;
+	}
 
-  conditions
-  {
-    Is Game In Progress == True;
-    Is Alive(Event Player) == True;
-    Event Player.ai_AIEnabled == True;
-  }
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_AIEnabled == True;
+	}
 
-  actions
-  {
-    Event Player.ai_OptimalDistanceDefault = Random Real(3, 6);
-    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-    Event Player.ai_StrafeDistanceMod = 0;
-    Event Player.ai_AimBaseDefault = 0;
-    Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
-    Event Player.ai_AimType = 0;
-    Event Player.ai_ProjectileSpeeds[2] = 80;
-    Event Player.ai_HeroInitialized = True;
-  }
+	actions
+	{
+		Event Player.ai_OptimalDistanceDefault = Random Real(3, 6);
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+		Event Player.ai_StrafeDistanceMod = 0;
+		Event Player.ai_AimBaseDefault = 0;
+		Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
+		Event Player.ai_AimType = 0;
+		Event Player.ai_ProjectileSpeeds[2] = 80;
+		Event Player.ai_HeroInitialized = True;
+	}
 }
 
 rule("AI Brigitte Attack")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Brigitte;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Brigitte;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnAttack == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-    Event Player.ai_RetCastDistance < 1.5;
-    Is Firing Secondary(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnAttack == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
+		Event Player.ai_RetCastDistance < 1.5;
+		Is Firing Secondary(Event Player) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Primary Fire);
-    Event Player.ai_AbilityOpt = 0;
-    Call Subroutine(aiSub_Abilities_Brigitte);
-    Wait(0.600, Ignore Condition);
-    Loop If Condition Is True;
-    Stop Holding Button(Event Player, Button(Primary Fire));
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Primary Fire);
+		Event Player.ai_AbilityOpt = 0;
+		Call Subroutine(aiSub_Abilities_Brigitte);
+		Wait(0.600, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Primary Fire));
+	}
 }
 
 rule("AI Brigitte Use Shield")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Brigitte;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Brigitte;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 5;
-    (
-      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 6
-      || 
-      Health(Event Player) <= 100
-    ) == True;
-    Distance Between(
-      Players In Slot(Slot Of(Event Player), Team 1),
-      Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
-    ) < Global.c_BubbleRadius;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 5;
+		(
+			Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 6
+			|| 
+			Health(Event Player) <= 100
+		) == True;
+		Distance Between(
+			Players In Slot(Slot Of(Event Player), Team 1),
+			Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+		) < Global.c_BubbleRadius;
+	}
 
-  actions
-  {
-    If(Random Real(0, 1) < 0.300 + Event Player.ai_ChanceMod);
-      Event Player.ai_AbilityButton = Button(Secondary Fire);
-      Call Subroutine(aiSub_Abilities_Brigitte);
-    End;
-    Wait(0.500, Ignore Condition);
-    Loop If Condition Is True;
-    Stop Holding Button(Event Player, Button(Secondary Fire));
-  }
+	actions
+	{
+		If(Random Real(0, 1) < 0.300 + Event Player.ai_ChanceMod);
+			Event Player.ai_AbilityButton = Button(Secondary Fire);
+			Call Subroutine(aiSub_Abilities_Brigitte);
+		End;
+		Wait(0.500, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Secondary Fire));
+	}
 }
 
 rule("AI Brigitte Shield Bash")
 {
-  event
-  {
-    Player Dealt Damage;
-    Team 2;
-    Brigitte;
-  }
+	event
+	{
+		Player Dealt Damage;
+		Team 2;
+		Brigitte;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 1;
-    Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) < 2;
-    Altitude Of(Event Player) < 2;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 6.850;
-    Ability Cooldown(Event Player, Button(Primary Fire)) == 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 1;
+		Altitude Of(Players In Slot(Slot Of(Event Player), Team 1)) < 2;
+		Altitude Of(Event Player) < 2;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 6.850;
+		Ability Cooldown(Event Player, Button(Primary Fire)) == 0;
+	}
 
-  actions
-  {
-    If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
-      Event Player.ai_AbilityButton = Button(Primary Fire);
-      Event Player.ai_AbilityOpt = 1;
-      Call Subroutine(aiSub_Abilities_Brigitte);
-    End;
-  }
+	actions
+	{
+		If(Random Real(0, 1) < 0.400 + Event Player.ai_ChanceMod);
+			Event Player.ai_AbilityButton = Button(Primary Fire);
+			Event Player.ai_AbilityOpt = 1;
+			Call Subroutine(aiSub_Abilities_Brigitte);
+		End;
+	}
 }
 
 rule("AI Brigitte Shield Bash Gap Closer")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Brigitte;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Brigitte;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 12.500;
-    Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-      < Global.c_BubbleRadius;
-    Ability Cooldown(Event Player, Button(Primary Fire)) == 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 12.500;
+		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+			< Global.c_BubbleRadius;
+		Ability Cooldown(Event Player, Button(Primary Fire)) == 0;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Primary Fire);
-    Event Player.ai_AbilityOpt = 2;
-    Call Subroutine(aiSub_Abilities_Brigitte);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Primary Fire);
+		Event Player.ai_AbilityOpt = 2;
+		Call Subroutine(aiSub_Abilities_Brigitte);
+	}
 }
 
 rule("AI Brigitte Whip Shot Final")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Brigitte;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Brigitte;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 1;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-    Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 70;
-    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 1;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 70;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ability 1);
-    Call Subroutine(aiSub_Abilities_Brigitte);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 1);
+		Call Subroutine(aiSub_Abilities_Brigitte);
+	}
 }
 
 rule("AI Brigitte Whip Shot Boop")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Brigitte;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Brigitte;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 1;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-    Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
-    Health(Event Player) < 100;
-    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 1;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
+		Health(Event Player) < 100;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ability 1);
-    Call Subroutine(aiSub_Abilities_Brigitte);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 1);
+		Call Subroutine(aiSub_Abilities_Brigitte);
+	}
 }
 
 rule("AI Brigitte Rally")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Brigitte;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Brigitte;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 3;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-    Health(Event Player) >= 50;
-    Ultimate Charge Percent(Event Player) == 100;
-    Is Using Ultimate(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 3;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Health(Event Player) >= 50;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ultimate);
-    Call Subroutine(aiSub_Abilities_Brigitte);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ultimate);
+		Call Subroutine(aiSub_Abilities_Brigitte);
+	}
 }
 

@@ -1,213 +1,213 @@
 rule("AI Soldier: 76")
 {
-  event
-  {
-    Subroutine;
-    aiSub_Abilities_Soldier76;
-  }
+	event
+	{
+		Subroutine;
+		aiSub_Abilities_Soldier76;
+	}
 
-  actions
-  {
-    Event Player.ai_IsInAbilitySub = True;
-    Call Subroutine(aiSub_ReactionDelay);
-    If(Event Player.ai_AbilityButton == Button(Primary Fire));
-      Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
-      Call Subroutine(aiSub_ButtonsReset);
-      Start Holding Button(Event Player, Button(Primary Fire));
-    Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-      Event Player.ai_AimType = 1;
-      Event Player.ai_AimBase = 2;
-      Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
-      Call Subroutine(aiSub_FacingStart);
-      Wait(Random Real(0.150, 0.250), Ignore Condition);
-      Press Button(Event Player, Button(Secondary Fire));
-      Wait(0.250, Ignore Condition);
-      Call Subroutine(aiSub_FacingReset);
-    Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-      Call Subroutine(aiSub_ButtonsReset);
-      Start Holding Button(Event Player, Button(Ability 1));
-      Wait Until(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < Event Player.ai_OptimalDistance + 5,
-        9999);
-      Stop Holding Button(Event Player, Button(Ability 1));
-    Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-      Press Button(Event Player, Button(Ability 2));
-    Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-      Press Button(Event Player, Button(Ultimate));
-    End;
-    Event Player.ai_IsInAbilitySub = False;
-  }
+	actions
+	{
+		Event Player.ai_IsInAbilitySub = True;
+		Call Subroutine(aiSub_ReactionDelay);
+		If(Event Player.ai_AbilityButton == Button(Primary Fire));
+			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+			Call Subroutine(aiSub_ButtonsReset);
+			Start Holding Button(Event Player, Button(Primary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+			Event Player.ai_AimType = 1;
+			Event Player.ai_AimBase = 2;
+			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
+			Call Subroutine(aiSub_FacingStart);
+			Wait(Random Real(0.150, 0.250), Ignore Condition);
+			Press Button(Event Player, Button(Secondary Fire));
+			Wait(0.250, Ignore Condition);
+			Call Subroutine(aiSub_FacingReset);
+		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+			Call Subroutine(aiSub_ButtonsReset);
+			Start Holding Button(Event Player, Button(Ability 1));
+			Wait Until(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < Event Player.ai_OptimalDistance + 5,
+				9999);
+			Stop Holding Button(Event Player, Button(Ability 1));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+			Press Button(Event Player, Button(Ability 2));
+		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+			Press Button(Event Player, Button(Ultimate));
+		End;
+		Event Player.ai_IsInAbilitySub = False;
+	}
 }
 
 rule("AI Soldier: 76 General")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Soldier: 76;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
 
-  conditions
-  {
-    Is Game In Progress == True;
-    Is Alive(Event Player) == True;
-    Event Player.ai_AIEnabled == True;
-  }
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_AIEnabled == True;
+	}
 
-  actions
-  {
-    Event Player.ai_OptimalDistanceDefault = Random Real(15, 20);
-    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-    Event Player.ai_AimBaseDefault = 0;
-    Event Player.ai_AimTypeDefault = 0;
-    Event Player.ai_ProjectileSpeeds[1] = 50;
-    Call Subroutine(aiSub_FacingReset);
-    Event Player.ai_HeroInitialized = True;
-  }
+	actions
+	{
+		Event Player.ai_OptimalDistanceDefault = Random Real(15, 20);
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+		Event Player.ai_AimBaseDefault = 0;
+		Event Player.ai_AimTypeDefault = 0;
+		Event Player.ai_ProjectileSpeeds[1] = 50;
+		Call Subroutine(aiSub_FacingReset);
+		Event Player.ai_HeroInitialized = True;
+	}
 }
 
 rule("AI Soldier: 76 Attack")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Soldier: 76;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnAttack == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-    Event Player.ai_RetCastDistance < 2.25;
-    Is Using Ability 1(Event Player) == False;
-    Is Firing Secondary(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnAttack == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
+		Event Player.ai_RetCastDistance < 2.25;
+		Is Using Ability 1(Event Player) == False;
+		Is Firing Secondary(Event Player) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Primary Fire);
-    Call Subroutine(aiSub_Abilities_Soldier76);
-    Wait(0.250, Ignore Condition);
-    Loop If Condition Is True;
-    Stop Holding Button(Event Player, Button(Primary Fire));
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Primary Fire);
+		Call Subroutine(aiSub_Abilities_Soldier76);
+		Wait(0.250, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Primary Fire));
+	}
 }
 
 rule("AI Soldier: 76 Helix Rockets")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Soldier: 76;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 2.75;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-    Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 2.75;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Secondary Fire);
-    Call Subroutine(aiSub_Abilities_Soldier76);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Secondary Fire);
+		Call Subroutine(aiSub_Abilities_Soldier76);
+	}
 }
 
 rule("AI Soldier: 76 Sprint")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Soldier: 76;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > Event Player.ai_OptimalDistance + 5;
-    Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-      < Global.c_BubbleRadius;
-    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-    Is Using Ability 1(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > Event Player.ai_OptimalDistance + 5;
+		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+			< Global.c_BubbleRadius;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+		Is Using Ability 1(Event Player) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ability 1);
-    Call Subroutine(aiSub_Abilities_Soldier76);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 1);
+		Call Subroutine(aiSub_Abilities_Soldier76);
+	}
 }
 
 rule("AI Soldier: 76 Biotic Field")
 {
-  event
-  {
-    Player Took Damage;
-    Team 2;
-    Soldier: 76;
-  }
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		Soldier: 76;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Health(Event Player) < 100;
-    Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-    Is Using Ability 2(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Health(Event Player) < 100;
+		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+		Is Using Ability 2(Event Player) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ability 2);
-    Call Subroutine(aiSub_Abilities_Soldier76);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 2);
+		Call Subroutine(aiSub_Abilities_Soldier76);
+	}
 }
 
 rule("AI Soldier: 76 Tactical Visor")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Soldier: 76;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Soldier: 76;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Ultimate Charge Percent(Event Player) == 100;
-    Is Using Ultimate(Event Player) == False;
-    Health(Event Player) >= 50;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+		Health(Event Player) >= 50;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ultimate);
-    Call Subroutine(aiSub_Abilities_Soldier76);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ultimate);
+		Call Subroutine(aiSub_Abilities_Soldier76);
+	}
 }
 

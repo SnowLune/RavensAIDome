@@ -1,189 +1,189 @@
 rule("AI Reaper")
 {
-  event
-  {
-    Subroutine;
-    aiSub_Abilities_Reaper;
-  }
+	event
+	{
+		Subroutine;
+		aiSub_Abilities_Reaper;
+	}
 
-  actions
-  {
-    Event Player.ai_IsInAbilitySub = True;
-    Call Subroutine(aiSub_ReactionDelay);
-    If(Event Player.ai_AbilityButton == Button(Primary Fire));
-      Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
-      Start Holding Button(Event Player, Button(Primary Fire));
-    Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-      Call Subroutine(aiSub_ButtonsReset);
-      Press Button(Event Player, Button(Ability 1));
-      Wait(Random Real(2, 3), Ignore Condition);
-      Press Button(Event Player, Button(Primary Fire));
-    Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-      Press Button(Event Player, Button(Ability 2));
-      Event Player.ai_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player), Team 1) + Vector(Random Real(0, 5), 0,
-        Random Real(0, 5)));
-      Call Subroutine(aiSub_FacingLookAt);
-      Press Button(Event Player, Button(Primary Fire));
-      Wait(1.500, Ignore Condition);
-      Event Player.ai_CnAim = True;
-    Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-      Press Button(Event Player, Button(Ultimate));
-      Wait Until(Is Using Ultimate(Event Player), 0.500);
-      Wait Until(Is Using Ultimate(Event Player) == False, 3);
-    End;
-    Event Player.ai_IsInAbilitySub = False;
-  }
+	actions
+	{
+		Event Player.ai_IsInAbilitySub = True;
+		Call Subroutine(aiSub_ReactionDelay);
+		If(Event Player.ai_AbilityButton == Button(Primary Fire));
+			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
+			Start Holding Button(Event Player, Button(Primary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+			Call Subroutine(aiSub_ButtonsReset);
+			Press Button(Event Player, Button(Ability 1));
+			Wait(Random Real(2, 3), Ignore Condition);
+			Press Button(Event Player, Button(Primary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+			Press Button(Event Player, Button(Ability 2));
+			Event Player.ai_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player), Team 1) + Vector(Random Real(0, 5), 0,
+				Random Real(0, 5)));
+			Call Subroutine(aiSub_FacingLookAt);
+			Press Button(Event Player, Button(Primary Fire));
+			Wait(1.500, Ignore Condition);
+			Event Player.ai_CnAim = True;
+		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+			Press Button(Event Player, Button(Ultimate));
+			Wait Until(Is Using Ultimate(Event Player), 0.500);
+			Wait Until(Is Using Ultimate(Event Player) == False, 3);
+		End;
+		Event Player.ai_IsInAbilitySub = False;
+	}
 }
 
 rule("AI Reaper General")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Reaper;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reaper;
+	}
 
-  conditions
-  {
-    Is Game In Progress == True;
-    Is Alive(Event Player) == True;
-    Event Player.ai_AIEnabled == True;
-  }
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_AIEnabled == True;
+	}
 
-  actions
-  {
-    Event Player.ai_OptimalDistanceDefault = Random Real(3, 7);
-    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-    Event Player.ai_AimBaseDefault = 0;
-    Event Player.ai_AimTypeDefault = 0;
-    Call Subroutine(aiSub_FacingReset);
-    Event Player.ai_HeroInitialized = True;
-  }
+	actions
+	{
+		Event Player.ai_OptimalDistanceDefault = Random Real(3, 7);
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+		Event Player.ai_AimBaseDefault = 0;
+		Event Player.ai_AimTypeDefault = 0;
+		Call Subroutine(aiSub_FacingReset);
+		Event Player.ai_HeroInitialized = True;
+	}
 }
 
 rule("AI Reaper Attack")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Reaper;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reaper;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnAttack == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Event Player.ai_HeroInitialized == True;
-    Is Using Ability 1(Event Player) == False;
-    Is Using Ability 2(Event Player) == False;
-    Is Using Ultimate(Event Player) == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 25;
-    Event Player.ai_RetCastDistance < 2;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnAttack == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Using Ability 1(Event Player) == False;
+		Is Using Ability 2(Event Player) == False;
+		Is Using Ultimate(Event Player) == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 25;
+		Event Player.ai_RetCastDistance < 2;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Primary Fire);
-    Call Subroutine(aiSub_Abilities_Reaper);
-    Wait(0.500, Ignore Condition);
-    Loop If Condition Is True;
-    Stop Holding Button(Event Player, Button(Primary Fire));
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Primary Fire);
+		Call Subroutine(aiSub_Abilities_Reaper);
+		Wait(0.500, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Primary Fire));
+	}
 }
 
 rule("AI Reaper Wraith Form")
 {
-  event
-  {
-    Player Took Damage;
-    Team 2;
-    Reaper;
-  }
+	event
+	{
+		Player Took Damage;
+		Team 2;
+		Reaper;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Event Player.ai_HeroInitialized == True;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Health(Event Player) < 100;
-    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-    Is Using Ability 1(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Health(Event Player) < 100;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+		Is Using Ability 1(Event Player) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ability 1);
-    Call Subroutine(aiSub_Abilities_Reaper);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 1);
+		Call Subroutine(aiSub_Abilities_Reaper);
+	}
 }
 
 rule("AI Reaper Shadow Step")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Reaper;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reaper;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Event Player.ai_HeroInitialized == True;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 20;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-      < Global.c_BubbleRadius;
-    Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-    Is Using Ability 2(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 20;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+			< Global.c_BubbleRadius;
+		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+		Is Using Ability 2(Event Player) == False;
+	}
 
-  actions
-  {
-    Wait(0.250, Abort When False);
-    Event Player.ai_AbilityButton = Button(Ability 2);
-    Call Subroutine(aiSub_Abilities_Reaper);
-  }
+	actions
+	{
+		Wait(0.250, Abort When False);
+		Event Player.ai_AbilityButton = Button(Ability 2);
+		Call Subroutine(aiSub_Abilities_Reaper);
+	}
 }
 
 rule("AI Reaper Death Blossom")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Reaper;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Reaper;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Event Player.ai_HeroInitialized == True;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Ultimate Charge Percent(Event Player) == 100;
-    Is Using Ultimate(Event Player) == False;
-    Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 8;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Event Player.ai_HeroInitialized == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 8;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ultimate);
-    Call Subroutine(aiSub_Abilities_Reaper);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ultimate);
+		Call Subroutine(aiSub_Abilities_Reaper);
+	}
 }
 

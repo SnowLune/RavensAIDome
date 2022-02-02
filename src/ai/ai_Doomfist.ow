@@ -1,273 +1,273 @@
 rule("AI Doomfist")
 {
-  event
-  {
-    Subroutine;
-    aiSub_Abilities_Doomfist;
-  }
+	event
+	{
+		Subroutine;
+		aiSub_Abilities_Doomfist;
+	}
 
-  actions
-  {
-    Event Player.ai_IsInAbilitySub = True;
-    Call Subroutine(aiSub_ReactionDelay);
-    If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-      If(Event Player.ai_AbilityOpt == 0);
-        Start Holding Button(Event Player, Button(Secondary Fire));
-        Event Player.bot_MoveJumpEnabled = False;
-        Wait(Random Real(0.900, 1.800), Ignore Condition);
-        Stop Holding Button(Event Player, Button(Secondary Fire));
-      Else If(Event Player.ai_AbilityOpt == 1);
-        Start Holding Button(Event Player, Button(Secondary Fire));
-        Wait(Random Real(0.750, 1.500), Ignore Condition);
-        Stop Holding Button(Event Player, Button(Secondary Fire));
-        Wait(Random Real(0.100, 0.250), Ignore Condition);
-        Press Button(Event Player, Button(Jump));
-      End;
-    Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-      Press Button(Event Player, Button(Ability 1));
-    Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-      Press Button(Event Player, Button(Jump));
-      Event Player.ai_AimType = 0;
-      Event Player.ai_AimBase = 3;
-      Event Player.ai_FacingRelPosMod = Vector(0, -2, 0);
-      Call Subroutine(aiSub_FacingStart);
-      Wait(Random Real(0.150, 0.350), Ignore Condition);
-      Press Button(Event Player, Button(Ability 2));
-      Call Subroutine(aiSub_ReactionDelay);
-      Call Subroutine(aiSub_FacingReset);
-    Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-      Press Button(Event Player, Button(Ultimate));
-      Event Player.ai_AimBase = 2;
-      Call Subroutine(aiSub_FacingStart);
-      Event Player.ai_OptimalDistance = 0;
-      While(Is Using Ultimate(Event Player));
-        Wait(10 / 60, Ignore Condition);
-        If(Distance Between(Vector(X Component Of(Position Of(Event Player)), 0, Z Component Of(Position Of(Event Player))), Vector(
-          X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), 0, Z Component Of(Position Of(Players In Slot(
-          Slot Of(Event Player), Team 1))))) <= 2);
-          Press Button(Event Player, Button(Primary Fire));
-        End;
-      End;
-      Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-      Call Subroutine(aiSub_FacingReset);
-    End;
-    Event Player.ai_IsInAbilitySub = False;
-  }
+	actions
+	{
+		Event Player.ai_IsInAbilitySub = True;
+		Call Subroutine(aiSub_ReactionDelay);
+		If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+			If(Event Player.ai_AbilityOpt == 0);
+				Start Holding Button(Event Player, Button(Secondary Fire));
+				Event Player.bot_MoveJumpEnabled = False;
+				Wait(Random Real(0.900, 1.800), Ignore Condition);
+				Stop Holding Button(Event Player, Button(Secondary Fire));
+			Else If(Event Player.ai_AbilityOpt == 1);
+				Start Holding Button(Event Player, Button(Secondary Fire));
+				Wait(Random Real(0.750, 1.500), Ignore Condition);
+				Stop Holding Button(Event Player, Button(Secondary Fire));
+				Wait(Random Real(0.100, 0.250), Ignore Condition);
+				Press Button(Event Player, Button(Jump));
+			End;
+		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+			Press Button(Event Player, Button(Ability 1));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+			Press Button(Event Player, Button(Jump));
+			Event Player.ai_AimType = 0;
+			Event Player.ai_AimBase = 3;
+			Event Player.ai_FacingRelPosMod = Vector(0, -2, 0);
+			Call Subroutine(aiSub_FacingStart);
+			Wait(Random Real(0.150, 0.350), Ignore Condition);
+			Press Button(Event Player, Button(Ability 2));
+			Call Subroutine(aiSub_ReactionDelay);
+			Call Subroutine(aiSub_FacingReset);
+		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+			Press Button(Event Player, Button(Ultimate));
+			Event Player.ai_AimBase = 2;
+			Call Subroutine(aiSub_FacingStart);
+			Event Player.ai_OptimalDistance = 0;
+			While(Is Using Ultimate(Event Player));
+				Wait(10 / 60, Ignore Condition);
+				If(Distance Between(Vector(X Component Of(Position Of(Event Player)), 0, Z Component Of(Position Of(Event Player))), Vector(
+					X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), 0, Z Component Of(Position Of(Players In Slot(
+					Slot Of(Event Player), Team 1))))) <= 2);
+					Press Button(Event Player, Button(Primary Fire));
+				End;
+			End;
+			Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+			Call Subroutine(aiSub_FacingReset);
+		End;
+		Event Player.ai_IsInAbilitySub = False;
+	}
 }
 
 rule("AI Doomfist General")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Doomfist;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
 
-  conditions
-  {
-    Is Game In Progress == True;
-    Is Alive(Event Player) == True;
-    Event Player.ai_AIEnabled == True;
-  }
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_AIEnabled == True;
+	}
 
-  actions
-  {
-    Event Player.ai_OptimalDistanceDefault = Random Real(3, 6);
-    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-    Event Player.ai_StrafeDistanceMod = 3;
-    Event Player.ai_AimTypeDefault = 1;
-    Event Player.ai_AimBaseDefault = 0;
-    Event Player.ai_ProjectileSpeed = 80;
-    Event Player.ai_HeroInitialized = True;
-  }
+	actions
+	{
+		Event Player.ai_OptimalDistanceDefault = Random Real(3, 6);
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+		Event Player.ai_StrafeDistanceMod = 3;
+		Event Player.ai_AimTypeDefault = 1;
+		Event Player.ai_AimBaseDefault = 0;
+		Event Player.ai_ProjectileSpeed = 80;
+		Event Player.ai_HeroInitialized = True;
+	}
 }
 
 rule("AI Doomfist Attack")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Doomfist;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnAttack == True;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-    Event Player.ai_RetCastDistance < 2.5;
-    Is Firing Secondary(Event Player) == False;
-    Ammo(Event Player, 0) > 0;
-    Is Using Ultimate(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnAttack == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Event Player.ai_RetCastDistance < 2.5;
+		Is Firing Secondary(Event Player) == False;
+		Ammo(Event Player, 0) > 0;
+		Is Using Ultimate(Event Player) == False;
+	}
 
-  actions
-  {
-    Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
-    Start Holding Button(Event Player, Button(Primary Fire));
-    Wait(0.333, Ignore Condition);
-    Loop If Condition Is True;
-    Stop Holding Button(Event Player, Button(Primary Fire));
-  }
+	actions
+	{
+		Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
+		Start Holding Button(Event Player, Button(Primary Fire));
+		Wait(0.333, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Primary Fire));
+	}
 }
 
 rule("AI Doomfist Rocket Punch")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Doomfist;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 50;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12.500;
-    Event Player.ai_RetCastDistance < 2;
-    Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
-    (Ability Cooldown(Event Player, Button(Ability 1)) == 0 ? Distance Between(Event Player, Players In Slot(Slot Of(Event Player),
-      Team 1)) > 5 : True) == True;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 50;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12.500;
+		Event Player.ai_RetCastDistance < 2;
+		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
+		(Ability Cooldown(Event Player, Button(Ability 1)) == 0 ? Distance Between(Event Player, Players In Slot(Slot Of(Event Player),
+			Team 1)) > 5 : True) == True;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Secondary Fire);
-    Event Player.ai_AbilityOpt = 0;
-    Call Subroutine(aiSub_Abilities_Doomfist);
-    Wait Until(Speed Of(Event Player) < 45, 2);
-    Event Player.bot_MoveJumpEnabled = True;
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Secondary Fire);
+		Event Player.ai_AbilityOpt = 0;
+		Call Subroutine(aiSub_Abilities_Doomfist);
+		Wait Until(Speed Of(Event Player) < 45, 2);
+		Event Player.bot_MoveJumpEnabled = True;
+	}
 }
 
 rule("AI Doomfist Rocket Punch Gap Closer")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Doomfist;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= Event Player.ai_OptimalDistance * 3.500;
-    Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
-      < Global.c_BubbleRadius;
-    Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= Event Player.ai_OptimalDistance * 3.500;
+		Distance Between(Players In Slot(Slot Of(Event Player), Team 1), Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector)
+			< Global.c_BubbleRadius;
+		Ability Cooldown(Event Player, Button(Secondary Fire)) == 0;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Secondary Fire);
-    Event Player.ai_AbilityOpt = 1;
-    Call Subroutine(aiSub_Abilities_Doomfist);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Secondary Fire);
+		Event Player.ai_AbilityOpt = 1;
+		Call Subroutine(aiSub_Abilities_Doomfist);
+	}
 }
 
 rule("AI Doomfist Uppercut")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Doomfist;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 5;
-    Event Player.ai_RetCastDistance < 1.5;
-    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-    Is Button Held(Event Player, Button(Secondary Fire)) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 5;
+		Event Player.ai_RetCastDistance < 1.5;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+		Is Button Held(Event Player, Button(Secondary Fire)) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ability 1);
-    Call Subroutine(aiSub_Abilities_Doomfist);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 1);
+		Call Subroutine(aiSub_Abilities_Doomfist);
+	}
 }
 
 rule("AI Doomfist Seismic Slam")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Doomfist;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 9 || Is In Air(Event Player)) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-    Event Player.ai_RetCastDistance < 2;
-    Is Button Held(Event Player, Button(Secondary Fire)) == False;
-    Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 9 || Is In Air(Event Player)) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+		Event Player.ai_RetCastDistance < 2;
+		Is Button Held(Event Player, Button(Secondary Fire)) == False;
+		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ability 2);
-    Call Subroutine(aiSub_Abilities_Doomfist);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ability 2);
+		Call Subroutine(aiSub_Abilities_Doomfist);
+	}
 }
 
 rule("AI Doomfist Meteor Strike")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Doomfist;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Doomfist;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Ultimate Charge Percent(Event Player) == 100;
-    Is Using Ultimate(Event Player) == False;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-    Event Player.ai_RetCastDistance < 5;
-    Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 1.500;
-    Is Button Held(Event Player, Button(Secondary Fire)) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+		Event Player.ai_RetCastDistance < 5;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 100;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 1.500;
+		Is Button Held(Event Player, Button(Secondary Fire)) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ultimate);
-    Call Subroutine(aiSub_Abilities_Doomfist);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ultimate);
+		Call Subroutine(aiSub_Abilities_Doomfist);
+	}
 }
 

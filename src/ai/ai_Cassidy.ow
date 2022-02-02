@@ -1,252 +1,252 @@
 rule("AI Cassidy")
 {
-  event
-  {
-    Subroutine;
-    aiSub_Abilities_Cassidy;
-  }
+	event
+	{
+		Subroutine;
+		aiSub_Abilities_Cassidy;
+	}
 
-  actions
-  {
-    Event Player.ai_IsInAbilitySub = True;
-    Call Subroutine(aiSub_ReactionDelay);
-    If(Event Player.ai_AbilityButton == Button(Primary Fire));
-      Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
-      Start Holding Button(Event Player, Button(Primary Fire));
-    Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-      Event Player.ai_AimBase = 2;
-      Call Subroutine(aiSub_ReactionDelay);
-      Press Button(Event Player, Button(Secondary Fire));
-      Call Subroutine(aiSub_ReactionDelay);
-      Call Subroutine(aiSub_FacingReset);
-    Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-      Press Button(Event Player, Button(Ability 1));
-    Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-      Press Button(Event Player, Button(Ability 2));
-    Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-      Call Subroutine(aiSub_ButtonsReset);
-      Press Button(Event Player, Button(Ultimate));
-      Wait Until(Event Player.ai_CassidyDeadeyeCharge >= Health(Players In Slot(Slot Of(Event Player), Team 1)), 5);
-      Call Subroutine(aiSub_ReactionDelay);
-      Stop Chasing Player Variable(Event Player, ai_CassidyDeadeyeCharge);
-      Start Holding Button(Event Player, Button(Primary Fire));
-    End;
-    Event Player.ai_IsInAbilitySub = False;
-  }
+	actions
+	{
+		Event Player.ai_IsInAbilitySub = True;
+		Call Subroutine(aiSub_ReactionDelay);
+		If(Event Player.ai_AbilityButton == Button(Primary Fire));
+			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 1);
+			Start Holding Button(Event Player, Button(Primary Fire));
+		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+			Event Player.ai_AimBase = 2;
+			Call Subroutine(aiSub_ReactionDelay);
+			Press Button(Event Player, Button(Secondary Fire));
+			Call Subroutine(aiSub_ReactionDelay);
+			Call Subroutine(aiSub_FacingReset);
+		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+			Press Button(Event Player, Button(Ability 1));
+		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+			Press Button(Event Player, Button(Ability 2));
+		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+			Call Subroutine(aiSub_ButtonsReset);
+			Press Button(Event Player, Button(Ultimate));
+			Wait Until(Event Player.ai_CassidyDeadeyeCharge >= Health(Players In Slot(Slot Of(Event Player), Team 1)), 5);
+			Call Subroutine(aiSub_ReactionDelay);
+			Stop Chasing Player Variable(Event Player, ai_CassidyDeadeyeCharge);
+			Start Holding Button(Event Player, Button(Primary Fire));
+		End;
+		Event Player.ai_IsInAbilitySub = False;
+	}
 }
 
 rule("AI Cassidy General")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Cassidy;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Cassidy;
+	}
 
-  conditions
-  {
-    Is Game In Progress == True;
-    Is Alive(Event Player) == True;
-    Event Player.ai_AIEnabled == True;
-  }
+	conditions
+	{
+		Is Game In Progress == True;
+		Is Alive(Event Player) == True;
+		Event Player.ai_AIEnabled == True;
+	}
 
-  actions
-  {
-    Event Player.ai_OptimalDistanceDefault = Random Real(13, 16);
-    Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-    Event Player.ai_AimTypeDefault = 0;
-    Event Player.ai_AimBaseDefault = 0;
-    Call Subroutine(aiSub_FacingReset);
-    Event Player.ai_HeroInitialized = True;
-  }
+	actions
+	{
+		Event Player.ai_OptimalDistanceDefault = Random Real(13, 16);
+		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+		Event Player.ai_AimTypeDefault = 0;
+		Event Player.ai_AimBaseDefault = 0;
+		Call Subroutine(aiSub_FacingReset);
+		Event Player.ai_HeroInitialized = True;
+	}
 }
 
 rule("AI Cassidy Attack Primary")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Cassidy;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Cassidy;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnAttack == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 1.25;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 45;
-    Is Using Ultimate(Event Player) == False;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnAttack == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 1.25;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 45;
+		Is Using Ultimate(Event Player) == False;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Primary Fire);
-    Call Subroutine(aiSub_Abilities_Cassidy);
-    Wait(0.500, Ignore Condition);
-    Loop If Condition Is True;
-    Stop Holding Button(Event Player, Button(Primary Fire));
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Primary Fire);
+		Call Subroutine(aiSub_Abilities_Cassidy);
+		Wait(0.500, Ignore Condition);
+		Loop If Condition Is True;
+		Stop Holding Button(Event Player, Button(Primary Fire));
+	}
 }
 
 rule("AI Cassidy Attack Secondary")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Cassidy;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Cassidy;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnAttack == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 1;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 7.500;
-    (Has Status(Players In Slot(Slot Of(Event Player), Team 1), Stunned) == True || Health(Players In Slot(Slot Of(Event Player),
-      Team 1)) <= 75) == True;
-    Is Using Ultimate(Event Player) == False;
-    Ammo(Event Player, 0) >= 3;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnAttack == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 1;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 7.500;
+		(Has Status(Players In Slot(Slot Of(Event Player), Team 1), Stunned) == True || Health(Players In Slot(Slot Of(Event Player),
+			Team 1)) <= 75) == True;
+		Is Using Ultimate(Event Player) == False;
+		Ammo(Event Player, 0) >= 3;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Secondary Fire);
-    Call Subroutine(aiSub_Abilities_Cassidy);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Secondary Fire);
+		Call Subroutine(aiSub_Abilities_Cassidy);
+	}
 }
 
 rule("AI Cassidy Combat Roll")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Cassidy;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Cassidy;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
-      Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
-    Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Is In View Angle(Players In Slot(Slot Of(Event Player), Team 1), Eye Position(Event Player) - Vector(0, 0.250 + Y Component Of(
+			Eye Position(Players In Slot(Slot Of(Event Player), Team 1))), 0), 15) == True;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 8;
+		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+	}
 
-  actions
-  {
-    If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
-      Event Player.ai_AbilityButton = Button(Ability 1);
-      Call Subroutine(aiSub_Abilities_Cassidy);
-    End;
-  }
+	actions
+	{
+		If(Random Real(0, 1) < 0.350 + Event Player.ai_ChanceMod);
+			Event Player.ai_AbilityButton = Button(Ability 1);
+			Call Subroutine(aiSub_Abilities_Cassidy);
+		End;
+	}
 }
 
 rule("AI Cassidy Flashbang")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Cassidy;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Cassidy;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Event Player.ai_RetCastDistance < 1.35;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-    Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-    Ammo(Event Player, 0) > 0;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Event Player.ai_RetCastDistance < 1.35;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
+		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+		Ammo(Event Player, 0) > 0;
+	}
 
-  actions
-  {
-    If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
-      Event Player.ai_AbilityButton = Button(Ability 2);
-      Call Subroutine(aiSub_Abilities_Cassidy);
-    End;
-  }
+	actions
+	{
+		If(Random Real(0, 1) < 0.450 + Event Player.ai_ChanceMod);
+			Event Player.ai_AbilityButton = Button(Ability 2);
+			Call Subroutine(aiSub_Abilities_Cassidy);
+		End;
+	}
 }
 
 rule("AI Cassidy Deadeye Start")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Cassidy;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Cassidy;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Event Player.ai_CnUseAbilities == True;
-    Event Player.ai_IsInAbilitySub == False;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-    Ultimate Charge Percent(Event Player) == 100;
-    Is Using Ultimate(Event Player) == False;
-    Event Player.ai_RetCastDistance < 5;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 200;
-    Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
-    Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 125;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Event Player.ai_CnUseAbilities == True;
+		Event Player.ai_IsInAbilitySub == False;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+		Ultimate Charge Percent(Event Player) == 100;
+		Is Using Ultimate(Event Player) == False;
+		Event Player.ai_RetCastDistance < 5;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 200;
+		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) >= 10;
+		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 125;
+	}
 
-  actions
-  {
-    Event Player.ai_AbilityButton = Button(Ultimate);
-    Call Subroutine(aiSub_Abilities_Cassidy);
-  }
+	actions
+	{
+		Event Player.ai_AbilityButton = Button(Ultimate);
+		Call Subroutine(aiSub_Abilities_Cassidy);
+	}
 }
 
 rule("AI Cassidy Deadeye Charge")
 {
-  event
-  {
-    Ongoing - Each Player;
-    Team 2;
-    Cassidy;
-  }
+	event
+	{
+		Ongoing - Each Player;
+		Team 2;
+		Cassidy;
+	}
 
-  conditions
-  {
-    Event Player.ai_AIEnabled == True;
-    Is Using Ultimate(Event Player) == True;
-    Is Alive(Event Player) == True;
-    Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-  }
+	conditions
+	{
+		Event Player.ai_AIEnabled == True;
+		Is Using Ultimate(Event Player) == True;
+		Is Alive(Event Player) == True;
+		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+	}
 
-  actions
-  {
-    Event Player.ai_CassidyDeadeyeCharge = 0;
-    Event Player.ai_CassidyDeadeyeRate = 100;
-    Wait(0.200, Ignore Condition);
-    Chase Player Variable At Rate(Event Player, ai_CassidyDeadeyeCharge, 2802.500, Event Player.ai_CassidyDeadeyeRate,
-      Destination and Rate);
-    Wait(0.800, Ignore Condition);
-    Event Player.ai_CassidyDeadeyeRate = 275;
-    Wait(0.500, Ignore Condition);
-    Event Player.ai_CassidyDeadeyeRate = 550;
-    Wait Until(Is Using Ultimate(Event Player) == False, 4.600);
-    Event Player.ai_CassidyDeadeyeCharge = 0;
-  }
+	actions
+	{
+		Event Player.ai_CassidyDeadeyeCharge = 0;
+		Event Player.ai_CassidyDeadeyeRate = 100;
+		Wait(0.200, Ignore Condition);
+		Chase Player Variable At Rate(Event Player, ai_CassidyDeadeyeCharge, 2802.500, Event Player.ai_CassidyDeadeyeRate,
+			Destination and Rate);
+		Wait(0.800, Ignore Condition);
+		Event Player.ai_CassidyDeadeyeRate = 275;
+		Wait(0.500, Ignore Condition);
+		Event Player.ai_CassidyDeadeyeRate = 550;
+		Wait Until(Is Using Ultimate(Event Player) == False, 4.600);
+		Event Player.ai_CassidyDeadeyeCharge = 0;
+	}
 }
 

@@ -1,303 +1,303 @@
 rule("Global Defines")
 {
-  event
-  {
-    Ongoing - Global;
-  }
+	event
+	{
+		Ongoing - Global;
+	}
 
-  actions
-  {
-    //  Begin global variable initialization
-    Global.g_Initialized = False;
+	actions
+	{
+		//	Begin global variable initialization
+		Global.g_Initialized = False;
 
-    //
-    //  Info: version, build, links...
-    //
-    Global.c_Version = Custom String("0.15.0");
-    Global.c_BuildDate = Custom String("20211101");
-    Global.c_WorkshopCode = Custom String("5DPKQ");
-    Global.c_DeveloperName = Custom String("Raven#112503");
-    Global.c_TwitchURL = Custom String("twitch.tv/RavenLuna");
-    Global.c_GithubURL = Custom String("github.com/SnowLune/PracticeFieldExpanse");
-    Global.c_DiscordLink = Custom String("TBA");
-    
-    //
-    //  Integer constants
-    //
-    Global.c_LongDistance = 65;
-    Global.c_MediumDistance = 50;
-    Global.c_ShortDistance = 35;
-    Global.c_VeryShortDistance = 20;
-    Global.c_ZoneRadiusDefault = 20;
-    Global.c_BubbleRadius = 80;
-    Global.c_MaxDifficulty = 10;
-    Global.c_PseudoInfinity = 999999;
+		//
+		//	Info: version, build, links...
+		//
+		Global.c_Version = Custom String("0.15.0");
+		Global.c_BuildDate = Custom String("20211101");
+		Global.c_WorkshopCode = Custom String("5DPKQ");
+		Global.c_DeveloperName = Custom String("Raven#112503");
+		Global.c_TwitchURL = Custom String("twitch.tv/RavenLuna");
+		Global.c_GithubURL = Custom String("github.com/SnowLune/PracticeFieldExpanse");
+		Global.c_DiscordLink = Custom String("TBA");
+		
+		//
+		//	Integer constants
+		//
+		Global.c_LongDistance = 65;
+		Global.c_MediumDistance = 50;
+		Global.c_ShortDistance = 35;
+		Global.c_VeryShortDistance = 20;
+		Global.c_ZoneRadiusDefault = 20;
+		Global.c_BubbleRadius = 80;
+		Global.c_MaxDifficulty = 10;
+		Global.c_PseudoInfinity = 999999;
 
-    //
-    //  Hero array constants
-    //
-    Global.c_HeroRoles = Array();
-    Global.c_HeroRoles[0] = All Heroes;
-    Global.c_HeroRoles[1] = All Tank Heroes;
-    Global.c_HeroRoles[2] = All Damage Heroes;
-    Global.c_HeroRoles[3] = All Support Heroes;
+		//
+		//	Hero array constants
+		//
+		Global.c_HeroRoles = Array();
+		Global.c_HeroRoles[0] = All Heroes;
+		Global.c_HeroRoles[1] = All Tank Heroes;
+		Global.c_HeroRoles[2] = All Damage Heroes;
+		Global.c_HeroRoles[3] = All Support Heroes;
 
-    Global.c_LongRangeHeroes = Array();
-    Global.c_LongRangeHeroes[0] = Hero(Widowmaker);
+		Global.c_LongRangeHeroes = Array();
+		Global.c_LongRangeHeroes[0] = Hero(Widowmaker);
 
-    Global.c_MediumRangeHeroes = Array();
-    Global.c_MediumRangeHeroes[0] = Hero(Ana);
-    Global.c_MediumRangeHeroes[1] = Hero(Ashe);
-    Global.c_MediumRangeHeroes[2] = Hero(Baptiste);
-    Global.c_MediumRangeHeroes[3] = Hero(Hanzo);
+		Global.c_MediumRangeHeroes = Array();
+		Global.c_MediumRangeHeroes[0] = Hero(Ana);
+		Global.c_MediumRangeHeroes[1] = Hero(Ashe);
+		Global.c_MediumRangeHeroes[2] = Hero(Baptiste);
+		Global.c_MediumRangeHeroes[3] = Hero(Hanzo);
 
-    Global.c_ShortRangeHeroes = Array();
-    Global.c_ShortRangeHeroes[0] = Hero(Bastion);
-    Global.c_ShortRangeHeroes[1] = Hero(Lúcio);
-    Global.c_ShortRangeHeroes[2] = Hero(Cassidy);
-    Global.c_ShortRangeHeroes[3] = Hero(Mei);
-    Global.c_ShortRangeHeroes[4] = Hero(Orisa);
-    Global.c_ShortRangeHeroes[5] = Hero(Soldier: 76);
-    Global.c_ShortRangeHeroes[6] = Hero(Torbjörn);
-    Global.c_ShortRangeHeroes[7] = Hero(Zenyatta);
-    Global.c_ShortRangeHeroes[8] = Hero(Roadhog);
+		Global.c_ShortRangeHeroes = Array();
+		Global.c_ShortRangeHeroes[0] = Hero(Bastion);
+		Global.c_ShortRangeHeroes[1] = Hero(Lúcio);
+		Global.c_ShortRangeHeroes[2] = Hero(Cassidy);
+		Global.c_ShortRangeHeroes[3] = Hero(Mei);
+		Global.c_ShortRangeHeroes[4] = Hero(Orisa);
+		Global.c_ShortRangeHeroes[5] = Hero(Soldier: 76);
+		Global.c_ShortRangeHeroes[6] = Hero(Torbjörn);
+		Global.c_ShortRangeHeroes[7] = Hero(Zenyatta);
+		Global.c_ShortRangeHeroes[8] = Hero(Roadhog);
 
-    Global.c_VeryShortRangeHeroes = Array();
-    Global.c_VeryShortRangeHeroes[0] = Hero(Brigitte);
-    Global.c_VeryShortRangeHeroes[1] = Hero(D.Va);
-    Global.c_VeryShortRangeHeroes[2] = Hero(Moira);
-    Global.c_VeryShortRangeHeroes[3] = Hero(Reaper);
-    Global.c_VeryShortRangeHeroes[4] = Hero(Reinhardt);
-    Global.c_VeryShortRangeHeroes[5] = Hero(Sigma);
-    Global.c_VeryShortRangeHeroes[6] = Hero(Symmetra);
-    Global.c_VeryShortRangeHeroes[7] = Hero(Winston);
-    Global.c_VeryShortRangeHeroes[8] = Hero(Zarya);
-    Global.c_VeryShortRangeHeroes[9] = Hero(Doomfist);
+		Global.c_VeryShortRangeHeroes = Array();
+		Global.c_VeryShortRangeHeroes[0] = Hero(Brigitte);
+		Global.c_VeryShortRangeHeroes[1] = Hero(D.Va);
+		Global.c_VeryShortRangeHeroes[2] = Hero(Moira);
+		Global.c_VeryShortRangeHeroes[3] = Hero(Reaper);
+		Global.c_VeryShortRangeHeroes[4] = Hero(Reinhardt);
+		Global.c_VeryShortRangeHeroes[5] = Hero(Sigma);
+		Global.c_VeryShortRangeHeroes[6] = Hero(Symmetra);
+		Global.c_VeryShortRangeHeroes[7] = Hero(Winston);
+		Global.c_VeryShortRangeHeroes[8] = Hero(Zarya);
+		Global.c_VeryShortRangeHeroes[9] = Hero(Doomfist);
 
-    Global.c_ProjectileHeroes = Array();
-    Global.c_ProjectileHeroes[0] = Hero(Ana);
-    Global.c_ProjectileHeroes[1] = Hero(Ashe);
-    Global.c_ProjectileHeroes[2] = Hero(Baptiste);
-    Global.c_ProjectileHeroes[3] = Hero(Bastion);
-    Global.c_ProjectileHeroes[4] = Hero(D.Va);
-    Global.c_ProjectileHeroes[5] = Hero(Echo);
-    Global.c_ProjectileHeroes[6] = Hero(Genji);
-    Global.c_ProjectileHeroes[7] = Hero(Hanzo);
-    Global.c_ProjectileHeroes[8] = Hero(Junkrat);
-    Global.c_ProjectileHeroes[9] = Hero(Lúcio);
-    Global.c_ProjectileHeroes[10] = Hero(Cassidy);
-    Global.c_ProjectileHeroes[11] = Hero(Mercy);
-    Global.c_ProjectileHeroes[12] = Hero(Orisa);
-    Global.c_ProjectileHeroes[13] = Hero(Pharah);
-    Global.c_ProjectileHeroes[14] = Hero(Reaper);
-    Global.c_ProjectileHeroes[15] = Hero(Roadhog);
-    Global.c_ProjectileHeroes[16] = Hero(Sigma);
-    Global.c_ProjectileHeroes[17] = Hero(Soldier: 76);
-    Global.c_ProjectileHeroes[18] = Hero(Sombra);
-    Global.c_ProjectileHeroes[19] = Hero(Torbjörn);
-    Global.c_ProjectileHeroes[20] = Hero(Tracer);
-    Global.c_ProjectileHeroes[21] = Hero(Widowmaker);
-    Global.c_ProjectileHeroes[22] = Hero(Wrecking Ball);
-    Global.c_ProjectileHeroes[23] = Hero(Zenyatta);
-    
-    Global.c_LargeZoneHeroes = Array();
-    Global.c_LargeZoneHeroes[0] = Hero(Echo);
-    Global.c_LargeZoneHeroes[1] = Hero(Genji);
-    Global.c_LargeZoneHeroes[2] = Hero(Junkrat);
-    Global.c_LargeZoneHeroes[3] = Hero(Mercy);
-    Global.c_LargeZoneHeroes[4] = Hero(Pharah);
-    Global.c_LargeZoneHeroes[5] = Hero(Sombra);
-    Global.c_LargeZoneHeroes[6] = Hero(Tracer);
-    Global.c_LargeZoneHeroes[7] = Hero(Wrecking Ball);
-    
-    Global.c_ScopeHeroes = Array();
-    Global.c_ScopeHeroes[0] = Hero(Ana);
-    Global.c_ScopeHeroes[1] = Hero(Ashe);
-    Global.c_ScopeHeroes[2] = Hero(Widowmaker);
+		Global.c_ProjectileHeroes = Array();
+		Global.c_ProjectileHeroes[0] = Hero(Ana);
+		Global.c_ProjectileHeroes[1] = Hero(Ashe);
+		Global.c_ProjectileHeroes[2] = Hero(Baptiste);
+		Global.c_ProjectileHeroes[3] = Hero(Bastion);
+		Global.c_ProjectileHeroes[4] = Hero(D.Va);
+		Global.c_ProjectileHeroes[5] = Hero(Echo);
+		Global.c_ProjectileHeroes[6] = Hero(Genji);
+		Global.c_ProjectileHeroes[7] = Hero(Hanzo);
+		Global.c_ProjectileHeroes[8] = Hero(Junkrat);
+		Global.c_ProjectileHeroes[9] = Hero(Lúcio);
+		Global.c_ProjectileHeroes[10] = Hero(Cassidy);
+		Global.c_ProjectileHeroes[11] = Hero(Mercy);
+		Global.c_ProjectileHeroes[12] = Hero(Orisa);
+		Global.c_ProjectileHeroes[13] = Hero(Pharah);
+		Global.c_ProjectileHeroes[14] = Hero(Reaper);
+		Global.c_ProjectileHeroes[15] = Hero(Roadhog);
+		Global.c_ProjectileHeroes[16] = Hero(Sigma);
+		Global.c_ProjectileHeroes[17] = Hero(Soldier: 76);
+		Global.c_ProjectileHeroes[18] = Hero(Sombra);
+		Global.c_ProjectileHeroes[19] = Hero(Torbjörn);
+		Global.c_ProjectileHeroes[20] = Hero(Tracer);
+		Global.c_ProjectileHeroes[21] = Hero(Widowmaker);
+		Global.c_ProjectileHeroes[22] = Hero(Wrecking Ball);
+		Global.c_ProjectileHeroes[23] = Hero(Zenyatta);
+		
+		Global.c_LargeZoneHeroes = Array();
+		Global.c_LargeZoneHeroes[0] = Hero(Echo);
+		Global.c_LargeZoneHeroes[1] = Hero(Genji);
+		Global.c_LargeZoneHeroes[2] = Hero(Junkrat);
+		Global.c_LargeZoneHeroes[3] = Hero(Mercy);
+		Global.c_LargeZoneHeroes[4] = Hero(Pharah);
+		Global.c_LargeZoneHeroes[5] = Hero(Sombra);
+		Global.c_LargeZoneHeroes[6] = Hero(Tracer);
+		Global.c_LargeZoneHeroes[7] = Hero(Wrecking Ball);
+		
+		Global.c_ScopeHeroes = Array();
+		Global.c_ScopeHeroes[0] = Hero(Ana);
+		Global.c_ScopeHeroes[1] = Hero(Ashe);
+		Global.c_ScopeHeroes[2] = Hero(Widowmaker);
 
-    //
-    //  Direction array constants
-    //
-    Global.c_MoveDir_All = Array();
-    Global.c_MoveDir_All[0] = Forward;
-    Global.c_MoveDir_All[1] = Backward;
-    Global.c_MoveDir_All[2] = Left;
-    Global.c_MoveDir_All[3] = Right;
-    Global.c_MoveDir_All[4] = Vector(1, 0, 1);    // Diagonal forward and left
-    Global.c_MoveDir_All[5] = Vector(-1, 0, 1);    // Diagonal forward and right
-    Global.c_MoveDir_All[6] = Vector(1, 0, -1);    // Diagonal backward and left
-    Global.c_MoveDir_All[7] = Vector(-1, 0, -1);  // Diagonal backward and right
+		//
+		//	Direction array constants
+		//
+		Global.c_MoveDir_All = Array();
+		Global.c_MoveDir_All[0] = Forward;
+		Global.c_MoveDir_All[1] = Backward;
+		Global.c_MoveDir_All[2] = Left;
+		Global.c_MoveDir_All[3] = Right;
+		Global.c_MoveDir_All[4] = Vector(1, 0, 1);		// Diagonal forward and left
+		Global.c_MoveDir_All[5] = Vector(-1, 0, 1);		// Diagonal forward and right
+		Global.c_MoveDir_All[6] = Vector(1, 0, -1);		// Diagonal backward and left
+		Global.c_MoveDir_All[7] = Vector(-1, 0, -1);	// Diagonal backward and right
 
-    Global.c_MoveDir_Forward = Array();
-    Global.c_MoveDir_Forward[0] = Forward;
-    Global.c_MoveDir_Forward[1] = Left;
-    Global.c_MoveDir_Forward[2] = Right;
-    Global.c_MoveDir_Forward[3] = Vector(1, 0, 1);
-    Global.c_MoveDir_Forward[4] = Vector(-1, 0, 1);
+		Global.c_MoveDir_Forward = Array();
+		Global.c_MoveDir_Forward[0] = Forward;
+		Global.c_MoveDir_Forward[1] = Left;
+		Global.c_MoveDir_Forward[2] = Right;
+		Global.c_MoveDir_Forward[3] = Vector(1, 0, 1);
+		Global.c_MoveDir_Forward[4] = Vector(-1, 0, 1);
 
-    Global.c_MoveDir_Backward = Array();
-    Global.c_MoveDir_Backward[0] = Backward;
-    Global.c_MoveDir_Backward[1] = Left;
-    Global.c_MoveDir_Backward[2] = Right;
-    Global.c_MoveDir_Backward[3] = Vector(1, 0, -1);
-    Global.c_MoveDir_Backward[4] = Vector(-1, 0, -1);
+		Global.c_MoveDir_Backward = Array();
+		Global.c_MoveDir_Backward[0] = Backward;
+		Global.c_MoveDir_Backward[1] = Left;
+		Global.c_MoveDir_Backward[2] = Right;
+		Global.c_MoveDir_Backward[3] = Vector(1, 0, -1);
+		Global.c_MoveDir_Backward[4] = Vector(-1, 0, -1);
 
-    Global.c_MoveDir_Strafe = Array();
-    Global.c_MoveDir_Strafe[0] = Left;
-    Global.c_MoveDir_Strafe[1] = Right;
+		Global.c_MoveDir_Strafe = Array();
+		Global.c_MoveDir_Strafe[0] = Left;
+		Global.c_MoveDir_Strafe[1] = Right;
 
-    //
-    //  Color constants
-    //
-    Global.c_Color_LightPink = Custom Color(255, 195, 216, 255);
-    Global.c_Color_DarkPink = Custom Color(255, 135, 176, 255);
-    Global.c_Color_LightTeal = Custom Color(190, 235, 233, 255);
-    Global.c_Color_DarkTeal = Custom Color(138, 198, 209, 255);
-    Global.c_Color_LightGrey = Custom Color(230, 230, 230, 255);
+		//
+		//	Color constants
+		//
+		Global.c_Color_LightPink = Custom Color(255, 195, 216, 255);
+		Global.c_Color_DarkPink = Custom Color(255, 135, 176, 255);
+		Global.c_Color_LightTeal = Custom Color(190, 235, 233, 255);
+		Global.c_Color_DarkTeal = Custom Color(138, 198, 209, 255);
+		Global.c_Color_LightGrey = Custom Color(230, 230, 230, 255);
 
-    Global.c_Color_EffectColors = Array();
-    Global.c_Color_EffectColors[0] = Color(White);
-    Global.c_Color_EffectColors[1] = Color(Gray);
-    Global.c_Color_EffectColors[2] = Color(Black);
-    Global.c_Color_EffectColors[3] = Color(Red);
-    Global.c_Color_EffectColors[4] = Color(Green);
-    Global.c_Color_EffectColors[5] = Color(Blue);
-    Global.c_Color_EffectColors[6] = Color(Rose);
-    Global.c_Color_EffectColors[7] = Color(Lime Green);
-    Global.c_Color_EffectColors[8] = Color(Sky Blue);
-    Global.c_Color_EffectColors[9] = Color(Violet);
+		Global.c_Color_EffectColors = Array();
+		Global.c_Color_EffectColors[0] = Color(White);
+		Global.c_Color_EffectColors[1] = Color(Gray);
+		Global.c_Color_EffectColors[2] = Color(Black);
+		Global.c_Color_EffectColors[3] = Color(Red);
+		Global.c_Color_EffectColors[4] = Color(Green);
+		Global.c_Color_EffectColors[5] = Color(Blue);
+		Global.c_Color_EffectColors[6] = Color(Rose);
+		Global.c_Color_EffectColors[7] = Color(Lime Green);
+		Global.c_Color_EffectColors[8] = Color(Sky Blue);
+		Global.c_Color_EffectColors[9] = Color(Violet);
 
-    //
-    //  Bot names
-    //
-    Global.g_BotNames = Array();
-    Global.c_BotNamesConst = Array();
-    Global.c_BotNamesConst[0]  = Custom String("Amanda");
-    Global.c_BotNamesConst[1]  = Custom String("Amber");
-    Global.c_BotNamesConst[2]  = Custom String("Aphrodite");
-    Global.c_BotNamesConst[3]  = Custom String("CatShark");
-    Global.c_BotNamesConst[4]  = Custom String("BeepBoop");
-    Global.c_BotNamesConst[5]  = Custom String("BitsAndBytes");
-    Global.c_BotNamesConst[6]  = Custom String("Blue");
-    Global.c_BotNamesConst[7]  = Custom String("Mochi");
-    Global.c_BotNamesConst[8]  = Custom String("BronzeSmurf");
-    Global.c_BotNamesConst[9]  = Custom String("Comfort");
-    Global.c_BotNamesConst[10] = Custom String("Enceladus");
-    Global.c_BotNamesConst[11] = Custom String("Dirt");
-    Global.c_BotNamesConst[12] = Custom String("Ganymede");
-    Global.c_BotNamesConst[13] = Custom String("DoomfistOTP");
-    Global.c_BotNamesConst[14] = Custom String("DoomSlayer");
-    Global.c_BotNamesConst[15] = Custom String("DPSDiff");
-    Global.c_BotNamesConst[16] = Custom String("DPSLucio");
-    Global.c_BotNamesConst[17] = Custom String("DPSMercy");
-    Global.c_BotNamesConst[18] = Custom String("DrinkWater");
-    Global.c_BotNamesConst[19] = Custom String("Error");
-    Global.c_BotNamesConst[20] = Custom String("Fallout");
-    Global.c_BotNamesConst[21] = Custom String("Fear");
-    Global.c_BotNamesConst[22] = Custom String("Friend");
-    Global.c_BotNamesConst[23] = Custom String("GenjiMain");
-    Global.c_BotNamesConst[24] = Custom String("GGILY");
-    Global.c_BotNamesConst[25] = Custom String("GiveMeHanzo");
-    Global.c_BotNamesConst[26] = Custom String("GlaDOS");
-    Global.c_BotNamesConst[27] = Custom String("Triton");
-    Global.c_BotNamesConst[28] = Custom String("Greg");
-    Global.c_BotNamesConst[29] = Custom String("HammerOnly");
-    Global.c_BotNamesConst[30] = Custom String("HealPls");
-    Global.c_BotNamesConst[31] = Custom String("SRVacuum");
-    Global.c_BotNamesConst[32] = Custom String("Eris");
-    Global.c_BotNamesConst[33] = Custom String("HotTopic");
-    Global.c_BotNamesConst[34] = Custom String("IBMPC");
-    Global.c_BotNamesConst[35] = Custom String("IDontMiss");
-    Global.c_BotNamesConst[36] = Custom String("IMainSupport");
-    Global.c_BotNamesConst[37] = Custom String("ImSorry");
-    Global.c_BotNamesConst[38] = Custom String("Instalock");
-    Global.c_BotNamesConst[39] = Custom String("IntMain");
-    Global.c_BotNamesConst[40] = Custom String("JustLikeBart");
-    Global.c_BotNamesConst[41] = Custom String("ICantDoMore");
-    Global.c_BotNamesConst[42] = Custom String("Aaron");
-    Global.c_BotNamesConst[43] = Custom String("Player");
-    Global.c_BotNamesConst[44] = Custom String("Mars");
-    Global.c_BotNamesConst[45] = Custom String("Mercury");
-    Global.c_BotNamesConst[46] = Custom String("MercyMainBTW");
-    Global.c_BotNamesConst[47] = Custom String("MercyOnly");
-    Global.c_BotNamesConst[48] = Custom String("Mint");
-    Global.c_BotNamesConst[49] = Custom String("MoicyIsCanon");
-    Global.c_BotNamesConst[50] = Custom String("Mother");
-    Global.c_BotNamesConst[51] = Custom String("Neptune");
-    Global.c_BotNamesConst[52] = Custom String("NotABot");
-    Global.c_BotNamesConst[53] = Custom String("NotASmurf");
-    Global.c_BotNamesConst[54] = Custom String("NotScripting");
-    Global.c_BotNamesConst[55] = Custom String("NotSmurfing");
-    Global.c_BotNamesConst[56] = Custom String("OatMilk");
-    Global.c_BotNamesConst[57] = Custom String("OnesAndZeros");
-    Global.c_BotNamesConst[58] = Custom String("Overclocked");
-    Global.c_BotNamesConst[59] = Custom String("Deimos");
-    Global.c_BotNamesConst[60] = Custom String("Persephone");
-    Global.c_BotNamesConst[61] = Custom String("Phobos");
-    Global.c_BotNamesConst[62] = Custom String("Princess");
-    Global.c_BotNamesConst[63] = Custom String("Ramen");
-    Global.c_BotNamesConst[64] = Custom String("Reboot");
-    Global.c_BotNamesConst[65] = Custom String("Samantha");
-    Global.c_BotNamesConst[66] = Custom String("Sedna");
-    Global.c_BotNamesConst[67] = Custom String("Deadbeat");
-    Global.c_BotNamesConst[68] = Custom String("SupportDiff");
-    Global.c_BotNamesConst[69] = Custom String("Takoyaki");
-    Global.c_BotNamesConst[70] = Custom String("TankDiff");
-    Global.c_BotNamesConst[71] = Custom String("Tempest");
-    Global.c_BotNamesConst[72] = Custom String("TheBoyMayor");
-    Global.c_BotNamesConst[73] = Custom String("Titan");
-    Global.c_BotNamesConst[74] = Custom String("TokyoFool");
-    Global.c_BotNamesConst[75] = Custom String("TryRustLang");
-    Global.c_BotNamesConst[76] = Custom String("Venus");
-    Global.c_BotNamesConst[77] = Custom String("Veronica");
-    Global.c_BotNamesConst[78] = Custom String("ZaryaMain");
-    Global.c_BotNamesConst[79] = Custom String("ZenMainBTW");
-    Global.c_BotNamesConst[80] = Custom String("HelloWorld");
-    Global.c_BotNamesConst[81] = Custom String("Alien");
-    Global.c_BotNamesConst[82] = Custom String("MyMainIsT500");
-    Global.c_BotNamesConst[83] = Custom String("SuperFan");
-    Global.c_BotNamesConst[84] = Custom String("Europa");
-    Global.c_BotNamesConst[85] = Custom String("Callisto");
-    Global.c_BotNamesConst[86] = Custom String("Io");
-    Global.c_BotNamesConst[87] = Custom String("LoveYourself");
-    Global.c_BotNamesConst[88] = Custom String("GoodLuck");
-    Global.c_BotNamesConst[89] = Custom String("ILoveCats");
-    Global.c_BotNamesConst[90] = Custom String("LoveDVa");
-    Global.c_BotNamesConst[91] = Custom String("Brig1Trick");
-    Global.c_BotNamesConst[92] = Custom String("Monke");
-    Global.c_BotNamesConst[93] = Custom String("GravNanoRein");
-    Global.c_BotNamesConst[94] = Custom String("StanLOONA");
-    Global.c_BotNamesConst[95] = Custom String("OverTuned");
+		//
+		//	Bot names
+		//
+		Global.g_BotNames = Array();
+		Global.c_BotNamesConst = Array();
+		Global.c_BotNamesConst[0]  = Custom String("Amanda");
+		Global.c_BotNamesConst[1]  = Custom String("Amber");
+		Global.c_BotNamesConst[2]  = Custom String("Aphrodite");
+		Global.c_BotNamesConst[3]  = Custom String("CatShark");
+		Global.c_BotNamesConst[4]  = Custom String("BeepBoop");
+		Global.c_BotNamesConst[5]  = Custom String("BitsAndBytes");
+		Global.c_BotNamesConst[6]  = Custom String("Blue");
+		Global.c_BotNamesConst[7]  = Custom String("Mochi");
+		Global.c_BotNamesConst[8]  = Custom String("BronzeSmurf");
+		Global.c_BotNamesConst[9]  = Custom String("Comfort");
+		Global.c_BotNamesConst[10] = Custom String("Enceladus");
+		Global.c_BotNamesConst[11] = Custom String("Dirt");
+		Global.c_BotNamesConst[12] = Custom String("Ganymede");
+		Global.c_BotNamesConst[13] = Custom String("DoomfistOTP");
+		Global.c_BotNamesConst[14] = Custom String("DoomSlayer");
+		Global.c_BotNamesConst[15] = Custom String("DPSDiff");
+		Global.c_BotNamesConst[16] = Custom String("DPSLucio");
+		Global.c_BotNamesConst[17] = Custom String("DPSMercy");
+		Global.c_BotNamesConst[18] = Custom String("DrinkWater");
+		Global.c_BotNamesConst[19] = Custom String("Error");
+		Global.c_BotNamesConst[20] = Custom String("Fallout");
+		Global.c_BotNamesConst[21] = Custom String("Fear");
+		Global.c_BotNamesConst[22] = Custom String("Friend");
+		Global.c_BotNamesConst[23] = Custom String("GenjiMain");
+		Global.c_BotNamesConst[24] = Custom String("GGILY");
+		Global.c_BotNamesConst[25] = Custom String("GiveMeHanzo");
+		Global.c_BotNamesConst[26] = Custom String("GlaDOS");
+		Global.c_BotNamesConst[27] = Custom String("Triton");
+		Global.c_BotNamesConst[28] = Custom String("Greg");
+		Global.c_BotNamesConst[29] = Custom String("HammerOnly");
+		Global.c_BotNamesConst[30] = Custom String("HealPls");
+		Global.c_BotNamesConst[31] = Custom String("SRVacuum");
+		Global.c_BotNamesConst[32] = Custom String("Eris");
+		Global.c_BotNamesConst[33] = Custom String("HotTopic");
+		Global.c_BotNamesConst[34] = Custom String("IBMPC");
+		Global.c_BotNamesConst[35] = Custom String("IDontMiss");
+		Global.c_BotNamesConst[36] = Custom String("IMainSupport");
+		Global.c_BotNamesConst[37] = Custom String("ImSorry");
+		Global.c_BotNamesConst[38] = Custom String("Instalock");
+		Global.c_BotNamesConst[39] = Custom String("IntMain");
+		Global.c_BotNamesConst[40] = Custom String("JustLikeBart");
+		Global.c_BotNamesConst[41] = Custom String("ICantDoMore");
+		Global.c_BotNamesConst[42] = Custom String("Aaron");
+		Global.c_BotNamesConst[43] = Custom String("Player");
+		Global.c_BotNamesConst[44] = Custom String("Mars");
+		Global.c_BotNamesConst[45] = Custom String("Mercury");
+		Global.c_BotNamesConst[46] = Custom String("MercyMainBTW");
+		Global.c_BotNamesConst[47] = Custom String("MercyOnly");
+		Global.c_BotNamesConst[48] = Custom String("Mint");
+		Global.c_BotNamesConst[49] = Custom String("MoicyIsCanon");
+		Global.c_BotNamesConst[50] = Custom String("Mother");
+		Global.c_BotNamesConst[51] = Custom String("Neptune");
+		Global.c_BotNamesConst[52] = Custom String("NotABot");
+		Global.c_BotNamesConst[53] = Custom String("NotASmurf");
+		Global.c_BotNamesConst[54] = Custom String("NotScripting");
+		Global.c_BotNamesConst[55] = Custom String("NotSmurfing");
+		Global.c_BotNamesConst[56] = Custom String("OatMilk");
+		Global.c_BotNamesConst[57] = Custom String("OnesAndZeros");
+		Global.c_BotNamesConst[58] = Custom String("Overclocked");
+		Global.c_BotNamesConst[59] = Custom String("Deimos");
+		Global.c_BotNamesConst[60] = Custom String("Persephone");
+		Global.c_BotNamesConst[61] = Custom String("Phobos");
+		Global.c_BotNamesConst[62] = Custom String("Princess");
+		Global.c_BotNamesConst[63] = Custom String("Ramen");
+		Global.c_BotNamesConst[64] = Custom String("Reboot");
+		Global.c_BotNamesConst[65] = Custom String("Samantha");
+		Global.c_BotNamesConst[66] = Custom String("Sedna");
+		Global.c_BotNamesConst[67] = Custom String("Deadbeat");
+		Global.c_BotNamesConst[68] = Custom String("SupportDiff");
+		Global.c_BotNamesConst[69] = Custom String("Takoyaki");
+		Global.c_BotNamesConst[70] = Custom String("TankDiff");
+		Global.c_BotNamesConst[71] = Custom String("Tempest");
+		Global.c_BotNamesConst[72] = Custom String("TheBoyMayor");
+		Global.c_BotNamesConst[73] = Custom String("Titan");
+		Global.c_BotNamesConst[74] = Custom String("TokyoFool");
+		Global.c_BotNamesConst[75] = Custom String("TryRustLang");
+		Global.c_BotNamesConst[76] = Custom String("Venus");
+		Global.c_BotNamesConst[77] = Custom String("Veronica");
+		Global.c_BotNamesConst[78] = Custom String("ZaryaMain");
+		Global.c_BotNamesConst[79] = Custom String("ZenMainBTW");
+		Global.c_BotNamesConst[80] = Custom String("HelloWorld");
+		Global.c_BotNamesConst[81] = Custom String("Alien");
+		Global.c_BotNamesConst[82] = Custom String("MyMainIsT500");
+		Global.c_BotNamesConst[83] = Custom String("SuperFan");
+		Global.c_BotNamesConst[84] = Custom String("Europa");
+		Global.c_BotNamesConst[85] = Custom String("Callisto");
+		Global.c_BotNamesConst[86] = Custom String("Io");
+		Global.c_BotNamesConst[87] = Custom String("LoveYourself");
+		Global.c_BotNamesConst[88] = Custom String("GoodLuck");
+		Global.c_BotNamesConst[89] = Custom String("ILoveCats");
+		Global.c_BotNamesConst[90] = Custom String("LoveDVa");
+		Global.c_BotNamesConst[91] = Custom String("Brig1Trick");
+		Global.c_BotNamesConst[92] = Custom String("Monke");
+		Global.c_BotNamesConst[93] = Custom String("GravNanoRein");
+		Global.c_BotNamesConst[94] = Custom String("StanLOONA");
+		Global.c_BotNamesConst[95] = Custom String("OverTuned");
 
-    //
-    //  misc
-    //
-    Global.g_PlayerNames = Array();
+		//
+		//	misc
+		//
+		Global.g_PlayerNames = Array();
 
-    Global.c_PresetNames = Array();
-    Global.c_PresetNames[0] = Custom String("None");
-    Global.c_PresetNames[1] = Custom String("Widowmaker 1v1");
-    Global.c_PresetNames[2] = Custom String("Reinhardt 1v1");
-    Global.c_PresetNames[3] = Custom String("Roadhog Hook Practice");
-    Global.c_PresetNames[4] = Custom String("Ana Sleepdart Practice");
-    Global.c_PresetNames[5] = Custom String("Hard, Thorough Warmup");
-    Global.c_PresetNames[6] = Custom String("Easy, Thorough Warmup");
+		Global.c_PresetNames = Array();
+		Global.c_PresetNames[0] = Custom String("None");
+		Global.c_PresetNames[1] = Custom String("Widowmaker 1v1");
+		Global.c_PresetNames[2] = Custom String("Reinhardt 1v1");
+		Global.c_PresetNames[3] = Custom String("Roadhog Hook Practice");
+		Global.c_PresetNames[4] = Custom String("Ana Sleepdart Practice");
+		Global.c_PresetNames[5] = Custom String("Hard, Thorough Warmup");
+		Global.c_PresetNames[6] = Custom String("Easy, Thorough Warmup");
 
-    Global.c_DifficultyColors = Array();
-    Global.c_DifficultyColors[0] = Color(White);
-    Global.c_DifficultyColors[1] = Color(White);
-    Global.c_DifficultyColors[2] = Color(White);
-    Global.c_DifficultyColors[3] = Custom Color(190, 130, 93, 255);
-    Global.c_DifficultyColors[4] = Custom Color(212, 212, 212, 255);
-    Global.c_DifficultyColors[5] = Custom Color(242, 217, 114, 255);
-    Global.c_DifficultyColors[6] = Custom Color(235, 241, 235, 255);
-    Global.c_DifficultyColors[7] = Custom Color(178, 186, 255, 255);
-    Global.c_DifficultyColors[8] = Custom Color(255, 208, 128, 255);
-    Global.c_DifficultyColors[9] = Custom Color(255, 255, 212, 255);
-    Global.c_DifficultyColors[10] = Custom Color(226, 237, 255, 255);
+		Global.c_DifficultyColors = Array();
+		Global.c_DifficultyColors[0] = Color(White);
+		Global.c_DifficultyColors[1] = Color(White);
+		Global.c_DifficultyColors[2] = Color(White);
+		Global.c_DifficultyColors[3] = Custom Color(190, 130, 93, 255);
+		Global.c_DifficultyColors[4] = Custom Color(212, 212, 212, 255);
+		Global.c_DifficultyColors[5] = Custom Color(242, 217, 114, 255);
+		Global.c_DifficultyColors[6] = Custom Color(235, 241, 235, 255);
+		Global.c_DifficultyColors[7] = Custom Color(178, 186, 255, 255);
+		Global.c_DifficultyColors[8] = Custom Color(255, 208, 128, 255);
+		Global.c_DifficultyColors[9] = Custom Color(255, 255, 212, 255);
+		Global.c_DifficultyColors[10] = Custom Color(226, 237, 255, 255);
 
-    //  End global variable initialization
-    Global.g_Initialized = True;
-  }
+		//	End global variable initialization
+		Global.g_Initialized = True;
+	}
 }
 
