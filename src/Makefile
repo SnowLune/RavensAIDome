@@ -1,9 +1,9 @@
-SHELL = /bin/sh
+SHELL = /bin/bash
 
 .SUFFIXES:
 .SUFFIXES: .owh .ow
 
-MODEFILE=../PracticeFieldExpanse.txt
+MODEFILE=../practicefieldexpanse.workshop
 
 FILES=	\
 	main.owh \
@@ -53,8 +53,8 @@ FILES=	\
 	ai/ai_Zenyatta.ow
 
 $(MODEFILE): $(FILES)
-	cat $(FILES) | sed -e 's/\/\/.*$$//' -e 's/\t/    /g' -e '/^\ *$$/d' -e '/^$$/d' > $(MODEFILE)
+	cat $(FILES) | ./overwatch_workshop_minifier.sh > $(MODEFILE)
 	cat $(MODEFILE) | clip.exe
 
 clean: 
-	rm -f ../PracticeFieldExpanse.txt
+	rm -f $(MODEFILE)
