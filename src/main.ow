@@ -100,9 +100,8 @@ rule("Global Settings")
       Global.g_OneSecCooldown = Workshop Setting Toggle
       (
          Custom String("Debug Settings / 디버그 설정"),
-         Custom String(
-            "Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"
-         ),
+         Custom String
+            ("Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"),
          False,
          8
       );

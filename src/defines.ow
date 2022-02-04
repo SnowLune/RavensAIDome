@@ -13,8 +13,8 @@ rule("Global Defines")
       //
       //   Info: version, build, links...
       //
-      Global.c_Version = Custom String("0.15.0");
-      Global.c_BuildDate = Custom String("20211101");
+      Global.c_Version = Custom String("0.15.1");
+      Global.c_BuildDate = Custom String("20220203");
       Global.c_WorkshopCode = Custom String("5DPKQ");
       Global.c_DeveloperName = Custom String("Raven#112503");
       Global.c_TwitchURL = Custom String("twitch.tv/RavenLuna");
@@ -125,9 +125,9 @@ rule("Global Defines")
       Global.c_MoveDir_All[2] = Left;
       Global.c_MoveDir_All[3] = Right;
       Global.c_MoveDir_All[4] = Vector(1, 0, 1);   // Diagonal forward & left
-      Global.c_MoveDir_All[5] = Vector(-1, 0, 1);   // Diagonal forward & right
-      Global.c_MoveDir_All[6] = Vector(1, 0, -1);   // Diagonal backward & left
-      Global.c_MoveDir_All[7] = Vector(-1, 0, -1);   // Diagonal backward & right
+      Global.c_MoveDir_All[5] = Vector(-1, 0, 1);  // Diagonal forward & right
+      Global.c_MoveDir_All[6] = Vector(1, 0, -1);  // Diagonal backward & left
+      Global.c_MoveDir_All[7] = Vector(-1, 0, -1); // Diagonal backward & right
 
       Global.c_MoveDir_Forward = Array();
       Global.c_MoveDir_Forward[0] = Forward;
