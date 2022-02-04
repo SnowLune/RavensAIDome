@@ -7,43 +7,131 @@ rule("Global Settings")
 
 	actions
 	{
-		Global.g_Language = Workshop Setting Combo(Custom String("Default Settings / 기본 설정"), Custom String("Language / 언어"), 0, Array(
-			Custom String("English"), Custom String("한국어")), 0);
-		Global.g_Difficulty = Workshop Setting Combo(Custom String("Default Settings / 기본 설정"), Custom String("Difficulty / 난이도"), 6,
-			Array(Custom String("No AI Easy"), Custom String("No AI Medium"), Custom String("No AI Hard"), Custom String("AI Bronze"),
-			Custom String("AI Silver"), Custom String("AI Gold"), Custom String("AI Platinum"), Custom String("AI Diamond"), Custom String(
-			"AI Master"), Custom String("AI Grand Master"), Custom String("AI Top 500")), 1);
-		Global.g_KillGoal = Workshop Setting Integer(Custom String("Default Settings / 기본 설정"), Custom String("Kill Goal / 필요한 킬 수"), 4, 4,
-			64, 2);
+		Global.g_Language = Workshop Setting Combo
+      (
+         Custom String("Default Settings / 기본 설정"),
+         Custom String("Language / 언어"),
+         0,
+         Array(Custom String("English"), Custom String("한국어")),
+         0
+      );
+
+		Global.g_Difficulty = Workshop Setting Combo
+      (
+         Custom String("Default Settings / 기본 설정"),
+         Custom String("Difficulty / 난이도"),
+         6,
+			Array
+         (
+            Custom String("No AI Easy"), Custom String("No AI Medium"),
+            Custom String("No AI Hard"), Custom String("AI Bronze"),
+			   Custom String("AI Silver"), Custom String("AI Gold"),
+            Custom String("AI Platinum"), Custom String("AI Diamond"),
+            Custom String("AI Master"), Custom String("AI Grand Master"),
+            Custom String("AI Top 500")
+         ),
+         1
+      );
+
+		Global.g_KillGoal = Workshop Setting Integer
+      (
+         Custom String("Default Settings / 기본 설정"),
+         Custom String("Kill Goal / 필요한 킬 수"),
+         4, 4, 64, 2
+      );
+
 		If(Global.g_KillGoal % 4 != 0 && Global.g_KillGoal > 4);
 			Global.g_KillGoal = Global.g_KillGoal - Global.g_KillGoal % 4;
 		End;
-		Global.g_BotHeroRole = Workshop Setting Combo(Custom String("Default Settings / 기본 설정"), Custom String("Bot Hero Role / 영웅 유형"), 0,
-			Array(Custom String("All"), Custom String("Tank"), Custom String("Damage"), Custom String("Support")), 3);
-		Global.g_PlayerHealing = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String(
-			"Player Healing / 플레이어 치유"), True, 4);
-		Global.g_BotHealing = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Bot Healing / 인공지는 치유"),
-			False, 5);
-		Global.g_UseBotNames = Workshop Setting Toggle(Custom String("Default Settings / 기본 설정"), Custom String("Random Names For Bots"),
-			True, 5.5);
-		Global.g_DebugMode = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug Mode / 디버그 모드"), False,
-			6);
-		Global.g_DebugHUD = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug HUD / 디버그 HUD"), False,
-			7);
-		Global.g_OneSecCooldown = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
-			"Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"), False, 8);
+
+		Global.g_BotHeroRole = Workshop Setting Combo
+      (
+         Custom String("Default Settings / 기본 설정"),
+         Custom String("Bot Hero Role / 영웅 유형"),
+         0,
+			Array
+         (
+            Custom String("All"), Custom String("Tank"),
+            Custom String("Damage"), Custom String("Support")
+         ),
+         3
+      );
+
+		Global.g_PlayerHealing = Workshop Setting Toggle
+      (
+         Custom String("Default Settings / 기본 설정"),
+         Custom String("Player Healing / 플레이어 치유"),
+         True,
+         4
+      );
+
+		Global.g_BotHealing = Workshop Setting Toggle
+      (
+         Custom String("Default Settings / 기본 설정"),
+         Custom String("Bot Healing / 인공지는 치유"),
+			False,
+         5
+      );
+
+		Global.g_UseBotNames = Workshop Setting Toggle
+      (
+         Custom String("Default Settings / 기본 설정"),
+         Custom String("Random Names For Bots"),
+			True,
+         5.5
+      );
+
+		Global.g_DebugMode = Workshop Setting Toggle
+      (
+         Custom String("Debug Settings / 디버그 설정"),
+         Custom String("Debug Mode / 디버그 모드"),
+         False,
+			6
+      );
+
+		Global.g_DebugHUD = Workshop Setting Toggle
+      (
+         Custom String("Debug Settings / 디버그 설정"),
+         Custom String("Debug HUD / 디버그 HUD"),
+         False,
+			7
+      );
+
+		Global.g_OneSecCooldown = Workshop Setting Toggle
+      (
+         Custom String("Debug Settings / 디버그 설정"),
+         Custom String(
+            "Global 1 Second Cooldown Mode / 글로벌 쿨 다운 새로 고침"
+         ),
+         False,
+         8
+      );
+
 		Global.g_DebugHero = Array();
-		Global.g_DebugHero[0] = Workshop Setting Toggle(Custom String("Debug Settings / 디버그 설정"), Custom String(
-			"Debug Hero Enabled / 디버그 영웅 활성화"), False, 9);
+		Global.g_DebugHero[0] = Workshop Setting Toggle
+      (
+         Custom String("Debug Settings / 디버그 설정"),
+         Custom String("Debug Hero Enabled / 디버그 영웅 활성화"),
+         False,
+         9
+      );
+
 		If(Global.g_DebugHero[0] == True);
-			Global.g_DebugHero[1] = Workshop Setting Hero(Custom String("Debug Settings / 디버그 설정"), Custom String("Debug Hero / 디버그 영웅"),
-				Genji, 10);
+			Global.g_DebugHero[1] = Workshop Setting Hero
+         (
+            Custom String("Debug Settings / 디버그 설정"),
+            Custom String("Debug Hero / 디버그 영웅"),
+				Genji,
+            10
+         );
 		End;
+
 		If(Global.g_DebugMode == True);
 			Enable Inspector Recording;
 		Else;
 			Disable Inspector Recording;
 		End;
+
 		Disable Built-In Game Mode Completion;
 	}
 }
@@ -69,7 +157,6 @@ rule("Global Main Tick Loop")
 				Wait(2 / 60, Ignore Condition);
 			Else If(Server Load >= 225);
 				Wait(1 / 60, Ignore Condition);
-				
 			Else;
 				Wait(0.500 / 60, Ignore Condition);
 			End;

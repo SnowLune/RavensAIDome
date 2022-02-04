@@ -3,11 +3,11 @@
 
 function minify_pipe 
 {
-   sed \
-      -e 's/\/\/.*$//'           `# Remove C++ style one line comments "//"` \
-      -e 's/\s\+/ /g'            `# Truncate whitespace to 1 space` \
-   | tr -ds '\r''\n' '[:blank:]' `# Remote all newlines and squeeze whitespace` \
-   | sed 's/\/\*.*\*\///'        `# Remove C style comments "/* */"`
+   sed 's/\/\/.*$//'        `# Remove C++ style one line comments "//"` \
+   | tr '\r''\n' ' '        `# Translate newlines into spaces` \
+   | tr '[:blank:]' ' '     `# Translate blanks into spaces` \
+   | tr -s '[:blank:]'      `# Squeeze horizontal whitespace` \
+   | sed 's/\/\*.*\*\///'   `# Remove C style comments "/* */"`
 }
 
 if [ $# -eq 0 ]; then
