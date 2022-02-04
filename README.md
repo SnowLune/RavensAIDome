@@ -4,9 +4,16 @@ Practice Field: Expanse is a sandbox practice game mode for the Overwatch Worksh
 ## Summary
 Up to six players are spread across the map "Workshop Expanse". Each player is put in a bubble against an enemy dummy bot. The player kills the enemy bot and progresses to the next hero in the list when the "Kill Goal" is met. The player can select any hero they would like to practice on. The enemy spawn distances and play area will automatically be adapted to the optimal sizes for the chosen hero.
 
-For more info, see: [Practice Field: Expanse](https://snowroberge.github.io/PracticeFieldExpanse/)
+For more info, see: [Practice Field: Expanse](https://snowlune.github.io/PracticeFieldExpanse/)
 ## Files
-The main file containing the mode [`PracticeFieldExpanse.txt`](https://github.com/SnowRoberge/PracticeFieldExpanse/blob/master/PracticeFieldExpanse.txt) is a simple text file.
+`src/` contains all the text files of groups of rules that are compiled into the mode file `practicefieldexpanse.workshop.txt` with Make. 
+## How to use
+A premade release can be downloaded and imported into Overwatch right away. Just open `practicefieldexpanse.workshop.txt` in your favorite editor or notepad. Select All (ctrl-a), then Copy (ctrl-c).
+The mode text file will now be in your clipboard. Go to Game Browser >> Create >> Settings. There will be an orange button in the top right that will paste from your clipboard when you click it.
+Info: You can also import the code `5DPKQ` in Overwatch to get a recent build. However, sometimes this isn't always up to date with the git version.
+### How to build
+I build under WSL2 Ubuntu, but any kind of linux with GNU Make should work.
+From the project directory, run `make`. This creates `practicefieldexpanse.workshop.txt` which can be imported as described above.
 ## Additional Information
 The mode itself is over 12,000 lines of text and reaching even the new Overwatch Workshop limit of 35,000 objects.
 
@@ -16,7 +23,8 @@ After a version is ready for release, I import it into a custom game, then recop
 ## Development History
 I started this project in January 2020 as soon as the "Workshop Expanse" map was released on the PTR. The idea came from my first practice mode on the Practice Range that spawned random types of enemies and gave them *very* rudimentary movement. I knew I wanted something that would spawn enemies at random distances from me and facing a random direction. Initially I only intended it to be a small Widowmaker warm-up and flick practice mode. It is currently in the pre-release stage with changes happening rapidly.
 ## Support Me
-I've put more hours into this project than I have an any one job most likely. It's been a passion project, but I have put my soul and *a lot* of time into it.
+I've put more hours into this project than I have an any one job most likely. It's been a passion project, but I have put my soul 
+and *a lot* of time into it.
 Consider supporting me if you enjoy this project.
 
 <pre><code>CashApp: $RavenQueenLuna
