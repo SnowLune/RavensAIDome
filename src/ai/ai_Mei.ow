@@ -1,271 +1,271 @@
 rule("AI Mei")
 {
-	event
-	{
-		Subroutine;
-		aiSub_Abilities_Mei;
-	}
+   event
+   {
+      Subroutine;
+      aiSub_Abilities_Mei;
+   }
 
-	actions
-	{
-		Event Player.ai_IsInAbilitySub = True;
-		Call Subroutine(aiSub_ReactionDelay);
-		If(Event Player.ai_AbilityButton == Button(Primary Fire));
-			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[0];
-			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Primary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
-			Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 2);
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Secondary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-			Press Button(Event Player, Button(Ability 1));
-			Wait Until(Health(Event Player) >= 200, 4.250);
-			Press Button(Event Player, Button(Ability 1));
-		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-			Event Player.bot_MoveCrouchEnabled = False;
-			Event Player.bot_MoveJumpEnabled = False;
-			Press Button(Event Player, Button(Ability 2));
-			Event Player.ai_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player), Team 1)) + World Vector Of(Vector(0, 0, 2.500),
-				Event Player, Rotation);
-			Call Subroutine(aiSub_FacingLookAt);
-			Press Button(Event Player, Button(Primary Fire));
-			Wait(0.100, Ignore Condition);
-			Event Player.ai_CnAim = True;
-			Event Player.bot_MoveCrouchEnabled = True;
-			Event Player.bot_MoveJumpEnabled = True;
-		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
-			Event Player.ai_AimBase = 2;
-			Wait(0.250, Ignore Condition);
-			Press Button(Event Player, Button(Ultimate));
-			Wait(0.250, Ignore Condition);
-			Call Subroutine(aiSub_FacingReset);
-		End;
-		Event Player.ai_IsInAbilitySub = False;
-	}
+   actions
+   {
+      Event Player.ai_IsInAbilitySub = True;
+      Call Subroutine(aiSub_ReactionDelay);
+      If(Event Player.ai_AbilityButton == Button(Primary Fire));
+         Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[0];
+         Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+         Call Subroutine(aiSub_ButtonsReset);
+         Start Holding Button(Event Player, Button(Primary Fire));
+      Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+         Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
+         Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 2);
+         Call Subroutine(aiSub_ButtonsReset);
+         Start Holding Button(Event Player, Button(Secondary Fire));
+      Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+         Press Button(Event Player, Button(Ability 1));
+         Wait Until(Health(Event Player) >= 200, 4.250);
+         Press Button(Event Player, Button(Ability 1));
+      Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+         Event Player.bot_MoveCrouchEnabled = False;
+         Event Player.bot_MoveJumpEnabled = False;
+         Press Button(Event Player, Button(Ability 2));
+         Event Player.ai_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player), Team 1)) + World Vector Of(Vector(0, 0, 2.500),
+            Event Player, Rotation);
+         Call Subroutine(aiSub_FacingLookAt);
+         Press Button(Event Player, Button(Primary Fire));
+         Wait(0.100, Ignore Condition);
+         Event Player.ai_CnAim = True;
+         Event Player.bot_MoveCrouchEnabled = True;
+         Event Player.bot_MoveJumpEnabled = True;
+      Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+         Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
+         Event Player.ai_AimBase = 2;
+         Wait(0.250, Ignore Condition);
+         Press Button(Event Player, Button(Ultimate));
+         Wait(0.250, Ignore Condition);
+         Call Subroutine(aiSub_FacingReset);
+      End;
+      Event Player.ai_IsInAbilitySub = False;
+   }
 }
 
 rule("AI Mei General")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Mei;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Mei;
+   }
 
-	conditions
-	{
-		Is Game In Progress == True;
-		Is Alive(Event Player) == True;
-		Event Player.ai_AIEnabled == True;
-	}
+   conditions
+   {
+      Is Game In Progress == True;
+      Is Alive(Event Player) == True;
+      Event Player.ai_AIEnabled == True;
+   }
 
-	actions
-	{
-		Event Player.ai_OptimalDistanceDefault = Random Real(6, 10);
-		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_AimBaseDefault = 0;
-		Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
-		Event Player.ai_AimType = 1;
-		Event Player.ai_ProjectileSpeeds[0] = 20;
-		Event Player.ai_ProjectileSpeeds[1] = 115;
-		Event Player.ai_ProjectileSpeeds[4] = 20;
-		Event Player.ai_HeroInitialized = True;
-	}
+   actions
+   {
+      Event Player.ai_OptimalDistanceDefault = Random Real(6, 10);
+      Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+      Event Player.ai_AimBaseDefault = 0;
+      Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
+      Event Player.ai_AimType = 1;
+      Event Player.ai_ProjectileSpeeds[0] = 20;
+      Event Player.ai_ProjectileSpeeds[1] = 115;
+      Event Player.ai_ProjectileSpeeds[4] = 20;
+      Event Player.ai_HeroInitialized = True;
+   }
 }
 
 rule("AI Mei Attack Primary")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Mei;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Mei;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-		Event Player.ai_RetCastDistance < 3;
-		Is Using Ability 1(Event Player) == False;
-		Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == False;
-		Health(Players In Slot(Slot Of(Event Player), Team 1)) > 75;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnAttack == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
+      Event Player.ai_RetCastDistance < 3;
+      Is Using Ability 1(Event Player) == False;
+      Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == False;
+      Health(Players In Slot(Slot Of(Event Player), Team 1)) > 75;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_Mei);
-		Wait(0.150, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Primary Fire));
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Primary Fire);
+      Call Subroutine(aiSub_Abilities_Mei);
+      Wait(0.150, Ignore Condition);
+      Loop If Condition Is True;
+      Stop Holding Button(Event Player, Button(Primary Fire));
+   }
 }
 
 rule("AI Mei Attack Secondary")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Mei;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Mei;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
-		(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10 || Health(Players In Slot(Slot Of(
-			Event Player), Team 1)) <= 75) == True;
-		Event Player.ai_RetCastDistance < 2.5;
-		Is Using Ability 1(Event Player) == False;
-		Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == False;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnAttack == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 50;
+      (Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10 || Health(Players In Slot(Slot Of(
+         Event Player), Team 1)) <= 75) == True;
+      Event Player.ai_RetCastDistance < 2.5;
+      Is Using Ability 1(Event Player) == False;
+      Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == False;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Secondary Fire);
-		Call Subroutine(aiSub_Abilities_Mei);
-		Wait(0.800, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Secondary Fire));
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Secondary Fire);
+      Call Subroutine(aiSub_Abilities_Mei);
+      Wait(0.800, Ignore Condition);
+      Loop If Condition Is True;
+      Stop Holding Button(Event Player, Button(Secondary Fire));
+   }
 }
 
 rule("AI Mei Attack Secondary Frozen")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Mei;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Mei;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-		Event Player.ai_RetCastDistance < 1;
-		Is Using Ability 1(Event Player) == False;
-		Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == True;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnAttack == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+      Event Player.ai_RetCastDistance < 1;
+      Is Using Ability 1(Event Player) == False;
+      Has Status(Players In Slot(Slot Of(Event Player), Team 1), Frozen) == True;
+   }
 
-	actions
-	{
-		Event Player.bot_MoveCrouchEnabled = False;
-		Event Player.bot_MoveJumpEnabled = False;
-		Event Player.ai_AimBase = 1;
-		Event Player.ai_AbilityButton = Button(Secondary Fire);
-		Call Subroutine(aiSub_Abilities_Mei);
-		Wait(0.800, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Secondary Fire));
-		Call Subroutine(aiSub_FacingReset);
-		Event Player.bot_MoveCrouchEnabled = True;
-		Event Player.bot_MoveJumpEnabled = True;
-	}
+   actions
+   {
+      Event Player.bot_MoveCrouchEnabled = False;
+      Event Player.bot_MoveJumpEnabled = False;
+      Event Player.ai_AimBase = 1;
+      Event Player.ai_AbilityButton = Button(Secondary Fire);
+      Call Subroutine(aiSub_Abilities_Mei);
+      Wait(0.800, Ignore Condition);
+      Loop If Condition Is True;
+      Stop Holding Button(Event Player, Button(Secondary Fire));
+      Call Subroutine(aiSub_FacingReset);
+      Event Player.bot_MoveCrouchEnabled = True;
+      Event Player.bot_MoveJumpEnabled = True;
+   }
 }
 
 rule("AI Mei Cryo-Freeze")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Mei;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Mei;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Health(Event Player) <= 70;
-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Is Using Ability 1(Event Player) == False;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnUseAbilities == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Health(Event Player) <= 70;
+      Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+      Is Using Ability 1(Event Player) == False;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 1);
-		Call Subroutine(aiSub_Abilities_Mei);
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Ability 1);
+      Call Subroutine(aiSub_Abilities_Mei);
+   }
 }
 
 rule("AI Mei Ice Wall")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Mei;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Mei;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-		Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-		Is Using Ability 2(Event Player) == False;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnUseAbilities == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
+      Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+      Is Using Ability 2(Event Player) == False;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 2);
-		Call Subroutine(aiSub_Abilities_Mei);
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Ability 2);
+      Call Subroutine(aiSub_Abilities_Mei);
+   }
 }
 
 rule("AI Mei Blizzrd")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Mei;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Mei;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Ultimate Charge Percent(Event Player) == 100;
-		Is Using Ultimate(Event Player) == False;
-		Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnUseAbilities == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Ultimate Charge Percent(Event Player) == 100;
+      Is Using Ultimate(Event Player) == False;
+      Health(Players In Slot(Slot Of(Event Player), Team 1)) >= 100;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 15;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ultimate);
-		Call Subroutine(aiSub_Abilities_Mei);
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Ultimate);
+      Call Subroutine(aiSub_Abilities_Mei);
+   }
 }
 

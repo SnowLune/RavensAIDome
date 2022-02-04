@@ -1,190 +1,190 @@
 rule("AI Symmetra")
 {
-	event
-	{
-		Subroutine;
-		aiSub_Abilities_Symmetra;
-	}
+   event
+   {
+      Subroutine;
+      aiSub_Abilities_Symmetra;
+   }
 
-	actions
-	{
-		Event Player.ai_IsInAbilitySub = True;
-		Call Subroutine(aiSub_ReactionDelay);
-		If(Event Player.ai_AbilityButton == Button(Primary Fire));
-			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
-			Call Subroutine(aiSub_ButtonsReset);
-			Event Player.ai_AimType = 0;
-			Event Player.ai_AimBase = 0;
-			Call Subroutine(aiSub_FacingStart);
-			Start Holding Button(Event Player, Button(Primary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-			Event Player.ai_AimType = 1;
-			Event Player.ai_AimBase = 0;
-			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
-			Call Subroutine(aiSub_FacingStart);
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Secondary Fire));
-			Wait(Random Real(0.500, 1), Ignore Condition);
-			Stop Holding Button(Event Player, Button(Primary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-			Event Player.ai_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player), Team 1)) + Vector(Random Real(-6, 6), 0,
-				Random Real(-6, 6));
-			Call Subroutine(aiSub_FacingLookAt);
-			Press Button(Event Player, Button(Ability 1));
-			Wait(0.350, Ignore Condition);
-			Event Player.ai_CnAim = True;
-		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-			Press Button(Event Player, Button(Ultimate));
-			Wait(0.250, Ignore Condition);
-			Press Button(Event Player, Button(Ultimate));
-			Wait(0.250, Ignore Condition);
-			Press Button(Event Player, Button(Primary Fire));
-		End;
-		Event Player.ai_IsInAbilitySub = False;
-	}
+   actions
+   {
+      Event Player.ai_IsInAbilitySub = True;
+      Call Subroutine(aiSub_ReactionDelay);
+      If(Event Player.ai_AbilityButton == Button(Primary Fire));
+         Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+         Call Subroutine(aiSub_ButtonsReset);
+         Event Player.ai_AimType = 0;
+         Event Player.ai_AimBase = 0;
+         Call Subroutine(aiSub_FacingStart);
+         Start Holding Button(Event Player, Button(Primary Fire));
+      Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+         Event Player.ai_AimType = 1;
+         Event Player.ai_AimBase = 0;
+         Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
+         Call Subroutine(aiSub_FacingStart);
+         Call Subroutine(aiSub_ButtonsReset);
+         Start Holding Button(Event Player, Button(Secondary Fire));
+         Wait(Random Real(0.500, 1), Ignore Condition);
+         Stop Holding Button(Event Player, Button(Primary Fire));
+      Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+         Event Player.ai_LookAtVector = Position Of(Players In Slot(Slot Of(Event Player), Team 1)) + Vector(Random Real(-6, 6), 0,
+            Random Real(-6, 6));
+         Call Subroutine(aiSub_FacingLookAt);
+         Press Button(Event Player, Button(Ability 1));
+         Wait(0.350, Ignore Condition);
+         Event Player.ai_CnAim = True;
+      Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+         Press Button(Event Player, Button(Ultimate));
+         Wait(0.250, Ignore Condition);
+         Press Button(Event Player, Button(Ultimate));
+         Wait(0.250, Ignore Condition);
+         Press Button(Event Player, Button(Primary Fire));
+      End;
+      Event Player.ai_IsInAbilitySub = False;
+   }
 }
 
 rule("AI Symmetra General")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Symmetra;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Symmetra;
+   }
 
-	conditions
-	{
-		Is Game In Progress == True;
-		Is Alive(Event Player) == True;
-		Event Player.ai_AIEnabled == True;
-	}
+   conditions
+   {
+      Is Game In Progress == True;
+      Is Alive(Event Player) == True;
+      Event Player.ai_AIEnabled == True;
+   }
 
-	actions
-	{
-		Event Player.ai_OptimalDistanceDefault = Random Real(6, 10);
-		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_AimBaseDefault = 0;
-		Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
-		Event Player.ai_AimType = 0;
-		Event Player.ai_ProjectileSpeeds[1] = 25;
-		Event Player.ai_HeroInitialized = True;
-	}
+   actions
+   {
+      Event Player.ai_OptimalDistanceDefault = Random Real(6, 10);
+      Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+      Event Player.ai_AimBaseDefault = 0;
+      Event Player.ai_AimBase = Event Player.ai_AimBaseDefault;
+      Event Player.ai_AimType = 0;
+      Event Player.ai_ProjectileSpeeds[1] = 25;
+      Event Player.ai_HeroInitialized = True;
+   }
 }
 
 rule("AI Symmetra Attack Primary")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Symmetra;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Symmetra;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12;
-		Event Player.ai_RetCastDistance < 2;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnAttack == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 12;
+      Event Player.ai_RetCastDistance < 2;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_Symmetra);
-		Wait(0.250, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Primary Fire));
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Primary Fire);
+      Call Subroutine(aiSub_Abilities_Symmetra);
+      Wait(0.250, Ignore Condition);
+      Loop If Condition Is True;
+      Stop Holding Button(Event Player, Button(Primary Fire));
+   }
 }
 
 rule("AI Symmetra Attack Secondary")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Symmetra;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Symmetra;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 12;
-		Event Player.ai_RetCastDistance < 3.5;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnAttack == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 12;
+      Event Player.ai_RetCastDistance < 3.5;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Secondary Fire);
-		Call Subroutine(aiSub_Abilities_Symmetra);
-		Loop If Condition Is True;
-		Event Player.ai_AimType = 0;
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Secondary Fire);
+      Call Subroutine(aiSub_Abilities_Symmetra);
+      Loop If Condition Is True;
+      Event Player.ai_AimType = 0;
+   }
 }
 
 rule("AI Symmetra Sentry Turret")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Symmetra;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Symmetra;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
-		Ability Charge(Event Player, Button(Ability 1)) > 0;
-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnUseAbilities == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Is On Ground(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 20;
+      Ability Charge(Event Player, Button(Ability 1)) > 0;
+      Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 1);
-		Call Subroutine(aiSub_Abilities_Symmetra);
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Ability 1);
+      Call Subroutine(aiSub_Abilities_Symmetra);
+   }
 }
 
 rule("AI Symmetra Photon Barrier")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Symmetra;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Symmetra;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Ultimate Charge Percent(Event Player) == 100;
-		Is Using Ultimate(Event Player) == False;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnUseAbilities == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Ultimate Charge Percent(Event Player) == 100;
+      Is Using Ultimate(Event Player) == False;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ultimate);
-		Call Subroutine(aiSub_Abilities_Symmetra);
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Ultimate);
+      Call Subroutine(aiSub_Abilities_Symmetra);
+   }
 }
 

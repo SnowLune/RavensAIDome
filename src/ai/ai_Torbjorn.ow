@@ -1,235 +1,235 @@
 rule("AI Torbjorn")
 {
-	event
-	{
-		Subroutine;
-		aiSub_Abilities_Torbjorn;
-	}
+   event
+   {
+      Subroutine;
+      aiSub_Abilities_Torbjorn;
+   }
 
-	actions
-	{
-		Event Player.ai_IsInAbilitySub = True;
-		Call Subroutine(aiSub_ReactionDelay);
-		If(Event Player.ai_AbilityButton == Button(Primary Fire));
-			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[0];
-			Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Primary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
-			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
-			Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 2);
-			Call Subroutine(aiSub_ButtonsReset);
-			Start Holding Button(Event Player, Button(Secondary Fire));
-		Else If(Event Player.ai_AbilityButton == Button(Ability 1));
-			Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(Random Real(-8, 8), 0, Random Real(0, 3)),
-				Event Player, Rotation);
-			Call Subroutine(aiSub_FacingLookAt);
-			Press Button(Event Player, Button(Ability 1));
-			Call Subroutine(aiSub_ReactionDelay);
-			Event Player.ai_CnAim = True;
-			Call Subroutine(aiSub_FacingReset);
-		Else If(Event Player.ai_AbilityButton == Button(Ability 2));
-			Press Button(Event Player, Button(Ability 2));
-		Else If(Event Player.ai_AbilityButton == Button(Ultimate));
-			Call Subroutine(aiSub_ButtonsReset);
-			Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
-			Call Subroutine(aiSub_ReactionDelay);
-			Press Button(Event Player, Button(Ultimate));
-			Wait(1, Ignore Condition);
-			While(Is Using Ultimate(Event Player));
-				Press Button(Event Player, Button(Primary Fire));
-				Wait(Random Real(0.150, 0.500), Ignore Condition);
-			End;
-			Call Subroutine(aiSub_FacingReset);
-		End;
-		Event Player.ai_IsInAbilitySub = False;
-	}
+   actions
+   {
+      Event Player.ai_IsInAbilitySub = True;
+      Call Subroutine(aiSub_ReactionDelay);
+      If(Event Player.ai_AbilityButton == Button(Primary Fire));
+         Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[0];
+         Skip If(Is Button Held(Event Player, Button(Primary Fire)), 2);
+         Call Subroutine(aiSub_ButtonsReset);
+         Start Holding Button(Event Player, Button(Primary Fire));
+      Else If(Event Player.ai_AbilityButton == Button(Secondary Fire));
+         Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[1];
+         Skip If(Is Button Held(Event Player, Button(Secondary Fire)), 2);
+         Call Subroutine(aiSub_ButtonsReset);
+         Start Holding Button(Event Player, Button(Secondary Fire));
+      Else If(Event Player.ai_AbilityButton == Button(Ability 1));
+         Event Player.ai_LookAtVector = Position Of(Event Player) + World Vector Of(Vector(Random Real(-8, 8), 0, Random Real(0, 3)),
+            Event Player, Rotation);
+         Call Subroutine(aiSub_FacingLookAt);
+         Press Button(Event Player, Button(Ability 1));
+         Call Subroutine(aiSub_ReactionDelay);
+         Event Player.ai_CnAim = True;
+         Call Subroutine(aiSub_FacingReset);
+      Else If(Event Player.ai_AbilityButton == Button(Ability 2));
+         Press Button(Event Player, Button(Ability 2));
+      Else If(Event Player.ai_AbilityButton == Button(Ultimate));
+         Call Subroutine(aiSub_ButtonsReset);
+         Event Player.ai_ProjectileSpeed = Event Player.ai_ProjectileSpeeds[4];
+         Call Subroutine(aiSub_ReactionDelay);
+         Press Button(Event Player, Button(Ultimate));
+         Wait(1, Ignore Condition);
+         While(Is Using Ultimate(Event Player));
+            Press Button(Event Player, Button(Primary Fire));
+            Wait(Random Real(0.150, 0.500), Ignore Condition);
+         End;
+         Call Subroutine(aiSub_FacingReset);
+      End;
+      Event Player.ai_IsInAbilitySub = False;
+   }
 }
 
 rule("AI Torbjorn General")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Torbjörn;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Torbjörn;
+   }
 
-	conditions
-	{
-		Is Game In Progress == True;
-		Is Alive(Event Player) == True;
-		Event Player.ai_AIEnabled == True;
-	}
+   conditions
+   {
+      Is Game In Progress == True;
+      Is Alive(Event Player) == True;
+      Event Player.ai_AIEnabled == True;
+   }
 
-	actions
-	{
-		Event Player.ai_OptimalDistanceDefault = Random Real(15, 20);
-		Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
-		Event Player.ai_AimBaseDefault = 1;
-		Event Player.ai_AimTypeDefault = 2;
-		Event Player.ai_ProjectileSpeeds[0] = 70;
-		Event Player.ai_ProjectileSpeeds[1] = 120;
-		Event Player.ai_ProjectileSpeeds[4] = 40;
-		Call Subroutine(aiSub_FacingReset);
-		Event Player.ai_HeroInitialized = True;
-	}
+   actions
+   {
+      Event Player.ai_OptimalDistanceDefault = Random Real(15, 20);
+      Event Player.ai_OptimalDistance = Event Player.ai_OptimalDistanceDefault;
+      Event Player.ai_AimBaseDefault = 1;
+      Event Player.ai_AimTypeDefault = 2;
+      Event Player.ai_ProjectileSpeeds[0] = 70;
+      Event Player.ai_ProjectileSpeeds[1] = 120;
+      Event Player.ai_ProjectileSpeeds[4] = 40;
+      Call Subroutine(aiSub_FacingReset);
+      Event Player.ai_HeroInitialized = True;
+   }
 }
 
 rule("AI Torbjorn Attack Primary")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Torbjörn;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Torbjörn;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Event Player.ai_HeroInitialized == True;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
-		Event Player.ai_RetCastDistance < 2.25;
-		Is Using Ultimate(Event Player) == False;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnAttack == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Event Player.ai_HeroInitialized == True;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 40;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) > 10;
+      Event Player.ai_RetCastDistance < 2.25;
+      Is Using Ultimate(Event Player) == False;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Primary Fire);
-		Call Subroutine(aiSub_Abilities_Torbjorn);
-		Wait(0.600, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Primary Fire));
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Primary Fire);
+      Call Subroutine(aiSub_Abilities_Torbjorn);
+      Wait(0.600, Ignore Condition);
+      Loop If Condition Is True;
+      Stop Holding Button(Event Player, Button(Primary Fire));
+   }
 }
 
 rule("AI Torbjorn Attack Secondary")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Torbjörn;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Torbjörn;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnAttack == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Event Player.ai_HeroInitialized == True;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
-		Event Player.ai_RetCastDistance < 1.75;
-		Is Using Ultimate(Event Player) == False;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnAttack == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Event Player.ai_HeroInitialized == True;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 10;
+      Event Player.ai_RetCastDistance < 1.75;
+      Is Using Ultimate(Event Player) == False;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Secondary Fire);
-		Call Subroutine(aiSub_Abilities_Torbjorn);
-		Wait(0.800, Ignore Condition);
-		Loop If Condition Is True;
-		Stop Holding Button(Event Player, Button(Secondary Fire));
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Secondary Fire);
+      Call Subroutine(aiSub_Abilities_Torbjorn);
+      Wait(0.800, Ignore Condition);
+      Loop If Condition Is True;
+      Stop Holding Button(Event Player, Button(Secondary Fire));
+   }
 }
 
 rule("AI Torbjorn Deploy Turret")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Torbjörn;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Torbjörn;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Event Player.ai_HeroInitialized == True;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Is Using Ultimate(Event Player) == False;
-		Ability Cooldown(Event Player, Button(Ability 1)) == 0;
-		Is Using Ability 1(Event Player) == False;
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnUseAbilities == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Event Player.ai_HeroInitialized == True;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Is Using Ultimate(Event Player) == False;
+      Ability Cooldown(Event Player, Button(Ability 1)) == 0;
+      Is Using Ability 1(Event Player) == False;
 
-		// People REALLY hate Torb turret but I don't want to totally remove it
-		// He can only use it when the player has an Even score
-		Players In Slot(Slot Of(Event Player), Team 1).all_Kills % 2 == 0;
-	}
+      // People REALLY hate Torb turret but I don't want to totally remove it
+      // He can only use it when the player has an Even score
+      Players In Slot(Slot Of(Event Player), Team 1).all_Kills % 2 == 0;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 1);
-		Call Subroutine(aiSub_Abilities_Torbjorn);
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Ability 1);
+      Call Subroutine(aiSub_Abilities_Torbjorn);
+   }
 }
 
 rule("AI Torbjorn Overload")
 {
-	event
-	{
-		Player Took Damage;
-		Team 2;
-		Torbjörn;
-	}
+   event
+   {
+      Player Took Damage;
+      Team 2;
+      Torbjörn;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Event Player.ai_HeroInitialized == True;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Health(Event Player) <= 90;
-		Ability Cooldown(Event Player, Button(Ability 2)) == 0;
-		Is Using Ability 2(Event Player) == False;
-		Is Using Ultimate(Event Player) == False;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnUseAbilities == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Event Player.ai_HeroInitialized == True;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Health(Event Player) <= 90;
+      Ability Cooldown(Event Player, Button(Ability 2)) == 0;
+      Is Using Ability 2(Event Player) == False;
+      Is Using Ultimate(Event Player) == False;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ability 2);
-		Call Subroutine(aiSub_Abilities_Torbjorn);
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Ability 2);
+      Call Subroutine(aiSub_Abilities_Torbjorn);
+   }
 }
 
 rule("AI Torbjorn Molten Core")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 2;
-		Torbjörn;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 2;
+      Torbjörn;
+   }
 
-	conditions
-	{
-		Event Player.ai_AIEnabled == True;
-		Event Player.ai_CnUseAbilities == True;
-		Event Player.ai_IsInAbilitySub == False;
-		Event Player.ai_HeroInitialized == True;
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
-		Ultimate Charge Percent(Event Player) == 100;
-		Is Using Ultimate(Event Player) == False;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
-	}
+   conditions
+   {
+      Event Player.ai_AIEnabled == True;
+      Event Player.ai_CnUseAbilities == True;
+      Event Player.ai_IsInAbilitySub == False;
+      Event Player.ai_HeroInitialized == True;
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 1)) == True;
+      Ultimate Charge Percent(Event Player) == 100;
+      Is Using Ultimate(Event Player) == False;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
+   }
 
-	actions
-	{
-		Event Player.ai_AbilityButton = Button(Ultimate);
-		Call Subroutine(aiSub_Abilities_Torbjorn);
-	}
+   actions
+   {
+      Event Player.ai_AbilityButton = Button(Ultimate);
+      Call Subroutine(aiSub_Abilities_Torbjorn);
+   }
 }
 

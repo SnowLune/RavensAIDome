@@ -1,705 +1,705 @@
 rule("Global HUD")
 {
-	event
-	{
-		Ongoing - Global;
-	}
+   event
+   {
+      Ongoing - Global;
+   }
 
-	conditions
-	{
-		Is Game In Progress == True;
-	}
+   conditions
+   {
+      Is Game In Progress == True;
+   }
 
-	actions
-	{
-		// Padding
-		Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
-			White), Visible To, Default Visibility);
-		Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
-			White), Visible To, Default Visibility);
-		Create HUD Text(All Players(All Teams), Custom String("{0}", Global.c_WorkshopCode), Custom String("{0}+{1}, {2}", Global.c_Version,
-			Global.c_BuildDate, Global.c_DeveloperName), Custom String("Practice Field: Expanse"), Left, -3, Global.c_Color_LightPink,
-			Global.c_Color_LightGrey, Global.c_Color_LightTeal, Visible To, Default Visibility);
+   actions
+   {
+      // Padding
+      Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
+         White), Visible To, Default Visibility);
+      Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
+         White), Visible To, Default Visibility);
+      Create HUD Text(All Players(All Teams), Custom String("{0}", Global.c_WorkshopCode), Custom String("{0}+{1}, {2}", Global.c_Version,
+         Global.c_BuildDate, Global.c_DeveloperName), Custom String("Practice Field: Expanse"), Left, -3, Global.c_Color_LightPink,
+         Global.c_Color_LightGrey, Global.c_Color_LightTeal, Visible To, Default Visibility);
 
-		// Create Left Side HUD Text EN
-		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to show/hide info",
-			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White),
-			Color(White), Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and {1} to change heroes",
-			Input Binding String(Button(Crouch)), Input Binding String(Button(Reload))), Null, Left, -1.800, Color(White), Color(White),
-			Color(White), Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and press {1} or {2} to cycle enemy hero",
-			Input Binding String(Button(Interact)), Input Binding String(Button(Primary Fire)), Input Binding String(Button(
-			Secondary Fire))), Null, Left, -1.600, Color(White), Color(White), Color(Yellow), Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and {1} to select specific enemy hero",
-			Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String(
-			"Press {0} and {1} to open/close the menu", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left,
-			-1.500, Color(White), Color(White), Global.c_Color_DarkPink, Visible To and String, Default Visibility);
+      // Create Left Side HUD Text EN
+      Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to show/hide info",
+         Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White),
+         Color(White), Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and {1} to change heroes",
+         Input Binding String(Button(Crouch)), Input Binding String(Button(Reload))), Null, Left, -1.800, Color(White), Color(White),
+         Color(White), Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and press {1} or {2} to cycle enemy hero",
+         Input Binding String(Button(Interact)), Input Binding String(Button(Primary Fire)), Input Binding String(Button(
+         Secondary Fire))), Null, Left, -1.600, Color(White), Color(White), Color(Yellow), Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_MainVisibleToEN, Custom String(""), Custom String("Hold {0} and {1} to select specific enemy hero",
+         Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String(
+         "Press {0} and {1} to open/close the menu", Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left,
+         -1.500, Color(White), Color(White), Global.c_Color_DarkPink, Visible To and String, Default Visibility);
 
-		// Create Left Side HUD Text KR
-		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼을 [{0} 및 {1}] 눌러 힌트 창을 닫습니다", Input Binding String(
-			Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White), Color(White),
-			Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 영웅 선택", Input Binding String(
-			Button(Crouch)), Input Binding String(Button(Reload))), Null, Left, -1.800, Color(White), Color(White), Color(White),
-			Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 순환합니다.",
-			Input Binding String(Button(Interact)), Input Binding String(Button(Primary Fire)), Input Binding String(Button(
-			Secondary Fire))), Null, Left, -1.600, Color(White), Color(White), Color(Yellow), Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 선택합니다",
-			Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다",
-			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left, -1.500, Color(White), Color(White),
-			Global.c_Color_DarkPink, Visible To and String, Default Visibility);
+      // Create Left Side HUD Text KR
+      Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼을 [{0} 및 {1}] 눌러 힌트 창을 닫습니다", Input Binding String(
+         Button(Crouch)), Input Binding String(Button(Interact))), Null, Left, -1.890, Color(White), Color(White), Color(White),
+         Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 영웅 선택", Input Binding String(
+         Button(Crouch)), Input Binding String(Button(Reload))), Null, Left, -1.800, Color(White), Color(White), Color(White),
+         Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 순환합니다.",
+         Input Binding String(Button(Interact)), Input Binding String(Button(Primary Fire)), Input Binding String(Button(
+         Secondary Fire))), Null, Left, -1.600, Color(White), Color(White), Color(Yellow), Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_MainVisibleToKR, Custom String(""), Custom String("버튼 [{0} 및 {1}] 를 길게 눌러 AI 영웅을 선택합니다",
+         Input Binding String(Button(Interact)), Input Binding String(Button(Reload))), Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다",
+         Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Left, -1.500, Color(White), Color(White),
+         Global.c_Color_DarkPink, Visible To and String, Default Visibility);
 
-		// Create Info HUD EN
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Practice Field: Expanse!"), Global.c_TwitchURL, Custom String(
-			"Created by {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
-			Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
-			"This workshop mode allows you to thoroughly warm up/practice your movement and aim on and against ALL heroes."),
-			Custom String(
-			"You are placed in a bubble against one bot opponent. When you kill them enough times it progresses to the next hero in the list."),
-			Top, 5, Color(Yellow), Color(White), Global.c_Color_DarkPink, Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String(
-			"The AI modes contain AI for all heroes written from scratch by myself. The bots do not attack below the difficulty \"AI Bronze\"."),
-			Top, 5.100, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String(
-			"There are many difficulties and they correspond to many variables that affect the bots' movement, aim, and reaction time."),
-			Top, 5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String("Press {0} and {1} to toggle the menu!",
-			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White),
-			Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
-			"There are many settings so you can customize your warmup!"), Custom String("See the top left corner for controls."), Top,
-			5.300, Color(Yellow), Color(White), Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("{0}", Global.c_GithubURL),
-			Custom String("For the most recent version: Please import code: {0}", Global.c_WorkshopCode), Top, 7, Color(Yellow),
-			Global.c_Color_LightTeal, Global.c_Color_LightPink, Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to hide this text",
-			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
-			Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
+      // Create Info HUD EN
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Practice Field: Expanse!"), Global.c_TwitchURL, Custom String(
+         "Created by {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
+         Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
+         "This workshop mode allows you to thoroughly warm up/practice your movement and aim on and against ALL heroes."),
+         Custom String(
+         "You are placed in a bubble against one bot opponent. When you kill them enough times it progresses to the next hero in the list."),
+         Top, 5, Color(Yellow), Color(White), Global.c_Color_DarkPink, Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String(
+         "The AI modes contain AI for all heroes written from scratch by myself. The bots do not attack below the difficulty \"AI Bronze\"."),
+         Top, 5.100, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String(
+         "There are many difficulties and they correspond to many variables that affect the bots' movement, aim, and reaction time."),
+         Top, 5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Null, Custom String("Press {0} and {1} to toggle the menu!",
+         Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White),
+         Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
+         "There are many settings so you can customize your warmup!"), Custom String("See the top left corner for controls."), Top,
+         5.300, Color(Yellow), Color(White), Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("{0}", Global.c_GithubURL),
+         Custom String("For the most recent version: Please import code: {0}", Global.c_WorkshopCode), Top, 7, Color(Yellow),
+         Global.c_Color_LightTeal, Global.c_Color_LightPink, Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String("Press {0} and {1} to hide this text",
+         Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
+         Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
 
-		// Create Info HUD KR
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Practice Field: Expanse 어서 오십시오!"), Global.c_TwitchURL, Custom String(
-			"창조자: {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
-			Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 모드를 사용하면 워밍업하고 철저하게 연습 할 수 있습니다."), Custom String(
-			"적을 충분한 횟수로 처치하면 다음 영웅이 생성됩니다."), Top, 5, Color(Yellow), Color(White), Global.c_Color_DarkPink, Visible To and String,
-			Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String(
-			"나는 모든 영웅을 위해 인공 지능을 프로그래밍했습니다. 난이도가 \"인공지능 브론즈\" 미만이면 봇은 공격하지 않습니다."), Top, 5.100, Color(Yellow), Color(White), Color(White),
-			Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String("난이도은 인공 지능의 움직임, 겨냥, 반응 시간에 영향을 미칩니다."), Top,
-			5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다!",
-			Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White),
-			Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("당신이 당신의 연습 루틴을 사용자 정의 할 수 있도록 많은 설정이 있습니다!"),
-			Custom String("컨트롤은 왼쪽 상단을 참조하십시오."), Top, 5.300, Color(Yellow), Color(White), Global.c_Color_DarkTeal, Visible To and String,
-			Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String(
-			"{0}", Global.c_GithubURL), Custom String(
-			"최신 버전을 얻으려면 코드 {0}를 사용하십시오!", Global.c_WorkshopCode), Top, 7, Color(Yellow), Global.c_Color_LightTeal, Global.c_Color_LightPink,
-			Visible To and String, Default Visibility);
-		Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 정보를 숨기려면 {0} 및 {1} 버튼을 사용하십시오",
-			Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
-			Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
-			
-		// Global Debug HUD
-		If(Global.g_DebugHUD == True);
-			Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(Server Load / 2.550, Down), Server Load),
-				Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550, Down), Server Load Average), Custom String(
-				"Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down), Server Load Peak), Top, 100, Global.c_Color_LightPink,
-				Global.c_Color_LightTeal, Global.c_Color_DarkTeal, Visible To and String, Visible Always);
-		End;
-	}
+      // Create Info HUD KR
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Practice Field: Expanse 어서 오십시오!"), Global.c_TwitchURL, Custom String(
+         "창조자: {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
+         Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 모드를 사용하면 워밍업하고 철저하게 연습 할 수 있습니다."), Custom String(
+         "적을 충분한 횟수로 처치하면 다음 영웅이 생성됩니다."), Top, 5, Color(Yellow), Color(White), Global.c_Color_DarkPink, Visible To and String,
+         Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String(
+         "나는 모든 영웅을 위해 인공 지능을 프로그래밍했습니다. 난이도가 \"인공지능 브론즈\" 미만이면 봇은 공격하지 않습니다."), Top, 5.100, Color(Yellow), Color(White), Color(White),
+         Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String("난이도은 인공 지능의 움직임, 겨냥, 반응 시간에 영향을 미칩니다."), Top,
+         5.120, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Null, Custom String("[{0} 및 {1}] 버튼을 길게 눌러 메뉴를 전환합니다!",
+         Input Binding String(Button(Reload)), Input Binding String(Button(Melee))), Top, 5.200, Color(White), Color(White),
+         Global.c_Color_DarkTeal, Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("당신이 당신의 연습 루틴을 사용자 정의 할 수 있도록 많은 설정이 있습니다!"),
+         Custom String("컨트롤은 왼쪽 상단을 참조하십시오."), Top, 5.300, Color(Yellow), Color(White), Global.c_Color_DarkTeal, Visible To and String,
+         Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String(
+         "{0}", Global.c_GithubURL), Custom String(
+         "최신 버전을 얻으려면 코드 {0}를 사용하십시오!", Global.c_WorkshopCode), Top, 7, Color(Yellow), Global.c_Color_LightTeal, Global.c_Color_LightPink,
+         Visible To and String, Default Visibility);
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 정보를 숨기려면 {0} 및 {1} 버튼을 사용하십시오",
+         Input Binding String(Button(Crouch)), Input Binding String(Button(Interact))), Null, Top, 8, Color(Yellow),
+         Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
+         
+      // Global Debug HUD
+      If(Global.g_DebugHUD == True);
+         Create HUD Text(Null, Custom String("Server Load: {0}% ({1})", Round To Integer(Server Load / 2.550, Down), Server Load),
+            Custom String("Average: {0}% ({1})", Round To Integer(Server Load Average / 2.550, Down), Server Load Average), Custom String(
+            "Peak: {0}% ({1})", Round To Integer(Server Load Peak / 2.550, Down), Server Load Peak), Top, 100, Global.c_Color_LightPink,
+            Global.c_Color_LightTeal, Global.c_Color_DarkTeal, Visible To and String, Visible Always);
+      End;
+   }
 }
 
 rule("Player Sky Menu Toggle")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Button Held(Event Player, Button(Melee)) == True;
-		Is Button Held(Event Player, Button(Reload)) == True;
-		Event Player.p_PlayerInitialized == True;
-	}
+   conditions
+   {
+      Is Button Held(Event Player, Button(Melee)) == True;
+      Is Button Held(Event Player, Button(Reload)) == True;
+      Event Player.p_PlayerInitialized == True;
+   }
 
-	actions
-	{
-		Call Subroutine(allSub_WaitForFrame);
-		Call Subroutine(hudSub_SkyMenuToggle);
-	}
+   actions
+   {
+      Call Subroutine(allSub_WaitForFrame);
+      Call Subroutine(hudSub_SkyMenuToggle);
+   }
 }
 
 rule("Player Sky Menu Move Selection Up")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.hud_SkyMenuIsOpen == True;
-		Throttle Of(Event Player) == Forward;
-	}
+   conditions
+   {
+      Event Player.hud_SkyMenuIsOpen == True;
+      Throttle Of(Event Player) == Forward;
+   }
 
-	actions
-	{
-		Event Player.hud_SkyMenuSound = 3;
-		Call Subroutine(hudSub_SkyMenuPlaySound);
+   actions
+   {
+      Event Player.hud_SkyMenuSound = 3;
+      Call Subroutine(hudSub_SkyMenuPlaySound);
 
-		If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0]);
-			Event Player.hud_SkyMenuSelection = Last Of(Event Player.hud_SkyMenuVectors);
-		Else;
-			Event Player.hud_SkyMenuSelection = Event Player.hud_SkyMenuVectors[Index Of Array Value(Event Player.hud_SkyMenuVectors,
-				Event Player.hud_SkyMenuSelection) - 1];
-		End;
+      If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0]);
+         Event Player.hud_SkyMenuSelection = Last Of(Event Player.hud_SkyMenuVectors);
+      Else;
+         Event Player.hud_SkyMenuSelection = Event Player.hud_SkyMenuVectors[Index Of Array Value(Event Player.hud_SkyMenuVectors,
+            Event Player.hud_SkyMenuSelection) - 1];
+      End;
 
-		Call Subroutine(hudSub_SkyMenuArrowSet);
-	}
+      Call Subroutine(hudSub_SkyMenuArrowSet);
+   }
 }
 
 rule("Player Sky Menu Move Selection Down")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.hud_SkyMenuIsOpen == True;
-		Throttle Of(Event Player) == Backward;
-	}
+   conditions
+   {
+      Event Player.hud_SkyMenuIsOpen == True;
+      Throttle Of(Event Player) == Backward;
+   }
 
-	actions
-	{
-		Event Player.hud_SkyMenuSound = 3;
-		Call Subroutine(hudSub_SkyMenuPlaySound);
+   actions
+   {
+      Event Player.hud_SkyMenuSound = 3;
+      Call Subroutine(hudSub_SkyMenuPlaySound);
 
-		If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[Count Of(Event Player.hud_SkyMenuVectors) - 1]);
-			Event Player.hud_SkyMenuSelection = Event Player.hud_SkyMenuVectors[0];
-		Else;
-			Event Player.hud_SkyMenuSelection = Event Player.hud_SkyMenuVectors[Index Of Array Value(Event Player.hud_SkyMenuVectors,
-				Event Player.hud_SkyMenuSelection) + 1];
-		End;
-		
-		Call Subroutine(hudSub_SkyMenuArrowSet);
-	}
+      If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[Count Of(Event Player.hud_SkyMenuVectors) - 1]);
+         Event Player.hud_SkyMenuSelection = Event Player.hud_SkyMenuVectors[0];
+      Else;
+         Event Player.hud_SkyMenuSelection = Event Player.hud_SkyMenuVectors[Index Of Array Value(Event Player.hud_SkyMenuVectors,
+            Event Player.hud_SkyMenuSelection) + 1];
+      End;
+      
+      Call Subroutine(hudSub_SkyMenuArrowSet);
+   }
 }
 
 rule("Player Sky Menu Move Selection Decrease")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.hud_SkyMenuIsOpen == True;
-		Throttle Of(Event Player) == Left;
-	}
+   conditions
+   {
+      Event Player.hud_SkyMenuIsOpen == True;
+      Throttle Of(Event Player) == Left;
+   }
 
-	actions
-	{
-		// Difficulty
-		If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0] && Event Player.p_Difficulty > 0);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_Difficulty -= 1;
-			Call Subroutine(pSub_SetDifficulty);
+   actions
+   {
+      // Difficulty
+      If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0] && Event Player.p_Difficulty > 0);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_Difficulty -= 1;
+         Call Subroutine(pSub_SetDifficulty);
 
-		// Kill Goal
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[1] && Event Player.p_QuickModeEnabled == False);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_KillGoal <= 4);
-				Event Player.p_KillGoal = Global.c_PseudoInfinity;
-			Else If(Event Player.p_KillGoal == Global.c_PseudoInfinity);
-				Event Player.p_KillGoal = 64;
-			Else;
-				Event Player.p_KillGoal -= 4;
-			End;
-			If(Event Player.all_Kills >= Event Player.p_KillGoal);
-				Event Player.all_Kills = Event Player.p_KillGoal - 1;
-			End;
+      // Kill Goal
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[1] && Event Player.p_QuickModeEnabled == False);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_KillGoal <= 4);
+            Event Player.p_KillGoal = Global.c_PseudoInfinity;
+         Else If(Event Player.p_KillGoal == Global.c_PseudoInfinity);
+            Event Player.p_KillGoal = 64;
+         Else;
+            Event Player.p_KillGoal -= 4;
+         End;
+         If(Event Player.all_Kills >= Event Player.p_KillGoal);
+            Event Player.all_Kills = Event Player.p_KillGoal - 1;
+         End;
 
-		// Preset
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_Preset == 0);
-				Event Player.p_Preset = Count Of(Global.c_PresetNames) - 1;
-			Else;
-				Event Player.p_Preset -= 1;
-			End;
-		
-		// Bot Hero Class
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_BotHeroRole > 0);
-				Event Player.p_BotHeroRole -= 1;
-			Else;
-				Event Player.p_BotHeroRole = 3;
-			End;
+      // Preset
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_Preset == 0);
+            Event Player.p_Preset = Count Of(Global.c_PresetNames) - 1;
+         Else;
+            Event Player.p_Preset -= 1;
+         End;
+      
+      // Bot Hero Class
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_BotHeroRole > 0);
+            Event Player.p_BotHeroRole -= 1;
+         Else;
+            Event Player.p_BotHeroRole = 3;
+         End;
 
-		// Quick Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4] && Event Player.p_QuickModeEnabled == True);
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Call Subroutine(pSub_QuickMode);
+      // Quick Mode
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4] && Event Player.p_QuickModeEnabled == True);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Call Subroutine(pSub_QuickMode);
 
-		// Mirror Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5] && Event Player.p_MirrorModeEnabled == True);
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_MirrorModeEnabled = False;
+      // Mirror Mode
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5] && Event Player.p_MirrorModeEnabled == True);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_MirrorModeEnabled = False;
 
-		// One Second Cooldown Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_OneSecCooldown == 0);
-				Event Player.p_OneSecCooldown = 3;
-			Else;
-				Event Player.p_OneSecCooldown -= 1;
-			End;
+      // One Second Cooldown Mode
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_OneSecCooldown == 0);
+            Event Player.p_OneSecCooldown = 3;
+         Else;
+            Event Player.p_OneSecCooldown -= 1;
+         End;
 
-		// Points Lost On Death
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_KillsLostOnDeath == 0);
-				Event Player.p_KillsLostOnDeath = Global.c_PseudoInfinity;
-			Else If(Event Player.p_KillsLostOnDeath == Global.c_PseudoInfinity);
-				Event Player.p_KillsLostOnDeath = 10;
-			Else;
-				Event Player.p_KillsLostOnDeath -= 1;
-			End;
+      // Points Lost On Death
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_KillsLostOnDeath == 0);
+            Event Player.p_KillsLostOnDeath = Global.c_PseudoInfinity;
+         Else If(Event Player.p_KillsLostOnDeath == Global.c_PseudoInfinity);
+            Event Player.p_KillsLostOnDeath = 10;
+         Else;
+            Event Player.p_KillsLostOnDeath -= 1;
+         End;
 
-		// Player Healing
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_HealingEnabled == True);
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_HealingEnabled = False;
+      // Player Healing
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_HealingEnabled == True);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_HealingEnabled = False;
 
-		// Bot Healing
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9] && Event Player.p_BotHealingEnabled == True);
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_BotHealingEnabled = False;
-		
-		// Player Invulnerable
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
+      // Bot Healing
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9] && Event Player.p_BotHealingEnabled == True);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_BotHealingEnabled = False;
+      
+      // Player Invulnerable
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
 
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
 
-			If(Event Player.p_Invulnerable > 0);
-				Event Player.p_Invulnerable -= 1;
-			Else;
-				Event Player.p_Invulnerable = 3;
-			End;
+         If(Event Player.p_Invulnerable > 0);
+            Event Player.p_Invulnerable -= 1;
+         Else;
+            Event Player.p_Invulnerable = 3;
+         End;
 
-			Call Subroutine(pSub_SetInvulnerable);
+         Call Subroutine(pSub_SetInvulnerable);
 
-		// Disable Bot Ultimate
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]
-			&& Event Player.p_BotUltimateDisabled == True);
+      // Disable Bot Ultimate
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]
+         && Event Player.p_BotUltimateDisabled == True);
 
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
 
-			Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), True);
-			Event Player.p_BotUltimateDisabled = False;
+         Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), True);
+         Event Player.p_BotUltimateDisabled = False;
 
-		// Bot Flicker
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]
-			&& Event Player.p_BotFlickerEnabled == True);
+      // Bot Flicker
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]
+         && Event Player.p_BotFlickerEnabled == True);
 
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
 
-			Event Player.p_BotFlickerEnabled = False;
+         Event Player.p_BotFlickerEnabled = False;
 
-		// Elevator
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]
-			&& Event Player.p_ElevatorEnabled == True);
-			Event Player.hud_SkyMenuSound = 1;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_ElevatorEnabled = False;
-			Stop Chasing Player Variable(Event Player, p_ElevatorHeight);
-			Event Player.p_ElevatorHeight = 0;
-			Stop Accelerating(Event Player);
-			Set Jump Enabled(Event Player, True);
-			Set Crouch Enabled(Event Player, True);
-			Set Gravity(Event Player, 100);
+      // Elevator
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]
+         && Event Player.p_ElevatorEnabled == True);
+         Event Player.hud_SkyMenuSound = 1;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_ElevatorEnabled = False;
+         Stop Chasing Player Variable(Event Player, p_ElevatorHeight);
+         Event Player.p_ElevatorHeight = 0;
+         Stop Accelerating(Event Player);
+         Set Jump Enabled(Event Player, True);
+         Set Crouch Enabled(Event Player, True);
+         Set Gravity(Event Player, 100);
 
-		// Effects Color
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[0]);
-				Event Player.p_EffectsColor = Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1];
-			Else;
-				Event Player.p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
-					Event Player.p_EffectsColor) - 1];
-			End;
+      // Effects Color
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[0]);
+            Event Player.p_EffectsColor = Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1];
+         Else;
+            Event Player.p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
+               Event Player.p_EffectsColor) - 1];
+         End;
 
-		// Language
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[15] && Event Player.p_Language == 1);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
+      // Language
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[15] && Event Player.p_Language == 1);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
 
-			Event Player.p_Language = 0;
-			Call Subroutine(pSub_SetLanguage);
-			Call Subroutine(pSub_SetNames);
-		End;
-		Call Subroutine(hudSub_SkyMenuArrowSet);
-	}
+         Event Player.p_Language = 0;
+         Call Subroutine(pSub_SetLanguage);
+         Call Subroutine(pSub_SetNames);
+      End;
+      Call Subroutine(hudSub_SkyMenuArrowSet);
+   }
 }
 
 rule("Player Sky Menu Move Selection Increase")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.hud_SkyMenuIsOpen == True;
-		Throttle Of(Event Player) == Right;
-	}
+   conditions
+   {
+      Event Player.hud_SkyMenuIsOpen == True;
+      Throttle Of(Event Player) == Right;
+   }
 
-	actions
-	{
-		// Difficulty
-		If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0] && Event Player.p_Difficulty < 10);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_Difficulty += 1;
-			Call Subroutine(pSub_SetDifficulty);
+   actions
+   {
+      // Difficulty
+      If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0] && Event Player.p_Difficulty < 10);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_Difficulty += 1;
+         Call Subroutine(pSub_SetDifficulty);
 
-		// Kill Goal
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[1] && Event Player.p_QuickModeEnabled == False);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_KillGoal == 64);
-				Event Player.p_KillGoal = Global.c_PseudoInfinity;
-			Else If(Event Player.p_KillGoal == Global.c_PseudoInfinity);
-				Event Player.p_KillGoal = 4;
-			Else;
-				Event Player.p_KillGoal += 4;
-			End;
-			If(Event Player.all_Kills >= Event Player.p_KillGoal);
-				Event Player.all_Kills = Event Player.p_KillGoal - 1;
-			End;
+      // Kill Goal
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[1] && Event Player.p_QuickModeEnabled == False);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_KillGoal == 64);
+            Event Player.p_KillGoal = Global.c_PseudoInfinity;
+         Else If(Event Player.p_KillGoal == Global.c_PseudoInfinity);
+            Event Player.p_KillGoal = 4;
+         Else;
+            Event Player.p_KillGoal += 4;
+         End;
+         If(Event Player.all_Kills >= Event Player.p_KillGoal);
+            Event Player.all_Kills = Event Player.p_KillGoal - 1;
+         End;
 
-		// Preset
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
+      // Preset
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
 
-			If(Event Player.p_Preset == Count Of(Global.c_PresetNames) - 1);
-				Event Player.p_Preset = 0;
-			Else;
-				Event Player.p_Preset += 1;
-			End;
+         If(Event Player.p_Preset == Count Of(Global.c_PresetNames) - 1);
+            Event Player.p_Preset = 0;
+         Else;
+            Event Player.p_Preset += 1;
+         End;
 
-		// Bot Hero Class
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_BotHeroRole < 3);
-				Event Player.p_BotHeroRole += 1;
-			Else;
-				Event Player.p_BotHeroRole = 0;
-			End;
+      // Bot Hero Class
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_BotHeroRole < 3);
+            Event Player.p_BotHeroRole += 1;
+         Else;
+            Event Player.p_BotHeroRole = 0;
+         End;
 
-		// Quick Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4] && Event Player.p_QuickModeEnabled == False);
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Call Subroutine(pSub_QuickMode);
+      // Quick Mode
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4] && Event Player.p_QuickModeEnabled == False);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Call Subroutine(pSub_QuickMode);
 
-		// Mirror Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5] && Event Player.p_MirrorModeEnabled == False);
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_MirrorModeEnabled = True;
-			Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Event Player);
+      // Mirror Mode
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5] && Event Player.p_MirrorModeEnabled == False);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_MirrorModeEnabled = True;
+         Start Forcing Dummy Bot Name(Players In Slot(Slot Of(Event Player), Team 2), Event Player);
 
-		// One Second Cooldown Mode
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_OneSecCooldown == 3);
-				Event Player.p_OneSecCooldown = 0;
-			Else;
-				Event Player.p_OneSecCooldown += 1;
-			End;
+      // One Second Cooldown Mode
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_OneSecCooldown == 3);
+            Event Player.p_OneSecCooldown = 0;
+         Else;
+            Event Player.p_OneSecCooldown += 1;
+         End;
 
-		// Points Lost On Death
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_KillsLostOnDeath == Global.c_PseudoInfinity);
-				Event Player.p_KillsLostOnDeath = 0;
-			Else If(Event Player.p_KillsLostOnDeath == 10);
-				Event Player.p_KillsLostOnDeath = Global.c_PseudoInfinity;
-			Else;
-				Event Player.p_KillsLostOnDeath += 1;
-			End;
+      // Points Lost On Death
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_KillsLostOnDeath == Global.c_PseudoInfinity);
+            Event Player.p_KillsLostOnDeath = 0;
+         Else If(Event Player.p_KillsLostOnDeath == 10);
+            Event Player.p_KillsLostOnDeath = Global.c_PseudoInfinity;
+         Else;
+            Event Player.p_KillsLostOnDeath += 1;
+         End;
 
-		// Player Healing
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_HealingEnabled == False);
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_HealingEnabled = True;
+      // Player Healing
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8] && Event Player.p_HealingEnabled == False);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_HealingEnabled = True;
 
-		// Bot Healing
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9] && Event Player.p_BotHealingEnabled == False);
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_BotHealingEnabled = True;
+      // Bot Healing
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9] && Event Player.p_BotHealingEnabled == False);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_BotHealingEnabled = True;
 
-		// Player Invulnerable
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
+      // Player Invulnerable
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
 
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
 
-			If(Event Player.p_Invulnerable < 3);
-				Event Player.p_Invulnerable += 1;
-			Else;
-				Event Player.p_Invulnerable = 0;
-			End;
+         If(Event Player.p_Invulnerable < 3);
+            Event Player.p_Invulnerable += 1;
+         Else;
+            Event Player.p_Invulnerable = 0;
+         End;
 
-			Call Subroutine(pSub_SetInvulnerable);
+         Call Subroutine(pSub_SetInvulnerable);
 
-		// Disable Bot Ultimate
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Event Player
-				.p_BotUltimateDisabled == False);
+      // Disable Bot Ultimate
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11] && Event Player
+            .p_BotUltimateDisabled == False);
 
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
 
-			Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
-			Event Player.p_BotUltimateDisabled = True;
+         Set Ultimate Ability Enabled(Players In Slot(Slot Of(Event Player), Team 2), False);
+         Event Player.p_BotUltimateDisabled = True;
 
-		// Bot Flicker
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Event Player
-				.p_BotFlickerEnabled == False);
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_BotFlickerEnabled = True;
-		
-		// Elevator
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13] && Event Player
-				.p_ElevatorEnabled == False);
-			Event Player.hud_SkyMenuSound = 0;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_ElevatorEnabled = True;
-			Set Jump Enabled(Event Player, False);
-			Set Crouch Enabled(Event Player, False);
-			Set Gravity(Event Player, 0);
-			Small Message(Event Player, Event Player.p_Language == 1 ? Custom String("{0} = 올리다 / {1} = 낮추다",
-				Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))) : Custom String("{0} to go Up / {1} to go Down",
-				Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))));
+      // Bot Flicker
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12] && Event Player
+            .p_BotFlickerEnabled == False);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_BotFlickerEnabled = True;
+      
+      // Elevator
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13] && Event Player
+            .p_ElevatorEnabled == False);
+         Event Player.hud_SkyMenuSound = 0;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_ElevatorEnabled = True;
+         Set Jump Enabled(Event Player, False);
+         Set Crouch Enabled(Event Player, False);
+         Set Gravity(Event Player, 0);
+         Small Message(Event Player, Event Player.p_Language == 1 ? Custom String("{0} = 올리다 / {1} = 낮추다",
+            Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))) : Custom String("{0} to go Up / {1} to go Down",
+            Input Binding String(Button(Jump)), Input Binding String(Button(Crouch))));
 
-		// Effects Color
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1]);
-				Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
-			Else;
-				Event Player.p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
-					Event Player.p_EffectsColor) + 1];
-			End;
+      // Effects Color
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         If(Event Player.p_EffectsColor == Global.c_Color_EffectColors[Count Of(Global.c_Color_EffectColors) - 1]);
+            Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
+         Else;
+            Event Player.p_EffectsColor = Global.c_Color_EffectColors[Index Of Array Value(Global.c_Color_EffectColors,
+               Event Player.p_EffectsColor) + 1];
+         End;
 
-		// Language
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[15] && Event Player.p_Language == 0);
-			Event Player.hud_SkyMenuSound = 2;
-			Call Subroutine(hudSub_SkyMenuPlaySound);
-			Event Player.p_Language = 1;
-			Call Subroutine(pSub_SetLanguage);
-			Call Subroutine(pSub_SetNames);
-		End;
-		Call Subroutine(hudSub_SkyMenuArrowSet);
-	}
+      // Language
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[15] && Event Player.p_Language == 0);
+         Event Player.hud_SkyMenuSound = 2;
+         Call Subroutine(hudSub_SkyMenuPlaySound);
+         Event Player.p_Language = 1;
+         Call Subroutine(pSub_SetLanguage);
+         Call Subroutine(pSub_SetNames);
+      End;
+      Call Subroutine(hudSub_SkyMenuArrowSet);
+   }
 }
 
 rule("Player Sky Menu Arrow Visibility")
 {
-	event
-	{
-		Subroutine;
-		hudSub_SkyMenuArrowSet;
-	}
+   event
+   {
+      Subroutine;
+      hudSub_SkyMenuArrowSet;
+   }
 
-	actions
-	{
-		If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0]);
-			If(Event Player.p_Difficulty == 0);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Event Player.p_Difficulty == 10);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-			Else;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[1]);
-			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
-			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
-			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4]);
-			If(Event Player.p_QuickModeEnabled == False);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Event Player.p_QuickModeEnabled == True);
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5]);
-			If(Event Player.p_MirrorModeEnabled == False);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Event Player.p_MirrorModeEnabled == True);
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
-			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
-			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8]);
-			If(Event Player.p_HealingEnabled == False);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Event Player.p_HealingEnabled == True);
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
-			If(Event Player.p_BotHealingEnabled == False);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Event Player.p_BotHealingEnabled == True);
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
-			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]);
-			If(Event Player.p_BotUltimateDisabled == False);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Event Player.p_BotUltimateDisabled == True);
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]);
-			If(Event Player.p_BotFlickerEnabled == False);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Event Player.p_BotFlickerEnabled == True);
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]);
-			If(Event Player.p_ElevatorEnabled == False);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else If(Event Player.p_ElevatorEnabled == True);
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			End;
-		Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
-			If(Event Player.p_Language == 0);
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-			Else;
-				Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
-				Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			End;
-		Else;
-			Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
-			Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
-		End;
-	}
+   actions
+   {
+      If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[0]);
+         If(Event Player.p_Difficulty == 0);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else If(Event Player.p_Difficulty == 10);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+         Else;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         End;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[1]);
+         Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[2]);
+         Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[3]);
+         Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[4]);
+         If(Event Player.p_QuickModeEnabled == False);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else If(Event Player.p_QuickModeEnabled == True);
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         End;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[5]);
+         If(Event Player.p_MirrorModeEnabled == False);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else If(Event Player.p_MirrorModeEnabled == True);
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         End;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[6]);
+         Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[7]);
+         Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[8]);
+         If(Event Player.p_HealingEnabled == False);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else If(Event Player.p_HealingEnabled == True);
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         End;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[9]);
+         If(Event Player.p_BotHealingEnabled == False);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else If(Event Player.p_BotHealingEnabled == True);
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         End;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[10]);
+         Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[11]);
+         If(Event Player.p_BotUltimateDisabled == False);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else If(Event Player.p_BotUltimateDisabled == True);
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         End;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[12]);
+         If(Event Player.p_BotFlickerEnabled == False);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else If(Event Player.p_BotFlickerEnabled == True);
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         End;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[13]);
+         If(Event Player.p_ElevatorEnabled == False);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else If(Event Player.p_ElevatorEnabled == True);
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         End;
+      Else If(Event Player.hud_SkyMenuSelection == Event Player.hud_SkyMenuVectors[14]);
+         If(Event Player.p_Language == 0);
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+         Else;
+            Event Player.hud_SkyMenuArrowsVisibleTo[1] = Null;
+            Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         End;
+      Else;
+         Event Player.hud_SkyMenuArrowsVisibleTo[0] = Event Player;
+         Event Player.hud_SkyMenuArrowsVisibleTo[1] = Event Player;
+      End;
+   }
 }
 
 rule("Debug Toggle")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Button Held(Event Player, Button(Ability 2)) == True;
-		Is Button Held(Event Player, Button(Reload)) == True;
-		Is Button Held(Event Player, Button(Jump)) == True;
-	}
+   conditions
+   {
+      Is Button Held(Event Player, Button(Ability 2)) == True;
+      Is Button Held(Event Player, Button(Reload)) == True;
+      Is Button Held(Event Player, Button(Jump)) == True;
+   }
 
-	actions
-	{
-		Wait(0.500, Abort When False);
-		Call Subroutine(hudSub_DebugToggle);
-	}
+   actions
+   {
+      Wait(0.500, Abort When False);
+      Call Subroutine(hudSub_DebugToggle);
+   }
 }
 
 rule("Info Toggle")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Button Held(Event Player, Button(Interact)) == True;
-		Is Button Held(Event Player, Button(Crouch)) == True;
-	}
+   conditions
+   {
+      Is Button Held(Event Player, Button(Interact)) == True;
+      Is Button Held(Event Player, Button(Crouch)) == True;
+   }
 
-	actions
-	{
-		Start Rule(hudSub_InfoToggle, Restart Rule);
-	}
+   actions
+   {
+      Start Rule(hudSub_InfoToggle, Restart Rule);
+   }
 }
 

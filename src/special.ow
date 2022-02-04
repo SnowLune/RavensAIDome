@@ -1,208 +1,208 @@
 rule("Special Rule: Doomfist Rocket Punch Start")
 {
-	event
-	{
-		Ongoing - Each Player;
-		All;
-		Doomfist;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      All;
+      Doomfist;
+   }
 
-	conditions
-	{
-		Is Firing Secondary(Event Player) == True;
-		Is Alive(Event Player) == True;
-	}
+   conditions
+   {
+      Is Firing Secondary(Event Player) == True;
+      Is Alive(Event Player) == True;
+   }
 
-	actions
-	{
-		Event Player.ai_DoomfistPunchTime = Total Time Elapsed;
-		Event Player.ai_DoomfistPunchDamage = 0;
-	}
+   actions
+   {
+      Event Player.ai_DoomfistPunchTime = Total Time Elapsed;
+      Event Player.ai_DoomfistPunchDamage = 0;
+   }
 }
 
 rule("Special Rule: Doomfist Rocket Punch")
 {
-	event
-	{
-		Ongoing - Each Player;
-		All;
-		Doomfist;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      All;
+      Doomfist;
+   }
 
-	conditions
-	{
-		Is Firing Secondary(Event Player) == False;
-		Is Alive(Event Player) == True;
-		Event Player.ai_DoomfistPunchTime != 0;
-	}
+   conditions
+   {
+      Is Firing Secondary(Event Player) == False;
+      Is Alive(Event Player) == True;
+      Event Player.ai_DoomfistPunchTime != 0;
+   }
 
-	actions
-	{
-		Event Player.ai_DoomfistPunchDamage = (Total Time Elapsed - Event Player.ai_DoomfistPunchTime) / 1.400 * 100.750 + 49.250;
-		If(Event Player.ai_DoomfistPunchDamage > 150);
-			Event Player.ai_DoomfistPunchDamage = 150;
-		End;
-	}
+   actions
+   {
+      Event Player.ai_DoomfistPunchDamage = (Total Time Elapsed - Event Player.ai_DoomfistPunchTime) / 1.400 * 100.750 + 49.250;
+      If(Event Player.ai_DoomfistPunchDamage > 150);
+         Event Player.ai_DoomfistPunchDamage = 150;
+      End;
+   }
 }
 
 rule("Special Rule: Doomfist Rocket Punch Damage")
 {
-	event
-	{
-		Ongoing - Each Player;
-		All;
-		Doomfist;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      All;
+      Doomfist;
+   }
 
-	conditions
-	{
-		Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) == True;
-		Distance Between(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Players In Slot(Slot Of(
-			Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
-	}
+   conditions
+   {
+      Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) == True;
+      Distance Between(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Players In Slot(Slot Of(
+         Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
+   }
 
-	actions
-	{
-		Apply Impulse(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Direction Towards(Players In Slot(
-			Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player), 1, To World, Cancel Contrary Motion);
-		Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player,
-			Event Player.ai_DoomfistPunchDamage);
-		Event Player.ai_DoomfistPunchTime = 0;
-		Event Player.ai_DoomfistPunchDamage = 0;
-	}
+   actions
+   {
+      Apply Impulse(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Direction Towards(Players In Slot(
+         Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player), 1, To World, Cancel Contrary Motion);
+      Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player,
+         Event Player.ai_DoomfistPunchDamage);
+      Event Player.ai_DoomfistPunchTime = 0;
+      Event Player.ai_DoomfistPunchDamage = 0;
+   }
 }
 
 rule("Special Rule: Reinhardt Charge")
 {
-	event
-	{
-		Ongoing - Each Player;
-		All;
-		Reinhardt;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      All;
+      Reinhardt;
+   }
 
-	conditions
-	{
-		Is Alive(Event Player) == True;
-		Is Using Ability 1(Event Player) == True;
-		Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) 
-			>= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
-		Distance Between(
-			Position Of(Event Player) + World Vector Of(Vector(0, 0, -5), Event Player, Rotation),
-			Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
-		) 
-			<= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
-	}
+   conditions
+   {
+      Is Alive(Event Player) == True;
+      Is Using Ability 1(Event Player) == True;
+      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) 
+         >= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
+      Distance Between(
+         Position Of(Event Player) + World Vector Of(Vector(0, 0, -5), Event Player, Rotation),
+         Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+      ) 
+         <= Players In Slot(Slot Of(Event Player), Team 1).p_ZoneRadius - 2.500;
+   }
 
-	actions
-	{
-		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
-			Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
-		End;
+   actions
+   {
+      If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
+         Stop Facing(Players In Slot(Slot Of(Event Player), Team 2));
+      End;
 
-		Set Status(Event Player, Null, Stunned, 0.650);
-		Start Forcing Player Position(Event Player, Position Of(Event Player), False);
+      Set Status(Event Player, Null, Stunned, 0.650);
+      Start Forcing Player Position(Event Player, Position Of(Event Player), False);
 
-		If(Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) && Distance Between(
-			Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) < 2);
-			Start Forcing Player Position(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Position Of(
-				Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))), False);
-			Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player, 300);
-		End;
+      If(Has Status(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Stunned) && Distance Between(
+         Event Player, Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))) < 2);
+         Start Forcing Player Position(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Position Of(
+            Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player)))), False);
+         Damage(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))), Event Player, 300);
+      End;
 
-		Wait(0.650, Ignore Condition);
-		Stop Forcing Player Position(Event Player);
-		Stop Forcing Player Position(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))));
+      Wait(0.650, Ignore Condition);
+      Stop Forcing Player Position(Event Player);
+      Stop Forcing Player Position(Players In Slot(Slot Of(Event Player), Opposite Team Of(Team Of(Event Player))));
 
-		If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
-			Call Subroutine(aiSub_FacingReset);
-		End;
-		
-		If(Event Player == Players In Slot(Slot Of(Event Player), Team 2));
-			Event Player.bot_MoveJumpEnabled = True;
-		End;
-	}
+      If(Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3);
+         Call Subroutine(aiSub_FacingReset);
+      End;
+      
+      If(Event Player == Players In Slot(Slot Of(Event Player), Team 2));
+         Event Player.bot_MoveJumpEnabled = True;
+      End;
+   }
 }
 
 rule("Special Rule: Player Ana Self Nano Boost")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		Ana;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      Ana;
+   }
 
-	conditions
-	{
-		Is Alive(Event Player) == True;
-		Ultimate Charge Percent(Event Player) == 100;
-		Is Button Held(Event Player, Button(Ultimate)) == True;
-	}
+   conditions
+   {
+      Is Alive(Event Player) == True;
+      Ultimate Charge Percent(Event Player) == 100;
+      Is Button Held(Event Player, Button(Ultimate)) == True;
+   }
 
-	actions
-	{
-		Set Ultimate Charge(Event Player, 0);
-		Wait(0.150, Abort When False);
-		Set Ultimate Ability Enabled(Event Player, False);
-		Disallow Button(Event Player, Button(Ultimate));
-		Big Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("{0} 활성화!",
-			Ability Icon String(Hero(Ana), Button(Ultimate))) : Custom String("{0} ACTIVATED!", Ability Icon String(Hero(Ana), Button(
-			Ultimate))));
-		Play Effect(All Players(All Teams), Good Pickup Effect, Color(Blue), Event Player, 2);
-		Play Effect(All Players(All Teams), Explosion Sound, Color(White), Event Player, 60);
-		Heal(Event Player, Event Player, 250);
-		Start Damage Modification(Players In Slot(Slot Of(Event Player), Team 2), Event Player, 150,
-			Receivers Damagers and Damage Percent);
-		Call Subroutine(allSub_WaitForFrame);
-		Event Player.p_DamageModDealtID = Last Damage Modification ID;
-		Start Damage Modification(Event Player, Players In Slot(Slot Of(Event Player), Team 2), 50, Receivers Damagers and Damage Percent);
-		Call Subroutine(allSub_WaitForFrame);
-		Event Player.p_DamageModReceivedID = Last Damage Modification ID;
-		Wait Until(Is Dead(Event Player), 8);
-		Set Ultimate Ability Enabled(Event Player, True);
-		Allow Button(Event Player, Button(Ultimate));
-		Stop Damage Modification(Event Player.p_DamageModDealtID);
-		Stop Damage Modification(Event Player.p_DamageModReceivedID);
-	}
+   actions
+   {
+      Set Ultimate Charge(Event Player, 0);
+      Wait(0.150, Abort When False);
+      Set Ultimate Ability Enabled(Event Player, False);
+      Disallow Button(Event Player, Button(Ultimate));
+      Big Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("{0} 활성화!",
+         Ability Icon String(Hero(Ana), Button(Ultimate))) : Custom String("{0} ACTIVATED!", Ability Icon String(Hero(Ana), Button(
+         Ultimate))));
+      Play Effect(All Players(All Teams), Good Pickup Effect, Color(Blue), Event Player, 2);
+      Play Effect(All Players(All Teams), Explosion Sound, Color(White), Event Player, 60);
+      Heal(Event Player, Event Player, 250);
+      Start Damage Modification(Players In Slot(Slot Of(Event Player), Team 2), Event Player, 150,
+         Receivers Damagers and Damage Percent);
+      Call Subroutine(allSub_WaitForFrame);
+      Event Player.p_DamageModDealtID = Last Damage Modification ID;
+      Start Damage Modification(Event Player, Players In Slot(Slot Of(Event Player), Team 2), 50, Receivers Damagers and Damage Percent);
+      Call Subroutine(allSub_WaitForFrame);
+      Event Player.p_DamageModReceivedID = Last Damage Modification ID;
+      Wait Until(Is Dead(Event Player), 8);
+      Set Ultimate Ability Enabled(Event Player, True);
+      Allow Button(Event Player, Button(Ultimate));
+      Stop Damage Modification(Event Player.p_DamageModDealtID);
+      Stop Damage Modification(Event Player.p_DamageModReceivedID);
+   }
 }
 
 rule("Special Rule: Player Sombra Disable Enemy Attack")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		Sombra;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      Sombra;
+   }
 
-	conditions
-	{
-		Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
-		Is Using Ability 1(Event Player) == True;
-	}
+   conditions
+   {
+      Players In Slot(Slot Of(Event Player), Team 2).ai_AIEnabled == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+      Is Using Ability 1(Event Player) == True;
+   }
 
-	actions
-	{
-		Wait(Random Real(0.250, 0.500), Ignore Condition);
-		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = False;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_CnAttack = False;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_CnUseAbilities = False;
-		While(Is Using Ability 1(Event Player) == True && Hero Of(Event Player) == Hero(Sombra));
-			Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector = Vector(Random Real(-5, 5), Random Real(1, 2), Random Real(-5, 5))
-				+ Position Of(Players In Slot(Slot Of(Event Player), Team 2));
-			Call Subroutine(aiSub_FacingLookAt);
-			Wait(Random Real(0.250, 1.250), Ignore Condition);
-			Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim = True;
-			If(Random Real(0, 1) < 0.050);
-				Communicate(Players In Slot(Slot Of(Event Player), Team 2), Hello);
-			End;
-		End;
-		Wait(Random Real(0.250, 0.500), Ignore Condition);
-		Players In Slot(Slot Of(Event Player), Team 2).ai_CnAttack = True;
-		Players In Slot(Slot Of(Event Player), Team 2).ai_CnUseAbilities = True;
-		Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = True;
-	}
+   actions
+   {
+      Wait(Random Real(0.250, 0.500), Ignore Condition);
+      Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = False;
+      Players In Slot(Slot Of(Event Player), Team 2).ai_CnAttack = False;
+      Players In Slot(Slot Of(Event Player), Team 2).ai_CnUseAbilities = False;
+      While(Is Using Ability 1(Event Player) == True && Hero Of(Event Player) == Hero(Sombra));
+         Players In Slot(Slot Of(Event Player), Team 2).ai_LookAtVector = Vector(Random Real(-5, 5), Random Real(1, 2), Random Real(-5, 5))
+            + Position Of(Players In Slot(Slot Of(Event Player), Team 2));
+         Call Subroutine(aiSub_FacingLookAt);
+         Wait(Random Real(0.250, 1.250), Ignore Condition);
+         Players In Slot(Slot Of(Event Player), Team 2).ai_CnAim = True;
+         If(Random Real(0, 1) < 0.050);
+            Communicate(Players In Slot(Slot Of(Event Player), Team 2), Hello);
+         End;
+      End;
+      Wait(Random Real(0.250, 0.500), Ignore Condition);
+      Players In Slot(Slot Of(Event Player), Team 2).ai_CnAttack = True;
+      Players In Slot(Slot Of(Event Player), Team 2).ai_CnUseAbilities = True;
+      Players In Slot(Slot Of(Event Player), Team 2).bot_MoveCrouchEnabled = True;
+   }
 }
 

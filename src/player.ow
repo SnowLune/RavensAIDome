@@ -1,786 +1,786 @@
 rule("Player Init")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Global.g_Initialized == True;
-		Event Player.p_PlayerInitialized == False;
-		Has Spawned(Event Player) == True;
-	}
+   conditions
+   {
+      Global.g_Initialized == True;
+      Event Player.p_PlayerInitialized == False;
+      Has Spawned(Event Player) == True;
+   }
 
-	actions
-	{
-		// Disable Buttons
-		Call Subroutine(allSub_ButtonsDisallow);
-		
-		// Force facing and prevent movement
-		Start Facing(Event Player, Vector(0, 0, 0), 1000, To World, None);
-		Start Forcing Throttle(Event Player, 0, 0, 0, 0, 0, 0);
+   actions
+   {
+      // Disable Buttons
+      Call Subroutine(allSub_ButtonsDisallow);
+      
+      // Force facing and prevent movement
+      Start Facing(Event Player, Vector(0, 0, 0), 1000, To World, None);
+      Start Forcing Throttle(Event Player, 0, 0, 0, 0, 0, 0);
 
-		// Set Language
-		Event Player.p_Language = Global.g_Language;
-		Call Subroutine(pSub_SetLanguage);
+      // Set Language
+      Event Player.p_Language = Global.g_Language;
+      Call Subroutine(pSub_SetLanguage);
 
-		// Show info
-		Start Rule(hudSub_InfoToggle, Restart Rule);
+      // Show info
+      Start Rule(hudSub_InfoToggle, Restart Rule);
 
-		// Disable HUDs
-		Disable Game Mode HUD(Event Player);
-		Disable Hero HUD(Event Player);
+      // Disable HUDs
+      Disable Game Mode HUD(Event Player);
+      Disable Hero HUD(Event Player);
 
-		// Start Camera
-		Event Player.p_CameraEyePos = Vector(0, Global.c_BubbleRadius * 2, 0);
-		Event Player.p_CameraLookAtPos = Vector(0, 200, 0);
-		Start Camera(Event Player, Event Player.p_CameraEyePos, Event Player.p_CameraLookAtPos, 10);
+      // Start Camera
+      Event Player.p_CameraEyePos = Vector(0, Global.c_BubbleRadius * 2, 0);
+      Event Player.p_CameraLookAtPos = Vector(0, 200, 0);
+      Start Camera(Event Player, Event Player.p_CameraEyePos, Event Player.p_CameraLookAtPos, 10);
 
-		// Initialize Variables
-		Call Subroutine(pSub_SetNames);
-		Event Player.all_Kills = 0;
-		Event Player.p_BotHeroNumber = 0;
-		Event Player.p_BotHeroRole = Global.g_BotHeroRole;
-		Event Player.p_HeroNumberMod = 0;
-		Event Player.p_KillGoal = Global.g_KillGoal;
-		Call Subroutine(pSub_SetHeroRole);
-		Event Player.hud_InfoEnabled = False;
-		Event Player.p_HealingEnabled = Global.g_PlayerHealing;
-		Event Player.p_OneSecCooldown = False;
-		Event Player.p_KillsLostOnDeath = 0;
-		Event Player.p_MirrorModeEnabled = False;
-		Event Player.p_Preset = 0;
-		Event Player.p_PresetName = Global.c_PresetNames[Event Player.p_Preset];
-		Event Player.p_Difficulty = Global.g_Difficulty;
-		Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
-		Event Player.p_ZoneRadius = Global.c_ZoneRadiusDefault;
-		Event Player.p_PlayerHero = Hero Of(Event Player);
-		Call Subroutine(pSub_SetDistances);
+      // Initialize Variables
+      Call Subroutine(pSub_SetNames);
+      Event Player.all_Kills = 0;
+      Event Player.p_BotHeroNumber = 0;
+      Event Player.p_BotHeroRole = Global.g_BotHeroRole;
+      Event Player.p_HeroNumberMod = 0;
+      Event Player.p_KillGoal = Global.g_KillGoal;
+      Call Subroutine(pSub_SetHeroRole);
+      Event Player.hud_InfoEnabled = False;
+      Event Player.p_HealingEnabled = Global.g_PlayerHealing;
+      Event Player.p_OneSecCooldown = False;
+      Event Player.p_KillsLostOnDeath = 0;
+      Event Player.p_MirrorModeEnabled = False;
+      Event Player.p_Preset = 0;
+      Event Player.p_PresetName = Global.c_PresetNames[Event Player.p_Preset];
+      Event Player.p_Difficulty = Global.g_Difficulty;
+      Event Player.p_EffectsColor = Global.c_Color_EffectColors[0];
+      Event Player.p_ZoneRadius = Global.c_ZoneRadiusDefault;
+      Event Player.p_PlayerHero = Hero Of(Event Player);
+      Call Subroutine(pSub_SetDistances);
 
-		// HUD Object Arrays
-		Event Player.hud_Info = Array();
-		Event Player.hud_Debug = Array();
-		Event Player.hud_SkyMenu = Array();
+      // HUD Object Arrays
+      Event Player.hud_Info = Array();
+      Event Player.hud_Debug = Array();
+      Event Player.hud_SkyMenu = Array();
 
-		// Set Home Vector
-		If(Slot Of(Event Player) == 0);
-			Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
-		Else If(Slot Of(Event Player) == 1);
-			Event Player.p_HomeVector = Vector(380 - Global.c_BubbleRadius, 0, -380 + Global.c_BubbleRadius);
-		Else If(Slot Of(Event Player) == 2);
-			Event Player.p_HomeVector = Vector(380 - Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
-		Else If(Slot Of(Event Player) == 3);
-			Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, -380 + Global.c_BubbleRadius);
-		Else If(Slot Of(Event Player) == 4);
-			Event Player.p_HomeVector = Vector(0, 0, 380 - Global.c_BubbleRadius);
-		Else If(Slot Of(Event Player) == 5);
-			Event Player.p_HomeVector = Vector(0, 0, -380 + Global.c_BubbleRadius);
-		End;
+      // Set Home Vector
+      If(Slot Of(Event Player) == 0);
+         Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
+      Else If(Slot Of(Event Player) == 1);
+         Event Player.p_HomeVector = Vector(380 - Global.c_BubbleRadius, 0, -380 + Global.c_BubbleRadius);
+      Else If(Slot Of(Event Player) == 2);
+         Event Player.p_HomeVector = Vector(380 - Global.c_BubbleRadius, 0, 380 - Global.c_BubbleRadius);
+      Else If(Slot Of(Event Player) == 3);
+         Event Player.p_HomeVector = Vector(-380 + Global.c_BubbleRadius, 0, -380 + Global.c_BubbleRadius);
+      Else If(Slot Of(Event Player) == 4);
+         Event Player.p_HomeVector = Vector(0, 0, 380 - Global.c_BubbleRadius);
+      Else If(Slot Of(Event Player) == 5);
+         Event Player.p_HomeVector = Vector(0, 0, -380 + Global.c_BubbleRadius);
+      End;
 
-		Event Player.p_Effects = Array();
+      Event Player.p_Effects = Array();
 
-		// Create Player Bubble
-		Create Effect(All Players(All Teams), Sphere, Event Player.p_EffectsColor, Event Player.p_HomeVector, Global.c_BubbleRadius,
-			Color);
-		Event Player.p_Effects[0] = Last Created Entity;
+      // Create Player Bubble
+      Create Effect(All Players(All Teams), Sphere, Event Player.p_EffectsColor, Event Player.p_HomeVector, Global.c_BubbleRadius,
+         Color);
+      Event Player.p_Effects[0] = Last Created Entity;
 
-		// Create Player Movement Zone
-		Create Effect(All Players(All Teams), Ring, Event Player.p_EffectsColor, Event Player.p_HomeVector,
-			Event Player.p_ZoneRadius + 1.250, Position Radius and Color);
-		Event Player.p_Effects[1] = Last Created Entity;
+      // Create Player Movement Zone
+      Create Effect(All Players(All Teams), Ring, Event Player.p_EffectsColor, Event Player.p_HomeVector,
+         Event Player.p_ZoneRadius + 1.250, Position Radius and Color);
+      Event Player.p_Effects[1] = Last Created Entity;
 
-		// Create Maximum Enemy Distance Zone
-		Create Effect(All Players(All Teams), Light Shaft, Event Player.p_EffectsColor, Event Player.p_HomeVector,
-			Event Player.p_EnemyDistanceMax + 1.250, Position Radius and Color);
-		Event Player.p_Effects[2] = Last Created Entity;
-		Wait(1, Ignore Condition);
-		Event Player.p_CameraLookAtPos = Event Player.p_HomeVector;
+      // Create Maximum Enemy Distance Zone
+      Create Effect(All Players(All Teams), Light Shaft, Event Player.p_EffectsColor, Event Player.p_HomeVector,
+         Event Player.p_EnemyDistanceMax + 1.250, Position Radius and Color);
+      Event Player.p_Effects[2] = Last Created Entity;
+      Wait(1, Ignore Condition);
+      Event Player.p_CameraLookAtPos = Event Player.p_HomeVector;
 
-		// Intro tip
-		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("메뉴를 열어 환경 설정을 구성하십시오.")
-			: Custom String("Open menu for options"));
-		Wait(1, Ignore Condition);
-		Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, Global.c_BubbleRadius * 2, 0.001);
-		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("활성화하려면 봇을 공격하십시오.")
-			: Custom String("Attack the bot to start"));
-		Wait(1, Ignore Condition);
-		Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, 5, 0.001);
+      // Intro tip
+      Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("메뉴를 열어 환경 설정을 구성하십시오.")
+         : Custom String("Open menu for options"));
+      Wait(1, Ignore Condition);
+      Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, Global.c_BubbleRadius * 2, 0.001);
+      Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String("활성화하려면 봇을 공격하십시오.")
+         : Custom String("Attack the bot to start"));
+      Wait(1, Ignore Condition);
+      Event Player.p_CameraEyePos = Event Player.p_HomeVector + Vector(0, 5, 0.001);
 
-		// Preload Heroes
-		For Player Variable(Event Player, all_Index, 0, Count Of(All Heroes), 1);
-			Preload Hero(Event Player, All Heroes[Event Player.all_Index]);
-			Wait(1 / 60, Ignore Condition);
-		End;
+      // Preload Heroes
+      For Player Variable(Event Player, all_Index, 0, Count Of(All Heroes), 1);
+         Preload Hero(Event Player, All Heroes[Event Player.all_Index]);
+         Wait(1 / 60, Ignore Condition);
+      End;
 
-		// Global 1 Second Cooldown
-		If(Global.g_OneSecCooldown == True);
-			Event Player.p_OneSecCooldown = 3;
-		End;
+      // Global 1 Second Cooldown
+      If(Global.g_OneSecCooldown == True);
+         Event Player.p_OneSecCooldown = 3;
+      End;
 
-		// Teleport Player Home And Reset HUD
-		Teleport(Event Player, Event Player.p_HomeVector);
-		Event Player.p_CameraEyePos = Eye Position(Event Player);
-		Event Player.p_CameraLookAtPos = Ray Cast Hit Position(Eye Position(Event Player), Eye Position(Event Player)
-			+ Facing Direction Of(Event Player) * 1, Null, Event Player, False);
-		Wait(0.500, Ignore Condition);
-		Stop Camera(Event Player);
-		Call Subroutine(hudSub_MainToggle);
-		Enable Hero HUD(Event Player);
-		Call Subroutine(allSub_ButtonsAllow);
-		Stop Forcing Throttle(Event Player);
+      // Teleport Player Home And Reset HUD
+      Teleport(Event Player, Event Player.p_HomeVector);
+      Event Player.p_CameraEyePos = Eye Position(Event Player);
+      Event Player.p_CameraLookAtPos = Ray Cast Hit Position(Eye Position(Event Player), Eye Position(Event Player)
+         + Facing Direction Of(Event Player) * 1, Null, Event Player, False);
+      Wait(0.500, Ignore Condition);
+      Stop Camera(Event Player);
+      Call Subroutine(hudSub_MainToggle);
+      Enable Hero HUD(Event Player);
+      Call Subroutine(allSub_ButtonsAllow);
+      Stop Forcing Throttle(Event Player);
 
-		// Player initialization is complete
-		Event Player.p_PlayerInitialized = True;
-		Log To Inspector(Custom String("{0} spawned as {1} at vector {2}", Custom String("{0}: {1}", Total Time Elapsed, Event Player), Hero Of(Event Player), Event Player.p_HomeVector));
+      // Player initialization is complete
+      Event Player.p_PlayerInitialized = True;
+      Log To Inspector(Custom String("{0} spawned as {1} at vector {2}", Custom String("{0}: {1}", Total Time Elapsed, Event Player), Hero Of(Event Player), Event Player.p_HomeVector));
 
-		// Add Player name to pool of names
-		If(Global.g_UseBotNames == True && Count Of(Global.g_PlayerNames) < 256);
-			Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
-		End;
+      // Add Player name to pool of names
+      If(Global.g_UseBotNames == True && Count Of(Global.g_PlayerNames) < 256);
+         Modify Global Variable(g_PlayerNames, Append To Array, Custom String("{0}", Event Player));
+      End;
 
-		// Bot Init
-		Wait(0.100, Ignore Condition);
-		Call Subroutine(botSub_SetHero);
+      // Bot Init
+      Wait(0.100, Ignore Condition);
+      Call Subroutine(botSub_SetHero);
 
-		// Setup difficulty
-		Call Subroutine(pSub_SetDifficulty);
-		Event Player.p_BotHealingEnabled = Global.g_BotHealing;
+      // Setup difficulty
+      Call Subroutine(pSub_SetDifficulty);
+      Event Player.p_BotHealingEnabled = Global.g_BotHealing;
 
-		// Face enemy bot after it is created
-		Stop Facing(Event Player);
-		Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
-			Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
-			Players In Slot(Slot Of(Event Player), Team 2)))) * 10, To World, None);
-		Wait(12 / 60, Ignore Condition);
-		Stop Facing(Event Player);
-	}
+      // Face enemy bot after it is created
+      Stop Facing(Event Player);
+      Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
+         Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
+         Players In Slot(Slot Of(Event Player), Team 2)))) * 10, To World, None);
+      Wait(12 / 60, Ignore Condition);
+      Stop Facing(Event Player);
+   }
 }
 
 rule("Player Died")
 {
-	event
-	{
-		Player Died;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Player Died;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.p_Difficulty >= 3;
-	}
+   conditions
+   {
+      Event Player.p_Difficulty >= 3;
+   }
 
-	actions
-	{
-		Stop Heal Over Time(Event Player.all_InspireHealID);
-		Set Status(Event Player, Null, Invincible, 2.250);
-		Stop Forcing Player Position(Event Player);
-	}
+   actions
+   {
+      Stop Heal Over Time(Event Player.all_InspireHealID);
+      Set Status(Event Player, Null, Invincible, 2.250);
+      Stop Forcing Player Position(Event Player);
+   }
 }
 
 rule("Player Heal After Elim")
 {
-	event
-	{
-		Player Dealt Final Blow;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Player Dealt Final Blow;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Alive(Event Player) == True;
-		Health(Event Player) != Max Health(Event Player);
-		Event Player.p_HealingEnabled == True;
-	}
+   conditions
+   {
+      Is Alive(Event Player) == True;
+      Health(Event Player) != Max Health(Event Player);
+      Event Player.p_HealingEnabled == True;
+   }
 
-	actions
-	{
-		Call Subroutine(allSub_HealAfterElim);
-	}
+   actions
+   {
+      Call Subroutine(allSub_HealAfterElim);
+   }
 }
 
 rule("Player Heal After Damage")
 {
-	event
-	{
-		Player Dealt Damage;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Player Dealt Damage;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Alive(Event Player) == True;
-		Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
-		Event Player.p_HealingEnabled == True;
-		Total Time Elapsed >= Event Player.all_InspireHealTime + 1;
-		Event Damage > 5;
-	}
+   conditions
+   {
+      Is Alive(Event Player) == True;
+      Is Alive(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+      Event Player.p_HealingEnabled == True;
+      Total Time Elapsed >= Event Player.all_InspireHealTime + 1;
+      Event Damage > 5;
+   }
 
-	actions
-	{
-		Call Subroutine(allSub_HealAfterDamage);
-	}
+   actions
+   {
+      Call Subroutine(allSub_HealAfterDamage);
+   }
 }
 
 rule("Increment Kills")
 {
-	event
-	{
-		Player Dealt Final Blow;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Player Dealt Final Blow;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Players In Slot(Slot Of(Event Player), Team 2) == Victim;
-	}
+   conditions
+   {
+      Players In Slot(Slot Of(Event Player), Team 2) == Victim;
+   }
 
-	actions
-	{
-		Event Player.all_Kills += 1;
-	}
+   actions
+   {
+      Event Player.all_Kills += 1;
+   }
 }
 
 rule("Next Hero")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Game In Progress == True;
-		Event Player.all_Kills == Event Player.p_KillGoal;
-	}
+   conditions
+   {
+      Is Game In Progress == True;
+      Event Player.all_Kills == Event Player.p_KillGoal;
+   }
 
-	actions
-	{
-		// Echo locks you out of switching heroes for ~5 seconds
-		If(Is Duplicating(Event Player));
-			// So this was causing an issue with Create Dummy Bot
-			Damage(Event Player, Null, 9999);
-			Wait(5, Ignore Condition);
-		End;
+   actions
+   {
+      // Echo locks you out of switching heroes for ~5 seconds
+      If(Is Duplicating(Event Player));
+         // So this was causing an issue with Create Dummy Bot
+         Damage(Event Player, Null, 9999);
+         Wait(5, Ignore Condition);
+      End;
 
-		If(Event Player.p_Preset > 0 && Event Player.p_Preset <= 2);
-			Event Player.p_Preset = 0;
-			Call Subroutine(pSub_SetPreset);
-		End;
+      If(Event Player.p_Preset > 0 && Event Player.p_Preset <= 2);
+         Event Player.p_Preset = 0;
+         Call Subroutine(pSub_SetPreset);
+      End;
 
-		Event Player.p_HeroNumberMod = 1;
-		Call Subroutine(botSub_SetHero);
-	}
+      Event Player.p_HeroNumberMod = 1;
+      Call Subroutine(botSub_SetHero);
+   }
 }
 
 rule("Reset Player At Home")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Distance Between(Vector(X Component Of(Position Of(Event Player)), 0, Z Component Of(Position Of(Event Player))),
-			Event Player.p_HomeVector) > Event Player.p_ZoneRadius;
-		Is Alive(Event Player) == True;
-		Has Spawned(Event Player) == True;
-		Event Player.p_PlayerInitialized == True;
-	}
+   conditions
+   {
+      Distance Between(Vector(X Component Of(Position Of(Event Player)), 0, Z Component Of(Position Of(Event Player))),
+         Event Player.p_HomeVector) > Event Player.p_ZoneRadius;
+      Is Alive(Event Player) == True;
+      Has Spawned(Event Player) == True;
+      Event Player.p_PlayerInitialized == True;
+   }
 
-	actions
-	{
-		// Prevent Widowmaker Doomfist loop bug
-		If(((Hero Of(Event Player) == Hero(Widowmaker) && Is Using Ability 1(Event Player)) || (Hero Of(Event Player) == Hero(Doomfist)
-			&& Is Using Ability 2(Event Player))) == True);
-			Cancel Primary Action(Event Player);
-		End;
-		Play Effect(Event Player, Debuff Impact Sound, Color(White), Event Player, 75);
-		Play Effect(Event Player, Bad Pickup Effect, Color(White), Event Player.p_HomeVector, 1);
-		If(Is In View Angle(
-			Event Player,
-			Eye Position(Players In Slot(Slot Of(Event Player), Team 2)) 
-				- Vector(0, Y Component Of(Eye Position(Event Player)), 0),20
-			) 
-				== True
-		);
-			Teleport(Event Player, Event Player.p_HomeVector);
-			Wait(1 / 60, Ignore Condition);
-			Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
-				Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
-				Players In Slot(Slot Of(Event Player), Team 2)))) * 5, To World, None);
-			Wait(0.200, Ignore Condition);
-			Stop Facing(Event Player);
-		Else;
-			Teleport(Event Player, Event Player.p_HomeVector);
-		End;
-		If(Event Player.p_ElevatorEnabled == True);
-			Start Forcing Player Position(Event Player, Vector(X Component Of(Event Player.p_HomeVector), Event Player.p_ElevatorHeight,
-				Z Component Of(Event Player.p_HomeVector)), False);
-			Wait(0.250, Ignore Condition);
-			Stop Forcing Player Position(Event Player);
-		End;
-		Allow Button(Event Player, Button(Jump));
-	}
+   actions
+   {
+      // Prevent Widowmaker Doomfist loop bug
+      If(((Hero Of(Event Player) == Hero(Widowmaker) && Is Using Ability 1(Event Player)) || (Hero Of(Event Player) == Hero(Doomfist)
+         && Is Using Ability 2(Event Player))) == True);
+         Cancel Primary Action(Event Player);
+      End;
+      Play Effect(Event Player, Debuff Impact Sound, Color(White), Event Player, 75);
+      Play Effect(Event Player, Bad Pickup Effect, Color(White), Event Player.p_HomeVector, 1);
+      If(Is In View Angle(
+         Event Player,
+         Eye Position(Players In Slot(Slot Of(Event Player), Team 2)) 
+            - Vector(0, Y Component Of(Eye Position(Event Player)), 0),20
+         ) 
+            == True
+      );
+         Teleport(Event Player, Event Player.p_HomeVector);
+         Wait(1 / 60, Ignore Condition);
+         Start Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player),
+            Team 2))), Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), Eye Position(
+            Players In Slot(Slot Of(Event Player), Team 2)))) * 5, To World, None);
+         Wait(0.200, Ignore Condition);
+         Stop Facing(Event Player);
+      Else;
+         Teleport(Event Player, Event Player.p_HomeVector);
+      End;
+      If(Event Player.p_ElevatorEnabled == True);
+         Start Forcing Player Position(Event Player, Vector(X Component Of(Event Player.p_HomeVector), Event Player.p_ElevatorHeight,
+            Z Component Of(Event Player.p_HomeVector)), False);
+         Wait(0.250, Ignore Condition);
+         Stop Forcing Player Position(Event Player);
+      End;
+      Allow Button(Event Player, Button(Jump));
+   }
 }
 
 rule("Player Change Self Hero")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Button Held(Event Player, Button(Crouch)) == True;
-		Is Button Held(Event Player, Button(Reload)) == True;
-		Event Player.all_ChangingHero == False;
-		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
-		Event Player.p_PlayerInitialized == True;
-	}
+   conditions
+   {
+      Is Button Held(Event Player, Button(Crouch)) == True;
+      Is Button Held(Event Player, Button(Reload)) == True;
+      Event Player.all_ChangingHero == False;
+      Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
+      Event Player.p_PlayerInitialized == True;
+   }
 
-	actions
-	{
-		Wait(15 / 60, Abort When False);
-		If(Event Player.p_MirrorModeEnabled == True);
-			Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
-				"같은 영웅 모드가 활성화 된 동안에는 영웅을 변경할 수 없습니다.") : Custom String("Cannot change heroes while Mirror Mode is on"));
-			Abort;
-		End;
-		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
-			"{0} 및 {1} 버튼을 계속 누르고 있으면 영웅이 변경됩니다.", Input Binding String(Button(Crouch)), Input Binding String(Button(Reload)))
-			: Custom String("Continue holding {0} and {1} to change heroes", Input Binding String(Button(Crouch)), Input Binding String(
-			Button(Reload))));
-		Set Status(Event Player, Null, Phased Out, 1);
-		Wait(15 / 60, Abort When False);
-		Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player)));
-		Event Player.all_ChangingHero = True;
-		Wait(1, Ignore Condition);
-		Reset Player Hero Availability(Event Player);
-	}
+   actions
+   {
+      Wait(15 / 60, Abort When False);
+      If(Event Player.p_MirrorModeEnabled == True);
+         Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
+            "같은 영웅 모드가 활성화 된 동안에는 영웅을 변경할 수 없습니다.") : Custom String("Cannot change heroes while Mirror Mode is on"));
+         Abort;
+      End;
+      Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
+         "{0} 및 {1} 버튼을 계속 누르고 있으면 영웅이 변경됩니다.", Input Binding String(Button(Crouch)), Input Binding String(Button(Reload)))
+         : Custom String("Continue holding {0} and {1} to change heroes", Input Binding String(Button(Crouch)), Input Binding String(
+         Button(Reload))));
+      Set Status(Event Player, Null, Phased Out, 1);
+      Wait(15 / 60, Abort When False);
+      Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player)));
+      Event Player.all_ChangingHero = True;
+      Wait(1, Ignore Condition);
+      Reset Player Hero Availability(Event Player);
+   }
 }
 
 rule("Player Self Hero Change Teleport Enemy On Spawn")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is In Spawn Room(Event Player) == False;
-		Has Spawned(Event Player) == True;
-		Event Player.all_ChangingHero == True;
-		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
-	}
+   conditions
+   {
+      Is In Spawn Room(Event Player) == False;
+      Has Spawned(Event Player) == True;
+      Event Player.all_ChangingHero == True;
+      Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
+   }
 
-	actions
-	{
-		Wait(6 / 60, Abort When False);
-		Call Subroutine(pSub_SetDistances);
-		Call Subroutine(pSub_SetInvulnerable);
-		Call Subroutine(botSub_TeleportBot);
-		Event Player.all_ChangingHero = False;
-	}
+   actions
+   {
+      Wait(6 / 60, Abort When False);
+      Call Subroutine(pSub_SetDistances);
+      Call Subroutine(pSub_SetInvulnerable);
+      Call Subroutine(botSub_TeleportBot);
+      Event Player.all_ChangingHero = False;
+   }
 }
 
 rule("Player Change Bot Hero")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Button Held(Event Player, Button(Interact)) == True;
-		Is Button Held(Event Player, Button(Reload)) == True;
-		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
-		Event Player.all_ChangingHero == False;
-		Event Player.p_PlayerInitialized == True;
-	}
+   conditions
+   {
+      Is Button Held(Event Player, Button(Interact)) == True;
+      Is Button Held(Event Player, Button(Reload)) == True;
+      Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
+      Event Player.all_ChangingHero == False;
+      Event Player.p_PlayerInitialized == True;
+   }
 
-	actions
-	{
-		Wait(15 / 60, Abort When False);
-		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
-			"{0} 및 {1} 버튼을 계속 누르고 있으면 적 영웅을 선택합니다.", Input Binding String(Button(Interact)), Input Binding String(Button(Reload)))
-			: Custom String("Continue holding {0} and {1} to change bot hero", Input Binding String(Button(Interact)),
-			Input Binding String(Button(Reload))));
-		Set Status(Event Player, Null, Phased Out, 1);
-		Wait(15 / 60, Abort When False);
-		Event Player.p_PlayerHero = Hero Of(Event Player);
-		Start Camera(Event Player, Position Of(Players In Slot(Slot Of(Event Player), Team 2) + Vector(0, 10, 10)), Position Of(
-			Players In Slot(Slot Of(Event Player), Team 2)), 45);
-		Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player)));
-		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero = True;
-		Wait(1, Ignore Condition);
-		Reset Player Hero Availability(Event Player);
-	}
+   actions
+   {
+      Wait(15 / 60, Abort When False);
+      Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
+         "{0} 및 {1} 버튼을 계속 누르고 있으면 적 영웅을 선택합니다.", Input Binding String(Button(Interact)), Input Binding String(Button(Reload)))
+         : Custom String("Continue holding {0} and {1} to change bot hero", Input Binding String(Button(Interact)),
+         Input Binding String(Button(Reload))));
+      Set Status(Event Player, Null, Phased Out, 1);
+      Wait(15 / 60, Abort When False);
+      Event Player.p_PlayerHero = Hero Of(Event Player);
+      Start Camera(Event Player, Position Of(Players In Slot(Slot Of(Event Player), Team 2) + Vector(0, 10, 10)), Position Of(
+         Players In Slot(Slot Of(Event Player), Team 2)), 45);
+      Set Player Allowed Heroes(Event Player, Remove From Array(All Heroes, Hero Of(Event Player)));
+      Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero = True;
+      Wait(1, Ignore Condition);
+      Reset Player Hero Availability(Event Player);
+   }
 }
 
 rule("Player Change Bot Hero On Spawn")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is In Spawn Room(Event Player) == False;
-		Has Spawned(Event Player) == True;
-		Event Player.all_ChangingHero == False;
-		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == True;
-	}
+   conditions
+   {
+      Is In Spawn Room(Event Player) == False;
+      Has Spawned(Event Player) == True;
+      Event Player.all_ChangingHero == False;
+      Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == True;
+   }
 
-	actions
-	{
-		Wait(9 / 60, Abort When False);
-		If(Event Player.p_BotHeroRole != 0);
-			Event Player.p_BotHeroRole = 0;
-			Call Subroutine(pSub_SetHeroRole);
-		End;
-		Event Player.p_BotHeroNumber = Index Of Array Value(Event Player.p_HeroList, Hero Of(Event Player));
-		Start Forcing Player To Be Hero(Event Player, Event Player.p_PlayerHero);
-		Wait(1 / 60, Ignore Condition);
-		Stop Forcing Player To Be Hero(Event Player);
-		Call Subroutine(pSub_SetInvulnerable);
-		Call Subroutine(botSub_SetHero);
-		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero = False;
-		Set Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 2))
-			- Vector(0, 0.250, 0)), To World);
-		Wait(0.350, Ignore Condition);
-		Stop Camera(Event Player);
-	}
+   actions
+   {
+      Wait(9 / 60, Abort When False);
+      If(Event Player.p_BotHeroRole != 0);
+         Event Player.p_BotHeroRole = 0;
+         Call Subroutine(pSub_SetHeroRole);
+      End;
+      Event Player.p_BotHeroNumber = Index Of Array Value(Event Player.p_HeroList, Hero Of(Event Player));
+      Start Forcing Player To Be Hero(Event Player, Event Player.p_PlayerHero);
+      Wait(1 / 60, Ignore Condition);
+      Stop Forcing Player To Be Hero(Event Player);
+      Call Subroutine(pSub_SetInvulnerable);
+      Call Subroutine(botSub_SetHero);
+      Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero = False;
+      Set Facing(Event Player, Direction Towards(Eye Position(Event Player), Eye Position(Players In Slot(Slot Of(Event Player), Team 2))
+         - Vector(0, 0.250, 0)), To World);
+      Wait(0.350, Ignore Condition);
+      Stop Camera(Event Player);
+   }
 }
 
 rule("Disable Primary Secondary Skip")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Button Held(Event Player, Button(Interact)) == True;
-		Has Spawned(Event Player) == True;
-	}
+   conditions
+   {
+      Is Button Held(Event Player, Button(Interact)) == True;
+      Has Spawned(Event Player) == True;
+   }
 
-	actions
-	{
-		Disallow Button(Event Player, Button(Primary Fire));
-		Disallow Button(Event Player, Button(Secondary Fire));
-		Wait Until(Is Button Held(Event Player, Button(Interact)) == False, 9999);
-		Wait(0.750, Ignore Condition);
-		Allow Button(Event Player, Button(Primary Fire));
-		Allow Button(Event Player, Button(Secondary Fire));
-	}
+   actions
+   {
+      Disallow Button(Event Player, Button(Primary Fire));
+      Disallow Button(Event Player, Button(Secondary Fire));
+      Wait Until(Is Button Held(Event Player, Button(Interact)) == False, 9999);
+      Wait(0.750, Ignore Condition);
+      Allow Button(Event Player, Button(Primary Fire));
+      Allow Button(Event Player, Button(Secondary Fire));
+   }
 }
 
 rule("Skip Hero")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Button Held(Event Player, Button(Interact)) == True;
-		(Is Button Held(Event Player, Button(Primary Fire)) == True || Is Button Held(Event Player, Button(Secondary Fire)) == True)
-			== True;
-	}
+   conditions
+   {
+      Is Button Held(Event Player, Button(Interact)) == True;
+      (Is Button Held(Event Player, Button(Primary Fire)) == True || Is Button Held(Event Player, Button(Secondary Fire)) == True)
+         == True;
+   }
 
-	actions
-	{
-		If(Event Player.p_Preset > 0 && Event Player.p_Preset <= 2);
-			Event Player.p_Preset = 0;
-			Call Subroutine(pSub_SetPreset);
-		End;
+   actions
+   {
+      If(Event Player.p_Preset > 0 && Event Player.p_Preset <= 2);
+         Event Player.p_Preset = 0;
+         Call Subroutine(pSub_SetPreset);
+      End;
 
-		If(Is Button Held(Event Player, Button(Primary Fire)) == True);
-			Event Player.p_HeroNumberMod = 1;
-		Else;
-			Event Player.p_HeroNumberMod = -1;
-		End;
-		
-		Call Subroutine(botSub_SetHero);
-	}
+      If(Is Button Held(Event Player, Button(Primary Fire)) == True);
+         Event Player.p_HeroNumberMod = 1;
+      Else;
+         Event Player.p_HeroNumberMod = -1;
+      End;
+      
+      Call Subroutine(botSub_SetHero);
+   }
 }
 
 rule("Help Skip Message")
 {
-	event
-	{
-		Player Died;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Player Died;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Is Game In Progress == True;
-		Players In Slot(Slot Of(Event Player), Team 2).all_Kills >= 2;
-		Players In Slot(Slot Of(Event Player), Team 2).all_Kills > Event Player.all_Kills;
-		Players In Slot(Slot Of(Event Player), Team 2).all_Kills % 2 == 0;
-		Event Player.p_Difficulty >= 3;
-	}
+   conditions
+   {
+      Is Game In Progress == True;
+      Players In Slot(Slot Of(Event Player), Team 2).all_Kills >= 2;
+      Players In Slot(Slot Of(Event Player), Team 2).all_Kills > Event Player.all_Kills;
+      Players In Slot(Slot Of(Event Player), Team 2).all_Kills % 2 == 0;
+      Event Player.p_Difficulty >= 3;
+   }
 
-	actions
-	{
-		If(Players In Slot(Slot Of(Event Player), Team 2).all_Kills % 4 == 0);
-			Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
-				"조언: 메뉴에서 난이도를 낮출 수 있습니다") : Custom String("Tip: Difficulty can be lowered in the menu"));
-		End;
-		Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
-			"{1} 및 {2} 을 눌러 {0} 건너 뛰기", Hero Icon String(Hero Of(Players In Slot(Slot Of(Event Player), Team 2))), Input Binding String(
-			Button(Interact)), Input Binding String(Button(Primary Fire))) : Custom String("To skip {0} hold {1} and press {2}",
-			Hero Icon String(Hero Of(Players In Slot(Slot Of(Event Player), Team 2))), Input Binding String(Button(Interact)),
-			Input Binding String(Button(Primary Fire))));
-	}
+   actions
+   {
+      If(Players In Slot(Slot Of(Event Player), Team 2).all_Kills % 4 == 0);
+         Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
+            "조언: 메뉴에서 난이도를 낮출 수 있습니다") : Custom String("Tip: Difficulty can be lowered in the menu"));
+      End;
+      Small Message(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_Language == 1 ? Custom String(
+         "{1} 및 {2} 을 눌러 {0} 건너 뛰기", Hero Icon String(Hero Of(Players In Slot(Slot Of(Event Player), Team 2))), Input Binding String(
+         Button(Interact)), Input Binding String(Button(Primary Fire))) : Custom String("To skip {0} hold {1} and press {2}",
+         Hero Icon String(Hero Of(Players In Slot(Slot Of(Event Player), Team 2))), Input Binding String(Button(Interact)),
+         Input Binding String(Button(Primary Fire))));
+   }
 }
 
 rule("Player Mirror Mode On")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.p_MirrorModeEnabled == True;
-		Event Player.hud_SkyMenuIsOpen == False;
-		Event Player.all_ChangingHero == False;
-		Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
-		Hero Of(Event Player) != Hero Of(Players In Slot(Slot Of(Event Player), Team 2));
-		Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)) == True;
-	}
+   conditions
+   {
+      Event Player.p_MirrorModeEnabled == True;
+      Event Player.hud_SkyMenuIsOpen == False;
+      Event Player.all_ChangingHero == False;
+      Players In Slot(Slot Of(Event Player), Team 2).all_ChangingHero == False;
+      Hero Of(Event Player) != Hero Of(Players In Slot(Slot Of(Event Player), Team 2));
+      Entity Exists(Players In Slot(Slot Of(Event Player), Team 2)) == True;
+   }
 
-	actions
-	{
-		Start Forcing Player To Be Hero(Event Player, Hero Of(Players In Slot(Slot Of(Event Player), Team 2)));
-		Wait(1 / 60, Ignore Condition);
-		Stop Forcing Player To Be Hero(Event Player);
-		Call Subroutine(pSub_SetDistances);
-	}
+   actions
+   {
+      Start Forcing Player To Be Hero(Event Player, Hero Of(Players In Slot(Slot Of(Event Player), Team 2)));
+      Wait(1 / 60, Ignore Condition);
+      Stop Forcing Player To Be Hero(Event Player);
+      Call Subroutine(pSub_SetDistances);
+   }
 }
 
 rule("Player 1 Second Cooldown Resets")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.p_OneSecCooldown > 0;
-		Event Player.hud_SkyMenuIsOpen == False;
-		Is Alive(Event Player) == True;
-	}
+   conditions
+   {
+      Event Player.p_OneSecCooldown > 0;
+      Event Player.hud_SkyMenuIsOpen == False;
+      Is Alive(Event Player) == True;
+   }
 
-	actions
-	{
-		Wait(1, Abort When False);
-		If(Event Player.p_OneSecCooldown != 2);
-			If(Ability Cooldown(Event Player, Button(Primary Fire)) != 0);
-				Set Ability Cooldown(Event Player, Button(Primary Fire), 0);
-			End;
-			If(Ability Cooldown(Event Player, Button(Secondary Fire)) != 0 && Is Using Ability 1(Event Player) == False);
-				Set Ability Cooldown(Event Player, Button(Secondary Fire), 0);
-			End;
-			If(Ability Cooldown(Event Player, Button(Ability 1)) != 0 && Is Using Ability 1(Event Player) == False);
-				Set Ability Cooldown(Event Player, Button(Ability 1), 0);
-			End;
-			If(Ability Cooldown(Event Player, Button(Ability 2)) != 0 && Is Using Ability 2(Event Player) == False);
-				Set Ability Cooldown(Event Player, Button(Ability 2), 0);
-			End;
-			If(Ability Cooldown(Event Player, Button(Crouch)) != 0);
-				Set Ability Cooldown(Event Player, Button(Crouch), 0);
-			End;
-			If(Ultimate Charge Percent(Event Player) < 100 && Is Using Ultimate(Event Player) == False);
-				Set Ultimate Charge(Event Player, 100);
-			End;
-			Set Ammo(Event Player, 0, Max Ammo(Event Player, 0));
-			Set Ammo(Event Player, 1, Max Ammo(Event Player, 1));
-			Set Ability Charge(Event Player, Button(Ability 1), 3);
-			Set Ability Charge(Event Player, Button(Ability 2), 3);
-			Set Ability Resource(Event Player, Button(Secondary Fire), 100);
-			Set Ability Resource(Event Player, Button(Jump), 100);
-		End;
-		If(Event Player.p_OneSecCooldown != 1 && Round To Integer(Total Time Elapsed, Down) % 2 == 0);
-			If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Primary Fire)) != 0);
-				Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Primary Fire), 0);
-			End;
-			If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Secondary Fire)) != 0 && Is Using Ability 1(
-				Players In Slot(Slot Of(Event Player), Team 2)) == False);
-				Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Secondary Fire), 0);
-			End;
-			If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 1)) != 0 && Is Using Ability 1(Players In Slot(
-				Slot Of(Event Player), Team 2)) == False);
-				Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 1), 0);
-			End;
-			If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 2)) != 0 && Is Using Ability 2(Players In Slot(
-				Slot Of(Event Player), Team 2)) == False);
-				Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 2), 0);
-			End;
-			If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch)) != 0);
-				Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch), 0);
-			End;
-			If(Ultimate Charge Percent(Players In Slot(Slot Of(Event Player), Team 2)) < 100 && Is Using Ultimate(Players In Slot(Slot Of(
-				Event Player), Team 2)) == False);
-				Set Ultimate Charge(Players In Slot(Slot Of(Event Player), Team 2), 100);
-			End;
-			Set Ammo(Players In Slot(Slot Of(Event Player), Team 2), 0, Max Ammo(Players In Slot(Slot Of(Event Player), Team 2), 0));
-			Set Ammo(Players In Slot(Slot Of(Event Player), Team 2), 1, Max Ammo(Players In Slot(Slot Of(Event Player), Team 2), 1));
-			Set Ability Charge(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 1), 3);
-			Set Ability Charge(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 2), 3);
-			Set Ability Resource(Players In Slot(Slot Of(Event Player), Team 2), Button(Secondary Fire), 100);
-			Set Ability Resource(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump), 100);
-		End;
-		Loop If Condition Is True;
-	}
+   actions
+   {
+      Wait(1, Abort When False);
+      If(Event Player.p_OneSecCooldown != 2);
+         If(Ability Cooldown(Event Player, Button(Primary Fire)) != 0);
+            Set Ability Cooldown(Event Player, Button(Primary Fire), 0);
+         End;
+         If(Ability Cooldown(Event Player, Button(Secondary Fire)) != 0 && Is Using Ability 1(Event Player) == False);
+            Set Ability Cooldown(Event Player, Button(Secondary Fire), 0);
+         End;
+         If(Ability Cooldown(Event Player, Button(Ability 1)) != 0 && Is Using Ability 1(Event Player) == False);
+            Set Ability Cooldown(Event Player, Button(Ability 1), 0);
+         End;
+         If(Ability Cooldown(Event Player, Button(Ability 2)) != 0 && Is Using Ability 2(Event Player) == False);
+            Set Ability Cooldown(Event Player, Button(Ability 2), 0);
+         End;
+         If(Ability Cooldown(Event Player, Button(Crouch)) != 0);
+            Set Ability Cooldown(Event Player, Button(Crouch), 0);
+         End;
+         If(Ultimate Charge Percent(Event Player) < 100 && Is Using Ultimate(Event Player) == False);
+            Set Ultimate Charge(Event Player, 100);
+         End;
+         Set Ammo(Event Player, 0, Max Ammo(Event Player, 0));
+         Set Ammo(Event Player, 1, Max Ammo(Event Player, 1));
+         Set Ability Charge(Event Player, Button(Ability 1), 3);
+         Set Ability Charge(Event Player, Button(Ability 2), 3);
+         Set Ability Resource(Event Player, Button(Secondary Fire), 100);
+         Set Ability Resource(Event Player, Button(Jump), 100);
+      End;
+      If(Event Player.p_OneSecCooldown != 1 && Round To Integer(Total Time Elapsed, Down) % 2 == 0);
+         If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Primary Fire)) != 0);
+            Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Primary Fire), 0);
+         End;
+         If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Secondary Fire)) != 0 && Is Using Ability 1(
+            Players In Slot(Slot Of(Event Player), Team 2)) == False);
+            Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Secondary Fire), 0);
+         End;
+         If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 1)) != 0 && Is Using Ability 1(Players In Slot(
+            Slot Of(Event Player), Team 2)) == False);
+            Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 1), 0);
+         End;
+         If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 2)) != 0 && Is Using Ability 2(Players In Slot(
+            Slot Of(Event Player), Team 2)) == False);
+            Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 2), 0);
+         End;
+         If(Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch)) != 0);
+            Set Ability Cooldown(Players In Slot(Slot Of(Event Player), Team 2), Button(Crouch), 0);
+         End;
+         If(Ultimate Charge Percent(Players In Slot(Slot Of(Event Player), Team 2)) < 100 && Is Using Ultimate(Players In Slot(Slot Of(
+            Event Player), Team 2)) == False);
+            Set Ultimate Charge(Players In Slot(Slot Of(Event Player), Team 2), 100);
+         End;
+         Set Ammo(Players In Slot(Slot Of(Event Player), Team 2), 0, Max Ammo(Players In Slot(Slot Of(Event Player), Team 2), 0));
+         Set Ammo(Players In Slot(Slot Of(Event Player), Team 2), 1, Max Ammo(Players In Slot(Slot Of(Event Player), Team 2), 1));
+         Set Ability Charge(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 1), 3);
+         Set Ability Charge(Players In Slot(Slot Of(Event Player), Team 2), Button(Ability 2), 3);
+         Set Ability Resource(Players In Slot(Slot Of(Event Player), Team 2), Button(Secondary Fire), 100);
+         Set Ability Resource(Players In Slot(Slot Of(Event Player), Team 2), Button(Jump), 100);
+      End;
+      Loop If Condition Is True;
+   }
 }
 
 rule("Player Elevator Up")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.p_ElevatorEnabled == True;
-		Event Player.p_ElevatorHeight < 32;
-		Event Player.p_ElevatorHeight % 2 == 0;
-		Vertical Speed Of(Event Player) >= 0;
-		Is Alive(Event Player) == True;
-		Is Button Held(Event Player, Button(Jump)) == True;
-		Is Button Held(Event Player, Button(Crouch)) == False;
-	}
+   conditions
+   {
+      Event Player.p_ElevatorEnabled == True;
+      Event Player.p_ElevatorHeight < 32;
+      Event Player.p_ElevatorHeight % 2 == 0;
+      Vertical Speed Of(Event Player) >= 0;
+      Is Alive(Event Player) == True;
+      Is Button Held(Event Player, Button(Jump)) == True;
+      Is Button Held(Event Player, Button(Crouch)) == False;
+   }
 
-	actions
-	{
-		Event Player.all_SubArg[0] = 1;
-		Call Subroutine(pSub_Elevator);
-		Loop If Condition Is True;
-	}
+   actions
+   {
+      Event Player.all_SubArg[0] = 1;
+      Call Subroutine(pSub_Elevator);
+      Loop If Condition Is True;
+   }
 }
 
 rule("Player Elevator Down")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.p_ElevatorEnabled == True;
-		Event Player.p_ElevatorHeight > 0;
-		Event Player.p_ElevatorHeight % 2 == 0;
-		Vertical Speed Of(Event Player) <= 0;
-		Is Alive(Event Player) == True;
-		Is Button Held(Event Player, Button(Crouch)) == True;
-		Is Button Held(Event Player, Button(Jump)) == False;
-		Is Button Held(Event Player, Button(Reload)) == False;
-	}
+   conditions
+   {
+      Event Player.p_ElevatorEnabled == True;
+      Event Player.p_ElevatorHeight > 0;
+      Event Player.p_ElevatorHeight % 2 == 0;
+      Vertical Speed Of(Event Player) <= 0;
+      Is Alive(Event Player) == True;
+      Is Button Held(Event Player, Button(Crouch)) == True;
+      Is Button Held(Event Player, Button(Jump)) == False;
+      Is Button Held(Event Player, Button(Reload)) == False;
+   }
 
-	actions
-	{
-		Event Player.all_SubArg[0] = 2;
-		Call Subroutine(pSub_Elevator);
-		Loop If Condition Is True;
-	}
+   actions
+   {
+      Event Player.all_SubArg[0] = 2;
+      Call Subroutine(pSub_Elevator);
+      Loop If Condition Is True;
+   }
 }
 
 rule("Player Elevator Movement Start")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.p_ElevatorEnabled == True;
-		Is Alive(Event Player) == True;
-		Throttle Of(Event Player) != Vector(0, 0, 0);
-	}
+   conditions
+   {
+      Event Player.p_ElevatorEnabled == True;
+      Is Alive(Event Player) == True;
+      Throttle Of(Event Player) != Vector(0, 0, 0);
+   }
 
-	actions
-	{
-		Stop Accelerating(Event Player);
-		Start Accelerating(Event Player, Throttle Of(Event Player), 100, Speed Of(Event Player), To Player, Direction Rate and Max Speed);
-	}
+   actions
+   {
+      Stop Accelerating(Event Player);
+      Start Accelerating(Event Player, Throttle Of(Event Player), 100, Speed Of(Event Player), To Player, Direction Rate and Max Speed);
+   }
 }
 
 rule("Player Elevator Movement Stop")
 {
-	event
-	{
-		Ongoing - Each Player;
-		Team 1;
-		All;
-	}
+   event
+   {
+      Ongoing - Each Player;
+      Team 1;
+      All;
+   }
 
-	conditions
-	{
-		Event Player.p_ElevatorEnabled == True;
-		Is Alive(Event Player) == True;
-		Throttle Of(Event Player) == Vector(0, 0, 0);
-		Speed Of(Event Player) > 0;
-	}
+   conditions
+   {
+      Event Player.p_ElevatorEnabled == True;
+      Is Alive(Event Player) == True;
+      Throttle Of(Event Player) == Vector(0, 0, 0);
+      Speed Of(Event Player) > 0;
+   }
 
-	actions
-	{
-		Stop Accelerating(Event Player);
-		Event Player.p_ElevatorPosition = Array();
-		Event Player.p_ElevatorPosition[0] = Position Of(Event Player);
-		Wait(0.100, Ignore Condition);
-		Event Player.p_ElevatorPosition[1] = Position Of(Event Player);
-		Apply Impulse(Event Player, Direction Towards(Event Player.p_ElevatorPosition[1], Event Player.p_ElevatorPosition[0]),
-			Speed Of In Direction(Event Player, Direction Towards(Event Player.p_ElevatorPosition[0], Event Player.p_ElevatorPosition[1])),
-			To World, Incorporate Contrary Motion);
-	}
+   actions
+   {
+      Stop Accelerating(Event Player);
+      Event Player.p_ElevatorPosition = Array();
+      Event Player.p_ElevatorPosition[0] = Position Of(Event Player);
+      Wait(0.100, Ignore Condition);
+      Event Player.p_ElevatorPosition[1] = Position Of(Event Player);
+      Apply Impulse(Event Player, Direction Towards(Event Player.p_ElevatorPosition[1], Event Player.p_ElevatorPosition[0]),
+         Speed Of In Direction(Event Player, Direction Towards(Event Player.p_ElevatorPosition[0], Event Player.p_ElevatorPosition[1])),
+         To World, Incorporate Contrary Motion);
+   }
 }
 
