@@ -52,12 +52,18 @@ rule("AI Aim Calculation Loop")
 
    actions
    {
-      // Distance between the ray cast of the bot's facing direction and the position of the Player
-      Event Player.ai_RetCastDistance = Distance Between(
-         Ray Cast Hit Position(
+      // Distance between the ray cast of the bot's facing direction and the 
+      // position of the Player
+      Event Player.ai_RetCastDistance = Distance Between
+      (
+         Ray Cast Hit Position
+         (
             Eye Position(Event Player),
             Eye Position(Event Player) + Facing Direction Of(Event Player) 
-               * Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)),
+               * Distance Between
+               (
+                  Event Player, Players In Slot(Slot Of(Event Player), Team 1)
+               ),
             All Players(Team 1),
             Event Player,
             True
@@ -112,7 +118,8 @@ rule("AI Aim Flick")
       Event Player.ai_AIEnabled == True;
       Event Player.ai_CnAim == True;
       Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty >= 3;
-      Event Player.ai_RetCastDistance > 3 - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.250;
+      Event Player.ai_RetCastDistance > 3 
+         - Players In Slot(Slot Of(Event Player), Team 1).p_Difficulty * 0.250;
    }
 
    actions
@@ -139,7 +146,8 @@ rule("AI Attack Melee")
       Event Player.ai_AIEnabled == True;
       Event Player.ai_CnAttack == True;
       Is Alive(Event Player) == True;
-      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 2.500;
+      Distance Between
+         (Event Player, Players In Slot(Slot Of(Event Player), Team 1)) < 2.500;
       Event Player.ai_RetCastDistance <= 2;
       Health(Players In Slot(Slot Of(Event Player), Team 1)) <= 30;
       Health(Players In Slot(Slot Of(Event Player), Team 1)) > 0;
@@ -414,7 +422,8 @@ rule("AI Movement WASD Strafe On Dmg")
       Event Player.bot_MoveWASDEnabled == True;
       Event Player.ai_HeroInitialized == True;
       Is Alive(Event Player) == True;
-      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1))
+      Distance Between
+         (Event Player, Players In Slot(Slot Of(Event Player), Team 1))
          > Event Player.ai_OptimalDistance + Event Player.ai_StrafeDistanceMod;
       Event Damage > 25;
    }
@@ -423,7 +432,8 @@ rule("AI Movement WASD Strafe On Dmg")
    {
       If(Random Real(0, 1) < 0.100 + Event Player.ai_ChanceMod);
          Call Subroutine(aiSub_ReactionDelay);
-         Event Player.bot_ThrottleDir = Random Value In Array(Global.c_MoveDir_Strafe);
+         Event Player.bot_ThrottleDir 
+            = Random Value In Array(Global.c_MoveDir_Strafe);
          Start Rule(botSub_MoveWASD, Restart Rule);
       End;
    }
@@ -444,18 +454,45 @@ rule("AI Movement WASD Move Closer")
       Event Player.bot_MoveWASDEnabled == True;
       Event Player.ai_HeroInitialized == True;
       Is Alive(Event Player) == True;
-      Distance Between(Event Player, Vector(X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), 0,
-         Z Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))))) >= Event Player.ai_OptimalDistance;
+      Distance Between
+      (
+         Event Player,
+         Vector
+         (
+            X Component Of
+               (Position Of(Players In Slot(Slot Of(Event Player), Team 1))),
+            0,
+            Z Component Of
+               (Position Of(Players In Slot(Slot Of(Event Player), Team 1)))
+         )
+      ) 
+         >= Event Player.ai_OptimalDistance;
    }
 
    actions
    {
-      If(Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1))
-         > Event Player.ai_OptimalDistance + Event Player.ai_StrafeDistanceMod);
-         Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.c_MoveDir_Forward, Array(Left, Right,
-            Event Player.bot_ThrottleDir)));
+      If
+      (
+         Distance Between
+            (Event Player, Players In Slot(Slot Of(Event Player), Team 1))
+         > Event Player.ai_OptimalDistance + Event Player.ai_StrafeDistanceMod
+      );
+         Event Player.bot_ThrottleDir 
+            = Random Value In Array
+            (
+               Remove From Array
+               (
+                  Global.c_MoveDir_Forward, 
+                  Array(Left, Right, Event Player.bot_ThrottleDir)
+               )
+            );
       Else;
-         Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.c_MoveDir_Forward, Event Player.bot_ThrottleDir));
+         Event Player.bot_ThrottleDir 
+            = Random Value In Array
+            (
+               Remove From Array
+                  (Global.c_MoveDir_Forward, Event Player.bot_ThrottleDir)
+            );
       End;
       Call Subroutine(botSub_MoveWASD);
       Loop If Condition Is True;
@@ -477,13 +514,29 @@ rule("AI Movement WASD Move Farther")
       Event Player.bot_MoveWASDEnabled == True;
       Event Player.ai_HeroInitialized == True;
       Is Alive(Event Player) == True;
-      Distance Between(Event Player, Vector(X Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))), 0,
-         Z Component Of(Position Of(Players In Slot(Slot Of(Event Player), Team 1))))) < Event Player.ai_OptimalDistance;
+      Distance Between
+      (
+         Event Player, 
+         Vector
+         (
+            X Component Of
+               (Position Of(Players In Slot(Slot Of(Event Player), Team 1))), 
+            0,
+            Z Component Of
+            (Position Of(Players In Slot(Slot Of(Event Player), Team 1)))
+         )
+      ) 
+         < Event Player.ai_OptimalDistance;
    }
 
    actions
    {
-      Event Player.bot_ThrottleDir = Random Value In Array(Remove From Array(Global.c_MoveDir_Backward, Event Player.bot_ThrottleDir));
+      Event Player.bot_ThrottleDir 
+         = Random Value In Array
+         (
+            Remove From Array
+               (Global.c_MoveDir_Backward, Event Player.bot_ThrottleDir)
+         );
       Call Subroutine(botSub_MoveWASD);
       Loop If Condition Is True;
    }
@@ -502,8 +555,15 @@ rule("AI Optimal Distance Default Resize")
    {
       Event Player.ai_AIEnabled == True;
       Is Alive(Event Player) == True;
-      Distance Between(Event Player, Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector) >= Players In Slot(Slot Of(
-         Event Player), Team 1).p_EnemyDistanceMax - 2.500;
+      
+      Distance Between
+      (
+         Event Player, 
+         Players In Slot(Slot Of(Event Player), Team 1).p_HomeVector
+      ) 
+         >= 
+         Players In Slot(Slot Of(Event Player), Team 1).p_EnemyDistanceMax 
+         - 2.500;
    }
 
    actions
