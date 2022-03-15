@@ -1,3 +1,7 @@
+// ai.ow
+// Primary event rules for hero AI
+
+// Heal AI and call subroutine to enable AI
 rule("AI Enable")
 {
    event
@@ -23,6 +27,7 @@ rule("AI Enable")
    }
 }
 
+// Start AI aim calculation loop
 rule("AI Aim Calculation Loop")
 {
    event
@@ -75,6 +80,7 @@ rule("AI Aim Calculation Loop")
    }
 }
 
+// Stop AI aiming
 rule("AI Aim Stop")
 {
    event
@@ -102,6 +108,7 @@ rule("AI Aim Stop")
    }
 }
 
+// Flick aim when Player is far away from the Bot's reticle
 rule("AI Aim Flick")
 {
    event
@@ -132,6 +139,7 @@ rule("AI Aim Flick")
    }
 }
 
+// Bot melee Player when health is low
 rule("AI Attack Melee")
 {
    event
@@ -160,6 +168,7 @@ rule("AI Attack Melee")
    }
 }
 
+// Start Bot facing Player
 rule("AI Aim Start")
 {
    event
@@ -183,6 +192,7 @@ rule("AI Aim Start")
    }
 }
 
+// Whether or not the Bot is able to and allowed to aim
 rule("AI Rule Can Aim")
 {
    event
@@ -209,6 +219,7 @@ rule("AI Rule Can Aim")
    }
 }
 
+// Whether or not the Bot is able to and allowed to attack
 rule("AI Rule Can Attack")
 {
    event
@@ -235,6 +246,7 @@ rule("AI Rule Can Attack")
    }
 }
 
+// Whether or not the Bot is able to and allowed to use abilities
 rule("AI Rule Can Use Abilities")
 {
    event
@@ -262,6 +274,7 @@ rule("AI Rule Can Use Abilities")
    }
 }
 
+// If hacked, the Bot cannot use abilities
 rule("AI Rule Status Hacked")
 {
    event
@@ -284,6 +297,7 @@ rule("AI Rule Status Hacked")
    }
 }
 
+// If knocked down, the Bot cannot aim, attack, or use abilities
 rule("AI Rule Status Knocked Down")
 {
    event
@@ -309,6 +323,7 @@ rule("AI Rule Status Knocked Down")
    }
 }
 
+// If asleep, the Bot cannot aim, attack, or use abilities
 rule("AI Rule Status Asleep")
 {
    event
@@ -334,6 +349,7 @@ rule("AI Rule Status Asleep")
    }
 }
 
+// If frozen, the Bot cannot aim, attack, or use abilities
 rule("AI Rule Status Frozen")
 {
    event
@@ -359,6 +375,7 @@ rule("AI Rule Status Frozen")
    }
 }
 
+// If phased out, the Bot cannot attack or use abilities
 rule("AI Rule Status Phased Out")
 {
    event
@@ -382,6 +399,7 @@ rule("AI Rule Status Phased Out")
    }
 }
 
+// If stunned, the Bot cannot aim, attack, or use abilities
 rule("AI Rule Status Stunned")
 {
    event
@@ -407,6 +425,7 @@ rule("AI Rule Status Stunned")
    }
 }
 
+// Bot briefly strafe in a random direction upon taking damage
 rule("AI Movement WASD Strafe On Dmg")
 {
    event
@@ -439,6 +458,7 @@ rule("AI Movement WASD Strafe On Dmg")
    }
 }
 
+// Bot move closer if further than `ai_OptimalDistance`
 rule("AI Movement WASD Move Closer")
 {
    event
@@ -499,6 +519,7 @@ rule("AI Movement WASD Move Closer")
    }
 }
 
+// Bot move further if closer than `ai_OptimalDistance`
 rule("AI Movement WASD Move Farther")
 {
    event
@@ -542,6 +563,7 @@ rule("AI Movement WASD Move Farther")
    }
 }
 
+// i don't actually know what this does
 rule("AI Optimal Distance Default Resize")
 {
    event
@@ -575,6 +597,7 @@ rule("AI Optimal Distance Default Resize")
    }
 }
 
+// Bot crouch
 rule("AI Movement Crouch")
 {
    event
@@ -601,6 +624,7 @@ rule("AI Movement Crouch")
    }
 }
 
+// Bot jump
 rule("AI Movement Jump")
 {
    event
@@ -626,6 +650,7 @@ rule("AI Movement Jump")
    }
 }
 
+// Enable AI if Player just turned on Quick Mode
 rule("Quick Mode AI Enable")
 {
    event

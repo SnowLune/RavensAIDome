@@ -1,4 +1,5 @@
 #!/bin/bash
+# overwatch_workshop_minifier.sh
 # Minify Overwatch Workshop scripts from stdin or file
 
 function minify_pipe 

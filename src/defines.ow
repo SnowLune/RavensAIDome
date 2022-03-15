@@ -13,8 +13,8 @@ rule("Global Defines")
       //
       //   Info: version, build, links...
       //
-      Global.c_Version = Custom String("0.15.1");
-      Global.c_BuildDate = Custom String("20220203");
+      Global.c_Version = Custom String("0.15.2");
+      Global.c_BuildDate = Custom String("20220315");
       Global.c_WorkshopCode = Custom String("5DPKQ");
       Global.c_DeveloperName = Custom String("Raven#112503");
       Global.c_TwitchURL = Custom String("twitch.tv/RavenLuna");
