@@ -3,7 +3,7 @@ SHELL = /bin/bash
 .SUFFIXES:
 .SUFFIXES: .owh .ow
 
-MODEFILE=practicefieldexpanse.workshop.txt
+MODEFILE=practicefieldexpanse.ow.txt
 
 FILES=	\
 	src/main.owh \
@@ -53,8 +53,8 @@ FILES=	\
 	src/ai/ai_Zenyatta.ow
 
 $(MODEFILE): $(FILES)
-	cat $(FILES) | ./tools/overwatch_workshop_minifier.sh > $(MODEFILE)
-	cat $(MODEFILE) | clip.exe
+	cat $(FILES) > $(MODEFILE)
+	./tools/overwatch_workshop_minifier.sh $(MODEFILE)
 
 clean: 
 	rm -f $(MODEFILE)
