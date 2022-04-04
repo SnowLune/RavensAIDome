@@ -28,12 +28,13 @@ function minify_pipe
 
 # Set our new name for the minified file
 basename=$(echo $1 | sed 's/\..*$//')
-new_file="$basename"".min.ow.txt"
+new_file="$basename.min.ow.txt"
+echo "$new_file"
 
 # Check if it already exists and prompt for continue if it does
 if [ -f $new_file ]; then
    echo
-   echo "WARNING: $new_file already exists"
+   echo "WARNING: '$new_file' already exists"
    while true; do
       read -p "Would you like to overwrite it? (y/n): " yn
       case $yn in
@@ -49,7 +50,8 @@ cp "$1" "$new_file"
 
 # Do the minifying
 rename_functions "$new_file"
-echo $(cat "$new_file" | minify_pipe) > "$new_file"
+cat "$new_file" | minify_pipe > "$new_file.tmp"
+mv "$new_file.tmp" "$new_file"
 
 # Get the file sizes
 old_file_size=$(du -b $1)
