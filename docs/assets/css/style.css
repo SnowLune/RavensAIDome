@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@570&display=swap");
 :root {
+   --extra-dark-teal: hsl(177, 53%, 15%);
+   --dark-teal: rgb(138, 198, 209);
+   --light-teal: rgb(190, 235, 233);
+   --dark-pink: rgb(255, 135, 176);
+   --light-pink: rgb(255, 195, 216);
+   --light-grey: rgb(230, 230, 230);
 }
 
 * {
@@ -9,7 +15,7 @@
 }
 
 body {
-   background-color: rgb(230, 230, 230);
+   background-color: var(--light-grey);
 }
 
 h1,
@@ -24,7 +30,7 @@ h5 {
 
 header nav {
    height: 100px;
-   background-color: rgb(138, 198, 209);
+   background-color: var(--dark-teal);
 }
 
 header nav ul {
@@ -43,7 +49,7 @@ header nav ul li {
    font-family: "Montserrat", sans-serif;
    font-weight: 700;
    font-size: 1.2em;
-   color: hsl(177, 53%, 15%);
+   color: var(--extra-dark-teal);
    list-style: none;
 }
 
@@ -60,7 +66,7 @@ a:active {
 }
 
 header nav ul li a:hover {
-   text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.25);
+   background-color: var(--light-teal);
 }
 
 .main-content {
@@ -68,14 +74,13 @@ header nav ul li a:hover {
    max-width: 960px;
    margin: 0 auto;
    padding: 0 25px;
-   /* text-align: center; */
 }
 
 .main-content p {
    font-family: "Montserrat", sans-serif;
    font-size: 1em;
    font-weight: 200;
-   text-align: justify;
+   text-align: left;
    line-height: 1.4em;
 }
 
@@ -86,8 +91,7 @@ header nav ul li a:hover {
 .about {
    display: flex;
    align-items: center;
-   margin: 15px;
-   padding: 10px;
+   margin-top: 20px;
 }
 
 .about p,
@@ -95,13 +99,12 @@ header nav ul li a:hover {
    margin-top: 15px;
 }
 
-.about #about-txt {
-   padding-left: 100px;
+#about-text {
+   margin-left: 20px;
 }
 
 #hero {
    width: 400px;
-   margin: 15px;
    border-radius: 15px;
 }
 
@@ -110,7 +113,7 @@ header nav ul li a:hover {
 }
 
 footer {
-   background-color: bisque;
+   background-color: var(--light-pink);
    text-align: center;
    width: 100%;
 }
