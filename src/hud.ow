@@ -18,7 +18,7 @@ rule("Global HUD")
       Create HUD Text(All Players(All Teams), Null, Custom String(" "), Custom String(" "), Left, -20, Color(White), Color(White), Color(
          White), Visible To, Default Visibility);
       Create HUD Text(All Players(All Teams), Custom String("{0}", Global.c_WorkshopCode), Custom String("{0}+{1}, {2}", Global.c_Version,
-         Global.c_BuildDate, Global.c_DeveloperName), Custom String("Practice Field: Expanse"), Left, -3, Global.c_Color_LightPink,
+         Global.c_BuildDate, Global.c_DeveloperName), Custom String("Raven's AI Dome"), Left, -3, Global.c_Color_LightPink,
          Global.c_Color_LightGrey, Global.c_Color_LightTeal, Visible To, Default Visibility);
 
       // Create Left Side HUD Text EN
@@ -52,7 +52,7 @@ rule("Global HUD")
          Global.c_Color_DarkPink, Visible To and String, Default Visibility);
 
       // Create Info HUD EN
-      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Practice Field: Expanse!"), Global.c_TwitchURL, Custom String(
+      Create HUD Text(Global.hud_InfoVisibleToEN, Custom String("Welcome to Raven's AI Dome!"), Global.c_TwitchURL, Custom String(
          "Created by {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
          Visible To and String, Default Visibility);
       Create HUD Text(Global.hud_InfoVisibleToEN, Custom String(""), Custom String(
@@ -80,7 +80,7 @@ rule("Global HUD")
          Global.c_Color_LightGrey, Color(Sky Blue), Visible To and String, Default Visibility);
 
       // Create Info HUD KR
-      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Practice Field: Expanse 어서 오십시오!"), Global.c_TwitchURL, Custom String(
+      Create HUD Text(Global.hud_InfoVisibleToKR, Custom String("Raven's AI Dome 어서 오십시오!"), Global.c_TwitchURL, Custom String(
          "창조자: {0}", Global.c_DeveloperName), Top, 3, Global.c_Color_LightTeal, Global.c_Color_LightPink, Global.c_Color_LightPink,
          Visible To and String, Default Visibility);
       Create HUD Text(Global.hud_InfoVisibleToKR, Custom String(""), Custom String("이 모드를 사용하면 워밍업하고 철저하게 연습 할 수 있습니다."), Custom String(
