@@ -3,7 +3,10 @@ SHELL = /bin/bash
 .SUFFIXES:
 .SUFFIXES: .owh .ow
 
-MODEFILE=practicefieldexpanse.ow.txt
+BUILDDATE=$(shell date -u +%Y%m%d)
+
+MODENAME=ravensaidome
+MODEFILE=$(MODENAME).ow.txt
 
 FILES=	\
 	src/main.owh \
@@ -54,6 +57,7 @@ FILES=	\
 
 $(MODEFILE): $(FILES)
 	cat $(FILES) > $(MODEFILE)
+	sed -i "s/__BUILDDATE__/$(BUILDDATE)/" $(MODEFILE)
 	./tools/overwatch_workshop_minifier.sh $(MODEFILE)
 
 clean: 

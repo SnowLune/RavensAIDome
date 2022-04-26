@@ -2,8 +2,8 @@ settings
 {
    main
    {
-      Description: "Practice Field: Expanse is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: 5DPKQ\n♥  Created by Raven#112503\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\"to this description."
-      Mode Name: "Practice Field: Expanse"
+      Description: "Raven's AI Dome is a tool for practicing against dummy bots with AI for all Heroes. (한국어 옵션 포함!)\n♥  This is a Pre-Release Beta Version!\n♥  Import Code: BWGAP\n♥  Created by Raven#112503\n♥  If you modify this mode and share your modification, please prepend \"Modified by: [your battletag]\"to this description."
+      Mode Name: "Raven's AI Dome"
    }
 
    lobby
