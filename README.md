@@ -60,8 +60,9 @@ released on the PTR. The idea came from my first practice mode on the Practice
 Range that spawned random types of enemies and gave them _very_ rudimentary
 movement. I knew I wanted something that would spawn enemies at random distances
 from me and facing a random direction. Initially I only intended it to be a
-small Widowmaker warm-up and flick practice mode. It is currently in the
-pre-release stage with changes happening rapidly.
+small Widowmaker warm-up and flick practice mode. The current release is stable
+and more or less functionally complete. More features and tweaks will happen as
+I desire.
 
 ## Support Me
 
