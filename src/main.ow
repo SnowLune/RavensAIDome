@@ -1,3 +1,8 @@
+// main.ow
+// The inital portion of the workshop mode containing global settings and
+// the main tick loop
+
+// Workshop Settings that can be modified in the game lobby
 rule("Global Settings")
 {
    event
@@ -135,6 +140,7 @@ rule("Global Settings")
    }
 }
 
+// Main 60hz tick loop used by rules to spread computations over ticks
 rule("Global Main Tick Loop")
 {
    event
