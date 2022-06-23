@@ -42,7 +42,7 @@ rule("Special Rule: Doomfist Rocket Punch")
          = min(
             (Total Time Elapsed - Event Player.ai_DoomfistPunchTime) / 1.400 * 100.750 + 49.250,
             150
-         )
+         );
    }
 }
 
