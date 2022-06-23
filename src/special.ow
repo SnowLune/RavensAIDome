@@ -38,10 +38,11 @@ rule("Special Rule: Doomfist Rocket Punch")
 
    actions
    {
-      Event Player.ai_DoomfistPunchDamage = (Total Time Elapsed - Event Player.ai_DoomfistPunchTime) / 1.400 * 100.750 + 49.250;
-      If(Event Player.ai_DoomfistPunchDamage > 150);
-         Event Player.ai_DoomfistPunchDamage = 150;
-      End;
+      Event Player.ai_DoomfistPunchDamage 
+         = min(
+            (Total Time Elapsed - Event Player.ai_DoomfistPunchTime) / 1.400 * 100.750 + 49.250,
+            150
+         )
    }
 }
 
